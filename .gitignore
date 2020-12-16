@@ -1,0 +1,9 @@
+# Intellij
+.idea
+
+# CMake
+cmake-build-*/
+
+# Godot
+project/.import
+project/gdnative/lib

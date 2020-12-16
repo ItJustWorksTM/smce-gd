@@ -1,0 +1,19 @@
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+reloadable=true
+
+[entry]
+
+OSX.64="res://gdnative/lib/libgodot-smce.dylib"
+Windows.64="res://gdnative/lib/libgodot-smce.dll"
+X11.64="res://gdnative/lib/libgodot-smce.so"
+Server.x86_64="res://gdnative/lib/libgodot-smce.so"
+
+[dependencies]
+
+OSX.64=[  ]
+Windows.64=[  ]
+X11.64=[  ]
