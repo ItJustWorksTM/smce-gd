@@ -1,5 +1,5 @@
 /*
- *  lib.cxx
+ *  EmulGlue.hxx
  *  Copyright 2020 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,24 +16,22 @@
  *
  */
 
-#include <core/Godot.hpp>
-#include "Dummy.hxx"
-#include "EmulGlue.hxx"
+#ifndef GODOT_SMCE_UTIL_HXX
+#define GODOT_SMCE_UTIL_HXX
+#include <filesystem>
+#include <optional>
+#include <utility>
+#include <BoardConf.hxx>
+#include <BoardData.hxx>
+#include <BoardInfo.hxx>
+#include <Godot.hpp>
 
-using namespace godot;
-
-extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
-Godot::gdnative_init(o);
+template<typename T>
+T* gd_cast(const godot::Object* variant) {
+    return godot::Object::cast_to<T>(variant);
 }
 
-extern "C" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_options *o) {
-Godot::gdnative_terminate(o);
-}
 
-template<class ...T>
-void register_classes() { (register_class<T>(), ...); };
+std::optional<std::pair<BoardData, BoardInfo>> make_config(const std::filesystem::path& path);
 
-extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
-    godot::Godot::nativescript_init(handle);
-    register_classes<Dummy, EmulGlue>();
-}
+#endif //GODOT_SMCE_UTIL_HXX

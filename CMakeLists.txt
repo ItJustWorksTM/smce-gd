@@ -15,7 +15,9 @@
 #  limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.13)
+
+message(${CMAKE_CXX_COMPILER_AR})
 
 project(godot-smce LANGUAGES CXX C)
 
@@ -37,8 +39,6 @@ set(SCONS_TARGET "debug")
 if (CMAKE_BUILD_TYPE STREQUAL Release)
     set(SCONS_TARGET "release")
 endif ()
-
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 set(GODOTCPP_TARGET ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64${CMAKE_STATIC_LIBRARY_SUFFIX})
 
@@ -69,12 +69,14 @@ if (UNIX AND CMAKE_BUILD_TYPE STREQUAL Release)
     target_link_options(godot-cpp INTERFACE "-s")
 endif ()
 
+add_subdirectory(thirdparty/smarcar_emul)
+
 add_library(godot-smce SHARED)
 
-target_sources(godot-smce PRIVATE src/lib.cxx src/Dummy.cxx)
+target_sources(godot-smce PRIVATE src/lib.cxx src/util.cxx src/Dummy.cxx src/EmulGlue.cxx)
 target_include_directories(godot-smce PRIVATE include)
 
-target_link_libraries(godot-smce godot-cpp)
+target_link_libraries(godot-smce godot-cpp smartcar_emul)
 
 add_custom_command(TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_SOURCE_DIR}/project/gdnative/lib"

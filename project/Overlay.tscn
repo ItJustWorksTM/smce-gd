@@ -1,0 +1,127 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Overlay.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+shadow_size = 2
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+anchor_top = -0.002
+anchor_right = 1.0
+margin_top = 1.2
+margin_bottom = 63.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="Panel"]
+anchor_left = 0.109
+anchor_top = 0.5
+anchor_right = 0.992
+anchor_bottom = 0.871
+margin_left = 0.383995
+margin_top = -0.5
+margin_right = 0.191956
+margin_bottom = 0.126995
+placeholder_text = "Write to UART"
+placeholder_alpha = 0.327
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Panel"]
+anchor_left = 0.102
+anchor_top = 0.118
+anchor_right = 0.977
+anchor_bottom = 0.369
+margin_left = -0.448006
+margin_top = -0.434
+margin_right = -0.448059
+margin_bottom = -0.247002
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Panel"]
+anchor_left = 0.016
+anchor_top = 0.118
+anchor_right = 0.094
+anchor_bottom = 0.363
+margin_left = -0.384001
+margin_top = -0.434
+margin_right = -0.256004
+margin_bottom = 0.131001
+text = "RX Uart Buf:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Panel"]
+anchor_left = 0.016
+anchor_top = 0.5
+anchor_right = 0.094
+anchor_bottom = 0.857
+margin_left = -0.384001
+margin_top = -0.5
+margin_right = -0.256004
+margin_bottom = 0.00899506
+text = "Write to uart:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Panel"]
+margin_left = 936.0
+margin_top = 78.8775
+margin_right = 1001.0
+margin_bottom = 98.8775
+text = "Compile"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="Panel"]
+margin_left = 936.0
+margin_top = 110.878
+margin_right = 1001.0
+margin_bottom = 130.878
+text = "Pause"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button3" type="Button" parent="Panel"]
+margin_left = 936.0
+margin_top = 142.878
+margin_right = 1001.0
+margin_bottom = 162.878
+text = "Resume"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+[connection signal="text_changed" from="Panel/LineEdit" to="." method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="Panel/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Panel/Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="Panel/Button3" to="." method="_on_Button3_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
