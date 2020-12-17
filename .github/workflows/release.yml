@@ -1,0 +1,80 @@
+
+name: CI
+on: [push, pull_request]
+jobs:
+  setup-godot:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Cache godot
+        uses: actions/cache@v2
+        id: cache-godot
+        with:
+          path: |
+            project/godot
+             ~/.local/share/godot/
+          key: godot-linux-323
+      - name: Download godot
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip -O godot.zip
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.zip
+          unzip godot.zip
+          unzip godot_export.zip
+          mkdir -p ~/.local/share/godot/templates
+          mkdir project
+          mv templates/ ~/.local/share/godot/templates/3.2.3.stable
+          mv Godot_v3.2.3-stable_linux_headless.64 project/godot
+
+  build-ubuntu:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install deps
+        run: |
+          sudo apt install ninja-build scons
+      - name: Cache godot-cpp
+        uses: actions/cache@v2
+        with:
+          path: |
+            thirdparty/godot-cpp/bin
+            thirdparty/godot-cpp/include/gen
+          key: godot-cpp-properhash
+      - name: configure
+        run: mkdir build && pushd build && cmake -G Ninja .. && popd
+      - name: build
+        run: |
+          cmake --build build --target godot-smce
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libgodot-smce.so
+          path: project/gdnative/lib/libgodot-smce.so
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Cache godot-cpp
+        uses: actions/cache@v2
+        with:
+          path: |
+            thirdparty\godot-cpp\bin
+            thirdparty\godot-cpp\include\gen
+          key: godot-cpp-properhash-win
+      - name: Install deps
+        run: |
+          cmd /C "pip install SCons"
+      - name: configure
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && popd
+      - name: build
+        run: |
+          cmake --build build --target godot-smce
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: godot-smce.dll
+          path: project\gdnative\lib\godot-smce.dll

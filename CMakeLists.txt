@@ -41,19 +41,29 @@ endif ()
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 set(GODOTCPP_TARGET ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64${CMAKE_STATIC_LIBRARY_SUFFIX})
-add_custom_command(OUTPUT ${GODOTCPP_TARGET}
-        COMMAND scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8)
 
-add_custom_target(gotdot-cpp-proxygen DEPENDS ${GODOTCPP_TARGET})
+message("${GODOTCPP_TARGET}")
+if (EXISTS ${GODOTCPP_TARGET})
+    message("Using existing")
+    add_library(godot-cpp STATIC IMPORTED GLOBAL)
+    set_property(TARGET godot-cpp PROPERTY IMPORTED_LOCATION ${GODOTCPP_TARGET})
+else ()
+    message("Using generated")
+    add_custom_command(OUTPUT ${GODOTCPP_TARGET}
+            COMMAND ls -R
+            COMMAND scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8)
 
-add_library(godot-cpp INTERFACE)
+    add_custom_target(gotdot-cpp-proxygen DEPENDS ${GODOTCPP_TARGET})
+    add_library(godot-cpp INTERFACE)
+    target_link_libraries(godot-cpp INTERFACE ${GODOTCPP_TARGET})
+    add_dependencies(godot-cpp gotdot-cpp-proxygen)
+endif ()
+
 target_include_directories(godot-cpp INTERFACE
         thirdparty/godot-cpp/godot_headers
         thirdparty/godot-cpp/include
         thirdparty/godot-cpp/include/core
         thirdparty/godot-cpp/include/gen)
-
-target_link_libraries(godot-cpp INTERFACE ${GODOTCPP_TARGET})
 
 if (UNIX)
     target_link_options(godot-cpp INTERFACE "-s")
@@ -63,10 +73,10 @@ add_library(godot-smce SHARED)
 
 target_sources(godot-smce PRIVATE src/lib.cxx src/Dummy.cxx)
 target_include_directories(godot-smce PRIVATE include)
-add_dependencies(godot-cpp gotdot-cpp-proxygen)
 
 target_link_libraries(godot-smce godot-cpp)
 
 add_custom_command(TARGET godot-smce POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/"
-        COMMAND "echo" "copied to: $<TARGET_FILE:godot-smce>  ${CMAKE_SOURCE_DIR}/project/gdnative/lib/ ")
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_SOURCE_DIR}/project/gdnative/lib"
+        COMMAND cd ${CMAKE_SOURCE_DIR}/project && ls -R
+        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/")
