@@ -42,7 +42,7 @@ jobs:
             thirdparty/godot-cpp/include/gen
           key: godot-cpp-properhash
       - name: configure
-        run: mkdir build && pushd build && cmake -G Ninja .. && popd
+        run: mkdir build && pushd build && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release .. && popd
       - name: build
         run: |
           cmake --build build --target godot-smce
@@ -69,7 +69,7 @@ jobs:
         run: |
           cmd /C "pip install SCons"
       - name: configure
-        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && popd
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && popd
       - name: build
         run: |
           cmake --build build --target godot-smce

@@ -28,6 +28,6 @@ auto Dummy::_ready() -> void {
     Godot::print("Dummy ready");
 }
 
-auto Dummy::_process(float) -> void {
+auto Dummy::_process(float delta) -> void {
     this->set_process(false);
 }

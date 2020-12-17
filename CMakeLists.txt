@@ -65,7 +65,7 @@ target_include_directories(godot-cpp INTERFACE
         thirdparty/godot-cpp/include/core
         thirdparty/godot-cpp/include/gen)
 
-if (UNIX)
+if (UNIX AND CMAKE_BUILD_TYPE STREQUAL Release)
     target_link_options(godot-cpp INTERFACE "-s")
 endif ()
 
