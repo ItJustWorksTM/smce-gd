@@ -17,8 +17,6 @@
 
 cmake_minimum_required(VERSION 3.13)
 
-message(${CMAKE_CXX_COMPILER_AR})
-
 project(godot-smce LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -42,7 +40,6 @@ endif ()
 
 set(GODOTCPP_TARGET ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-message("${GODOTCPP_TARGET}")
 if (EXISTS ${GODOTCPP_TARGET})
     message("Using existing")
     add_library(godot-cpp STATIC IMPORTED GLOBAL)
