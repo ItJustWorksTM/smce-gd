@@ -39,7 +39,6 @@ LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
-#include <SMCE/internal/BoardData.hpp>
 #include <SMCE/internal/SharedBoardData.hpp>
 
 using namespace std::literals;
@@ -107,41 +106,11 @@ bool BoardRunner::configure(std::string_view pp_fqbn, const BoardConfig& bconf) 
     m_internal->sbdata.configure("SMCE-Runner-" + std::to_string(m_internal->sketch_id), pp_fqbn, bconf);
     m_status = Status::configured;
     return true;
-
-#if 0
-#pragma region move_me_to_check_suitable_env
-    if(std::error_code ec; stdfs::is_empty(res_path, ec) || ec)
-        return false;
-
-    std::string cmake_path = []{ const auto env = std::getenv("SMCE_CMAKE_PATH"); return env ? env : ""; }();
-    if(!cmake_path.empty()) {
-        if(std::error_code ec; stdfs::is_empty(cmake_path, ec) || ec)
-            return false;
-    } else {
-        cmake_path = bp::search_path(cmake_path).string();
-        if(cmake_path.empty())
-            return false;
-    }
-    bp::ipstream cmake_out;
-    bp::child cmake_child{cmake_path, "--version", bp::std_out > cmake_out};
-    std::string line;
-    while (cmake_child.running() && std::getline(cmake_out, line) && !line.empty()) {
-        if(line.starts_with("cmake")) {
-            cmake_child.join();
-            return false;
-        }
-        break;
-    }
-    cmake_child.join();
-#pragma endregion
-#endif
 }
 
 bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const SketchConfig& skonf) noexcept {
-
     const auto& res_path = m_exectx.resource_dir();
-//  const auto& cmake_path = m_exectx.cmake_path();
-    const auto cmake_path = "/usr/local/bin/cmake";
+    const auto& cmake_path = m_exectx.cmake_path();
 
     std::string dir_arg = "-DSMCE_DIR=" + res_path.string();
     std::string fqbn_arg = "-DSKETCH_FQBN="s + m_internal->sbdata.get_board_data()->fqbn.c_str();

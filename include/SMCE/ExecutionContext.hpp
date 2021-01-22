@@ -27,10 +27,12 @@ namespace smce {
 
 class ExecutionContext {
     stdfs::path m_res_dir;
+    std::string m_cmake_path = "cmake";
 
   public:
     explicit ExecutionContext(stdfs::path resources_dir) : m_res_dir{std::move(resources_dir)} {};
     [[nodiscard]] const stdfs::path& resource_dir() const noexcept { return m_res_dir; }
+    [[nodiscard]] const std::string& cmake_path() const noexcept { return m_cmake_path; }
     [[nodiscard]] bool check_suitable_environment() noexcept;
 };
 
