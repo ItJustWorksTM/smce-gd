@@ -32,6 +32,7 @@ LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
 #error "Unsupported platform"
 #endif
 
+#include <ctime>
 #include <mutex>
 #include <span>
 #include <string>
@@ -55,7 +56,7 @@ enum class BoardRunner::Command {
 };
 
 struct BoardRunner::Internal {
-    unsigned sketch_id = 549; //FIXME use a dynamic value
+    std::uint64_t sketch_id = std::time(nullptr);
     SharedBoardData sbdata;
     bp::child sketch;
 };
