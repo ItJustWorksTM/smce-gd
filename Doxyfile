@@ -2275,7 +2275,7 @@ HAVE_DOT               = NO
 # The DOT_NUM_THREADS specifies the number of dot invocations doxygen is allowed
 # to run in parallel. When set to 0 doxygen will base this on the number of
 # processors available in the system. You can set it explicitly to a value
-# larger than 0 to get control over the balance between CPU load and processing
+# larger than 0 to get control over the balance between CPU build and processing
 # speed.
 # Minimum value: 0, maximum value: 32, default value: 0.
 # This tag requires that the tag HAVE_DOT is set to YES.
