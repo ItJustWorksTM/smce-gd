@@ -16,9 +16,9 @@
 #
 
 add_library (SMCE_Boost INTERFACE)
-find_package (Boost 1.74)
+find_package (Boost 1.74 COMPONENTS atomic filesystem)
 if (Boost_FOUND)
-    target_link_libraries (SMCE_Boost INTERFACE Boost::headers)
+    target_link_libraries (SMCE_Boost INTERFACE Boost::headers Boost::atomic Boost::filesystem)
 else ()
 #   set (Boost_DEBUG True)
     set (BOOST_ENABLE_CMAKE True)
