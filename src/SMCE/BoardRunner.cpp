@@ -73,7 +73,7 @@ BoardRunner::~BoardRunner() {
 }
 
 [[nodiscard]] BoardView BoardRunner::view() noexcept {
-    if(m_status != Status::configured && m_status != Status::running && m_status != Status::suspended)
+    if(m_status != Status::configured && m_status != Status::built && m_status != Status::running && m_status != Status::suspended)
         return {};
     return BoardView{*m_internal->sbdata.get_board_data()};
 }
