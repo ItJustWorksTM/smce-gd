@@ -213,7 +213,7 @@ bool BoardRunner::terminate() noexcept {
 
     std::error_code ec;
     m_internal->sketch.terminate(ec);
-    if(ec)
+    if(!ec)
         m_status = Status::stopped;
     return !ec;
 }
