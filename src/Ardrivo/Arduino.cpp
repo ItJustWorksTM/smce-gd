@@ -113,3 +113,19 @@ void analogWrite(int pin, byte value) {
 void delay(unsigned long long ms) {
     std::this_thread::sleep_for(std::chrono::milliseconds{ms});
 }
+
+void delayMicroseconds(unsigned long long us) {
+    std::this_thread::sleep_for(std::chrono::microseconds{us});
+}
+
+static const auto start_time = std::chrono::steady_clock::now();
+
+unsigned long micros() {
+    const auto current_time = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time).count();
+}
+
+unsigned long millis() {
+    const auto current_time = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count();
+}
