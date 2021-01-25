@@ -47,6 +47,12 @@ struct IpcAtomicValue : boost::ipc_atomic<T> {
     IpcAtomicValue& operator=(IpcAtomicValue&& other) noexcept { boost::ipc_atomic<T>::store(other.load()); return *this; }
 };
 
+struct IpcMovableRecursiveMutex : boost::interprocess::interprocess_recursive_mutex {
+    IpcMovableRecursiveMutex() noexcept = default;
+    IpcMovableRecursiveMutex(IpcMovableRecursiveMutex&&) noexcept {} //HSD never
+    IpcMovableRecursiveMutex& operator=(IpcMovableRecursiveMutex&&) noexcept { return *this; } //HSD never
+};
+
 template <class T>
 using ShmAllocator = boost::interprocess::allocator<T, boost::interprocess::managed_shared_memory::segment_manager>;
 template <class T>
@@ -76,16 +82,17 @@ struct BoardData {
         IpcAtomicValue<ActiveDriver> active_driver = ActiveDriver::gpio; //rw
     };
     struct UartChannel {
-        IpcAtomicValue<bool> active; //rw
-        boost::ipc_atomic_flag rx_live;
-        boost::interprocess::interprocess_recursive_mutex rx_mut;
-        boost::interprocess::interprocess_recursive_mutex tx_mut;
+        IpcAtomicValue<bool> active = false; //rw
+        IpcMovableRecursiveMutex rx_mut;
+        IpcMovableRecursiveMutex tx_mut;
         std::deque<char, ShmAllocator<char>> rx; //rw
         std::deque<char, ShmAllocator<char>> tx; //rw
-        std::uint16_t max_buffed; //ro
+        std::uint16_t max_buffered_rx; //ro
+        std::uint16_t max_buffered_tx; //ro
         std::uint16_t baud_rate; //ro
         std::optional<std::uint16_t> rx_pin_override; //ro
         std::optional<std::uint16_t> tx_pin_override; //ro
+        explicit UartChannel(const ShmAllocator<void>&);
     };
 
     boost::interprocess::vector<Pin, ShmAllocator<Pin>> pins; // sorted by id

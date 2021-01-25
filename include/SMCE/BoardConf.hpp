@@ -44,6 +44,8 @@ struct BoardConfig {
         std::optional<std::uint16_t> rx_pin_override;
         std::optional<std::uint16_t> tx_pin_override;
         std::uint16_t baud_rate = 9600;
+        std::size_t rx_buffer_length = 64;
+        std::size_t tx_buffer_length = 64;
         std::size_t flushing_threshold = 0;
     };
 /*

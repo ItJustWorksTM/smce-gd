@@ -25,6 +25,8 @@ namespace bip = boost::interprocess;
 
 namespace smce {
 
+BoardData::UartChannel::UartChannel(const ShmAllocator<void>& shm_valloc) : rx{shm_valloc}, tx{shm_valloc} {}
+
 BoardData::BoardData(
         const ShmAllocator<void>& shm_valloc,
         std::string_view fqbn,
@@ -59,15 +61,15 @@ BoardData::BoardData(
         }
     }
 
-    /*
-    ret->uart_channels.reserve(c.uart_channels.size());
+    uart_channels.reserve(c.uart_channels.size());
     for(const auto& conf : c.uart_channels) {
-        auto& data = ret->uart_channels.emplace_back();
+        auto& data = uart_channels.emplace_back(shm_valloc);
         data.baud_rate = conf.baud_rate;
         data.rx_pin_override = conf.rx_pin_override;
         data.tx_pin_override = conf.tx_pin_override;
+        data.max_buffered_rx = conf.rx_buffer_length;
+        data.max_buffered_tx = conf.tx_buffer_length;
     }
-     */
 }
 
 }

@@ -74,7 +74,7 @@ class VirtualPins {
     BoardData* m_bdat;
     explicit VirtualPins(BoardData* bdat) : m_bdat{bdat} {}
   public:
-    struct Iterator;
+//  struct Iterator;
 
     [[nodiscard]] VirtualPin operator[](std::size_t idx) noexcept;
 //  [[nodiscard]] Iterator begin() noexcept;
@@ -82,14 +82,33 @@ class VirtualPins {
 //  [[nodiscard]] std::size_t size() noexcept;
 };
 
-struct VirtualUart {
+class VirtualUartBuffer {
+    friend class VirtualUart;
+    enum class Direction { rx, tx };
+    BoardData* m_bdat;
+    std::size_t m_index;
+    Direction m_dir;
+    constexpr VirtualUartBuffer(BoardData* bdat, std::size_t idx, Direction dir) : m_bdat{bdat}, m_index{idx}, m_dir{dir} {}
+  public:
+    [[nodiscard]] bool exists() noexcept;
+    [[nodiscard]] std::size_t max_size() noexcept;
+    [[nodiscard]] std::size_t size() noexcept;
+    std::size_t read(std::span<char>) noexcept;
+    std::size_t write(std::span<const char>) noexcept;
+    [[nodiscard]] char front() noexcept;
+};
+
+class VirtualUart {
     friend class VirtualUarts;
     BoardData* m_bdat;
     std::size_t m_index;
+    constexpr VirtualUart(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_index{idx} {}
   public:
     [[nodiscard]] bool exists() noexcept;
-    [[nodiscard]] bool active() noexcept; // unimplemented
-    //FIXME add rx/tx
+    [[nodiscard]] bool is_active() noexcept;
+    void set_active(bool) noexcept; // Board-only
+    VirtualUartBuffer rx() noexcept { return {m_bdat, m_index, VirtualUartBuffer::Direction::rx}; }
+    VirtualUartBuffer tx() noexcept { return {m_bdat, m_index, VirtualUartBuffer::Direction::tx}; }
 };
 
 class VirtualUarts {

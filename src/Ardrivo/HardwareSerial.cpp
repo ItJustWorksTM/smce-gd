@@ -16,22 +16,23 @@
  *
  */
 
-#include <deque>
 #include <iostream>
 #include <limits>
+#include <SMCE/BoardView.hpp>
 #include "HardwareSerial.h"
 #include "SMCE_dll.hpp"
 
-static const char* env_pipes_root(){
-    const auto* env_val = std::getenv("SMCE_ROOT");
-    return env_val ? env_val : ".";
+namespace smce {
+extern BoardView board_view;
+extern void maybe_init();
 }
 
+using namespace smce;
+
 struct SMCE_HardwareSerialImpl : HardwareSerial {
-    explicit SMCE_HardwareSerialImpl(int id) : m_id{id} {}
+    explicit SMCE_HardwareSerialImpl(int id) noexcept : m_id{id} {}
     const int m_id;
-    std::deque<char> m_buf;
-    bool m_begun = false;
+    VirtualUart view() noexcept { maybe_init(); return board_view.uart_channels[m_id]; }
 };
 
 SMCE_HardwareSerialImpl Serial_impl{0};
@@ -41,43 +42,54 @@ constexpr SMCE_HardwareSerialImpl& upcast(HardwareSerial& obj) {
     return static_cast<SMCE_HardwareSerialImpl&>(obj); // NOLINT
 }
 
-void HardwareSerial::begin(unsigned long, uint8_t) {
-//  maybe_init();
-    upcast(*this).m_begun = true;
+void HardwareSerial::begin([[maybe_unused]] unsigned long baud_rate, [[maybe_unused]] uint8_t conf) {
+    upcast(*this).view().set_active(true);
 }
 
-void HardwareSerial::end() { upcast(*this).m_begun = false; }
+void HardwareSerial::end() {
+    if(!upcast(*this).view().is_active())
+        return (void)(std::cerr << "HardwareSerial::end(): Already inactive" << std::endl);
+    upcast(*this).view().set_active(false);
+}
 
 int HardwareSerial::available() {
-    if(!upcast(*this).m_begun)
-        return 0;
-    return upcast(*this).m_buf.size();
+    if(!upcast(*this).view().is_active())
+        return std::cerr << "HardwareSerial::available(): Device inactive" << std::endl, 0;
+    return upcast(*this).view().rx().size();
 }
 
-int HardwareSerial::availableForWrite() { return std::numeric_limits<int>::max(); }
+int HardwareSerial::availableForWrite() {
+    if(!upcast(*this).view().is_active())
+        return std::cerr << "HardwareSerial::availableForWrite(): Device inactive" << std::endl, 0;
+    auto tx_buf = upcast(*this).view().tx();
+    return static_cast<int>(tx_buf.max_size() - tx_buf.size());
+}
 
 size_t HardwareSerial::write(uint8_t c) {
-    if (!upcast(*this).m_begun)
-        return 0;
-    std::cout.put(c);
-    return 1;
+    if(!upcast(*this).view().is_active())
+        return std::cerr << "HardwareSerial::write(" << static_cast<int>(c) << "): Device inactive" << std::endl, 0;
+    return upcast(*this).view().tx().write({reinterpret_cast<const char*>(&c), 1});
 }
 
 size_t HardwareSerial::write(const uint8_t* buf, std::size_t n) {
-    if (!upcast(*this).m_begun)
-        return 0;
-    std::cout.write(reinterpret_cast<const char*>(buf), n);
-    return n;
+    if(!upcast(*this).view().is_active())
+        return std::cerr << "HardwareSerial::write(?, " << n << "): Device inactive" << std::endl, 0;
+    return upcast(*this).view().tx().write({reinterpret_cast<const char*>(buf), n});
 }
 
 int HardwareSerial::peek() {
-    if (!upcast(*this).m_begun)
+    if(!upcast(*this).view().is_active())
+        return std::cerr << "HardwareSerial::peek(): Device inactive" << std::endl, -1;
+    if(upcast(*this).view().rx().size() < 1)
         return -1;
-    return std::cin.peek();
+    return upcast(*this).view().rx().front();
 }
 
 int HardwareSerial::read() {
-    if (!upcast(*this).m_begun || available() == 0)
-        return -1;
-    return std::cin.get();
+    if(!upcast(*this).view().is_active())
+        return std::cerr << "HardwareSerial::read(): Device inactive" << std::endl, -1;
+    char ret;
+    if(upcast(*this).view().rx().read({&ret, 1}))
+        return ret;
+    return -1;
 }

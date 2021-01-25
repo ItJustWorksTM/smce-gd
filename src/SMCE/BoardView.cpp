@@ -96,8 +96,94 @@ VirtualPin VirtualPins::operator[](std::size_t pin_id) noexcept {
     return {m_bdat, static_cast<std::size_t>(std::distance(it, m_bdat->pins.begin()))};
 }
 
+[[nodiscard]] bool VirtualUartBuffer::exists() noexcept {
+    return m_bdat && m_index < m_bdat->uart_channels.size();
+}
+
+[[nodiscard]] std::size_t VirtualUartBuffer::max_size() noexcept {
+    return exists() ? (m_dir == Direction::rx
+                           ? m_bdat->uart_channels[m_index].max_buffered_rx
+                           : m_bdat->uart_channels[m_index].max_buffered_tx) : 0;
+}
+
+[[nodiscard]] std::size_t VirtualUartBuffer::size() noexcept {
+    if(!exists())
+        return 0;
+    auto& chan = m_bdat->uart_channels[m_index];
+    auto [d, mut] = [&]{
+      switch(m_dir) {
+      case Direction::rx: return std::tie(chan.rx, chan.rx_mut);
+      case Direction::tx: return std::tie(chan.tx, chan.tx_mut);
+      }
+    }();
+    std::lock_guard g{mut};
+    return d.size();
+}
+
+std::size_t VirtualUartBuffer::read(std::span<char> buf) noexcept {
+    if(!exists())
+        return 0;
+    auto& chan = m_bdat->uart_channels[m_index];
+    auto [d, mut, max_buffered] = [&]{
+      switch(m_dir) {
+      case Direction::rx:
+          return std::tie(chan.rx, chan.rx_mut, chan.max_buffered_rx);
+      case Direction::tx:
+          return std::tie(chan.tx, chan.tx_mut, chan.max_buffered_tx);
+      }
+    }();
+    std::lock_guard g{mut};
+    const std::size_t count = std::min(d.size(), buf.size());
+    std::copy_n(d.begin(), count, buf.begin());
+    d.erase(d.begin(), d.begin() + count);
+    return count;
+}
+
+std::size_t VirtualUartBuffer::write(std::span<const char> buf) noexcept {
+    if(!exists())
+        return 0;
+    auto& chan = m_bdat->uart_channels[m_index];
+    auto [d, mut, max_buffered] = [&]{
+        switch(m_dir) {
+        case Direction::rx:
+            return std::tie(chan.rx, chan.rx_mut, chan.max_buffered_rx);
+        case Direction::tx:
+            return std::tie(chan.tx, chan.tx_mut, chan.max_buffered_tx);
+        }
+    }();
+    std::lock_guard g{mut};
+    const std::size_t count = std::min(std::clamp(max_buffered - d.size(), 0ul, static_cast<std::size_t>(max_buffered)), buf.size());
+    std::copy_n(buf.begin(), count, std::back_inserter(d));
+    return count;
+}
+
+[[nodiscard]] char VirtualUartBuffer::front() noexcept {
+    if(!exists())
+        return '\0';
+    auto& chan = m_bdat->uart_channels[m_index];
+    auto [d, mut] = [&]{
+      switch(m_dir) {
+      case Direction::rx: return std::tie(chan.rx, chan.rx_mut);
+      case Direction::tx: return std::tie(chan.tx, chan.tx_mut);
+      }
+    }();
+    std::lock_guard g{mut};
+    if(d.empty())
+        return '\0';
+    return d.front();
+}
+
 [[nodiscard]] bool VirtualUart::exists() noexcept {
     return m_bdat && m_index < m_bdat->uart_channels.size();
+}
+
+[[nodiscard]] bool VirtualUart::is_active() noexcept {
+    return exists() && m_bdat->uart_channels[m_index].active.load();
+}
+
+void VirtualUart::set_active(bool value) noexcept {
+    if(exists())
+        m_bdat->uart_channels[m_index].active.store(value);
 }
 
 [[nodiscard]] VirtualUart VirtualUarts::operator[](std::size_t idx) noexcept {
@@ -115,7 +201,7 @@ VirtualPin VirtualPins::operator[](std::size_t pin_id) noexcept {
 }
 
 [[nodiscard]] std::size_t VirtualUarts::size() noexcept {
-    return m_bdat->uart_channels.size();
+    return m_bdat ? m_bdat->uart_channels.size() : 0;
 }
 
 [[nodiscard]] VirtualUart VirtualUarts::Iterator::operator*() noexcept {
