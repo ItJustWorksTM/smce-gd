@@ -33,6 +33,7 @@ LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
 #endif
 
 #include <ctime>
+#include <iostream>
 #include <mutex>
 #include <span>
 #include <string>
@@ -133,8 +134,10 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
         std::string line;
         int i = 0;
         while (std::getline(cmake_out, line)) {
-            if (!line.starts_with("-- SMCE: "))
+            if (!line.starts_with("-- SMCE: ")) {
+                std::cout << line << std::endl;
                 continue;
+            }
             line.erase(0, line.find_first_of('"') + 1);
             line.pop_back();
             switch (i++) {
