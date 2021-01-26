@@ -43,12 +43,30 @@ target_sources (Ardrivo PRIVATE
         src/Ardrivo/String.cpp
         include/Ardrivo/analogWrite.h
 
+        include/Ardrivo/MQTT.h
+        src/Ardrivo/MQTT.cpp
+
         src/SMCE/BoardData.cpp
         src/SMCE/BoardView.cpp
         src/SMCE/SharedBoardData.cpp
         src/Ardrivo/SMCE_main.cpp
 )
 target_link_libraries (Ardrivo PUBLIC Threads::Threads SMCE_Boost)
+set (PAHO_BUILD_STATIC True)
+set (PAHO_BUILD_SHARED False)
+set (PAHO_WITH_SSL True)
+set (PAHO_ENABLE_TESTING False)
+FetchContent_Declare (Paho
+        GIT_REPOSITORY https://github.com/eclipse/paho.mqtt.c
+        GIT_TAG master)
+find_package (OpenSSL REQUIRED)
+FetchContent_GetProperties (Paho)
+if(NOT paho_POPULATED)
+   FetchContent_Populate (Paho)
+   add_subdirectory ("${paho_SOURCE_DIR}" ${paho_BINARY_DIR})
+endif ()
+set_property(TARGET paho-mqtt3c-static PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_link_libraries (Ardrivo PUBLIC paho-mqtt3c-static)
 
 add_library (SMCE)
 target_compile_features (SMCE PUBLIC cxx_std_20)

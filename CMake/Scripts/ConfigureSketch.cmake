@@ -38,6 +38,8 @@ message (STATUS "Using CMAW version ${CMAW_VERSION}")
 
 cmaw_arduinocli_version (ARDCLI_VERSION)
 message (STATUS "Using ArduinoCLI version ${ARDCLI_VERSION}")
+cmaw_update_library_index ()
+cmaw_install_libraries (MQTT)
 
 string (RANDOM LENGTH 13 COMP_DIRNAME)
 set (COMP_DIR "${SMCE_DIR}/tmp/${COMP_DIRNAME}")
