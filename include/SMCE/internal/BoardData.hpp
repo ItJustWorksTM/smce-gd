@@ -31,7 +31,7 @@
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/interprocess/containers/vector.hpp>
 #include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/sync/interprocess_recursive_mutex.hpp>
+#include <boost/interprocess/sync/spin/mutex.hpp>
 #include <SMCE/fwd.hpp>
 
 namespace smce {
@@ -47,7 +47,7 @@ struct IpcAtomicValue : boost::ipc_atomic<T> {
     IpcAtomicValue& operator=(IpcAtomicValue&& other) noexcept { boost::ipc_atomic<T>::store(other.load()); return *this; }
 };
 
-struct IpcMovableRecursiveMutex : boost::interprocess::interprocess_recursive_mutex {
+struct IpcMovableRecursiveMutex : boost::interprocess::ipcdetail::spin_mutex {
     IpcMovableRecursiveMutex() noexcept = default;
     IpcMovableRecursiveMutex(IpcMovableRecursiveMutex&&) noexcept {} //HSD never
     IpcMovableRecursiveMutex& operator=(IpcMovableRecursiveMutex&&) noexcept { return *this; } //HSD never
