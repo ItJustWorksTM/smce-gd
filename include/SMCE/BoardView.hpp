@@ -118,10 +118,11 @@ class VirtualUarts {
     constexpr explicit VirtualUarts(BoardData* bdat)
         : m_bdat{bdat}
     {}
-    constexpr VirtualUarts(const VirtualUarts&) noexcept = default;
   public:
     class Iterator;
     friend Iterator;
+
+    constexpr VirtualUarts(const VirtualUarts&) noexcept = default;
 
     [[nodiscard]] VirtualUart operator[](std::size_t) noexcept;
     [[nodiscard]] Iterator begin() noexcept;
