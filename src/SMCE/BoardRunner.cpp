@@ -173,7 +173,10 @@ bool BoardRunner::start() noexcept {
     m_internal->sketch =
         bp::child(
             bp::env["SEGNAME"] = "SMCE-Runner-" + std::to_string(m_internal->sketch_id),
-            m_sketch_bin.string());
+            m_sketch_bin.string(),
+            bp::on_exit([&](int, const std::error_code&){
+                m_status = Status::stopped;
+            }));
     m_status = Status::running;
     return true;
 }
