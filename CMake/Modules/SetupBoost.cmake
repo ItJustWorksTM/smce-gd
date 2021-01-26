@@ -36,7 +36,7 @@ else ()
             FetchContent_Populate (Boost)
         endif()
     endif()
-    add_subdirectory ("${Boost_SOURCE_DIR}")
+    add_subdirectory ("${Boost_SOURCE_DIR}" "${Boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
 
     target_link_libraries (SMCE_Boost INTERFACE Boost::atomic Boost::filesystem)
     target_include_directories (SMCE_Boost INTERFACE ext_deps/boost/libs/dll/include)

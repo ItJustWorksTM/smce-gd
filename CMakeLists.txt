@@ -57,14 +57,13 @@ set (PAHO_BUILD_SHARED False)
 set (PAHO_WITH_SSL True)
 set (PAHO_ENABLE_TESTING False)
 FetchContent_Declare (Paho
-        GIT_REPOSITORY https://github.com/eclipse/paho.mqtt.c
+        GIT_REPOSITORY "https://github.com/eclipse/paho.mqtt.c"
         GIT_TAG master)
-find_package (OpenSSL REQUIRED)
 FetchContent_GetProperties (Paho)
 if(NOT paho_POPULATED)
    FetchContent_Populate (Paho)
-   add_subdirectory ("${paho_SOURCE_DIR}" ${paho_BINARY_DIR})
 endif ()
+add_subdirectory ("${paho_SOURCE_DIR}" "${paho_BINARY_DIR}" EXCLUDE_FROM_ALL)
 set_property(TARGET paho-mqtt3c-static PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_link_libraries (Ardrivo PUBLIC paho-mqtt3c-static)
 
