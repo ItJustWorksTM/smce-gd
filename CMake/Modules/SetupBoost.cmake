@@ -24,7 +24,7 @@ else ()
     set (BOOST_ENABLE_CMAKE True)
 
     if(EXISTS "${PROJECT_SOURCE_DIR}/ext_deps/boost")
-        set (Boost_SOURCE_DIR ext_deps/boost)
+        set (boost_SOURCE_DIR ext_deps/boost)
     else ()
         message ("Downloading Boost")
         FetchContent_Declare (Boost
@@ -32,11 +32,11 @@ else ()
             GIT_TAG "boost-1.75.0"
         )
         FetchContent_GetProperties (Boost)
-        if(NOT Boost_POPULATED)
+        if(NOT boost_POPULATED)
             FetchContent_Populate (Boost)
         endif()
     endif()
-    add_subdirectory ("${Boost_SOURCE_DIR}" "${Boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
+    add_subdirectory ("${boost_SOURCE_DIR}" "${boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
 
     target_link_libraries (SMCE_Boost INTERFACE Boost::atomic Boost::filesystem)
     target_include_directories (SMCE_Boost INTERFACE ext_deps/boost/libs/dll/include)
