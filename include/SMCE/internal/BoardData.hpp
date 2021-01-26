@@ -47,10 +47,10 @@ struct IpcAtomicValue : boost::ipc_atomic<T> {
     IpcAtomicValue& operator=(IpcAtomicValue&& other) noexcept { boost::ipc_atomic<T>::store(other.load()); return *this; }
 };
 
-struct IpcMovableRecursiveMutex : boost::interprocess::ipcdetail::spin_mutex {
-    IpcMovableRecursiveMutex() noexcept = default;
-    IpcMovableRecursiveMutex(IpcMovableRecursiveMutex&&) noexcept {} //HSD never
-    IpcMovableRecursiveMutex& operator=(IpcMovableRecursiveMutex&&) noexcept { return *this; } //HSD never
+struct IpcMovableMutex : boost::interprocess::ipcdetail::spin_mutex {
+    IpcMovableMutex() noexcept = default;
+    IpcMovableMutex(IpcMovableMutex&&) noexcept {} //HSD never
+    IpcMovableMutex& operator=(IpcMovableMutex&&) noexcept { return *this; } //HSD never
 };
 
 template <class T>
@@ -83,8 +83,8 @@ struct BoardData {
     };
     struct UartChannel {
         IpcAtomicValue<bool> active = false; //rw
-        IpcMovableRecursiveMutex rx_mut;
-        IpcMovableRecursiveMutex tx_mut;
+        IpcMovableMutex rx_mut;
+        IpcMovableMutex tx_mut;
         std::deque<char, ShmAllocator<char>> rx; //rw
         std::deque<char, ShmAllocator<char>> tx; //rw
         std::uint16_t max_buffered_rx; //ro
