@@ -1,0 +1,50 @@
+name: Build
+on: [push, pull_request]
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - c: gcc-10
+            cxx: g++-10
+          - c: clang-10
+            cxx: clang++-10
+        boost: [1.74.0, 1.75.0]
+    env:
+      CC: ${{ matrix.compiler.c }}
+      CXX: ${{ matrix.compiler.cxx }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Boost
+        id: cache-boost
+        uses: actions/cache@v2
+        with:
+          path: boost_root
+          key: ${{ runner.os }}-boost-${{ matrix.boost }}
+      - name: Install Boost
+        if: steps.cache-boost.outputs.cache-hit != 'true'
+        run: |
+          export BOOST_ARK_BASENAME=$(echo ${{ matrix.boost }} | sed "s/^/boost_/;s/\./_/g")
+          wget -qOboost_src.tgz https://dl.bintray.com/boostorg/release/${{ matrix.boost }}/source/$BOOST_ARK_BASENAME.tar.gz
+          tar -xzf ./boost_src.tgz
+          mkdir boost_root
+          cd $BOOST_ARK_BASENAME
+          ./bootstrap.sh --prefix=../boost_root/
+          ./b2 link=static install
+          cd ../
+      - name: Check deps
+        run: |
+          sudo apt install ninja-build
+          ninja --version # technically not a dependency, but used to speedup builds
+          cmake --version
+          brew install arduino-cli
+          arduino-cli version
+      - name: CMake configure
+        run: |
+          export BOOST_ROOT="$(pwd)/boost_root"
+          mkdir build
+          cmake -G Ninja -S ./ -B ./build
+      - name: CMake build
+        run: cmake --build ./build

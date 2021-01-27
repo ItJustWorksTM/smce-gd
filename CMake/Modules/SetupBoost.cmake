@@ -16,6 +16,7 @@
 #
 
 add_library (SMCE_Boost INTERFACE)
+set (Boost_USE_STATIC_LIBS True)
 find_package (Boost 1.74 COMPONENTS atomic filesystem)
 if (Boost_FOUND)
     target_link_libraries (SMCE_Boost INTERFACE Boost::headers Boost::atomic Boost::filesystem)
@@ -38,8 +39,21 @@ else ()
     endif()
     add_subdirectory ("${boost_SOURCE_DIR}" "${boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
 
-    target_link_libraries (SMCE_Boost INTERFACE Boost::atomic Boost::filesystem)
-    target_include_directories (SMCE_Boost INTERFACE ext_deps/boost/libs/dll/include)
+    target_link_libraries (SMCE_Boost INTERFACE
+            Boost::atomic # Dependency of Interprocess
+            Boost::filesystem # Dependency of Process
+            Boost::intrusive # Dependency of Interprocess
+            Boost::container # Dependency of Interprocess
+            Boost::date_time # Dependency of Interprocess
+    )
+    target_include_directories (SMCE_Boost INTERFACE
+            "${boost_SOURCE_DIR}/libs/process/include"
+            "${boost_SOURCE_DIR}/libs/interprocess/include"
+            "${boost_SOURCE_DIR}/libs/asio/include" # Dependency of Process
+            "${boost_SOURCE_DIR}/libs/algorithm/include" # Dependency of Interprocess
+            "${boost_SOURCE_DIR}/libs/range/include" # Dependency of Interprocess
+            "${boost_SOURCE_DIR}/libs/numeric/conversion/include" # Dependency of Interprocess
+    )
 endif ()
 
 add_library (Boost_ipc INTERFACE)

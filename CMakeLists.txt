@@ -52,20 +52,21 @@ target_sources (Ardrivo PRIVATE
         src/Ardrivo/SMCE_main.cpp
 )
 target_link_libraries (Ardrivo PUBLIC Threads::Threads SMCE_Boost)
-set (PAHO_BUILD_STATIC True)
-set (PAHO_BUILD_SHARED False)
-set (PAHO_WITH_SSL True)
-set (PAHO_ENABLE_TESTING False)
 FetchContent_Declare (Paho
         GIT_REPOSITORY "https://github.com/eclipse/paho.mqtt.c"
         GIT_TAG master)
 FetchContent_GetProperties (Paho)
 if(NOT paho_POPULATED)
    FetchContent_Populate (Paho)
+   set (PAHO_BUILD_STATIC True CACHE INTERNAL "")
+   set (PAHO_BUILD_SHARED False CACHE INTERNAL "")
+   set (PAHO_WITH_SSL True CACHE INTERNAL "")
+   set (PAHO_ENABLE_TESTING False CACHE INTERNAL "")
+   set (PAHO_ENABLE_CPACK False CACHE INTERNAL "")
+   add_subdirectory ("${paho_SOURCE_DIR}" "${paho_BINARY_DIR}" EXCLUDE_FROM_ALL)
+   set_property(TARGET paho-mqtt3cs-static PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif ()
-add_subdirectory ("${paho_SOURCE_DIR}" "${paho_BINARY_DIR}" EXCLUDE_FROM_ALL)
-set_property(TARGET paho-mqtt3c-static PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries (Ardrivo PUBLIC paho-mqtt3c-static)
+target_link_libraries (Ardrivo PUBLIC paho-mqtt3cs-static)
 
 add_library (SMCE)
 target_compile_features (SMCE PUBLIC cxx_std_20)
