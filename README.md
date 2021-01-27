@@ -1,6 +1,8 @@
 # libSMCE
 _Spiritual successor to the backend of SMartCarEmul_
 
+![Build](https://github.com/ItJustWorksTM/libSMCE/workflows/Build/badge.svg?branch=master)
+
 Status: ***EXPERIMENTAL***
 
 ### Build Requirements
