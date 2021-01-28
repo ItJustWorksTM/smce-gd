@@ -1,5 +1,5 @@
 /*
- *  Dummy.hxx
+ *  EmulGlue.hxx
  *  Copyright 2020 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,29 +16,24 @@
  *
  */
 
-#ifndef GODOT_SMCE_DUMMY_HXX
-#define GODOT_SMCE_DUMMY_HXX
-
-#include <gen/Node.hpp>
+#ifndef GODOT_SMCE_UTIL_HXX
+#define GODOT_SMCE_UTIL_HXX
 #include <core/Godot.hpp>
+#include <concepts>
 
-namespace godot {
-    class Dummy : public Node {
-    GODOT_CLASS(Dummy, Node)
-
-    public:
-        static auto _register_methods() -> void {
-            register_method("_ready", &Dummy::_ready);
-            register_method("_process", &Dummy::_process);
-        }
-
-        auto _init() -> void;
-
-        auto _ready() -> void;
-
-        auto _process(float delta) -> void;
-    };
+template<std::derived_from<godot::Reference> T>
+auto make_ref() -> godot::Ref<T> {
+    return T::_new();
 }
 
+constexpr auto register_fns = []<class... T>(std::pair<const char *, T>... func) {
+    (register_method(func.first, func.second), ...);
+};
 
-#endif //GODOT_SMCE_DUMMY_HXX
+#define MEMBER_LAMBDA() \
+template<auto func, class Ret = void, class... Args> \
+constexpr auto lambda(Args ...args) -> Ret { \
+    return std::invoke(func, *this, args...); \
+}
+
+#endif //GODOT_SMCE_UTIL_HXX

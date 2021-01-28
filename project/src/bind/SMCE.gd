@@ -1,0 +1,10 @@
+class_name SMCE
+
+enum Status {
+	CLEAN,
+	CONFIGURED,
+	BUILT,
+	RUNNING,
+	SUSPENDED,
+	STOPPED
+}

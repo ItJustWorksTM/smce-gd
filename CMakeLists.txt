@@ -1,6 +1,6 @@
 #
 #  CMakeLists.txt
-#  Copyright 2020 ItJustWorksTM
+#  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -15,58 +15,44 @@
 #  limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.13)
 
 project(godot-smce LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-if (WIN32)
-    set(SCONS_PLATFORM windows)
-elseif (UNIX AND NOT APPLE)
-    set(SCONS_PLATFORM linux)
-elseif (APPLE)
-    set(SCONS_PLATFORM osx)
-else ()
-    message(FATAL_ERROR "Platform not supported")
-endif ()
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules")
+include(FetchContent)
 
-set(SCONS_TARGET "debug")
-if (CMAKE_BUILD_TYPE STREQUAL Release)
-    set(SCONS_TARGET "release")
-endif ()
-
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
-
-set(GODOTCPP_TARGET ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp/bin/libgodot-cpp.${SCONS_PLATFORM}.${SCONS_TARGET}.64${CMAKE_STATIC_LIBRARY_SUFFIX})
-add_custom_command(OUTPUT ${GODOTCPP_TARGET}
-        COMMAND scons --cache-force -C ${CMAKE_SOURCE_DIR}/thirdparty/godot-cpp platform=${SCONS_PLATFORM} target=${SCONS_TARGET} generate_bindings=yes -j8)
-
-add_custom_target(gotdot-cpp-proxygen DEPENDS ${GODOTCPP_TARGET})
-
-add_library(godot-cpp INTERFACE)
-target_include_directories(godot-cpp INTERFACE
-        thirdparty/godot-cpp/godot_headers
-        thirdparty/godot-cpp/include
-        thirdparty/godot-cpp/include/core
-        thirdparty/godot-cpp/include/gen)
-
-target_link_libraries(godot-cpp INTERFACE ${GODOTCPP_TARGET})
-
-if (UNIX)
-    target_link_options(godot-cpp INTERFACE "-s")
-endif ()
+include(GodotCpp)
+include(SMCE)
+include(fmt)
 
 add_library(godot-smce SHARED)
 
-target_sources(godot-smce PRIVATE src/lib.cxx src/Dummy.cxx)
-target_include_directories(godot-smce PRIVATE include)
-add_dependencies(godot-cpp gotdot-cpp-proxygen)
+if (UNIX)
+    # target_link_options(godot-smce PUBLIC "-s")
+endif ()
 
-target_link_libraries(godot-smce godot-cpp)
+target_sources(godot-smce PRIVATE
+        src/lib.cxx
+        src/bind/BoardRunner.cxx
+        src/bind/ExecutionContext.cxx
+        src/bind/BoardView.cxx
+        src/virt_devices/AnalogRaycast.cxx
+        src/bind/UartSlurper.cxx)
+
+target_include_directories(godot-smce PRIVATE include)
+
+target_link_libraries(godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
 
 add_custom_command(TARGET godot-smce POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/"
-        COMMAND "echo" "copied to: $<TARGET_FILE:godot-smce>  ${CMAKE_SOURCE_DIR}/project/gdnative/lib/ ")
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_SOURCE_DIR}/project/gdnative/lib"
+        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/")
+
+add_custom_command(TARGET godot-smce POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E tar xf "${libsmce_BINARY_DIR}/SMCE_Resources.zip"
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_BINARY_DIR}/RtResources" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/RtResources")
