@@ -19,6 +19,7 @@
 #include "SMCE/BoardView.hpp"
 
 #include <iterator>
+#include <mutex>
 #include "SMCE/internal/BoardData.hpp"
 
 namespace smce {
