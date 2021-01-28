@@ -28,6 +28,7 @@
 #include <boost/atomic/ipc_atomic.hpp>
 #include <boost/atomic/ipc_atomic_flag.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/interprocess/containers/deque.hpp>
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/interprocess/containers/vector.hpp>
 #include <boost/interprocess/managed_shared_memory.hpp>
@@ -85,8 +86,8 @@ struct BoardData {
         IpcAtomicValue<bool> active = false; //rw
         IpcMovableMutex rx_mut;
         IpcMovableMutex tx_mut;
-        std::deque<char, ShmAllocator<char>> rx; //rw
-        std::deque<char, ShmAllocator<char>> tx; //rw
+        boost::interprocess::deque<char, ShmAllocator<char>> rx; //rw
+        boost::interprocess::deque<char, ShmAllocator<char>> tx; //rw
         std::uint16_t max_buffered_rx; //ro
         std::uint16_t max_buffered_tx; //ro
         std::uint16_t baud_rate; //ro
