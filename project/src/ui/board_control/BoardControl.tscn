@@ -1,0 +1,216 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://src/ui/board_control/rbbuttons.tres" type="ButtonGroup" id=1]
+[ext_resource path="res://src/ui/board_control/BoardControl.gd" type="Script" id=2]
+[ext_resource path="res://src/ui/e_panel/EPanel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/ui/sketch_control/SketchControl.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/ui/uart_console/UartConsole.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/ui/v_panel/VPanel.tscn" type="PackedScene" id=7]
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+border_width_right = 8
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color( 1, 1, 1, 0.196078 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color( 1, 1, 1, 0.168627 )
+border_width_bottom = 2
+border_color = Color( 0, 0.811765, 1, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[sub_resource type="StyleBoxEmpty" id=5]
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[sub_resource type="StyleBoxEmpty" id=6]
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+border_width_top = 12
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[node name="BoardControl" type="Control"]
+anchor_right = 0.994
+anchor_bottom = 1.011
+margin_right = 7.67993
+margin_bottom = 0.0799561
+mouse_filter = 2
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightTop" parent="." instance=ExtResource( 7 )]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -440.0
+margin_right = 0.0
+custom_styles/panel = SubResource( 8 )
+side = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RightTop"]
+margin_right = 432.0
+margin_bottom = 40.0
+custom_constants/separation = 16
+alignment = 2
+
+[node name="Attachments" type="ToolButton" parent="RightTop/HBoxContainer"]
+margin_left = 24.0
+margin_right = 126.0
+margin_bottom = 40.0
+focus_mode = 1
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+disabled = true
+toggle_mode = true
+shortcut_in_tooltip = false
+action_mode = 0
+enabled_focus_mode = 1
+group = ExtResource( 1 )
+text = "Attachments"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Actions" type="ToolButton" parent="RightTop/HBoxContainer"]
+margin_left = 142.0
+margin_right = 210.0
+margin_bottom = 40.0
+focus_mode = 1
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+disabled = true
+toggle_mode = true
+shortcut_in_tooltip = false
+action_mode = 0
+enabled_focus_mode = 1
+group = ExtResource( 1 )
+text = "Actions"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Uart" type="ToolButton" parent="RightTop/HBoxContainer"]
+margin_left = 226.0
+margin_right = 273.0
+margin_bottom = 40.0
+focus_mode = 1
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+toggle_mode = true
+shortcut_in_tooltip = false
+action_mode = 0
+enabled_focus_mode = 1
+group = ExtResource( 1 )
+text = "Uart"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="ToolButton" parent="RightTop/HBoxContainer"]
+margin_left = 289.0
+margin_right = 355.0
+margin_bottom = 40.0
+focus_mode = 1
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+toggle_mode = true
+shortcut_in_tooltip = false
+action_mode = 0
+enabled_focus_mode = 1
+group = ExtResource( 1 )
+text = "Control"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Info" type="ToolButton" parent="RightTop/HBoxContainer"]
+margin_left = 371.0
+margin_right = 416.0
+margin_bottom = 40.0
+focus_mode = 1
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+disabled = true
+toggle_mode = true
+shortcut_in_tooltip = false
+action_mode = 0
+enabled_focus_mode = 1
+group = ExtResource( 1 )
+text = "Info"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Pad" type="Control" parent="RightTop/HBoxContainer"]
+margin_left = 432.0
+margin_right = 432.0
+margin_bottom = 40.0
+
+[node name="Uart" parent="." instance=ExtResource( 4 )]
+visible = false
+anchor_left = 1.0
+anchor_bottom = 0.56
+margin_left = -424.0
+margin_top = 56.0
+margin_right = -16.0
+margin_bottom = 128.32
+rect_pivot_offset = Vector2( 204, 191 )
+custom_styles/panel = SubResource( 7 )
+
+[node name="Uart" parent="Uart" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 12.0
+margin_right = 408.0
+margin_bottom = 480.0
+
+[node name="Control" parent="." instance=ExtResource( 4 )]
+visible = false
+anchor_left = 1.0
+anchor_bottom = 0.0
+margin_left = -424.0
+margin_top = 56.0
+margin_right = -16.0
+margin_bottom = 232.0
+rect_pivot_offset = Vector2( 402, 88 )
+custom_styles/panel = SubResource( 7 )
+
+[node name="SketchControl" parent="Control" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 12.0
+margin_right = 408.0
+margin_bottom = 176.0

@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/ui/file_dialog/FileDialog.tres" type="Theme" id=1]
+[ext_resource path="res://src/ui/file_dialog/FilePicker.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+border_width_top = 12
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[node name="FilePicker" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 640, 360 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialog" type="FileDialog" parent="."]
+visible = true
+margin_top = 12.0
+margin_right = 1280.0
+margin_bottom = 720.0
+rect_pivot_offset = Vector2( 640, 360 )
+theme = ExtResource( 1 )
+window_title = ""
+dialog_hide_on_ok = true
+mode_overrides_title = false
+mode = 0
+access = 2
+filters = PoolStringArray( "*.ino", "*.pde" )
+current_dir = "/home/ruthgerd/Sources/godot-smce/project"
+current_path = "/home/ruthgerd/Sources/godot-smce/project/"
+__meta__ = {
+"_edit_use_anchors_": false
+}

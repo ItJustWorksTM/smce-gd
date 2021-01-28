@@ -4,6 +4,11 @@
 # CMake
 cmake-build-*/
 
+# SMCE
+.cmaw
+
 # Godot
 project/.import
 project/gdnative/lib
+godot.log
+*.png~

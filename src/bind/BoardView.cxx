@@ -1,6 +1,6 @@
 /*
- *  Dummy.hxx
- *  Copyright 2020 ItJustWorksTM
+ *  BoardView.cxx
+ *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,18 +16,16 @@
  *
  */
 
-#include "Dummy.hxx"
+#include "bind/BoardView.hxx"
 
 using namespace godot;
 
-auto Dummy::_init() -> void {
-    Godot::print("Dummy initted");
+void BoardView::_init() {}
+
+void BoardView::_register_methods() {
+    register_signal<BoardView>("invalidated");
 }
 
-auto Dummy::_ready() -> void {
-    Godot::print("Dummy ready");
-}
+smce::BoardView BoardView::native() { return view; }
 
-auto Dummy::_process(float) -> void {
-    this->set_process(false);
-}
+const smce::BoardConfig& BoardView::board_config() const { return config; }
