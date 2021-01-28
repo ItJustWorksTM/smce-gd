@@ -20,7 +20,6 @@
 #define SMCE_BOARDVIEW_HPP
 
 #include <cstdint>
-#include <memory_resource>
 #include <span>
 #include <vector>
 #include <SMCE/fwd.hpp>
