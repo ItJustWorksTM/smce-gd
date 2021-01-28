@@ -16,11 +16,12 @@
  *
  */
 
+#include <boost/predef.h>
 #include <SMCE/BoardRunner.hpp>
 
-#if defined(__unix__)
+#if BOOST_OS_UNIX || BOOST_OS_MACOS
 #include <csignal>
-#elif defined(_WIN32) || defined(WIN32)
+#elif BOOST_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <winternl.h>
