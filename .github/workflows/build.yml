@@ -65,9 +65,9 @@ jobs:
           - name: Clang/LLVM 11
             c: clang-11
             cxx: clang++-11
-#         - name: AppleClang 12
-#           c: clang
-#           cxx: clang++
+          - name: AppleClang 12
+            c: clang
+            cxx: clang++
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
