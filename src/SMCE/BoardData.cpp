@@ -35,7 +35,7 @@ BoardData::BoardData(
       uart_channels{shm_valloc},
       fqbn{fqbn, shm_valloc} {
     auto sorted_pins = c.pins;
-    std::ranges::sort(sorted_pins);
+    std::sort(sorted_pins.begin(), sorted_pins.end());
 
     pins.reserve(sorted_pins.size());
     for(const auto pin_id : sorted_pins) {
