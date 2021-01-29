@@ -1,4 +1,4 @@
-name: Build
+name: Build & Test
 on: [push, pull_request]
 jobs:
   build-ubuntu:
@@ -51,6 +51,10 @@ jobs:
           cmake -G Ninja -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
+      - name: Build & Run tests
+        run: |
+          cmake --build ./build --target SMCE_Tests
+          (cd build/test/; ctest --output-on-failure)
 
   build-macos:
     name: libSMCE - macOS (${{ matrix.compiler.name }})
@@ -87,6 +91,10 @@ jobs:
           cmake -G Ninja -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
+      - name: Build & Run tests
+        run: |
+          cmake --build ./build --target SMCE_Tests
+          (cd build/test/; ctest --output-on-failure)
 
   build-windows:
     name: libSMCE - Windows (${{ matrix.compiler.name }} & Boost ${{ matrix.boost.version }})
@@ -134,3 +142,8 @@ jobs:
           cmake -G Ninja -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
+      - name: Build & Run tests
+        run: |
+          cmake --build ./build --target SMCE_Tests
+          cd build/test
+          ctest --output-on-failure

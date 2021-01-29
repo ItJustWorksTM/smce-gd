@@ -94,3 +94,4 @@ endif ()
 setup_smce_resources ()
 add_dependencies (SMCE ArdRtRes)
 
+add_subdirectory (test EXCLUDE_FROM_ALL)
