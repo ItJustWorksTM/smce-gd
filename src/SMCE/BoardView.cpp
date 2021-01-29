@@ -153,7 +153,7 @@ std::size_t VirtualUartBuffer::write(std::span<const char> buf) noexcept {
         }
     }();
     std::lock_guard g{mut};
-    const std::size_t count = std::min(std::clamp(max_buffered - d.size(), 0ul, static_cast<std::size_t>(max_buffered)), buf.size());
+    const std::size_t count = std::min(std::clamp(max_buffered - d.size(), std::size_t{0}, static_cast<std::size_t>(max_buffered)), buf.size());
     std::copy_n(buf.begin(), count, std::back_inserter(d));
     return count;
 }

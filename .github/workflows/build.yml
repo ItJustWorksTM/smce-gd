@@ -2,7 +2,7 @@ name: Build
 on: [push, pull_request]
 jobs:
   build-ubuntu:
-    name: libSMCE - Linux (${{ matrix.compiler.name }} & ${{ matrix.boost }})
+    name: libSMCE - Linux (${{ matrix.compiler.name }} & Boost ${{ matrix.boost }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -85,5 +85,52 @@ jobs:
           [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           mkdir build
           cmake -G Ninja -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -S ./ -B ./build
+      - name: CMake build
+        run: cmake --build ./build
+
+  build-windows:
+    name: libSMCE - Windows (${{ matrix.compiler.name }} & Boost ${{ matrix.boost.version }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - name: MSVC
+            c: cl
+            cxx: cl
+#         - name: Clang/LLVM
+#           c: clang-cl
+#           cxx: clang++-cl
+        boost:
+          - version: 1.74.0
+            slug: 1_74_0
+          - version: 1.75.0
+            slug: 1_75_0
+#   env:
+#     CC: ${{ matrix.compiler.c }}
+#     CXX: ${{ matrix.compiler.cxx }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir C:\local
+      - name: Cache Boost
+        id: cache-boost
+        uses: actions/cache@v2
+        with:
+          path: C:\local\boost_${{ matrix.boost.slug }}
+          key: ${{ runner.os }}-boost-${{ matrix.boost.version }}
+      - if: steps.cache-boost.outputs.cache-hit != 'true'
+        shell: powershell
+        run: .\ci\install-boost.ps1 '14.2' '${{ matrix.boost.version }}' '${{ matrix.boost.slug }}'
+      - name: Check deps
+        shell: bash
+        run: |
+          choco install ninja arduino-cli openssl > silence
+          ninja --version
+          arduino-cli version
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: CMake configure
+        run: |
+          mkdir build
+          cmake -G Ninja -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build

@@ -26,8 +26,8 @@
 #include <Windows.h>
 #include <winternl.h>
 extern "C" {
-LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
-LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
+__declspec(dllimport) LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
+__declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 }
 #else
 #error "Unsupported platform"
@@ -190,9 +190,9 @@ bool BoardRunner::suspend() noexcept {
         return false;
 
 #if defined(__unix__)
-    ::kill(m_internal->sketch.id(), SIGSTOP);
+    ::kill(m_internal->sketch.native_handle(), SIGSTOP);
 #elif defined(_WIN32) || defined(WIN32)
-    NtSuspendProcess(m_internal->sketch.id());
+    NtSuspendProcess(m_internal->sketch.native_handle());
 #endif
 
     m_status = Status::suspended;
@@ -204,9 +204,9 @@ bool BoardRunner::resume() noexcept {
         return false;
 
 #if defined(__unix__)
-    ::kill(m_internal->sketch.id(), SIGCONT);
+    ::kill(m_internal->sketch.native_handle(), SIGCONT);
 #elif defined(_WIN32) || defined(WIN32)
-    NtResumeProcess(m_internal->sketch.id());
+    NtResumeProcess(m_internal->sketch.native_handle());
 #endif
 
     m_status = Status::running;
