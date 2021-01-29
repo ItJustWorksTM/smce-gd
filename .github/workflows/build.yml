@@ -80,11 +80,30 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check deps
         run: |
-          brew install ninja boost arduino-cli
+          brew install ninja arduino-cli
           ninja --version # technically not a dependency, but used to speedup builds
           cmake --version
           arduino-cli version
           arduino-cli core install arduino:avr
+      - name: Cache Boost with GCC
+        if: startsWith(matrix.compiler.name, 'GCC')
+        id: cache-boost
+        uses: actions/cache@v2
+        with:
+          path: |
+            /usr/local/lib/cmake/Boost
+            /usr/local/lib/cmake/boost_*
+            /usr/local/Cellar/boost
+          key: ${{ runner.os }}-boost-gcc
+      - name: Install Boost with GCC
+        if: startsWith(matrix.compiler.name, 'GCC') && steps.cache-boost-gcc.outputs.cache-hit != 'true'
+        run: |
+          sed -e 's/bootstrap_args = %W\[/bootstrap_args = %W\[\
+          --with-toolset=gcc/' -i '' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/boost.rb
+          brew install boost -s --cc=${{ matrix.compiler.c }}
+      - name: Install Boost with Clang
+        if: (!startsWith(matrix.compiler.name, 'GCC'))
+        run: brew install boost
       - name: CMake configure
         run: |
           [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
