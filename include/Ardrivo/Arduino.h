@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cmath>
+#include "SMCE_dll.hpp"
 
 #define PROGMEM
 
@@ -42,21 +43,21 @@ using boolean = bool;
 using byte = std::uint8_t;
 using word = std::uint16_t;
 
-void pinMode(int pin, bool mode);
+SMCE__DLL_RT_API void pinMode(int pin, bool mode);
 
 //** Digital I/O **//
-int digitalRead(int pin);
-void digitalWrite(int pin, bool value);
+SMCE__DLL_RT_API int digitalRead(int pin);
+SMCE__DLL_RT_API void digitalWrite(int pin, bool value);
 
 //** Analog I/O **//
-void analogWrite(int pin, byte value);
-int analogRead(int pin);
+SMCE__DLL_RT_API void analogWrite(int pin, byte value);
+SMCE__DLL_RT_API int analogRead(int pin);
 
 //** Time **//
-void delay(unsigned long long);
-void delayMicroseconds(unsigned long long);
-unsigned long micros();
-unsigned long millis();
+SMCE__DLL_RT_API void delay(unsigned long long);
+SMCE__DLL_RT_API void delayMicroseconds(unsigned long long);
+SMCE__DLL_RT_API unsigned long micros();
+SMCE__DLL_RT_API unsigned long millis();
 
 //** Math **//
 using std::abs;

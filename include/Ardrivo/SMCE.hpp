@@ -21,9 +21,11 @@
 #ifndef SMCE_ARDRIVO_SMCE_HPP
 #define SMCE_ARDRIVO_SMCE_HPP
 
+#include "SMCE_dll.hpp"
+
 using SetupSig = void();
 using LoopSig = void();
 
-int SMCE__main(int, char**, SetupSig*, LoopSig*) noexcept;
+SMCE__DLL_RT_API int SMCE__main(int, char**, SetupSig*, LoopSig*) noexcept;
 
 #endif // SMCE_ARDRIVO_SMCE_HPP

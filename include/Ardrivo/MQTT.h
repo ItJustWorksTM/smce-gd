@@ -37,7 +37,7 @@ struct MQTTClientCallbacks {
     MQTTClientCallbackAdvanced advanced = nullptr;
 };
 
-class MQTTClient {
+class SMCE__DLL_RT_API MQTTClient {
     void* m_client = nullptr;
     bool m_clean_session = true;
     int m_keepalive = 60;
