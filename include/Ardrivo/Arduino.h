@@ -19,6 +19,7 @@
 #ifndef ARDUINO_H
 #define ARDUINO_H
 
+#include <algorithm>
 #include <cctype>
 #include <cstdint>
 #include <cstdlib>
