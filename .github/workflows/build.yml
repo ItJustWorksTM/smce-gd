@@ -44,6 +44,7 @@ jobs:
           cmake --version
           brew install arduino-cli
           arduino-cli version
+          arduino-cli core install arduino:avr
       - name: CMake configure
         run: |
           export BOOST_ROOT="$(pwd)/boost_root"
@@ -83,6 +84,7 @@ jobs:
           ninja --version # technically not a dependency, but used to speedup builds
           cmake --version
           arduino-cli version
+          arduino-cli core install arduino:avr
       - name: CMake configure
         run: |
           [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
@@ -135,6 +137,7 @@ jobs:
           choco install ninja arduino-cli openssl > silence
           ninja --version
           arduino-cli version
+          arduino-cli core install arduino:avr
       - uses: ilammy/msvc-dev-cmd@v1
       - name: CMake configure
         run: |
