@@ -23,6 +23,7 @@
 #include <csignal>
 #elif BOOST_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
+#pragma comment(lib, "ntdll.lib")
 #include <Windows.h>
 #include <winternl.h>
 extern "C" {
