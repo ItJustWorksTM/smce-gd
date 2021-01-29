@@ -129,7 +129,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: C:\local\boost_${{ matrix.boost.slug }}
-          key: ${{ runner.os }}-boost-${{ matrix.boost.version }}
+          key: ${{ runner.os }}-boost-${{ matrix.boost.version }}-64bit
       - if: steps.cache-boost.outputs.cache-hit != 'true'
         shell: powershell
         run: .\ci\install-boost.ps1 '14.2' '${{ matrix.boost.version }}' '${{ matrix.boost.slug }}'
