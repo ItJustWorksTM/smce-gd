@@ -5,29 +5,29 @@
 #ifndef GODOT_SMCE_ANALOGRAYCAST_HXX
 #define GODOT_SMCE_ANALOGRAYCAST_HXX
 
-#include "core/Godot.hpp"
-#include "gen/RayCast.hpp"
 #include "SMCE/BoardView.hpp"
 #include "bind/BoardView.hxx"
+#include "core/Godot.hpp"
+#include "gen/RayCast.hpp"
 
 namespace godot {
-    class AnalogRaycast : public RayCast {
+class AnalogRaycast : public RayCast {
     GODOT_CLASS(AnalogRaycast, RayCast)
 
-    public:
-        BoardView* board_view;
+  public:
+    BoardView* board_view;
 
-        static void _register_methods();
+    static void _register_methods();
 
-        void _init();
+    void _init();
 
-        void _physics_process(float delta);
+    void _physics_process(float delta);
 
-        void _on_view_invalidated();
+    void _on_view_invalidated();
 
-        void set_boardview(BoardView* view);
-    };
+    void set_boardview(BoardView* view);
+};
 
-}
+} // namespace godot
 
-#endif //GODOT_SMCE_ANALOGRAYCAST_HXX
+#endif // GODOT_SMCE_ANALOGRAYCAST_HXX

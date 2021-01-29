@@ -18,6 +18,6 @@
 Fetchcontent_Declare(libSMCE
         GIT_REPOSITORY https://github.com/ItJustWorksTM/libSMCE.git
         GIT_TAG master
-)
+        )
 
 FetchContent_MakeAvailable(libSMCE)

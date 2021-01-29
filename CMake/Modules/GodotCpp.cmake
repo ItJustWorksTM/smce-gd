@@ -19,14 +19,14 @@ add_library(godot-cpp STATIC)
 
 FetchContent_Declare(godot-cppy
         GIT_REPOSITORY https://github.com/portaloffreedom/godot-cpp.git
-        GIT_TAG        cmake-gen-fix
-)
+        GIT_TAG cmake-gen-fix
+        )
 
 FetchContent_GetProperties(godot-cppy)
 
-if(NOT godot-cppy_POPULATED)
+if (NOT godot-cppy_POPULATED)
     FetchContent_Populate(godot-cppy)
-endif()
+endif ()
 
 set(GODOTSRC ${godot-cppy_SOURCE_DIR})
 set(GODOTBIN ${godot-cppy_BINARY_DIR})

@@ -15,9 +15,12 @@ class Draw:
 
 
 export var disabled: bool = false setget set_disabled
+
+
 func set_disabled(v: bool) -> void:
 	disabled = v
 	set_process(v)
+
 
 var _to_draw: Array = []
 var _clear: bool = true

@@ -19,12 +19,13 @@
 #include "bind/BoardRunner.hxx"
 #include "bind/BoardView.hxx"
 
-
 using namespace godot;
 
 #define STR(s) #s
-#define U(f) std::pair { STR(f), &BoardRunner::f }
-#define R(f) std::pair { STR(f), &BoardRunner::fw_wrap<&smce::BoardRunner::f> }
+#define U(f)                                                                                                 \
+    std::pair { STR(f), &BoardRunner::f }
+#define R(f)                                                                                                 \
+    std::pair { STR(f), &BoardRunner::fw_wrap<&smce::BoardRunner::f> }
 
 void BoardRunner::_register_methods() {
     register_signal<BoardRunner>("status_changed");
@@ -38,29 +39,21 @@ void BoardRunner::_register_methods() {
 
 void BoardRunner::_init() { Godot::print("BoardRunner created"); }
 
-std::optional<smce::BoardRunner> &BoardRunner::native() { return runner; }
+std::optional<smce::BoardRunner>& BoardRunner::native() { return runner; }
 
 bool BoardRunner::configure(String pp_fqbn) {
     if (!runner)
         return false;
 
-    const auto fqbin_view = std::string_view{
-            pp_fqbn.alloc_c_string(), static_cast<size_t>(pp_fqbn.length())};
+    const auto fqbin_view = std::string_view{pp_fqbn.alloc_c_string(), static_cast<size_t>(pp_fqbn.length())};
 
     const auto config = smce::BoardConfig{
-            .pins = {1},
-            .gpio_drivers = {
-                    smce::BoardConfig::GpioDrivers{
-                            .pin_id = 1,
-                            .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{
-                                    .board_read = true,
-                                    .board_write = true
-                            }
-                    }
-            },
-            .uart_channels = {{}}
-    };
-
+        .pins = {1},
+        .gpio_drivers = {smce::BoardConfig::GpioDrivers{
+            .pin_id = 1,
+            .analog_driver =
+                smce::BoardConfig::GpioDrivers::AnalogDriver{.board_read = true, .board_write = true}}},
+        .uart_channels = {{}}};
 
     if (!runner->configure(fqbin_view, config))
         return false;
@@ -114,7 +107,7 @@ bool BoardRunner::init_context(String context_path) {
     return true;
 }
 
-BoardView *BoardRunner::view() { return view_node; }
+BoardView* BoardRunner::view() { return view_node; }
 
 bool BoardRunner::terminate() {
     if (!runner || !runner->terminate())
@@ -137,5 +130,4 @@ void BoardRunner::emit_status() {
 
 String BoardRunner::context() { return exec_context.resource_dir().c_str(); }
 
-UartSlurper *BoardRunner::uart() { return uart_node; }
-
+UartSlurper* BoardRunner::uart() { return uart_node; }

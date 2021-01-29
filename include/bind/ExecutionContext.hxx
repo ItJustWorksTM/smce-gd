@@ -19,29 +19,28 @@
 #ifndef GODOT_SMCE_EXECUTIONCONTEXT_HXX
 #define GODOT_SMCE_EXECUTIONCONTEXT_HXX
 
-#include "core/Godot.hpp"
 #include "SMCE/ExecutionContext.hpp"
+#include "core/Godot.hpp"
 
 namespace godot {
-    class ExecutionContext : public Reference {
+class ExecutionContext : public Reference {
     GODOT_CLASS(ExecutionContext, Reference)
 
-        smce::ExecutionContext context = smce::ExecutionContext{"."};
+    smce::ExecutionContext context = smce::ExecutionContext{"."};
 
-    public:
-        static void _register_methods();
+  public:
+    static void _register_methods();
 
-        static Ref<ExecutionContext> make_context(String path);
+    static Ref<ExecutionContext> make_context(String path);
 
-        void _init();
+    void _init();
 
-        smce::ExecutionContext &native();
+    smce::ExecutionContext& native();
 
-        String resource_dir();
+    String resource_dir();
 
-        bool check_suitable_environment();
-    };
-}
+    bool check_suitable_environment();
+};
+} // namespace godot
 
-
-#endif //GODOT_SMCE_EXECUTIONCONTEXT_HXX
+#endif // GODOT_SMCE_EXECUTIONCONTEXT_HXX

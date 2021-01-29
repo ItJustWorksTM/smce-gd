@@ -40,7 +40,7 @@ func add_force(state: PhysicsDirectBodyState):
 		state.add_force(real_force, force_position)
 
 		# debug
-		if !DebugCanvas.disabled:
+		if ! DebugCanvas.disabled:
 			var pos = global_transform.origin
 			DebugCanvas.add_draw(pos, pos + real_force, Color(1, 0, 0, 0.5))
 			DebugCanvas.add_draw(pos, point, Color(0, 0, 1, 0.5))

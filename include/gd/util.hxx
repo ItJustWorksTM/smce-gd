@@ -18,22 +18,19 @@
 
 #ifndef GODOT_SMCE_UTIL_HXX
 #define GODOT_SMCE_UTIL_HXX
-#include <core/Godot.hpp>
+
 #include <concepts>
+#include "core/Godot.hpp"
 
-template<std::derived_from<godot::Reference> T>
-auto make_ref() -> godot::Ref<T> {
-    return T::_new();
-}
+template <std::derived_from<godot::Reference> T> auto make_ref() -> godot::Ref<T> { return T::_new(); }
 
-constexpr auto register_fns = []<class... T>(std::pair<const char *, T>... func) {
+constexpr auto register_fns = []<class... T>(std::pair<const char*, T>... func) {
     (register_method(func.first, func.second), ...);
 };
 
-#define MEMBER_LAMBDA() \
-template<auto func, class Ret = void, class... Args> \
-constexpr auto lambda(Args ...args) -> Ret { \
-    return std::invoke(func, *this, args...); \
-}
+#define MEMBER_LAMBDA()                                                                                      \
+    template <auto func, class Ret = void, class... Args> constexpr auto lambda(Args... args)->Ret {         \
+        return std::invoke(func, *this, args...);                                                            \
+    }
 
-#endif //GODOT_SMCE_UTIL_HXX
+#endif // GODOT_SMCE_UTIL_HXX

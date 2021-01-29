@@ -19,14 +19,14 @@
 #ifndef GODOT_SMCE_UARTSLURPER_HXX
 #define GODOT_SMCE_UARTSLURPER_HXX
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
 #include "core/Godot.hpp"
 #include "gen/Node.hpp"
 #include "BoardView.hxx"
 
 namespace godot {
-    class UartSlurper : public Node {
+class UartSlurper : public Node {
     GODOT_CLASS(UartSlurper, Node)
     friend BoardRunner;
 
@@ -42,14 +42,17 @@ namespace godot {
 
     std::vector<UartBuffer> bufs;
 
-    public:
-        static void _register_methods();
-        void _init();
-        bool write(int channel, String msg);
-        int channels();
-        void _physics_process(float delta);
-    };
-}
+  public:
+    static void _register_methods();
 
+    void _init();
 
-#endif //GODOT_SMCE_UARTSLURPER_HXX
+    bool write(int channel, String msg);
+
+    int channels();
+
+    void _physics_process(float delta);
+};
+} // namespace godot
+
+#endif // GODOT_SMCE_UARTSLURPER_HXX

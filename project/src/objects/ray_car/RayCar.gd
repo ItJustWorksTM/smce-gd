@@ -2,19 +2,20 @@ extends RigidBody
 
 export var grounded_threshold = 2
 
+var runner: BoardRunner = null
+var _disabled = false
+
 onready var _wheels: Array = [$RightFront, $LeftFront, $RightBack, $LeftBack]
 
-var runner: BoardRunner = null
+
 func set_runner(runner: BoardRunner):
-	if !runner:
+	if ! runner:
 		return
 	runner.connect("status_changed", self, "_on_board_status_changed")
 	$Attachments/RayCast.set_boardview(runner.view())
 
-var _disabled = false
 
 func _integrate_forces(state: PhysicsDirectBodyState) -> void:
-
 	var touching = 0
 
 	# Iterate over our springs so that they can apply their forces
@@ -34,8 +35,6 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 	state.add_force(-state.linear_velocity, Vector3.ZERO)
 	state.add_torque(-state.angular_velocity)
 
-
-
 	# Stupid steering
 	if Input.is_action_pressed("ui_right"):
 		state.add_torque(transform.basis.xform(Vector3.DOWN * 5))
@@ -51,10 +50,10 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 	elif Input.is_action_pressed("ui_down"):
 		state.add_force(transform.basis.xform(Vector3.BACK) * 30, Vector3(0, -0.2, 0))
 	else:
-		# Extra extra friction		
+		# Extra extra friction
 		state.add_force(-state.linear_velocity * 3, Vector3.ZERO)
-		pass
+
 
 func _on_board_status_changed(status) -> void:
 	if status == SMCE.Status.STOPPED:
-		queue_free() # just die
+		queue_free()  # just die
