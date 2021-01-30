@@ -96,11 +96,12 @@ jobs:
             /usr/local/Cellar/boost
           key: ${{ runner.os }}-boost-gcc
       - name: Install Boost with GCC
-        if: startsWith(matrix.compiler.name, 'GCC') && steps.cache-boost-gcc.outputs.cache-hit != 'true'
+        if: startsWith(matrix.compiler.name, 'GCC')
         run: |
           sed -e 's/bootstrap_args = %W\[/bootstrap_args = %W\[\
           --with-toolset=gcc/' -i '' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/boost.rb
           brew install boost -s --cc=${{ matrix.compiler.c }}
+          brew link boost
       - name: Install Boost with Clang
         if: (!startsWith(matrix.compiler.name, 'GCC'))
         run: brew install boost
