@@ -53,6 +53,15 @@ TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
     REQUIRE_FALSE(br.view().valid());
 }
 
+template <class Pin, class Value, class Duration>
+void test_pin_delayable(Pin pin, Value expected_value, std::size_t ticks, Duration tick_length) {
+    do {
+        if(ticks-- == 0)
+            FAIL();
+        std::this_thread::sleep_for(tick_length);
+    } while(pin.read() != expected_value);
+}
+
 TEST_CASE("BoardView GPIO", "[BoardView]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
     REQUIRE(exec_ctx.check_suitable_environment());
@@ -96,12 +105,10 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
     auto pin2 = bv.pins[2].digital();
     REQUIRE(pin2.exists());
     REQUIRE(br.start());
-    std::this_thread::sleep_for(10ms);
-    pin0.write(false);
-    std::this_thread::sleep_for(10ms);
-    REQUIRE(pin2.read());
-    pin0.write(true);
     std::this_thread::sleep_for(1ms);
-    REQUIRE_FALSE(pin2.read());
+    pin0.write(false);
+    test_pin_delayable(pin2, true, 16384, 1ms);
+    pin0.write(true);
+    test_pin_delayable(pin2, false, 16384, 1ms);
     REQUIRE(br.stop());
 }
