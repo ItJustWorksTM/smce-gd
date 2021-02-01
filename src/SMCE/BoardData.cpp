@@ -47,7 +47,7 @@ BoardData::BoardData(
         const auto it = std::find(sorted_pins.begin(), sorted_pins.end(), gpio_driver.pin_id);
         if(it == sorted_pins.end())
             continue;
-        const auto pin_idx = std::distance(it, sorted_pins.begin());
+        const auto pin_idx = std::distance(sorted_pins.begin(), it);
         auto& pin = pins[pin_idx];
         if(gpio_driver.analog_driver) {
             auto& driver = gpio_driver.analog_driver.value();
