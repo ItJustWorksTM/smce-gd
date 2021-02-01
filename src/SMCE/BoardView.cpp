@@ -37,11 +37,11 @@ namespace smce {
 }
 
 [[nodiscard]] std::uint16_t VirtualAnalogDriver::read() noexcept {
-    return exists() && can_read() ? m_bdat->pins[m_idx].value.load() : 0;
+    return exists() ? m_bdat->pins[m_idx].value.load() : 0;
 }
 
 void VirtualAnalogDriver::write(std::uint16_t value) noexcept {
-    if(exists() && can_write())
+    if(exists())
         m_bdat->pins[m_idx].value.store(value);
 }
 
@@ -58,11 +58,11 @@ void VirtualAnalogDriver::write(std::uint16_t value) noexcept {
 }
 
 [[nodiscard]] bool VirtualDigitalDriver::read() noexcept {
-    return exists() && can_read() && m_bdat->pins[m_idx].value.load();
+    return exists() && m_bdat->pins[m_idx].value.load();
 }
 
 void VirtualDigitalDriver::write(bool value) noexcept {
-    if(exists() && can_write())
+    if(exists())
         m_bdat->pins[m_idx].value.store(value ? 255 : 0);
 }
 
@@ -94,7 +94,9 @@ VirtualPin VirtualPins::operator[](std::size_t pin_id) noexcept {
         [](const auto& pin, std::size_t pin_id){
         return pin.id < pin_id;
     });
-    return {m_bdat, static_cast<std::size_t>(std::distance(it, m_bdat->pins.begin()))};
+    if(const auto delta = std::distance(m_bdat->pins.begin(), it); delta >= 0 && m_bdat->pins[delta].id == pin_id)
+        return {m_bdat, static_cast<std::size_t>(delta)};
+    return {nullptr, std::size_t(-1)};
 }
 
 [[nodiscard]] bool VirtualUartBuffer::exists() noexcept {
