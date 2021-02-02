@@ -25,13 +25,20 @@
 #include <memory>
 #include <optional>
 #include <vector>
+
+#include <boost/predef.h>
+
 #include <boost/atomic/ipc_atomic.hpp>
 #include <boost/atomic/ipc_atomic_flag.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
 #include <boost/interprocess/containers/deque.hpp>
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/interprocess/containers/vector.hpp>
+#if BOOST_OS_WINDOWS
+#include <boost/interprocess/managed_windows_shared_memory.hpp>
+#else
 #include <boost/interprocess/managed_shared_memory.hpp>
+#endif
 #include <boost/interprocess/sync/spin/mutex.hpp>
 #include <SMCE/fwd.hpp>
 
@@ -54,8 +61,14 @@ struct IpcMovableMutex : boost::interprocess::ipcdetail::spin_mutex {
     IpcMovableMutex& operator=(IpcMovableMutex&&) noexcept { return *this; } //HSD never
 };
 
+#if BOOST_OS_WINDOWS
+using Shm = boost::interprocess::managed_windows_shared_memory;
+#else
+using Shm = boost::interprocess::managed_shared_memory;
+#endif
+
 template <class T>
-using ShmAllocator = boost::interprocess::allocator<T, boost::interprocess::managed_shared_memory::segment_manager>;
+using ShmAllocator = boost::interprocess::allocator<T, Shm::segment_manager>;
 template <class T>
 using ShmBasicString = boost::interprocess::basic_string<T, std::char_traits<T>, ShmAllocator<T>>;
 using ShmString = ShmBasicString<char>;
