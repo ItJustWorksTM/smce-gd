@@ -183,6 +183,9 @@ jobs:
           - name: GCC
             c: gcc
             cxx: g++
+          - name: Clang/LLVM
+            c: clang
+            cxx: clang++
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -192,6 +195,10 @@ jobs:
       - name: Check deps
         run: |
           pacman -Syu --noconfirm git cmake boost openssl arduino-cli ninja
+          if [ "${{ matrix.compiler.c }}" = "clang" ];
+          then
+            pacman -Syu --noconfirm clang
+          fi
           ninja --version
           arduino-cli version
           arduino-cli core install arduino:avr
