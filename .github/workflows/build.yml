@@ -2,7 +2,7 @@ name: Build & Test
 on: [push, pull_request]
 jobs:
   build-ubuntu:
-    name: libSMCE - Linux (${{ matrix.compiler.name }} & Boost ${{ matrix.boost }})
+    name: libSMCE - Ubuntu (${{ matrix.compiler.name }} & Boost ${{ matrix.boost }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
