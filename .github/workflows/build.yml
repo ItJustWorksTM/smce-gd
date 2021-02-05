@@ -229,8 +229,10 @@ jobs:
       - name: Package
         run: |
           mkdir ./build/packages
-          (cd build/; cpack -B packages)
-          rm -rd build/packages/_CPack_Packages
+          cd build
+          cpack -B packages
+          rm -rd packages/_CPack_Packages
+          cd ..
       - name: Upload artifacts
         if: matrix.boost.latest
         uses: 'actions/upload-artifact@v2'
