@@ -17,7 +17,7 @@ jobs:
           mv $(find . -mindepth 1 -maxdepth 2 -type d -name 'libSMCE-*' -printf '%p/* ') release/
           cd release
           mkdir hashes
-          for alg in md5 sha1 sha224 sha256 sha384 sha512 do
+          for alg in md5 sha1 sha224 sha256 sha384 sha512; do
             "${alg}sum" $(find . -maxdepth 1 -type f | sed 's/.\///') > hashes/$alg.txt
           done
           mv hashes/* ./
