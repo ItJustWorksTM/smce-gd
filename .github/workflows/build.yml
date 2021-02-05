@@ -1,6 +1,30 @@
 name: Build & Test
 on: [push, pull_request]
 jobs:
+  make-release:
+    name: Publish release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [build-ubuntu, build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v2
+      - name: Create Release
+        shell: bash
+        run: |
+          tag_name="${GITHUB_REF##*/}"
+          mkdir release
+          mv $(find . -mindepth 1 -maxdepth 2 -type d -name 'libSMCE-*' -printf '%p/* ') release/
+          cd release
+          mkdir hashes
+          for alg in md5 sha1 sha224 sha256 sha384 sha512 do
+            "${alg}sum" $(find . -maxdepth 1 -type f | sed 's/.\///') > hashes/$alg.txt
+          done
+          mv hashes/* ./
+          rmdir hashes
+          hub release create $(find . -type f -printf "-a %p ") -m "libSMCE $tag_name" "$tag_name"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-ubuntu:
     name: libSMCE - Ubuntu (${{ matrix.compiler.name }} & Boost ${{ matrix.boost }})
     runs-on: ubuntu-latest
@@ -14,7 +38,11 @@ jobs:
           - name: Clang/LLVM 10
             c: clang-10
             cxx: clang++-10
-        boost: [1.74.0, 1.75.0]
+        boost:
+          - version: 1.74.0
+            latest: false
+          - version: 1.75.0
+            latest: true
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -25,12 +53,12 @@ jobs:
         uses: actions/cache@v2
         with:
           path: boost_root
-          key: ${{ runner.os }}-boost-${{ matrix.boost }}
+          key: ${{ runner.os }}-boost-${{ matrix.boost.version }}
       - name: Install Boost
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
-          export BOOST_ARK_BASENAME=$(echo ${{ matrix.boost }} | sed "s/^/boost_/;s/\./_/g")
-          wget -qOboost_src.tgz https://dl.bintray.com/boostorg/release/${{ matrix.boost }}/source/$BOOST_ARK_BASENAME.tar.gz
+          export BOOST_ARK_BASENAME=$(echo ${{ matrix.boost.version }} | sed "s/^/boost_/;s/\./_/g")
+          wget -qOboost_src.tgz https://dl.bintray.com/boostorg/release/${{ matrix.boost.version }}/source/$BOOST_ARK_BASENAME.tar.gz
           tar -xzf ./boost_src.tgz
           mkdir boost_root
           cd $BOOST_ARK_BASENAME
@@ -56,6 +84,17 @@ jobs:
         run: |
           cmake --build ./build --target SMCE_Tests
           (cd build/test/; ctest --output-on-failure)
+      - name: Package
+        run: |
+          mkdir ./build/packages
+          (cd build/; cpack -B packages)
+          rm -rd build/packages/_CPack_Packages
+      - name: Upload artifacts
+        if: matrix.boost.latest
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: libSMCE-ubuntu-${{ matrix.compiler.c }}
+          path: build/packages/*
 
   build-macos:
     name: libSMCE - macOS (${{ matrix.compiler.name }})
@@ -65,12 +104,15 @@ jobs:
       matrix:
         compiler:
           - name: GCC 10
+            slug: gcc
             c: gcc-10
             cxx: g++-10
           - name: Clang/LLVM 11
+            slug: clang
             c: clang-11
             cxx: clang++-11
           - name: AppleClang 12
+            slug: appleclang
             c: clang
             cxx: clang++
     env:
@@ -119,6 +161,16 @@ jobs:
           [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           cmake --build ./build --target SMCE_Tests
           (cd build/test/; ctest --output-on-failure)
+      - name: Package
+        run: |
+          mkdir ./build/packages
+          (cd build/; cpack -B packages)
+          rm -rd build/packages/_CPack_Packages
+      - name: Upload artifacts
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: libSMCE-macos-${{ matrix.compiler.slug }}
+          path: build/packages/*
 
   build-windows:
     name: libSMCE - Windows (${{ matrix.compiler.name }} & Boost ${{ matrix.boost.version }})
@@ -136,8 +188,10 @@ jobs:
         boost:
           - version: 1.74.0
             slug: 1_74_0
+            latest: false
           - version: 1.75.0
             slug: 1_75_0
+            latest: true
 #   env:
 #     CC: ${{ matrix.compiler.c }}
 #     CXX: ${{ matrix.compiler.cxx }}
@@ -172,6 +226,17 @@ jobs:
           cmake --build ./build --target SMCE_Tests
           cd build/test
           ctest --output-on-failure
+      - name: Package
+        run: |
+          mkdir ./build/packages
+          (cd build/; cpack -B packages)
+          rm -rd build/packages/_CPack_Packages
+      - name: Upload artifacts
+        if: matrix.boost.latest
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: libSMCE-windows-${{ matrix.compiler.c }}
+          path: build/packages/*
   build-arch:
     name: libSMCE - ArchLinux (${{ matrix.compiler.name }})
     runs-on: ubuntu-latest

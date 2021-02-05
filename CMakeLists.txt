@@ -19,6 +19,10 @@ cmake_minimum_required (VERSION 3.16)
 
 project (libSMCE)
 
+if (NOT DEFINED SMCE_ARCH)
+   set (SMCE_ARCH x86_64)
+endif ()
+
 include (FetchContent)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 
@@ -95,3 +99,15 @@ setup_smce_resources ()
 add_dependencies (SMCE ArdRtRes)
 
 add_subdirectory (test EXCLUDE_FROM_ALL)
+
+install (FILES "$<TARGET_FILE:SMCE>" DESTINATION "lib64/SMCE")
+install (FILES "LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "share/SMCE")
+
+if (CMAKE_CXX_SIMULATE_ID)
+   set (SMCE_COMPILER_ID "${CMAKE_CXX_SIMULATE_ID}")
+else ()
+   set (SMCE_COMPILER_ID "${CMAKE_CXX_COMPILER_ID}")
+endif ()
+list (APPEND CPACK_GENERATOR STGZ TGZ ZIP)
+set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${SMCE_ARCH}-${SMCE_COMPILER_ID}")
+include (CPack)
