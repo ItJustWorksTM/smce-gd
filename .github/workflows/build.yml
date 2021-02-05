@@ -231,7 +231,7 @@ jobs:
           mkdir ./build/packages
           cd build
           cpack -B packages
-          rm -rd packages/_CPack_Packages
+          rm -R packages/_CPack_Packages
           cd ..
       - name: Upload artifacts
         if: matrix.boost.latest
