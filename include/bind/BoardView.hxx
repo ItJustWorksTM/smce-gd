@@ -16,38 +16,35 @@
  *
  */
 
-
 #ifndef GODOT_SMCE_BOARDVIEW_HXX
 #define GODOT_SMCE_BOARDVIEW_HXX
 
 #include <functional>
-#include "core/Godot.hpp"
-#include "gen/Node.hpp"
-#include "SMCE/BoardView.hpp"
 #include "SMCE/BoardConf.hpp"
+#include "SMCE/BoardView.hpp"
+#include "core/Godot.hpp"
 #include "gd/util.hxx"
+#include "gen/Node.hpp"
 
 namespace godot {
-    class BoardRunner;
+class BoardRunner;
 
-    class BoardView : public Node {
+class BoardView : public Node {
     GODOT_CLASS(BoardView, Node)
-        friend BoardRunner;
+    friend BoardRunner;
 
-        smce::BoardView view;
-        smce::BoardConfig config;
+    smce::BoardView view;
+    smce::BoardConfig config;
 
-    public:
-        static void _register_methods();
+  public:
+    static void _register_methods();
 
+    void _init();
 
-        void _init();
+    smce::BoardView native();
 
-        smce::BoardView native();
-        const smce::BoardConfig& board_config() const;
+    const smce::BoardConfig& board_config() const;
+};
+} // namespace godot
 
-    };
-}
-
-
-#endif //GODOT_SMCE_BOARDVIEW_HXX
+#endif // GODOT_SMCE_BOARDVIEW_HXX

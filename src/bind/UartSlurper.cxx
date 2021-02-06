@@ -16,8 +16,8 @@
  *
  */
 
-#include "bind/UartSlurper.hxx"
 #include <ranges>
+#include "bind/UartSlurper.hxx"
 
 using namespace godot;
 
@@ -32,18 +32,18 @@ void UartSlurper::_init() { set_physics_process(false); }
 
 void UartSlurper::_physics_process(float) {
     size_t i = 0;
-    for (auto &[available, read_buf, write_buf] : bufs) {
-
+    for (auto& [available, read_buf, write_buf] : bufs) {
 
         auto written = view.uart_channels[i].rx().write(write_buf);
         write_buf.erase(write_buf.begin(), write_buf.begin() + written);
 
         available = view.uart_channels[i].tx().read({read_buf.begin(), read_buf.end() - 1});
         if (available > 0) {
-            std::replace_if(read_buf.begin(), read_buf.begin() + available,
-                            [](const auto &letter) { return letter == '\0'; }, '\r'); // godot seems to ignore \r
+            std::replace_if(
+                read_buf.begin(), read_buf.begin() + available,
+                [](const auto& letter) { return letter == '\0'; }, '\r'); // godot seems to ignore \r
             read_buf[available] = '\0';
-            emit_signal("uart", 0, String(static_cast<const char *>(read_buf.data())));
+            emit_signal("uart", 0, String(static_cast<const char*>(read_buf.data())));
         }
 
         ++i;
@@ -60,7 +60,8 @@ void UartSlurper::setup_bufs(smce::BoardView new_view) {
         const auto max_write = view.uart_channels[i].rx().max_size();
         auto write_buf = std::vector<char>{};
         write_buf.reserve(max_write > 1024 ? max_write : 1024);
-        bufs.push_back({0,std::vector<char>(view.uart_channels[i].tx().max_size() + 1), std::move(write_buf)});
+        bufs.push_back(
+            {0, std::vector<char>(view.uart_channels[i].tx().max_size() + 1), std::move(write_buf)});
     }
 
     set_physics_process(true);
@@ -71,12 +72,9 @@ bool UartSlurper::write(int channel, String msg) {
         return false;
 
     const auto str = msg.ascii();
-    std::copy_n(str.get_data(), str.length(), std::back_inserter( bufs[channel].write_buf));
+    std::copy_n(str.get_data(), str.length(), std::back_inserter(bufs[channel].write_buf));
 
     return true;
 }
 
-int UartSlurper::channels() {
-    return view.valid() ? view.uart_channels.size() : -1;
-}
-
+int UartSlurper::channels() { return view.valid() ? view.uart_channels.size() : -1; }

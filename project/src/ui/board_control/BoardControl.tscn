@@ -7,7 +7,7 @@
 [ext_resource path="res://src/ui/uart_console/UartConsole.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/ui/v_panel/VPanel.tscn" type="PackedScene" id=7]
 
-[sub_resource type="StyleBoxFlat" id=8]
+[sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
 border_width_right = 8
 border_color = Color( 0, 0.74902, 1, 1 )
@@ -57,7 +57,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -440.0
 margin_right = 0.0
-custom_styles/panel = SubResource( 8 )
+custom_styles/panel = SubResource( 1 )
 side = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="RightTop"]

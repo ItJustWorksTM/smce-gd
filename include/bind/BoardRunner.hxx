@@ -19,74 +19,70 @@
 #ifndef GODOT_SMCE_BOARDRUNNER_HXX
 #define GODOT_SMCE_BOARDRUNNER_HXX
 
-#include <optional>
 #include <functional>
+#include <optional>
 #include <type_traits>
-#include "gen/Node.hpp"
-#include "core/Godot.hpp"
-#include "gen/Reference.hpp"
-#include "SMCE/BoardRunner.hpp"
 #include "SMCE/BoardConf.hpp"
-#include "SMCE/SketchConf.hpp"
+#include "SMCE/BoardRunner.hpp"
 #include "SMCE/ExecutionContext.hpp"
-#include "bind/ExecutionContext.hxx"
+#include "SMCE/SketchConf.hpp"
 #include "bind/BoardView.hxx"
+#include "bind/ExecutionContext.hxx"
 #include "bind/UartSlurper.hxx"
-#include "gd/util.hxx"
+#include "core/Godot.hpp"
 #include "gd/AnyTask.hxx"
+#include "gd/util.hxx"
+#include "gen/Node.hpp"
+#include "gen/Reference.hpp"
 
 namespace godot {
 
-    class BoardRunner : public Node {
+class BoardRunner : public Node {
     GODOT_CLASS(BoardRunner, Node)
 
+    std::optional<smce::BoardRunner> runner;
 
-        std::optional<smce::BoardRunner> runner;
+    template <auto func, class... Args>
+    std::invoke_result_t<decltype(func), smce::BoardRunner> fw_wrap(Args&&... args) {
+        if (!runner)
+            return false;
+        decltype(auto) ret = std::invoke(func, *runner, std::forward<Args>(args)...);
+        emit_status();
+        return std::move(ret);
+    }
 
-        template<auto func, class ...Args>
-        std::invoke_result_t<decltype(func), smce::BoardRunner> fw_wrap(Args &&...args) {
-            if (!runner)
-                return false;
-            decltype(auto) ret = std::invoke(func, *runner, std::forward<Args>(args)...);
-            emit_status();
-            return std::move(ret);
-        }
+    void emit_status();
 
-        void emit_status();
+  public:
+    smce::ExecutionContext exec_context = smce::ExecutionContext{"."};
 
-    public:
-        smce::ExecutionContext exec_context = smce::ExecutionContext{"."};
+    BoardView* view_node;
+    UartSlurper* uart_node;
 
+    BoardView* view();
 
-        BoardView *view_node;
-        UartSlurper *uart_node;
+    UartSlurper* uart();
 
-        BoardView *view();
+    void _init();
 
-        UartSlurper *uart();
+    static void _register_methods();
 
-        void _init();
+    bool init_context(String context_path);
 
-        static void _register_methods();
+    String context();
 
-        bool init_context(String context_path);
+    // TODO: take a real BoardConfig
+    bool configure(String pp_fqbn);
 
-        String context();
+    // TODO: take a real SketchConfig
+    Ref<AnyTask> build(const String sketch_src);
 
-        // TODO: take a real BoardConfig
-        bool configure(String pp_fqbn);
+    bool terminate();
 
-        // TODO: take a real SketchConfig
-        Ref<AnyTask> build(const String sketch_src);
+    int status();
 
-        bool terminate();
+    std::optional<smce::BoardRunner>& native();
+};
+} // namespace godot
 
-        int status();
-
-
-        std::optional<smce::BoardRunner> &native();
-
-    };
-}
-
-#endif //GODOT_SMCE_BOARDRUNNER_HXX
+#endif // GODOT_SMCE_BOARDRUNNER_HXX

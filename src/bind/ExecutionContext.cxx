@@ -21,15 +21,15 @@
 
 using namespace godot;
 
- void ExecutionContext::_register_methods() {
+void ExecutionContext::_register_methods() {
     register_method("resource_dir", &ExecutionContext::resource_dir);
     register_method("check_suitable_environment", &ExecutionContext::check_suitable_environment);
 }
 
 Ref<ExecutionContext> ExecutionContext::make_context(String path) {
     auto ret = make_ref<ExecutionContext>();
-    ret->context = smce::ExecutionContext{
-            std::string_view{path.alloc_c_string(), static_cast<size_t>(path.length())}};
+    ret->context =
+        smce::ExecutionContext{std::string_view{path.alloc_c_string(), static_cast<size_t>(path.length())}};
     return ret;
 }
 
@@ -40,4 +40,4 @@ String ExecutionContext::resource_dir() { return context.resource_dir().c_str();
 
 bool ExecutionContext::check_suitable_environment() { return context.check_suitable_environment(); }
 
-smce::ExecutionContext &ExecutionContext::native() { return context; }
+smce::ExecutionContext& ExecutionContext::native() { return context; }

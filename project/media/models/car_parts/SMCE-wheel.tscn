@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://media/models/car_parts/SMCE-wheel.glb" type="PackedScene" id=1]
+
+[node name="SMCE-wheel" instance=ExtResource( 1 )]
+
+[node name="Wheel" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )

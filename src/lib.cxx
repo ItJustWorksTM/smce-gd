@@ -17,26 +17,25 @@
  */
 
 #include <core/Godot.hpp>
-#include "gd/AnyTask.hxx"
 #include "bind/BoardRunner.hxx"
 #include "bind/ExecutionContext.hxx"
-#include "virt_devices/AnalogRaycast.hxx"
 #include "bind/UartSlurper.hxx"
+#include "gd/AnyTask.hxx"
+#include "virt_devices/AnalogRaycast.hxx"
+#include "virt_devices/BrushedMotor.hxx"
 
 using namespace godot;
 
-extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
-    Godot::gdnative_init(o);
-}
+extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options* o) { Godot::gdnative_init(o); }
 
-extern "C" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_options *o) {
+extern "C" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_options* o) {
     Godot::gdnative_terminate(o);
 }
 
-template<class ...T>
-void register_classes() { (register_class<T>(), ...); };
+template <class... T> void register_classes() { (register_class<T>(), ...); };
 
-extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
+extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
-    register_classes<AnyTask, BoardRunner, ExecutionContext, AnalogRaycast, BoardView, UartSlurper>();
+    register_classes<AnyTask, BoardRunner, ExecutionContext, AnalogRaycast, BoardView, UartSlurper,
+                     BrushedMotor>();
 }

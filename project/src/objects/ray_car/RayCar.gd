@@ -1,60 +1,56 @@
 extends RigidBody
 
-export var grounded_threshold = 2
+var runner: BoardRunner = null
+var _disabled: bool = false
 
 onready var _wheels: Array = [$RightFront, $LeftFront, $RightBack, $LeftBack]
+onready var _cosmetic_wheels: Array = [$RightFront/wheel, $LeftFront/wheel, $RightBack/wheel, $LeftBack/wheel]
 
-var runner: BoardRunner = null
+onready var _rightw: Array = [$RightFront, $RightBack]
+onready var _leftw: Array = [$LeftFront, $LeftBack]
+
+var lmotor: BrushedMotor = null
+var rmotor: BrushedMotor = null
+
 func set_runner(runner: BoardRunner):
-	if !runner:
+	if ! runner:
 		return
 	runner.connect("status_changed", self, "_on_board_status_changed")
+	
+	lmotor = BrushedMotor.new()
+	lmotor.set_boardview(runner.view())
+	lmotor.set_pins(2,3,4)
+	
+	rmotor = BrushedMotor.new()
+	rmotor.set_boardview(runner.view())
+	rmotor.set_pins(5,6,7)
+	
 	$Attachments/RayCast.set_boardview(runner.view())
 
-var _disabled = false
+func _process(delta):
+	$Attachments/SpotLight.light_color.h += delta * 0.1
 
 func _integrate_forces(state: PhysicsDirectBodyState) -> void:
+	for i in range(_wheels.size()):
+		_wheels[i].add_force(state)
+		if _wheels[i].is_colliding():
+			_cosmetic_wheels[i].global_transform.origin = _wheels[i].get_collision_point()
 
-	var touching = 0
+	var key_direction: int = int(Input.is_action_pressed("ui_up")) - int(Input.is_action_pressed("ui_down"))
+	
+	for wheel in _rightw:
+		if lmotor:
+			wheel.throttle = lmotor.get_speed()
+		else:
+			wheel.throttle = key_direction * int(!Input.is_action_pressed("ui_right"))
+	
+	for wheel in _leftw:
+		if rmotor:
+			wheel.throttle = rmotor.get_speed()
+		else:
+			wheel.throttle = key_direction * int(!Input.is_action_pressed("ui_left"))
 
-	# Iterate over our springs so that they can apply their forces
-	# Also count if they are touching the ground
-	for wheel in _wheels:
-		wheel.add_force(state)
-		if wheel.is_colliding():
-			touching += 1
-
-	# TODO: Have better friction / drag
-	# Stupid drag / friction when grounded
-	if touching < 2:
-		state.add_force(-state.linear_velocity / 3, Vector3.ZERO)
-		state.add_torque(-state.angular_velocity / 3)
-		return
-
-	state.add_force(-state.linear_velocity, Vector3.ZERO)
-	state.add_torque(-state.angular_velocity)
-
-
-
-	# Stupid steering
-	if Input.is_action_pressed("ui_right"):
-		state.add_torque(transform.basis.xform(Vector3.DOWN * 5))
-	elif Input.is_action_pressed("ui_left"):
-		state.add_torque(transform.basis.xform(Vector3.UP * 5))
-	else:
-		# Extra extra friction
-		state.add_torque(-state.angular_velocity * 3)
-
-	# Stupid throttle
-	if Input.is_action_pressed("ui_up"):
-		state.add_force(transform.basis.xform(Vector3.FORWARD) * 30, Vector3(0, -0.2, 0))
-	elif Input.is_action_pressed("ui_down"):
-		state.add_force(transform.basis.xform(Vector3.BACK) * 30, Vector3(0, -0.2, 0))
-	else:
-		# Extra extra friction		
-		state.add_force(-state.linear_velocity * 3, Vector3.ZERO)
-		pass
 
 func _on_board_status_changed(status) -> void:
 	if status == SMCE.Status.STOPPED:
-		queue_free() # just die
+		queue_free()  # just die

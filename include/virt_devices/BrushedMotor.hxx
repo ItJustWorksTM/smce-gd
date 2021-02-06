@@ -1,5 +1,5 @@
 /*
- *  ExecutionContext.hxx
+ *  BrushedMotor.hxx
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,31 +16,36 @@
  *
  */
 
-#ifndef GODOT_SMCE_EXECUTIONCONTEXT_HXX
-#define GODOT_SMCE_EXECUTIONCONTEXT_HXX
+#ifndef GODOT_SMCE_BRUSHEDMOTOR_HXX
+#define GODOT_SMCE_BRUSHEDMOTOR_HXX
 
-#include "SMCE/ExecutionContext.hpp"
+#include "SMCE/BoardView.hpp"
+#include "bind/BoardView.hxx"
 #include "core/Godot.hpp"
+#include "gen/RayCast.hpp"
 
 namespace godot {
-class ExecutionContext : public Reference {
-    GODOT_CLASS(ExecutionContext, Reference)
-
-    smce::ExecutionContext context = smce::ExecutionContext{"."};
+class BrushedMotor : public Reference {
+  GODOT_CLASS(BrushedMotor, Reference)
 
   public:
-    static void _register_methods();
+    BoardView* board_view;
+    int forward_pin;
+    int backward_pin;
+    int enable_pin;
 
-    static Ref<ExecutionContext> make_context(String path);
+    static void _register_methods();
 
     void _init();
 
-    smce::ExecutionContext& native();
+    float get_speed();
 
-    String resource_dir();
+    void _on_view_invalidated();
 
-    bool check_suitable_environment();
+    void set_boardview(BoardView* view);
+
+    void set_pins(int forward_pin, int backward_pin, int enable_pin);
 };
-} // namespace godot
 
-#endif // GODOT_SMCE_EXECUTIONCONTEXT_HXX
+} // namespace godot
+#endif // GODOT_SMCE_BRUSHEDMOTOR_HXX

@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/ui/sketch_control/SketchControl.gd" type="Script" id=1]
+[ext_resource path="res://src/ui/button/Button.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_top = 10.0
@@ -71,14 +72,8 @@ custom_styles/normal = SubResource( 4 )
 shortcut_in_tooltip = false
 text = "Recompile"
 
-[node name="Terminate" type="Button" parent="."]
+[node name="Terminate" parent="." instance=ExtResource( 2 )]
 margin_top = 119.0
 margin_right = 1280.0
 margin_bottom = 153.0
-focus_mode = 0
-custom_styles/hover = SubResource( 1 )
-custom_styles/pressed = SubResource( 2 )
-custom_styles/disabled = SubResource( 3 )
-custom_styles/normal = SubResource( 4 )
-shortcut_in_tooltip = false
 text = "Terminate"

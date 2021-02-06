@@ -24,7 +24,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules")
 include(FetchContent)
 
 include(GodotCpp)
@@ -43,7 +43,8 @@ target_sources(godot-smce PRIVATE
         src/bind/ExecutionContext.cxx
         src/bind/BoardView.cxx
         src/virt_devices/AnalogRaycast.cxx
-        src/bind/UartSlurper.cxx)
+        src/bind/UartSlurper.cxx
+        src/virt_devices/BrushedMotor.cxx)
 
 target_include_directories(godot-smce PRIVATE include)
 

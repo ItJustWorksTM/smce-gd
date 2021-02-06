@@ -1,57 +1,96 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/objects/ray_car/RayCar.gd" type="Script" id=1]
 [ext_resource path="res://src/virt_devices/AnalogRaycast.gdns" type="Script" id=2]
 [ext_resource path="res://media/images/icon.png" type="Texture" id=3]
+[ext_resource path="res://media/models/car_parts/SMCE-wheel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/utilities/raycast_spring/RayCastSpring.tscn" type="PackedScene" id=5]
+[ext_resource path="res://media/models/car_parts/SMCE-hull.glb" type="PackedScene" id=6]
 
-[sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 0.0470588, 0.737255, 0.607843, 1 )
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 1, 0.381946, 1.27087 )
 
-[sub_resource type="CubeMesh" id=2]
-material = SubResource( 1 )
-size = Vector3( 1.5, 0.5, 3 )
-
-[sub_resource type="ConvexPolygonShape" id=3]
-points = PoolVector3Array( -0.75, 0.25, 1.5, 0.75, 0.25, -1.5, 0.75, 0.25, 1.5, -0.75, 0.25, -1.5, -0.75, -0.25, 1.5, 0.75, -0.25, -1.5, 0.75, -0.25, 1.5, -0.75, -0.25, -1.5, 0.75, 0.25, 1.5, -0.75, 0.25, -1.5, 0.75, 0.25, -1.5, -0.75, 0.25, 1.5, 0.75, -0.25, 1.5, -0.75, -0.25, -1.5, 0.75, -0.25, -1.5, -0.75, -0.25, 1.5, 0.75, 0.25, 1.5, -0.75, -0.25, 1.5, -0.75, 0.25, 1.5, 0.75, -0.25, 1.5, 0.75, 0.25, -1.5, -0.75, -0.25, -1.5, -0.75, 0.25, -1.5, 0.75, -0.25, -1.5 )
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 1.87983, 0.232459, 0.411813 )
 
 [node name="RayCar" type="RigidBody"]
 can_sleep = false
+angular_damp = 0.0
 script = ExtResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-mesh = SubResource( 2 )
-material/0 = null
+[node name="Hull" parent="." instance=ExtResource( 6 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
+[node name="HullCollision" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.311966, 0 )
 shape = SubResource( 3 )
 
-[node name="LeftBack" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, -0.25, 1.5 )
-enabled = true
-cast_to = Vector3( 0, -0.7, 0 )
-spring_force = 20.0
+[node name="FrontBumperCollision" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0619854, -1.72681 )
+shape = SubResource( 2 )
 
-[node name="RightBack" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, -0.25, 1.5 )
+[node name="BackBumperCollision" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0619854, 1.63475 )
+shape = SubResource( 2 )
+
+[node name="LeftBack" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934, -0.211, 0.675 )
 enabled = true
-cast_to = Vector3( 0, -0.7, 0 )
-spring_force = 20.0
+cast_to = Vector3( 0, -1, 0 )
+spring_force = 50.0
+damper_force = 10.0
+target = 0.9
+
+[node name="wheel" type="Spatial" parent="LeftBack"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.700143, 0 )
+
+[node name="whell" parent="LeftBack/wheel" instance=ExtResource( 4 )]
+transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="LeftFront" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, -0.25, -1.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934, -0.211112, -0.668874 )
 enabled = true
-cast_to = Vector3( 0, -0.7, 0 )
-spring_force = 20.0
+cast_to = Vector3( 0, -1, 0 )
+spring_force = 50.0
+damper_force = 10.0
+target = 0.9
+
+[node name="wheel" type="Spatial" parent="LeftFront"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.660918, 0 )
+
+[node name="wheel" parent="LeftFront/wheel" instance=ExtResource( 4 )]
+transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
+
+[node name="RightBack" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.934, -0.211, 0.675 )
+enabled = true
+cast_to = Vector3( 0, -1, 0 )
+spring_force = 50.0
+damper_force = 10.0
+target = 0.9
+
+[node name="wheel" type="Spatial" parent="RightBack"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.700143, 0 )
+
+[node name="wheel" parent="RightBack/wheel" instance=ExtResource( 4 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="RightFront" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, -0.25, -1.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.934, -0.211112, -0.668874 )
 enabled = true
-cast_to = Vector3( 0, -0.7, 0 )
-spring_force = 20.0
+cast_to = Vector3( 0, -1, 0 )
+spring_force = 50.0
+damper_force = 10.0
+target = 0.9
+
+[node name="wheel" type="Spatial" parent="RightFront"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.660918, 0 )
+
+[node name="wheel" parent="RightFront/wheel" instance=ExtResource( 4 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.51243 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0393956, -2.19019 )
 texture = ExtResource( 3 )
 
 [node name="Attachments" type="Spatial" parent="."]
@@ -63,8 +102,8 @@ cast_to = Vector3( 5, 0, 0 )
 script = ExtResource( 2 )
 
 [node name="SpotLight" type="SpotLight" parent="Attachments"]
-transform = Transform( 1, 0, 0, 0, 0.97157, 0.236753, 0, -0.236753, 0.97157, 0, 0, -1.61452 )
-light_color = Color( 0.819608, 0.0666667, 1, 1 )
+transform = Transform( 1, 0, 0, 0, 0.97157, 0.236753, 0, -0.236753, 0.97157, 0, 0, -2.34608 )
+light_color = Color( 0.733333, 0, 1, 1 )
 light_energy = 5.66
 light_indirect_energy = 2.44
 spot_range = 9.4

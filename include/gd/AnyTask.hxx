@@ -19,48 +19,45 @@
 #ifndef GODOT_SMCE_ANYTASK_HXX
 #define GODOT_SMCE_ANYTASK_HXX
 
-#include <future>
-#include <functional>
 #include <concepts>
-#include "gen/FuncRef.hpp"
+#include <functional>
+#include <future>
 #include "core/Godot.hpp"
-#include "gen/Reference.hpp"
 #include "gd/util.hxx"
+#include "gen/FuncRef.hpp"
+#include "gen/Reference.hpp"
 
 namespace godot {
 
-    class AnyTask : public Reference {
+class AnyTask : public Reference {
     GODOT_CLASS(AnyTask, Reference)
 
-        std::future<Ref<AnyTask>> thread;
+    std::future<Ref<AnyTask>> thread;
 
-    public:
+  public:
+    static auto _register_methods() -> void {
+        register_signal<AnyTask>("completed");
+        register_method("_completed", &AnyTask::_completed);
+    }
 
-        static auto _register_methods() -> void {
-            register_signal<AnyTask>("completed");
-            register_method("_completed", &AnyTask::_completed);
-        }
-
-        static Ref<AnyTask> make_awaitable(std::invocable auto task) {
-            static_assert(std::is_convertible_v<std::invoke_result_t<decltype(task)>, Variant>);
-            auto runner = make_ref<AnyTask>();
-            runner->thread = std::async([runner, task = std::move(task)]() mutable {
-                runner->call_deferred("_completed", task());
-                return runner;
-            });
-
+    static Ref<AnyTask> make_awaitable(std::invocable auto task) {
+        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(task)>, Variant>);
+        auto runner = make_ref<AnyTask>();
+        runner->thread = std::async([runner, task = std::move(task)]() mutable {
+            runner->call_deferred("_completed", task());
             return runner;
-        }
+        });
 
-        void _completed(Variant ret) {
-            emit_signal("completed", ret);
-            thread.get();
-        }
+        return runner;
+    }
 
-        void _init() { }
+    void _completed(Variant ret) {
+        emit_signal("completed", ret);
+        thread.get();
+    }
 
-    };
-}
+    void _init() {}
+};
+} // namespace godot
 
-
-#endif //GODOT_SMCE_ANYTASK_HXX
+#endif // GODOT_SMCE_ANYTASK_HXX
