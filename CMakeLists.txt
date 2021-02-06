@@ -15,29 +15,24 @@
 #  limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required (VERSION 3.17)
 
-project(godot-smce LANGUAGES CXX C)
+project (godot-smce LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (CMAKE_CXX_EXTENSIONS OFF)
+set (CMAKE_POSITION_INDEPENDENT_CODE ON)
+set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules")
-include(FetchContent)
+list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
+include (SetupGodotCpp)
+include (SMCE)
+include (fmt)
 
-include(GodotCpp)
-include(SMCE)
-include(fmt)
 
-add_library(godot-smce SHARED)
-
-if (UNIX)
-    # target_link_options(godot-smce PUBLIC "-s")
-endif ()
-
-target_sources(godot-smce PRIVATE
+add_library (godot-smce SHARED)
+target_sources (godot-smce PRIVATE
         src/lib.cxx
         src/bind/BoardRunner.cxx
         src/bind/ExecutionContext.cxx
@@ -45,12 +40,13 @@ target_sources(godot-smce PRIVATE
         src/virt_devices/AnalogRaycast.cxx
         src/bind/UartSlurper.cxx
         src/virt_devices/BrushedMotor.cxx)
+target_include_directories (godot-smce PRIVATE include)
+target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
+if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)
+endif ()
 
-target_include_directories(godot-smce PRIVATE include)
-
-target_link_libraries(godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
-
-add_custom_command(TARGET godot-smce POST_BUILD
+add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_SOURCE_DIR}/project/gdnative/lib"
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/")
 
