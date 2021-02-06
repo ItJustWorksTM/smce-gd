@@ -100,6 +100,11 @@ add_dependencies (SMCE ArdRtRes)
 
 add_subdirectory (test EXCLUDE_FROM_ALL)
 
+file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging")
+file (MAKE_DIRECTORY "{PROJECT_BINARY_DIR}/packaging/include")
+file (COPY "${PROJECT_SOURCE_DIR}/include/SMCE" DESTINATION "${PROJECT_BINARY_DIR}/packaging/include")
+file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging/include/SMCE/internal")
+install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION ".")
 install (FILES "$<TARGET_FILE:SMCE>" DESTINATION "lib64/SMCE")
 install (FILES "LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "share/SMCE")
 
