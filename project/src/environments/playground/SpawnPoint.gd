@@ -1,12 +1,22 @@
 extends Spatial
 
+signal build_started()
+signal build_completed(error)
+signal focus_changed(car)
+
+
 var raycar_t = preload("res://src/objects/ray_car/RayCar.tscn")
 var control_t = preload("res://src/ui/board_control/BoardControl.tscn")
 
 var _managed: Array = []
+var _pending: Array = []
 
 var _active_ctl: Control = null
 
+func _init():
+	var newray = raycar_t.instance()
+	add_child(newray)
+	newray.queue_free()
 
 func set_active(ctl: Control):
 	if ctl == _active_ctl:
@@ -35,7 +45,6 @@ func _on_board_status_changed(status: int, instance: Spatial) -> void:
 	if status == SMCE.Status.STOPPED:
 		instance.queue_free()
 
-
 func _on_car_clicked(
 	camera: Node,
 	event: InputEvent,
@@ -48,48 +57,52 @@ func _on_car_clicked(
 	if event.is_action_pressed("mouse_left"):
 		print("clicked", car)
 		set_active(ctl)
+		get_viewport().get_camera().target = car.get_path()
 
+
+func _handle_build_end(root: Spatial, error = null) -> void:
+	if error != null:
+		root.queue_free()
+	emit_signal("build_completed", error)
 
 # TODO: free on failure
-func compile_sketch(path: String, context: String = OS.get_user_data_dir()) -> bool:
+func compile_sketch(path: String, context: String = OS.get_user_data_dir()) -> void:
+	emit_signal("build_started")
+	var newray = raycar_t.instance()
 	var top = Spatial.new()
 	add_child(top)
 
 	var runner = BoardRunner.new()
+	
 	top.add_child(runner)
-	runner.connect("status_changed", self, "_on_board_status_changed", [top])
-
-	var control = control_t.instance()
-	control.visible = false
+	# runner.connect("status_changed", self, "_on_pending_status_changed", [top])
 
 	if ! runner.init_context(context):
 		print("failed to setup")
-		top.queue_free()
-		return false
+		return _handle_build_end(top, "Failed to intialize context")
 
 	print("Setup context properly")
 
 	if ! runner.configure("arduino:avr:nano"):
 		print("failed to configure runner")
-		top.queue_free()
-		return false
+		return _handle_build_end(top, "Failed to configure runner")
 	print("we configured")
 
 	if ! yield(runner.build(path), "completed"):
 		print("build failed")
-		top.queue_free()
-		return false
+		return _handle_build_end(top, "Failed to compile sketch")
 	print("we build!")
 
 	if ! runner.start():
-		top.queue_free()
-		return false
+		return _handle_build_end(top, "Failed to start sketch")
+	
 	print("we started!")
 
+	var control = control_t.instance()
+	control.visible = false
 	top.add_child(control)
 
 	control.runner = runner
-	var newray = raycar_t.instance()
 	newray.set_runner(runner)
 	newray.connect("input_event", self, "_on_car_clicked", [newray, control])
 	top.add_child(newray)
@@ -97,4 +110,4 @@ func compile_sketch(path: String, context: String = OS.get_user_data_dir()) -> b
 	if ! _active_ctl:
 		set_active(control)
 
-	return false
+	return _handle_build_end(top)

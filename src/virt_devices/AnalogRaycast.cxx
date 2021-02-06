@@ -14,15 +14,6 @@ void AnalogRaycast::_init() {
     set_enabled(false);
 }
 
-void AnalogRaycast::set_boardview(BoardView* view) {
-    if (!view)
-        return;
-    view->connect("tree_exiting", this, "_on_view_invalidated");
-    board_view = view;
-    set_physics_process(true);
-    set_enabled(true);
-}
-
 void AnalogRaycast::_physics_process(float delta) {
     if (!is_colliding() || !board_view)
         return;
@@ -37,6 +28,15 @@ void AnalogRaycast::_physics_process(float delta) {
 
     std::uint16_t dist = pos.distance_to(point) * 100;
     board_view->native().pins[1].analog().write(dist);
+}
+
+void AnalogRaycast::set_boardview(BoardView* view) {
+    if (!view)
+        return;
+    view->connect("tree_exiting", this, "_on_view_invalidated");
+    board_view = view;
+    set_physics_process(true);
+    set_enabled(true);
 }
 
 void AnalogRaycast::_on_view_invalidated() {

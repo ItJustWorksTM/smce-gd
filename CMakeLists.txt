@@ -43,7 +43,8 @@ target_sources(godot-smce PRIVATE
         src/bind/ExecutionContext.cxx
         src/bind/BoardView.cxx
         src/virt_devices/AnalogRaycast.cxx
-        src/bind/UartSlurper.cxx)
+        src/bind/UartSlurper.cxx
+        src/virt_devices/BrushedMotor.cxx)
 
 target_include_directories(godot-smce PRIVATE include)
 

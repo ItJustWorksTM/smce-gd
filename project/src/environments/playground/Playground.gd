@@ -7,6 +7,7 @@ func _init() -> void:
 
 func _ready():
 	DebugCanvas.disabled = true
+	Engine.time_scale = 1
 	$GUI/GlobalControl.connect("do_compile", self, "_compile_sketch")
 
 

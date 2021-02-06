@@ -48,11 +48,17 @@ bool BoardRunner::configure(String pp_fqbn) {
     const auto fqbin_view = std::string_view{pp_fqbn.alloc_c_string(), static_cast<size_t>(pp_fqbn.length())};
 
     const auto config = smce::BoardConfig{
-        .pins = {1},
-        .gpio_drivers = {smce::BoardConfig::GpioDrivers{
-            .pin_id = 1,
-            .analog_driver =
-                smce::BoardConfig::GpioDrivers::AnalogDriver{.board_read = true, .board_write = true}}},
+        .pins = {1, 2, 3, 4, 5, 6, 7},
+        .gpio_drivers =
+            {
+                {.pin_id = 1, .analog_driver = {{.board_read = true, .board_write = true}}},
+                {.pin_id = 2, .analog_driver = {{.board_read = true, .board_write = true}}},
+                {.pin_id = 3, .digital_driver = {{.board_read = true, .board_write = true}}},
+                {.pin_id = 4, .digital_driver = {{.board_read = true, .board_write = true}}},
+                {.pin_id = 5, .analog_driver = {{.board_read = true, .board_write = true}}},
+                {.pin_id = 6, .digital_driver = {{.board_read = true, .board_write = true}}},
+                {.pin_id = 7, .digital_driver = {{.board_read = true, .board_write = true}}},
+            },
         .uart_channels = {{}}};
 
     if (!runner->configure(fqbin_view, config))

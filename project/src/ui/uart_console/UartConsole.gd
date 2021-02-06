@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+export (int) var max_text = 1000
+
 var disabled: bool = true setget set_disabled
 var runner: BoardRunner = null setget set_runner
 var uart_channel: int = 0 setget set_uart_channel
@@ -21,8 +23,6 @@ func set_runner(new_runner) -> void:
 	set_uart_channel(0)
 
 
-
-
 func set_uart_channel(val: int) -> void:
 	uart_channel = -1
 	if runner and runner.uart() and val < runner.uart().channels():  # muh shortcircuit??
@@ -30,9 +30,6 @@ func set_uart_channel(val: int) -> void:
 	header.text = "Uart | " + str(uart_channel)
 	console.clear()
 	input.clear()
-
-
-export (int) var max_text = 1000
 
 
 func _ready() -> void:
@@ -54,6 +51,6 @@ func _on_uart(channel, text) -> void:
 
 
 func _on_board_status_changed(status: int) -> void:
-	set_disabled(status != SMCE.Status.SUSPENDED and status != SMCE.Status.RUNNING)
+	set_disabled(status != SMCE.Status.RUNNING)
 	if status == SMCE.Status.STOPPED:
 		runner = null

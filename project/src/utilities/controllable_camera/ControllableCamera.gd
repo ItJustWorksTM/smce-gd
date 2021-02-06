@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 	var d = Input.get_action_strength("backward") - Input.get_action_strength("forward")
 	var b = Input.get_action_strength("right") - Input.get_action_strength("left")
 	var u = Input.get_action_strength("up") - Input.get_action_strength("down")
-	var new = Vector3(b, u, d)
+	var new = Vector3(b, u, d) / 5
 
 	if new != Vector3.ZERO:
 		translate(new)

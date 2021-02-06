@@ -22,7 +22,6 @@ func set_runner(new_board: BoardRunner) -> void:
 	runner = new_board
 	sketch_ctl.runner = new_board
 	uart_ctl.runner = new_board
-	# propegate changes
 
 
 func _ready() -> void:

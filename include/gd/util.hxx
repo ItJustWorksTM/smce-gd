@@ -1,6 +1,6 @@
 /*
- *  EmulGlue.hxx
- *  Copyright 2020 ItJustWorksTM
+ *  util.hxx
+ *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,10 +27,5 @@ template <std::derived_from<godot::Reference> T> auto make_ref() -> godot::Ref<T
 constexpr auto register_fns = []<class... T>(std::pair<const char*, T>... func) {
     (register_method(func.first, func.second), ...);
 };
-
-#define MEMBER_LAMBDA()                                                                                      \
-    template <auto func, class Ret = void, class... Args> constexpr auto lambda(Args... args)->Ret {         \
-        return std::invoke(func, *this, args...);                                                            \
-    }
 
 #endif // GODOT_SMCE_UTIL_HXX

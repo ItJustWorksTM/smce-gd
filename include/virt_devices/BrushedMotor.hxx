@@ -1,5 +1,5 @@
 /*
- *  AnalogRaycast.hxx
+ *  BrushedMotor.hxx
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,8 @@
  *
  */
 
-
-#ifndef GODOT_SMCE_ANALOGRAYCAST_HXX
-#define GODOT_SMCE_ANALOGRAYCAST_HXX
+#ifndef GODOT_SMCE_BRUSHEDMOTOR_HXX
+#define GODOT_SMCE_BRUSHEDMOTOR_HXX
 
 #include "SMCE/BoardView.hpp"
 #include "bind/BoardView.hxx"
@@ -26,23 +25,27 @@
 #include "gen/RayCast.hpp"
 
 namespace godot {
-class AnalogRaycast : public RayCast {
-    GODOT_CLASS(AnalogRaycast, RayCast)
+class BrushedMotor : public Reference {
+  GODOT_CLASS(BrushedMotor, Reference)
 
   public:
     BoardView* board_view;
+    int forward_pin;
+    int backward_pin;
+    int enable_pin;
 
     static void _register_methods();
 
     void _init();
 
-    void _physics_process(float delta);
+    float get_speed();
 
     void _on_view_invalidated();
 
     void set_boardview(BoardView* view);
+
+    void set_pins(int forward_pin, int backward_pin, int enable_pin);
 };
 
 } // namespace godot
-
-#endif // GODOT_SMCE_ANALOGRAYCAST_HXX
+#endif // GODOT_SMCE_BRUSHEDMOTOR_HXX
