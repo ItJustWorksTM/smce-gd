@@ -17,7 +17,7 @@
 
 cmake_minimum_required (VERSION 3.16)
 
-project (libSMCE)
+project (libSMCE VERSION 0.0.0)
 
 if (NOT DEFINED SMCE_ARCH)
    set (SMCE_ARCH x86_64)
@@ -61,6 +61,7 @@ FetchContent_Declare (Paho
         GIT_TAG master)
 FetchContent_GetProperties (Paho)
 if(NOT paho_POPULATED)
+   set (CMAKE_POLICY_DEFAULT_CMP0048 NEW)
    FetchContent_Populate (Paho)
    set (PAHO_BUILD_STATIC True CACHE INTERNAL "")
    set (PAHO_BUILD_SHARED False CACHE INTERNAL "")
