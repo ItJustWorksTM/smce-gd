@@ -22,10 +22,10 @@
 #include <concepts>
 #include <functional>
 #include <future>
-#include "core/Godot.hpp"
+#include <core/Godot.hpp>
+#include <gen/FuncRef.hpp>
+#include <gen/Reference.hpp>
 #include "gd/util.hxx"
-#include "gen/FuncRef.hpp"
-#include "gen/Reference.hpp"
 
 namespace godot {
 

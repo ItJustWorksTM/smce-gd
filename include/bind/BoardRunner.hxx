@@ -22,18 +22,18 @@
 #include <functional>
 #include <optional>
 #include <type_traits>
-#include "SMCE/BoardConf.hpp"
-#include "SMCE/BoardRunner.hpp"
-#include "SMCE/ExecutionContext.hpp"
-#include "SMCE/SketchConf.hpp"
+#include <SMCE/BoardConf.hpp>
+#include <SMCE/BoardRunner.hpp>
+#include <SMCE/ExecutionContext.hpp>
+#include <SMCE/SketchConf.hpp>
+#include <core/Godot.hpp>
+#include <gen/Node.hpp>
+#include <gen/Reference.hpp>
 #include "bind/BoardView.hxx"
 #include "bind/ExecutionContext.hxx"
 #include "bind/UartSlurper.hxx"
-#include "core/Godot.hpp"
 #include "gd/AnyTask.hxx"
 #include "gd/util.hxx"
-#include "gen/Node.hpp"
-#include "gen/Reference.hpp"
 
 namespace godot {
 

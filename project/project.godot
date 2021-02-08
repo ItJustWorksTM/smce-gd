@@ -9,7 +9,7 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "RayCast",
+"base": "",
 "class": "AnalogRaycast",
 "language": "NativeScript",
 "path": "res://src/virt_devices/AnalogRaycast.gdns"
@@ -19,7 +19,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/utilities/toggleable_bgroup/BButonGroup.gd"
 }, {
-"base": "Node",
+"base": "",
 "class": "BoardRunner",
 "language": "NativeScript",
 "path": "res://src/bind/BoardRunner.gdns"

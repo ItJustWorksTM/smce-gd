@@ -19,10 +19,10 @@
 #ifndef GODOT_SMCE_BRUSHEDMOTOR_HXX
 #define GODOT_SMCE_BRUSHEDMOTOR_HXX
 
-#include "SMCE/BoardView.hpp"
+#include <SMCE/BoardView.hpp>
+#include <core/Godot.hpp>
+#include <gen/RayCast.hpp>
 #include "bind/BoardView.hxx"
-#include "core/Godot.hpp"
-#include "gen/RayCast.hpp"
 
 namespace godot {
 class BrushedMotor : public Reference {

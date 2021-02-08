@@ -20,11 +20,11 @@
 #define GODOT_SMCE_BOARDVIEW_HXX
 
 #include <functional>
-#include "SMCE/BoardConf.hpp"
-#include "SMCE/BoardView.hpp"
-#include "core/Godot.hpp"
+#include <SMCE/BoardConf.hpp>
+#include <SMCE/BoardView.hpp>
+#include <core/Godot.hpp>
+#include <gen/Node.hpp>
 #include "gd/util.hxx"
-#include "gen/Node.hpp"
 
 namespace godot {
 class BoardRunner;

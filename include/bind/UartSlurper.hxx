@@ -21,8 +21,8 @@
 
 #include <unordered_map>
 #include <vector>
-#include "core/Godot.hpp"
-#include "gen/Node.hpp"
+#include <core/Godot.hpp>
+#include <gen/Node.hpp>
 #include "BoardView.hxx"
 
 namespace godot {

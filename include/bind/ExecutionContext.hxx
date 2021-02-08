@@ -19,8 +19,8 @@
 #ifndef GODOT_SMCE_EXECUTIONCONTEXT_HXX
 #define GODOT_SMCE_EXECUTIONCONTEXT_HXX
 
-#include "SMCE/ExecutionContext.hpp"
-#include "core/Godot.hpp"
+#include <SMCE/ExecutionContext.hpp>
+#include <core/Godot.hpp>
 
 namespace godot {
 class ExecutionContext : public Reference {

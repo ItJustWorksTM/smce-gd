@@ -27,9 +27,10 @@ set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 set (SMCE_AUTODOWNLOAD True)
+include (FetchContent)
+include (fmt)
 include (SetupSMCE)
 include (SetupGodotCpp)
-include (fmt)
 
 add_library (godot-smce SHARED)
 target_sources (godot-smce PRIVATE
@@ -41,7 +42,7 @@ target_sources (godot-smce PRIVATE
         src/bind/UartSlurper.cxx
         src/virt_devices/BrushedMotor.cxx)
 target_include_directories (godot-smce PRIVATE include)
-target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
+target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt boost_filesystem)
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)
 endif ()
