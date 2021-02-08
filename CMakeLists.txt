@@ -95,6 +95,7 @@ target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost)
 if (NOT WIN32)
    target_compile_options (SMCE PUBLIC "-Wall" "-Wextra")
 endif ()
+set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 
 setup_smce_resources ()
 add_dependencies (SMCE ArdRtRes)
