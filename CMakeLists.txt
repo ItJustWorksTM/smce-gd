@@ -26,10 +26,10 @@ set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
+set (SMCE_AUTODOWNLOAD True)
+include (SetupSMCE)
 include (SetupGodotCpp)
-include (SMCE)
 include (fmt)
-
 
 add_library (godot-smce SHARED)
 target_sources (godot-smce PRIVATE
@@ -51,5 +51,5 @@ add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/")
 
 add_custom_command(TARGET godot-smce POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E tar xf "${libsmce_BINARY_DIR}/SMCE_Resources.zip"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_BINARY_DIR}/RtResources" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/RtResources")
+        COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_ROOT}/share/SMCE/SMCE_Resources.zip"
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${PROJECT_BINARY_DIR}/RtResources" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/RtResources")
