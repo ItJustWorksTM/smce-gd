@@ -17,7 +17,20 @@
 
 if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
     set (GDCPP_USER_ROOT "${GDCPP_ROOT}")
-    set (GDCPP_ROOT "${PROJECT_SOURCE_DIR}/thirdparty/godot-cpp")
+
+    FetchContent_Declare (fc-godot-cpp
+            GIT_REPOSITORY https://github.com/godotengine/godot-cpp.git
+            GIT_TAG        master
+            GIT_SUBMODULES ""
+    )
+
+    FetchContent_GetProperties (fc-godot-cpp)
+
+    if (NOT fc-godot-cpp_POPULATED)
+        FetchContent_Populate (fc-godot-cpp)
+    endif ()
+
+    set (GDCPP_ROOT "${fc-godot-cpp_SOURCE_DIR}")
 
     # TODO check sources existence, list sorted equality, and individual timestamps
     set (GDCPP_SOURCES_MOD "${PROJECT_BINARY_DIR}/gdcpp-sources.cmake")
@@ -62,4 +75,4 @@ else ()
 endif ()
 
 target_include_directories (godot-cpp PUBLIC "${GDCPP_ROOT}/include" "${GDCPP_ROOT}/include/core" "${GDCPP_ROOT}/include/gen")
-target_include_directories (godot-cpp SYSTEM PUBLIC "${PROJECT_SOURCE_DIR}/thirdparty/godot-cpp/godot_headers")
+target_include_directories (godot-cpp SYSTEM PUBLIC "${GDCPP_ROOT}/godot_headers")
