@@ -251,9 +251,9 @@ jobs:
           - name: GCC
             c: gcc
             cxx: g++
-          - name: Clang/LLVM
-            c: clang
-            cxx: clang++
+#         - name: Clang/LLVM
+#           c: clang
+#           cxx: clang++
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
