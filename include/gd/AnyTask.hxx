@@ -23,7 +23,6 @@
 #include <functional>
 #include <future>
 #include <core/Godot.hpp>
-#include <gen/FuncRef.hpp>
 #include <gen/Reference.hpp>
 #include "gd/util.hxx"
 

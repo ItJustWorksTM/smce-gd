@@ -35,8 +35,15 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
     # TODO check sources existence, list sorted equality, and individual timestamps
     set (GDCPP_SOURCES_MOD "${PROJECT_BINARY_DIR}/gdcpp-sources.cmake")
     if (NOT EXISTS "${GDCPP_SOURCES_MOD}")
+        file (COPY "${PROJECT_SOURCE_DIR}/binding_generator_ext.py" DESTINATION "${GDCPP_ROOT}")
         message (STATUS "Generating Bindings")
-        execute_process (COMMAND "python" "-c" "import binding_generator; binding_generator.generate_bindings(\"godot_headers/api.json\", False)"
+        set (FIRST "")
+        foreach (GDCPP_NEEDED_CLASS ${GDCPP_NEEDED_CLASSES})
+            string (APPEND GDCPP_NEEDED_CLASSES_FMTD "${FIRST} \"${GDCPP_NEEDED_CLASS}\"")
+            set (FIRST ",")
+        endforeach ()
+        message ("GDCPP_NEEDED_CLASSES_FMTD: ${GDCPP_NEEDED_CLASSES_FMTD}")
+        execute_process (COMMAND "python" "-c" "import binding_generator_ext; binding_generator_ext.generate_bindings(\"godot_headers/api.json\", [${GDCPP_NEEDED_CLASSES_FMTD}], False)"
                 WORKING_DIRECTORY ${GDCPP_ROOT}
                 RESULT_VARIABLE GENERATION_RESULT
                 OUTPUT_VARIABLE GENERATION_OUTPUT)

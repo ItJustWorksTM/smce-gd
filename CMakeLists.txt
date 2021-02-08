@@ -33,6 +33,7 @@ set (SMCE_AUTODOWNLOAD True)
 include (FetchContent)
 include (fmt)
 include (SetupSMCE)
+list (APPEND GDCPP_NEEDED_CLASSES RayCast Reference Node)
 include (SetupGodotCpp)
 
 add_library (godot-smce SHARED)
