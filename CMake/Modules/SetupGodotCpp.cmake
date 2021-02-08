@@ -47,7 +47,7 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
         file (GLOB_RECURSE GDCPP_SOURCES ${GDCPP_ROOT}/src/*.c**)
         file (GLOB_RECURSE GDCPP_HEADERS ${GDCPP_ROOT}/include/*.h**)
 
-        file (WRITE "${GDCPP_SOURCES_MOD}" "list (APPEND GDCPP_FILES ")
+        file (WRITE "${GDCPP_SOURCES_MOD}" "add_library (godot-cpp STATIC ")
         foreach (FILE ${GDCPP_SOURCES} ${GDCPP_HEADERS})
             file (APPEND "${GDCPP_SOURCES_MOD}" "\"${FILE}\" ")
         endforeach ()
@@ -57,7 +57,6 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
 
     include ("${GDCPP_SOURCES_MOD}")
 
-    add_library (godot-cpp STATIC ${GDCPP_FILES})
     add_dependencies (godot-cpp godotcpp-generated)
 
     if (SMCE_CI)
