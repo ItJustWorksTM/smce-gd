@@ -68,6 +68,12 @@ add_library (SMCE IMPORTED STATIC)
 target_include_directories (SMCE INTERFACE "${SMCE_ROOT}/include")
 set_property (TARGET SMCE PROPERTY IMPORTED_LOCATION "${SMCE_ROOT}/lib64/SMCE/${CMAKE_STATIC_LIBRARY_PREFIX}SMCE${CMAKE_STATIC_LIBRARY_SUFFIX}")
 
+if (WIN32)
+    target_link_libraries (SMCE INTERFACE ole32 oleaut32 psapi advapi32)
+elseif (NOT APPLE)
+    target_link_libraries (SMCE INTERFACE rt)
+endif ()
+
 if (NOT WIN32 AND NOT APPLE)
     if (EXISTS "${SMCE_ROOT}/lib64/boost/${CMAKE_STATIC_LIBRARY_PREFIX}boost_filesystem${CMAKE_STATIC_LIBRARY_SUFFIX}")
         add_library (WA_BoostFS IMPORTED STATIC)
