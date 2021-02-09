@@ -91,7 +91,7 @@ target_sources (SMCE PRIVATE
       src/SMCE/SharedBoardData.cpp
       include/SMCE/SketchConf.hpp
 )
-target_link_libraries (SMCE PRIVATE Threads::Threads SMCE_Boost)
+target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost)
 if (NOT WIN32)
    target_compile_options (SMCE PUBLIC "-Wall" "-Wextra")
 endif ()
