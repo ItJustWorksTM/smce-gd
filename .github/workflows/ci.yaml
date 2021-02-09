@@ -22,7 +22,7 @@ jobs:
       - name: Check deps
         run: |
           sudo apt install godot3-server ninja-build
-          godot3-server --version
+          godot3-server --version || true
           ninja --version
       - name: Cache Godot export template
         uses: actions/cache@v2
