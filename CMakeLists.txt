@@ -46,7 +46,7 @@ target_sources (godot-smce PRIVATE
         src/bind/UartSlurper.cxx
         src/virt_devices/BrushedMotor.cxx)
 target_include_directories (godot-smce PRIVATE include)
-target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt boost_filesystem)
+target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)
 endif ()
