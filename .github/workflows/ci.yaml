@@ -44,16 +44,15 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build/
       - name: CMake Build
         run: cmake --build build/
-      - name: Godot Export
+      - name: CPack
         run: |
-          mkdir build/export
-          cd project/
-          godot3-server --export linux ../build/export/smce-gd
-          cd ../
+          mkdir build/packages
+          (cd build/; cpack -B packages)
+          rm -rd build/packages/_CPack_Packages
       - name: Upload artifacts
         uses: 'actions/upload-artifact@v2'
         with:
           name: SMCE_gd-ubuntu-${{ matrix.compiler.c }}
-          path: build/export/*
+          path: build/packages/*
 
 

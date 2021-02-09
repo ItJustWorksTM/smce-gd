@@ -1,0 +1,2 @@
+#!/bin/sh
+ln -s /usr/lib/smce/smce_gd /usr/bin/smce_gd
