@@ -21,7 +21,6 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
     FetchContent_Declare (fc-godot-cpp
             GIT_REPOSITORY https://github.com/godotengine/godot-cpp.git
             GIT_TAG        master
-            GIT_SUBMODULES ""
     )
 
     FetchContent_GetProperties (fc-godot-cpp)
