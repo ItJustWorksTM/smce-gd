@@ -49,5 +49,11 @@ jobs:
           mkdir build/export
           cd project/
           godot3-server --export linux ../build/export/smce-gd
+          cd ../
+      - name: Upload artifacts
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: SMCE_gd-ubuntu-${{ matrix.compiler.c }}
+          path: build/export/*
 
 
