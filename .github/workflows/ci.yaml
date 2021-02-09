@@ -1,0 +1,53 @@
+name: CI
+on: [ push, pull_request ]
+jobs:
+  build-ubuntu:
+    name: SMCE-gd - Ubuntu (${{ matrix.compiler.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - name: GCC 10
+            c: gcc-10
+            cxx: g++-10
+          - name: Clang/LLVM 10
+            c: clang-10
+            cxx: clang++-10
+    env:
+      CC: ${{ matrix.compiler.c }}
+      CXX: ${{ matrix.compiler.cxx }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check deps
+        run: |
+          sudo apt install godot3-server ninja-build
+          godot3-server --version
+          ninja --version
+      - name: Cache Godot export template
+        uses: actions/cache@v2
+        id: cache-godot
+        with:
+          path: |
+             ~/.local/share/godot/templates/3.2.3.stable
+          key: godot-323-linux_64
+      - name: Get export templates
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.tpz
+          unzip godot_export.zip
+          mkdir -p ~/.local/share/godot/templates/3.2.3.stable
+          mv templates/linux_x11_64* ~/.local/share/godot/templates/3.2.3.stable
+      - name: CMake Configure
+        run: |
+          mkdir build
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build/
+      - name: CMake Build
+        run: cmake --build build/
+      - name: Godot Export
+        run: |
+          mkdir build/export
+          cd project/
+          godot3-server --export linux ../build/export/smce-gd
+
+
