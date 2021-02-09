@@ -29,15 +29,15 @@ jobs:
         id: cache-godot
         with:
           path: |
-             ~/.local/share/godot/templates/3.2.3.stable
+             ~/.local/share/godot/templates/3.2.stable
           key: godot-323-linux_64
       - name: Get export templates
         if: steps.cache-godot.outputs.cache-hit != 'true'
         run: |
           wget -c https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -O godot_export.tpz
           unzip godot_export.tpz
-          mkdir -p ~/.local/share/godot/templates/3.2.3.stable
-          mv templates/linux_x11_64* ~/.local/share/godot/templates/3.2.3.stable
+          mkdir -p ~/.local/share/godot/templates/3.2.stable
+          mv templates/linux_x11_64* ~/.local/share/godot/templates/3.2.stable
       - name: CMake Configure
         run: |
           mkdir build
