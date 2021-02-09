@@ -51,7 +51,8 @@ if (NOT SMCE_ROOT AND SMCE_AUTODOWNLOAD)
                 SHOW_PROGRESS
                 TLS_VERIFY ON
                 EXPECTED_HASH SHA512=${SMCE_ARK_HASH})
-        execute_process (COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_ROOT}/${SMCE_ARK_FILENAME}")
+        execute_process (COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_ROOT}/${SMCE_ARK_FILENAME}"
+                WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
         file (REMOVE_RECURSE "${SMCE_ROOT}")
     endif ()
     set (SMCE_ROOT "${CMAKE_CURRENT_BINARY_DIR}/${SMCE_BASENAME}")
