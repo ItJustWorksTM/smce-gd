@@ -91,7 +91,7 @@ target_sources (SMCE PRIVATE
       src/SMCE/SharedBoardData.cpp
       include/SMCE/SketchConf.hpp
 )
-target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost)
+target_link_libraries (SMCE PRIVATE Threads::Threads SMCE_Boost)
 if (NOT WIN32)
    target_compile_options (SMCE PUBLIC "-Wall" "-Wextra")
 endif ()
@@ -103,11 +103,14 @@ add_dependencies (SMCE ArdRtRes)
 add_subdirectory (test EXCLUDE_FROM_ALL)
 
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging")
-file (MAKE_DIRECTORY "{PROJECT_BINARY_DIR}/packaging/include")
+file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include")
 file (COPY "${PROJECT_SOURCE_DIR}/include/SMCE" DESTINATION "${PROJECT_BINARY_DIR}/packaging/include")
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging/include/SMCE/internal")
 install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION ".")
 install (FILES "$<TARGET_FILE:SMCE>" DESTINATION "lib64/SMCE")
+if (NOT WIN32 AND NOT APPLE)
+   install (FILES "$<TARGET_FILE:Boost::filesystem>" DESTINATION "lib64/boost")
+endif ()
 install (FILES "LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "share/SMCE")
 
 if (CMAKE_CXX_SIMULATE_ID)

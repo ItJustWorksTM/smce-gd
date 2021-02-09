@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: boost_root
-          key: ${{ runner.os }}-boost-${{ matrix.boost.version }}
+          key: ${{ runner.os }}-boost-${{ matrix.boost.version }}-pic
       - name: Install Boost
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
@@ -64,7 +64,7 @@ jobs:
           mkdir boost_root
           cd $BOOST_ARK_BASENAME
           ./bootstrap.sh --prefix=../boost_root/
-          ./b2 link=static install
+          ./b2 link=static cflags='-fPIC' install
           cd ../
       - name: Check deps
         run: |

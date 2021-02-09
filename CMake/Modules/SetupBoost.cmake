@@ -56,6 +56,10 @@ else ()
             "${boost_SOURCE_DIR}/libs/range/include" # Dependency of Interprocess
             "${boost_SOURCE_DIR}/libs/numeric/conversion/include" # Dependency of Interprocess
     )
+
+    if (NOT WIN32 AND NOT APPLE)
+        set_property (TARGET boost_filesystem PROPERTY POSITION_INDEPENDENT_CODE True)
+    endif()
 endif ()
 
 add_library (Boost_ipc INTERFACE)
