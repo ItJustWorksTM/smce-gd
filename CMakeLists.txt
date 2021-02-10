@@ -55,13 +55,14 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif ()
 
 find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 REQUIRED)
-file (MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/project/gdnative/lib")
+file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${CMAKE_SOURCE_DIR}/project/gdnative/lib/"
+        COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
         COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_ROOT}/share/SMCE/SMCE_Resources.zip"
-        COMMAND "${CMAKE_COMMAND}" -E copy "./RtResources" "./gdnative/lib/"
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory "./RtResources" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources"
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "./RtResources"
-        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/project")
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
 
 if(WIN32)
     set (GODOT_PLATFORM windows)
