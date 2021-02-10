@@ -240,47 +240,47 @@ jobs:
         with:
           name: libSMCE-windows-${{ matrix.compiler.c }}
           path: build/packages/*
-  build-arch:
-    name: libSMCE - ArchLinux (${{ matrix.compiler.name }})
-    runs-on: ubuntu-latest
-    container: archlinux:base-devel
-    strategy:
-      fail-fast: false
-      matrix:
-        compiler:
-          - name: GCC
-            c: gcc
-            cxx: g++
+# build-arch:
+#   name: libSMCE - ArchLinux (${{ matrix.compiler.name }})
+#   runs-on: ubuntu-latest
+#   container: archlinux:base-devel
+#   strategy:
+#     fail-fast: false
+#     matrix:
+#       compiler:
+#         - name: GCC
+#           c: gcc
+#           cxx: g++
 #         - name: Clang/LLVM
 #           c: clang
 #           cxx: clang++
-    env:
-      CC: ${{ matrix.compiler.c }}
-      CXX: ${{ matrix.compiler.cxx }}
-    steps:
-      - run: cd ~
-      - uses: actions/checkout@v2
-      - name: Check deps
-        run: |
-          pacman -Syu --noconfirm git cmake boost openssl arduino-cli ninja
-          if [ "${{ matrix.compiler.c }}" = "clang" ];
-          then
-            pacman -Syu --noconfirm clang
-          fi
-          ninja --version
-          arduino-cli version
-          arduino-cli core install arduino:avr
-      - name: CMake configure
-        run: |
-          mkdir build
-          cmake -G Ninja -S ./ -B ./build
-      - name: CMake build
-        run: cmake --build ./build
-      - name: Build & Run tests
-        run: |
-          cmake --build ./build --target SMCE_Tests
-          cd build/test
-          ctest --output-on-failure
+#   env:
+#     CC: ${{ matrix.compiler.c }}
+#     CXX: ${{ matrix.compiler.cxx }}
+#   steps:
+#     - run: cd ~
+#     - uses: actions/checkout@v2
+#     - name: Check deps
+#       run: |
+#         pacman -Syu --noconfirm git cmake boost openssl arduino-cli ninja
+#         if [ "${{ matrix.compiler.c }}" = "clang" ];
+#         then
+#           pacman -Syu --noconfirm clang
+#         fi
+#         ninja --version
+#         arduino-cli version
+#         arduino-cli core install arduino:avr
+#     - name: CMake configure
+#       run: |
+#         mkdir build
+#         cmake -G Ninja -S ./ -B ./build
+#     - name: CMake build
+#       run: cmake --build ./build
+#     - name: Build & Run tests
+#       run: |
+#         cmake --build ./build --target SMCE_Tests
+#         cd build/test
+#         ctest --output-on-failure
   build-fedora:
     name: libSMCE - Fedora Rawhide (${{ matrix.compiler.name }})
     runs-on: ubuntu-latest
