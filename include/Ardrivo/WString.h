@@ -47,7 +47,8 @@ class SMCE__DLL_RT_API String {
     template <std::size_t N> inline /* explicit(false) */ String(const char (&charr)[N]) : m_u{charr, N} {}
     inline /* explicit(false) */ String(const char* cstr) : m_u{cstr} {}
     inline explicit String(char c) : m_u(1, c) {}
-    template <class T, class = std::enable_if_t<std::is_integral<T>::value>> inline String(T val, StringBaseConv base = DEC) {
+    template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
+    inline String(T val, StringBaseConv base = DEC) {
         constexpr static auto base2len_upperbound = [](StringBaseConv base) /*constexpr*/ {
           switch (base) {
           case BIN:
@@ -72,10 +73,10 @@ class SMCE__DLL_RT_API String {
 
     [[nodiscard]] const char* c_str() const noexcept;
     [[nodiscard]] std::size_t length() const noexcept;
-    [[nodiscard]] auto charAt(unsigned idx) const noexcept;
-    [[nodiscard]] auto& charAt(unsigned idx) noexcept;
-    [[nodiscard]] auto operator[](unsigned idx) const noexcept;
-    [[nodiscard]] auto& operator[](unsigned idx) noexcept;
+    [[nodiscard]] char charAt(unsigned idx) const noexcept;
+    [[nodiscard]] char& charAt(unsigned idx) noexcept;
+    [[nodiscard]] char operator[](unsigned idx) const noexcept;
+    [[nodiscard]] char& operator[](unsigned idx) noexcept;
 
     template <class T> inline bool concat(const T& v) {
         m_u += String(v).m_u;

@@ -66,7 +66,8 @@ class SMCE__DLL_RT_API Print {
     inline std::size_t print(const String& s) { return write(s.c_str(), s.length()); }
     inline std::size_t print(const char* czstr) { return write(czstr); }
     inline std::size_t print(char c) { return write(c); }
-    template <class Int, class = std::enable_if_t<std::is_integral<Int>::value>> inline std::size_t print(Int val, StringBaseConv base = DEC) {
+    template <class Int, class = typename std::enable_if<std::is_integral<Int>::value>::type>
+    inline std::size_t print(Int val, StringBaseConv base = DEC) {
         return print(String(val, base));
     }
     // inline std::size_t print(double val, int prec = 2) { return print(String(val, prec)); }
@@ -76,7 +77,8 @@ class SMCE__DLL_RT_API Print {
     inline std::size_t println(const String& s) { return print(s) + println(); }
     inline std::size_t println(const char* czstr) { return write(czstr) + println(); }
     inline std::size_t println(char c) { return write(c) + println(); }
-    template <class Int, class = std::enable_if_t<std::is_integral<Int>::value>> std::size_t println(Int val, StringBaseConv base = DEC) {
+    template <class Int, class = typename std::enable_if<std::is_integral<Int>::value>::type>
+    std::size_t println(Int val, StringBaseConv base = DEC) {
         return print(val, base) + println();
     }
     // inline std::size_t println(double val, int prec = 2) { return print(val, prec) + println(); }

@@ -20,10 +20,10 @@
 
 [[nodiscard]] const char* String::c_str() const noexcept { return m_u.c_str(); }
 [[nodiscard]] std::size_t String::length() const noexcept { return m_u.length(); }
-[[nodiscard]] auto String::charAt(unsigned idx) const noexcept { return m_u.at(idx); }
-[[nodiscard]] auto& String::charAt(unsigned idx) noexcept { return m_u.at(idx); }
-[[nodiscard]] auto String::operator[](unsigned idx) const noexcept { return m_u[idx]; }
-[[nodiscard]] auto& String::operator[](unsigned idx) noexcept { return m_u[idx]; }
+[[nodiscard]] char String::charAt(unsigned idx) const noexcept { return m_u.at(idx); }
+[[nodiscard]] char& String::charAt(unsigned idx) noexcept { return m_u.at(idx); }
+[[nodiscard]] char String::operator[](unsigned idx) const noexcept { return m_u[idx]; }
+[[nodiscard]] char& String::operator[](unsigned idx) noexcept { return m_u[idx]; }
 
 [[nodiscard]] int String::compareTo(const String& s) const noexcept {
     return std::memcmp(m_u.c_str(), s.m_u.c_str(), (std::min)(s.m_u.size(), m_u.size()));
