@@ -26,16 +26,22 @@
 #include "SMCE_dll.hpp"
 #include "WString.h"
 
+#if __cpp_constexpr >= 201304
+#define SMCE__CONSTEXPR1Y constexpr
+#else
+#define SMCE__CONSTEXPR1Y
+#endif
+
 class SMCE__DLL_RT_API Print {
     int write_error = 0;
 
   protected:
-    constexpr void setWriteError(int err = 1) noexcept { write_error = err; }
+    SMCE__CONSTEXPR1Y void setWriteError(int err = 1) noexcept { write_error = err; }
 
   public:
     Print() noexcept = default;
-    [[nodiscard]] constexpr int getWriteError() noexcept { return write_error; }
-    constexpr void clearWriteError() noexcept { setWriteError(0); }
+    [[nodiscard]] SMCE__CONSTEXPR1Y int getWriteError() noexcept { return write_error; }
+    SMCE__CONSTEXPR1Y void clearWriteError() noexcept { setWriteError(0); }
 
     virtual std::size_t write(std::uint8_t) = 0;
     inline virtual std::size_t write(const uint8_t* buffer, std::size_t size) {

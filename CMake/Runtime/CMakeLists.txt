@@ -34,7 +34,7 @@ if (WIN32)
 endif ()
 
 add_executable (Sketch)
-target_compile_features (Sketch PUBLIC cxx_std_17)
+target_compile_features (Sketch PUBLIC cxx_std_11)
 target_sources (Sketch PRIVATE "${PROJECT_SOURCE_DIR}/sketch.cpp" "${SMCE_DIR}/RtResources/Ardrivo/share/sketch_main.cpp")
 target_link_libraries (Sketch PUBLIC Ardrivo)
 target_compile_definitions(Sketch PUBLIC SMCE__COMPILING_USERCODE=1)
