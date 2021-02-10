@@ -41,9 +41,9 @@ jobs:
             cxx: clang++-10
         boost:
           - version: 1.74.0
-            latest: false
+            release: true
           - version: 1.75.0
-            latest: true
+            release: false
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -91,7 +91,7 @@ jobs:
           (cd build/; cpack -B packages)
           rm -rd build/packages/_CPack_Packages
       - name: Upload artifacts
-        if: matrix.boost.latest
+        if: matrix.boost.release
         uses: 'actions/upload-artifact@v2'
         with:
           name: libSMCE-ubuntu-${{ matrix.compiler.c }}
@@ -189,12 +189,12 @@ jobs:
         boost:
           - version: 1.74.0
             slug: 1_74_0
-            latest: false
+            release: false
           - version: 1.75.0
             slug: 1_75_0
-            latest: true
-#   env:
-#     CC: ${{ matrix.compiler.c }}
+            release: true
+    #   env:
+    #     CC: ${{ matrix.compiler.c }}
 #     CXX: ${{ matrix.compiler.cxx }}
     steps:
       - uses: actions/checkout@v2
@@ -235,7 +235,7 @@ jobs:
           rm -R packages/_CPack_Packages
           cd ..
       - name: Upload artifacts
-        if: matrix.boost.latest
+        if: matrix.boost.release
         uses: 'actions/upload-artifact@v2'
         with:
           name: libSMCE-windows-${{ matrix.compiler.c }}
