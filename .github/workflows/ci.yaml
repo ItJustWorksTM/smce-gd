@@ -1,6 +1,31 @@
 name: CI
 on: [ push, pull_request ]
 jobs:
+  make-release:
+    name: Publish release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [ build-ubuntu ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v2
+      - name: Create Release
+        shell: bash
+        run: |
+          tag_name="${GITHUB_REF##*/}"
+          mkdir release
+          mv $(find . -mindepth 1 -maxdepth 2 -type d -name 'SMCE_gd-*' -printf '%p/* ') release/
+          cd release
+          mkdir hashes
+          for alg in md5 sha1 sha224 sha256 sha384 sha512; do
+            "${alg}sum" $(find . -maxdepth 1 -type f | sed 's/.\///') > hashes/$alg.txt
+          done
+          mv hashes/* ./
+          rmdir hashes
+          hub release create $(find . -type f -printf "-a %p ") -m "SMCE_gd $tag_name" "$tag_name"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-ubuntu:
     name: SMCE-gd - Ubuntu (${{ matrix.compiler.name }})
     runs-on: ubuntu-latest
