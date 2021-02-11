@@ -152,15 +152,15 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
-quality/filters/anisotropic_filter_level=2
 quality/directional_shadow/size=2048
 quality/shadow_atlas/size=2048
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/reflections/irradiance_max_size=32
 quality/shading/force_blinn_over_ggx=true
-quality/subsurface_scattering/quality=0
 quality/reflections/atlas_size=0
 quality/reflections/atlas_subdiv=16
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"
+quality/filters/anisotropic_filter_level=2
+quality/subsurface_scattering/quality=0

@@ -19,10 +19,13 @@
 #ifndef GODOT_SMCE_UTIL_HXX
 #define GODOT_SMCE_UTIL_HXX
 
-#include <concepts>
-#include "core/Godot.hpp"
+#include <core/Godot.hpp>
 
-template <std::derived_from<godot::Reference> T> auto make_ref() -> godot::Ref<T> { return T::_new(); }
+template <class T>
+auto make_ref() -> godot::Ref<T> {
+    static_assert(std::is_base_of_v<godot::Reference, T>);
+    return T::_new();
+}
 
 constexpr auto register_fns = []<class... T>(std::pair<const char*, T>... func) {
     (register_method(func.first, func.second), ...);

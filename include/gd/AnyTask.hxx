@@ -19,7 +19,6 @@
 #ifndef GODOT_SMCE_ANYTASK_HXX
 #define GODOT_SMCE_ANYTASK_HXX
 
-#include <concepts>
 #include <functional>
 #include <future>
 #include <core/Godot.hpp>
@@ -39,10 +38,11 @@ class AnyTask : public Reference {
         register_method("_completed", &AnyTask::_completed);
     }
 
-    static Ref<AnyTask> make_awaitable(std::invocable auto task) {
-        static_assert(std::is_convertible_v<std::invoke_result_t<decltype(task)>, Variant>);
+    template <class F>
+    static Ref<AnyTask> make_awaitable(F&& task) {
+        static_assert(std::is_invocable_r_v<Variant, F>);
         auto runner = make_ref<AnyTask>();
-        runner->thread = std::async([runner, task = std::move(task)]() mutable {
+        runner->thread = std::async([runner, task = std::forward<F>(task)]() mutable {
             runner->call_deferred("_completed", task());
             return runner;
         });

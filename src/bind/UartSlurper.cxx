@@ -16,7 +16,6 @@
  *
  */
 
-#include <ranges>
 #include "bind/UartSlurper.hxx"
 
 using namespace godot;
@@ -37,7 +36,7 @@ void UartSlurper::_physics_process(float) {
         auto written = view.uart_channels[i].rx().write(write_buf);
         write_buf.erase(write_buf.begin(), write_buf.begin() + written);
 
-        available = view.uart_channels[i].tx().read({read_buf.begin(), read_buf.end() - 1});
+        available = view.uart_channels[i].tx().read({read_buf.data(), read_buf.size() - 1});
         if (available > 0) {
             std::replace_if(
                 read_buf.begin(), read_buf.begin() + available,
