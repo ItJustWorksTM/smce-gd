@@ -109,7 +109,7 @@ file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging/include/SMCE/internal")
 install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION ".")
 install (FILES "$<TARGET_FILE:SMCE>" DESTINATION "lib64/SMCE")
 if (NOT WIN32)
-   install (FILES "$<TARGET_FILE:Boost::filesystem>" DESTINATION "lib64/boost")
+   install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::filesystem>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
 endif ()
 install (FILES "LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "share/SMCE")
 
