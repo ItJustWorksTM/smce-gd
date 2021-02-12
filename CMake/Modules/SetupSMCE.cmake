@@ -1,5 +1,5 @@
 #
-#  FindSMCE.cmake
+#  SetupSMCE.cmake
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,17 +74,17 @@ elseif (NOT APPLE)
     target_link_libraries (SMCE INTERFACE rt)
 endif ()
 
-if (NOT WIN32)
-    file (GLOB WA_BOOST_LIBS LIST_DIRECTORIES false "${SMCE_ROOT}/lib64/boost/*${CMAKE_STATIC_LIBRARY_SUFFIX}")
-    message ("Found the following Boost workaround static libs: ${WA_BOOST_LIBS}")
-    if (WA_BOOST_LIBS)
+file (GLOB WA_BOOST_LIBS LIST_DIRECTORIES false "${SMCE_ROOT}/lib64/boost/*")
+message ("Found the following Boost workaround libs: ${WA_BOOST_LIBS}")
+if (WA_BOOST_LIBS)
+    add_library (WA_Boost INTERFACE)
+    foreach (WA_BLIB ${WA_BOOST_LIBS})
         if (IS_SYMLINK "${WA_BOOST_LIBS}")
-            message (FATAL_ERROR "Workaround Boost lib \"${WA_BOOST_LIBS}\" is a symlink")
+                message (FATAL_ERROR "Workaround Boost lib \"${WA_BLIB}\" is a symlink")
         elseif (IS_DIRECTORY "${WA_BOOST_LIBS}")
-            message (FATAL_ERROR "Workaround Boost lib \"${WA_BOOST_LIBS}\" is a directory")
+                message (FATAL_ERROR "Workaround Boost lib \"${WA_BLIB}\" is a directory")
         endif ()
-        add_library (WA_Boost IMPORTED STATIC)
-        set_property (TARGET WA_Boost PROPERTY IMPORTED_LOCATION "${WA_BOOST_LIBS}")
-        target_link_libraries (SMCE INTERFACE WA_Boost)
-    endif ()
+        target_link_libraries (WA_Boost INTERFACE "${WA_BLIB}")
+    endforeach ()
+    target_link_libraries (SMCE INTERFACE WA_Boost)
 endif ()

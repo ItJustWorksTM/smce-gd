@@ -16,6 +16,7 @@
  *
  */
 
+#include <algorithm>
 #include "bind/UartSlurper.hxx"
 
 using namespace godot;
@@ -24,7 +25,7 @@ void UartSlurper::_register_methods() {
     register_method("_physics_process", &UartSlurper::_physics_process);
     register_method("write", &UartSlurper::write);
     register_method("channels", &UartSlurper::channels);
-    register_signal<UartSlurper>("uart");
+    register_signal<UartSlurper>("uart", Dictionary{});
 }
 
 void UartSlurper::_init() { set_physics_process(false); }

@@ -36,7 +36,7 @@ include (SetupSMCE)
 list (APPEND GDCPP_NEEDED_CLASSES RayCast Reference Node)
 include (SetupGodotCpp)
 
-add_library (godot-smce SHARED)
+add_library (godot-smce MODULE)
 target_sources (godot-smce PRIVATE
         src/lib.cxx
         src/bind/BoardRunner.cxx
@@ -54,7 +54,7 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     endif ()
 endif ()
 
-find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 REQUIRED)
+find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 godot REQUIRED)
 file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"

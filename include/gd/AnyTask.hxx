@@ -34,7 +34,7 @@ class AnyTask : public Reference {
 
   public:
     static auto _register_methods() -> void {
-        register_signal<AnyTask>("completed");
+        register_signal<AnyTask>("completed", Dictionary{});
         register_method("_completed", &AnyTask::_completed);
     }
 

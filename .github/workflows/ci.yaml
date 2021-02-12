@@ -4,7 +4,7 @@ jobs:
   make-release:
     name: Publish release
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [ build-ubuntu, build-macos ]
+    needs: [ build-ubuntu, build-macos, build-windows ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -140,4 +140,66 @@ jobs:
         uses: 'actions/upload-artifact@v2'
         with:
           name: SMCE_gd-macos-${{ matrix.compiler.slug }}
+          path: build/packages/*
+  build-windows:
+    name: SMCE-gd - Windows (${{ matrix.compiler.name }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - name: MSVC
+            c: cl
+            cxx: cl
+#         - name: Clang/LLVM
+#           c: clang-cl
+#           cxx: clang++-cl
+#   env:
+#     CC: ${{ matrix.compiler.c }}
+#     CXX: ${{ matrix.compiler.cxx }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check deps
+        run: |
+          choco install ninja godot
+          ninja --version
+          godot --version || true
+      - name: Cache Godot export template
+        uses: actions/cache@v2
+        id: cache-godot
+        with:
+          path: ~/AppData/Roaming/Godot/templates/3.2.3.stable
+          key: godot-323-win64
+      - name: Get export templates
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          Invoke-WebRequest https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz -OutFile godot_export.zip
+          Expand-Archive -Path godot_export.zip -DestinationPath .
+          New-Item -ItemType Directory -Path ~\AppData\Roaming\Godot\templates\3.2.3.stable
+          Move-Item -Path .\templates\windows_64* -Destination ~\AppData\Roaming\Godot\templates\3.2.3.stable
+      - name: Get Mesa3D
+        shell: powershell
+        run: |
+          Invoke-WebRequest "https://downloads.fdossena.com/geth.php?r=mesa64-latest" -OutFile winmesa.7z
+          7z e -y winmesa.7z
+          Move-Item -Path .\opengl32.dll -Destination C:\ProgramData\chocolatey\lib\godot\tools
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: CMake configure
+        run: |
+          mkdir build
+          cmake -G Ninja -S ./ -B ./build
+      - name: CMake build
+        run: cmake --build ./build
+      - name: Package
+        run: |
+          mkdir ./build/packages
+          cd build
+          cpack -B packages
+          rm -R packages/_CPack_Packages
+          cd ..
+      - name: Upload artifacts
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: SMCE_gd-windows-${{ matrix.compiler.c }}
           path: build/packages/*

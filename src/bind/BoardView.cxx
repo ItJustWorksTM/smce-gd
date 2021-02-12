@@ -22,7 +22,7 @@ using namespace godot;
 
 void BoardView::_init() {}
 
-void BoardView::_register_methods() { register_signal<BoardView>("invalidated"); }
+void BoardView::_register_methods() { register_signal<BoardView>("invalidated", Dictionary{}); }
 
 smce::BoardView BoardView::native() { return view; }
 

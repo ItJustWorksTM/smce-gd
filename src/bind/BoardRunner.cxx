@@ -28,7 +28,7 @@ using namespace godot;
     std::pair { STR(f), &BoardRunner::fw_wrap<&smce::BoardRunner::f> }
 
 void BoardRunner::_register_methods() {
-    register_signal<BoardRunner>("status_changed");
+    register_signal<BoardRunner>("status_changed", Dictionary{});
     register_fns(R(reset), R(start), R(suspend), R(resume), U(terminate), U(configure), U(build), U(status),
                  U(emit_status), U(init_context), U(view), U(uart));
 }
