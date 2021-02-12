@@ -108,9 +108,8 @@ file (COPY "${PROJECT_SOURCE_DIR}/include/SMCE" DESTINATION "${PROJECT_BINARY_DI
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging/include/SMCE/internal")
 install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION ".")
 install (FILES "$<TARGET_FILE:SMCE>" DESTINATION "lib64/SMCE")
-if (NOT WIN32)
-   install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::filesystem>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
-endif ()
+install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::filesystem>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
+
 install (FILES "LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "share/SMCE")
 
 if (CMAKE_CXX_SIMULATE_ID)
