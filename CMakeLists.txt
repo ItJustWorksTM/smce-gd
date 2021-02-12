@@ -104,7 +104,7 @@ else ()
                          WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")
         execute_process (COMMAND \"${CMAKE_COMMAND}\" -E tar xf \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
                          WORKING_DIRECTORY \"${PROJECT_BINARY_DIR}/export\")
-        file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\")
+        file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\" USE_SOURCE_PERMISSIONS)
     ")
 endif ()
 
