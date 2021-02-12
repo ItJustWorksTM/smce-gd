@@ -92,7 +92,7 @@ endif()
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/export")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/export")
 if (NOT APPLE)
-    install (CODE "execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\" WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")")
+    install (CODE "execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export-debug \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\" WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")")
     install (PROGRAMS "${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
     install (FILES "${PROJECT_BINARY_DIR}/export/$<TARGET_FILE_NAME:godot-smce>" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
     if (NOT WIN32)
@@ -100,7 +100,7 @@ if (NOT APPLE)
     endif ()
 else ()
     install (CODE "
-        execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
+        execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export-debug \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
                          WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")
         execute_process (COMMAND \"${CMAKE_COMMAND}\" -E tar xf \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
                          WORKING_DIRECTORY \"${PROJECT_BINARY_DIR}/export\")
