@@ -39,9 +39,9 @@ else ()
             GIT_TAG "boost-1.75.0"
         )
         FetchContent_GetProperties (Boost)
-        if(NOT boost_POPULATED)
+        if (NOT boost_POPULATED)
             FetchContent_Populate (Boost)
-        endif()
+        endif ()
     endif()
     add_subdirectory ("${boost_SOURCE_DIR}" "${boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
 
@@ -63,7 +63,7 @@ else ()
 
     if (NOT WIN32 AND NOT APPLE)
         set_property (TARGET boost_filesystem PROPERTY POSITION_INDEPENDENT_CODE True)
-    endif()
+    endif ()
 endif ()
 
 add_library (Boost_ipc INTERFACE)
@@ -75,3 +75,9 @@ endif ()
 add_library(Boost::ipc ALIAS Boost_ipc)
 
 target_link_libraries (SMCE_Boost INTERFACE Boost_ipc)
+
+install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::filesystem>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
+if (MSVC)
+    install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::atomic>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
+    install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::date_time>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
+endif ()
