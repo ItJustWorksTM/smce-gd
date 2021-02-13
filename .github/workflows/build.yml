@@ -219,7 +219,7 @@ jobs:
       - name: CMake configure
         run: |
           mkdir build
-          cmake -G Ninja -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} -S ./ -B ./build
+          cmake -G Ninja -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} -DCMAKE_BUILD_TYPE=Release -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Build & Run tests
