@@ -32,12 +32,18 @@ if (NOT EXISTS "${CMAW_RUNLOC}")
     file (MAKE_DIRECTORY "${CMAW_RUNDIR}")
     file (DOWNLOAD "${CMAW_URL}" "${CMAW_RUNLOC}")
 endif ()
+set (CMAW_AUTO_PATH "${SMCE_DIR}")
 include (CMAW)
 
 message (STATUS "Using CMAW version ${CMAW_VERSION}")
 
 cmaw_arduinocli_version (ARDCLI_VERSION)
 message (STATUS "Using ArduinoCLI version ${ARDCLI_VERSION}")
+
+string (REPLACE ":" ";" SKETCH_FQBN_PARTS ${SKETCH_FQBN})
+list (GET SKETCH_FQBN_PARTS 0 SKETCH_FQBN_PACKAGER)
+list (GET SKETCH_FQBN_PARTS 1 SKETCH_FQBN_ARCH)
+cmaw_install_cores ("${SKETCH_FQBN_PACKAGER}:${SKETCH_FQBN_ARCH}")
 cmaw_update_library_index ()
 cmaw_install_libraries (MQTT)
 
