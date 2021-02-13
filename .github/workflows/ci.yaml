@@ -188,7 +188,7 @@ jobs:
       - name: CMake configure
         run: |
           mkdir build
-          cmake -G Ninja -S ./ -B ./build
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Package
