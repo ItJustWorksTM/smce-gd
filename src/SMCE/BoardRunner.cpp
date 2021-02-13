@@ -71,8 +71,10 @@ BoardRunner::BoardRunner(ExecutionContext& ctx) noexcept : m_exectx{ctx} {
 BoardRunner::~BoardRunner() {
     if(m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
         m_internal->sketch.terminate();
-    if(!m_sketch_dir.empty())
-        stdfs::remove_all(m_sketch_dir);
+    if(!m_sketch_dir.empty()) {
+        [[maybe_unused]] std::error_code ec;
+        stdfs::remove_all(m_sketch_dir, ec);
+    }
 }
 
 [[nodiscard]] BoardView BoardRunner::view() noexcept {
