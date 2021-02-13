@@ -7,12 +7,10 @@ Status: ***EXPERIMENTAL***
 
 ### Build Requirements
 
-- CMake
+- CMake >= 3.16
 - C++20
 - Boost >= 1.74
 
 ### Runtime Requirements
-- CMake
-
-(And at the current state of the project, you also need:)
-- `arduino-cli` in your `PATH` env-var
+- CMake >= 3.?
+- ArduinoCLI \[**IMPORTANT NOTE**: if `arduino-cli` cannot be found through your PATH (such as when it is not installed), if Arduino provides a prebuilt package for your system, it will be automatically installed (provided you have an active internet connection) in the resources directory specified when constructing `smce::ExecutionContext`\]
