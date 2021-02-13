@@ -17,7 +17,11 @@
 
 add_library (SMCE_Boost INTERFACE)
 set (Boost_USE_STATIC_LIBS True)
-find_package (Boost 1.74 COMPONENTS atomic filesystem)
+if (MSVC)
+    find_package (Boost 1.74 COMPONENTS atomic filesystem date_time)
+else ()
+    find_package (Boost 1.74 COMPONENTS atomic filesystem)
+endif ()
 if (Boost_FOUND)
     target_link_libraries (SMCE_Boost INTERFACE Boost::headers Boost::atomic Boost::filesystem)
     target_include_directories(SMCE_Boost INTERFACE ${Boost_INCLUDE_DIRS})
