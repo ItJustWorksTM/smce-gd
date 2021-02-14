@@ -99,8 +99,10 @@ VirtualPin VirtualPins::operator[](std::size_t pin_id) noexcept {
         [](const auto& pin, std::size_t pin_id){
         return pin.id < pin_id;
     });
-    if(const auto delta = std::distance(m_bdat->pins.begin(), it); delta >= 0 && m_bdat->pins[delta].id == pin_id)
-        return {m_bdat, static_cast<std::size_t>(delta)};
+    if (it != m_bdat->pins.end()) {
+        if (const auto delta = std::distance(m_bdat->pins.begin(), it); delta >= 0 && m_bdat->pins[delta].id == pin_id)
+            return {m_bdat, static_cast<std::size_t>(delta)};
+    }
     return {nullptr, std::size_t(-1)};
 }
 
