@@ -40,7 +40,6 @@ __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 #include <span>
 #include <string>
 #include <boost/process.hpp>
-#include <boost/interprocess/managed_shared_memory.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
 #include <SMCE/internal/SharedBoardData.hpp>
@@ -52,9 +51,9 @@ namespace bip = boost::interprocess;
 namespace smce {
 
 enum class BoardRunner::Command {
-    run, // <==>
-    stop, // ==>
-    suspend, // ==>
+    run,      // <==>
+    stop,     // ==>
+    suspend,  // ==>
     stop_ack, // <==
 };
 
@@ -62,49 +61,51 @@ struct BoardRunner::Internal {
     std::uint64_t sketch_id = std::time(nullptr);
     SharedBoardData sbdata;
     bp::child sketch;
+    bp::ipstream sketch_log;
 };
 
-BoardRunner::BoardRunner(ExecutionContext& ctx) noexcept : m_exectx{ctx} {
-    m_internal = std::make_unique<Internal>();
-}
+BoardRunner::BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_notify) noexcept
+    : m_exectx{ctx}
+    , m_exit_notify{std::move(exit_notify)}
+    , m_internal{std::make_unique<Internal>()}
+{}
 
 BoardRunner::~BoardRunner() {
-    if(m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
+    if (m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
         m_internal->sketch.terminate();
-    if(!m_sketch_dir.empty()) {
+    if (!m_sketch_dir.empty()) {
         [[maybe_unused]] std::error_code ec;
         stdfs::remove_all(m_sketch_dir, ec);
     }
 }
 
 [[nodiscard]] BoardView BoardRunner::view() noexcept {
-    if(m_status != Status::configured && m_status != Status::built && m_status != Status::running && m_status != Status::suspended)
+    if (m_status != Status::configured && m_status != Status::built && m_status != Status::running && m_status != Status::suspended)
         return {};
     return BoardView{*m_internal->sbdata.get_board_data()};
 }
 
 bool BoardRunner::reset() noexcept {
-    switch(m_status) {
+    switch (m_status) {
     case Status::running:
     case Status::suspended:
         return false;
     default:
-        if(m_internal
-          && m_internal->sketch.valid()
-          && m_internal->sketch.running())
+        if (m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
             m_internal->sketch.terminate();
         m_internal = std::make_unique<Internal>();
-        if(!m_sketch_dir.empty())
+        if (!m_sketch_dir.empty())
             stdfs::remove_all(m_sketch_dir);
         m_sketch_dir = stdfs::path{};
         m_sketch_bin = stdfs::path{};
+        m_build_log = std::stringstream{};
         m_status = Status::clean;
         return true;
     }
 }
 
 bool BoardRunner::configure(std::string_view pp_fqbn, const BoardConfig& bconf) noexcept {
-    if(!(m_status == Status::clean || m_status == Status::configured))
+    if (!(m_status == Status::clean || m_status == Status::configured))
         return false;
 
     namespace bp = boost::process;
@@ -124,22 +125,15 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
 
     namespace bp = boost::process;
     bp::ipstream cmake_out;
-    auto cmake_config = bp::child(
-        cmake_path,
-        std::move(dir_arg),
-        std::move(fqbn_arg),
-        std::move(sketch_arg),
-        "-P",
-        res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
-        bp::std_out > cmake_out
-    );
+    auto cmake_config = bp::child(cmake_path, std::move(dir_arg), std::move(fqbn_arg), std::move(sketch_arg), "-P",
+                                  res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake", bp::std_out > cmake_out);
 
     {
         std::string line;
         int i = 0;
         while (std::getline(cmake_out, line)) {
             if (!line.starts_with("-- SMCE: ")) {
-                std::cout << line << std::endl;
+                m_build_log << line << std::endl;
                 continue;
             }
             line.erase(0, line.find_first_of('"') + 1);
@@ -159,12 +153,12 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
 
     cmake_config.join();
 
-    if(cmake_config.native_exit_code() != 0)
+    if (cmake_config.native_exit_code() != 0)
         return false;
 
     const int build_res = bp::system(cmake_path, "--build", (m_sketch_dir / "build").string());
 
-    if(build_res != 0 || !stdfs::exists(m_sketch_bin))
+    if (build_res != 0 || !stdfs::exists(m_sketch_bin))
         return false;
 
     std::error_code ec;
@@ -174,22 +168,26 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
 }
 
 bool BoardRunner::start() noexcept {
-    if(m_status != Status::built)
+    if (m_status != Status::built)
         return false;
 
     m_internal->sketch =
         bp::child(
             bp::env["SEGNAME"] = "SMCE-Runner-" + std::to_string(m_internal->sketch_id),
             m_sketch_bin.string(),
-            bp::on_exit([&](int, const std::error_code&){
+            bp::std_out > bp::null,
+            bp::std_err > m_internal->sketch_log,
+            bp::on_exit([&](int exit_code, const std::error_code&) {
                 m_status = Status::stopped;
+                if(m_exit_notify)
+                    m_exit_notify(exit_code);
             }));
     m_status = Status::running;
     return true;
 }
 
 bool BoardRunner::suspend() noexcept {
-    if(m_status != Status::running)
+    if (m_status != Status::running)
         return false;
 
 #if defined(__unix__)
@@ -203,7 +201,7 @@ bool BoardRunner::suspend() noexcept {
 }
 
 bool BoardRunner::resume() noexcept {
-    if(m_status != Status::suspended)
+    if (m_status != Status::suspended)
         return false;
 
 #if defined(__unix__)
@@ -217,13 +215,12 @@ bool BoardRunner::resume() noexcept {
 }
 
 bool BoardRunner::terminate() noexcept {
-    if(m_status != Status::running
-        && m_status != Status::suspended)
+    if (m_status != Status::running && m_status != Status::suspended)
         return false;
 
     std::error_code ec;
     m_internal->sketch.terminate(ec);
-    if(!ec)
+    if (!ec)
         m_status = Status::stopped;
     return !ec;
 }
@@ -246,7 +243,16 @@ bool BoardRunner::stop() noexcept {
 }
 */
 
-//FIXME
+// FIXME
 bool BoardRunner::stop() noexcept { return terminate(); }
+
+static std::istream null_istream{nullptr};
+std::istream& BoardRunner::runtime_log() noexcept {
+    if (m_status == Status::running
+        || m_status == Status::suspended
+        || m_status == Status::stopped)
+        return m_internal->sketch_log;
+    return null_istream;
+}
 
 }

@@ -19,6 +19,8 @@
 #ifndef SMCE_BOARDRUNNER_HPP
 #define SMCE_BOARDRUNNER_HPP
 
+#include <functional>
+#include <sstream>
 #include <string_view>
 #include <thread>
 #include <SMCE/fwd.hpp>
@@ -41,7 +43,7 @@ class BoardRunner {
         stopped
     };
 
-    explicit BoardRunner(ExecutionContext& ctx) noexcept;
+    explicit BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_notify = nullptr) noexcept;
     ~BoardRunner();
 
     [[nodiscard]] Status status() const noexcept { return m_status; }
@@ -52,10 +54,13 @@ class BoardRunner {
     bool configure(std::string_view pp_fqbn, const BoardConfig& bconf) noexcept;
     bool build(const stdfs::path& sketch_src, const SketchConfig& skonf) noexcept;
     bool start() noexcept;
-    bool suspend() noexcept; // Hic sunt dracones: the fairness of this operation currently relies on the sketch code being non-blocking
+    bool suspend() noexcept;
     bool resume() noexcept;
     bool terminate() noexcept;
     bool stop() noexcept;
+
+    [[nodiscard]] inline std::istream& build_log() noexcept { return m_build_log; }
+    [[nodiscard]] std::istream& runtime_log() noexcept;
 
   private:
     struct Internal;
@@ -65,6 +70,8 @@ class BoardRunner {
     Status m_status{};
     stdfs::path m_sketch_dir;
     stdfs::path m_sketch_bin;
+    std::stringstream m_build_log;
+    std::function<void(int)> m_exit_notify;
     std::unique_ptr<Internal> m_internal;
 };
 

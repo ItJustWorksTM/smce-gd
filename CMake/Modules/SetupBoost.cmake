@@ -24,8 +24,8 @@ else ()
 endif ()
 if (Boost_FOUND)
     target_link_libraries (SMCE_Boost INTERFACE Boost::headers Boost::atomic Boost::filesystem)
-    target_include_directories(SMCE_Boost INTERFACE ${Boost_INCLUDE_DIRS})
-    target_link_directories(SMCE_Boost INTERFACE ${Boost_LIBRARY_DIRS})
+    target_include_directories (SMCE_Boost SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
+    target_link_directories (SMCE_Boost INTERFACE ${Boost_LIBRARY_DIRS})
 else ()
 #   set (Boost_DEBUG True)
     set (BOOST_ENABLE_CMAKE True)
@@ -52,7 +52,7 @@ else ()
             Boost::container # Dependency of Interprocess
             Boost::date_time # Dependency of Interprocess
     )
-    target_include_directories (SMCE_Boost INTERFACE
+    target_include_directories (SMCE_Boost SYSTEM INTERFACE
             "${boost_SOURCE_DIR}/libs/process/include"
             "${boost_SOURCE_DIR}/libs/interprocess/include"
             "${boost_SOURCE_DIR}/libs/asio/include" # Dependency of Process
