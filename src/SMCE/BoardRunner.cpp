@@ -20,12 +20,15 @@
 #include <SMCE/BoardRunner.hpp>
 
 #if BOOST_OS_UNIX || BOOST_OS_MACOS
+#include <fcntl.h>
 #include <csignal>
 #elif BOOST_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
-#pragma comment(lib, "ntdll.lib")
 #include <Windows.h>
+#include <namedpipeapi.h>
+#pragma comment(lib, "Kernel32.lib")
 #include <winternl.h>
+#pragma comment(lib, "ntdll.lib")
 extern "C" {
 __declspec(dllimport) LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
 __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
@@ -192,6 +195,12 @@ bool BoardRunner::start() noexcept {
             bp::std_out > bp::null,
             bp::std_err > m_internal->sketch_log
     );
+#if BOOST_OS_UNIX || BOOST_OS_MACOS
+    ::fcntl(m_internal->sketch_log.pipe().native_source(), F_SETFL, O_NONBLOCK);
+#elif BOOST_OS_WINDOWS
+    DWORD pmode = PIPE_NOWAIT;
+    ::SetNamedPipeHandleState(m_internal->sketch_log.pipe().native_source(), &pmode, nullptr, nullptr);
+#endif
     m_status = Status::running;
     return true;
 }
