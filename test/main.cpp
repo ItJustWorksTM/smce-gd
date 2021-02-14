@@ -1,6 +1,7 @@
 #include <array>
 #include <chrono>
 #include <filesystem>
+#include <future>
 #include <catch2/catch.hpp>
 #include <SMCE/BoardRunner.hpp>
 #include <SMCE/ExecutionContext.hpp>
@@ -52,6 +53,24 @@ TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
     REQUIRE(br.reset());
     REQUIRE(br.status() == smce::BoardRunner::Status::clean);
     REQUIRE_FALSE(br.view().valid());
+}
+
+TEST_CASE("BoardRunner exit_notify", "[BoardRunner]") {
+    smce::ExecutionContext exec_ctx{SMCE_PATH};
+    REQUIRE(exec_ctx.check_suitable_environment());
+    std::promise<int> ex;
+    smce::BoardRunner br{exec_ctx, [&](int ec){ ex.set_value(ec); }};
+    REQUIRE(br.configure("arduino:avr:nano", {}));
+    REQUIRE(br.build(SKETCHES_PATH "uncaught", {}));
+    REQUIRE(br.start());
+    auto exfut = ex.get_future();
+    int ticks = 0;
+    while (ticks++ < 5 && exfut.wait_for(0ms) != std::future_status::ready) {
+        exfut.wait_for(1s);
+        br.tick();
+    }
+    REQUIRE(exfut.wait_for(0ms) == std::future_status::ready);
+    REQUIRE(exfut.get() != 0);
 }
 
 template <class Pin, class Value, class Duration>

@@ -49,6 +49,7 @@ class BoardRunner {
     [[nodiscard]] Status status() const noexcept { return m_status; }
     [[nodiscard]] BoardView view() noexcept;
 
+    void tick() noexcept;
 
     bool reset() noexcept;
     bool configure(std::string_view pp_fqbn, const BoardConfig& bconf) noexcept;

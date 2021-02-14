@@ -85,6 +85,20 @@ BoardRunner::~BoardRunner() {
     return BoardView{*m_internal->sbdata.get_board_data()};
 }
 
+void BoardRunner::tick() noexcept {
+   switch (m_status) {
+   case Status::running:
+   case Status::suspended:
+       if (!m_internal->sketch.running()) {
+           m_status = Status::stopped;
+           if (m_exit_notify)
+               m_exit_notify(m_internal->sketch.exit_code());
+       }
+   default:
+       ;
+   }
+}
+
 bool BoardRunner::reset() noexcept {
     switch (m_status) {
     case Status::running:
@@ -176,12 +190,8 @@ bool BoardRunner::start() noexcept {
             bp::env["SEGNAME"] = "SMCE-Runner-" + std::to_string(m_internal->sketch_id),
             m_sketch_bin.string(),
             bp::std_out > bp::null,
-            bp::std_err > m_internal->sketch_log,
-            bp::on_exit([&](int exit_code, const std::error_code&) {
-                m_status = Status::stopped;
-                if(m_exit_notify)
-                    m_exit_notify(exit_code);
-            }));
+            bp::std_err > m_internal->sketch_log
+    );
     m_status = Status::running;
     return true;
 }
