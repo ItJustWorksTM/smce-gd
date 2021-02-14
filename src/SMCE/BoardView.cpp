@@ -20,7 +20,12 @@
 
 #include <iterator>
 #include <mutex>
+#include <boost/date_time/microsec_time_clock.hpp>
+#include <boost/date_time/posix_time/ptime.hpp>
+#include <boost/date_time/posix_time/posix_time_duration.hpp>
 #include "SMCE/internal/BoardData.hpp"
+
+using microsec_clock = boost::date_time::microsec_clock<boost::posix_time::ptime>;
 
 namespace smce {
 
@@ -119,8 +124,11 @@ VirtualPin VirtualPins::operator[](std::size_t pin_id) noexcept {
       case Direction::tx: return std::tie(chan.tx, chan.tx_mut);
       }
     }();
-    std::lock_guard g{mut};
-    return d.size();
+    if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
+        return 0;
+    const auto ret = d.size();
+    mut.unlock();
+    return ret;
 }
 
 std::size_t VirtualUartBuffer::read(std::span<char> buf) noexcept {
@@ -135,10 +143,12 @@ std::size_t VirtualUartBuffer::read(std::span<char> buf) noexcept {
           return std::tie(chan.tx, chan.tx_mut, chan.max_buffered_tx);
       }
     }();
-    std::lock_guard g{mut};
+    if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
+        return 0;
     const std::size_t count = std::min(d.size(), buf.size());
     std::copy_n(d.begin(), count, buf.begin());
     d.erase(d.begin(), d.begin() + count);
+    mut.unlock();
     return count;
 }
 
@@ -154,9 +164,11 @@ std::size_t VirtualUartBuffer::write(std::span<const char> buf) noexcept {
             return std::tie(chan.tx, chan.tx_mut, chan.max_buffered_tx);
         }
     }();
-    std::lock_guard g{mut};
+    if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
+        return 0;
     const std::size_t count = std::min(std::clamp(max_buffered - d.size(), std::size_t{0}, static_cast<std::size_t>(max_buffered)), buf.size());
     std::copy_n(buf.begin(), count, std::back_inserter(d));
+    mut.unlock();
     return count;
 }
 
@@ -170,10 +182,13 @@ std::size_t VirtualUartBuffer::write(std::span<const char> buf) noexcept {
       case Direction::tx: return std::tie(chan.tx, chan.tx_mut);
       }
     }();
-    std::lock_guard g{mut};
+    if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
+        return 0;
     if(d.empty())
         return '\0';
-    return d.front();
+    const char ret = d.front();
+    mut.unlock();
+    return ret;
 }
 
 [[nodiscard]] bool VirtualUart::exists() noexcept {
