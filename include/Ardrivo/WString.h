@@ -49,19 +49,7 @@ class SMCE__DLL_RT_API String {
     inline explicit String(char c) : m_u(1, c) {}
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
     inline String(T val, StringBaseConv base = DEC) {
-        constexpr static auto base2len_upperbound = [](StringBaseConv base) /*constexpr*/ {
-          switch (base) {
-          case BIN:
-              return 65;
-          case DEC:
-              return 11;
-          case HEX:
-              return 17;
-          default:
-              throw;
-          }
-        };
-        m_u.resize(base2len_upperbound(base));
+        m_u.resize(65);
         const auto res = std::to_chars(&*m_u.begin(), &*m_u.rbegin(), val, +base);
         if (static_cast<int>(res.ec))
             throw;
