@@ -15,8 +15,20 @@
  *  limitations under the License.
  */
 
+#include <algorithm>
+#include <cctype>
+#include <cstring>
+#include <charconv>
 #include <boost/algorithm/string/predicate.hpp>
 #include "WString.h"
+
+String::String(unsigned long long val, StringBaseConv base) {
+    m_u.resize(65);
+    const auto res = std::to_chars(&*m_u.begin(), &*m_u.rbegin(), val, +base);
+    if (static_cast<int>(res.ec))
+        throw;
+    m_u.resize(std::strlen(m_u.c_str()));
+}
 
 [[nodiscard]] const char* String::c_str() const noexcept { return m_u.c_str(); }
 [[nodiscard]] std::size_t String::length() const noexcept { return m_u.length(); }

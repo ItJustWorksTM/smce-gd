@@ -19,6 +19,7 @@
 #ifndef MQTT_H
 #define MQTT_H
 
+#include <cstring>
 #include <string>
 
 #include "WString.h"
@@ -100,7 +101,7 @@ public:
         return this->publish(topic, payload.c_str(), retained, qos);
     }
     inline bool publish(const char* topic, const char* payload = "", bool retained = false, int qos = 0) {
-        return this->publish(topic, payload, (int)strlen(payload), retained, qos);
+        return this->publish(topic, payload, (int)std::strlen(payload), retained, qos);
     }
     inline bool publish(const char* topic, const char* payload, int length) {
         return this->publish(topic, payload, length, false, 0);

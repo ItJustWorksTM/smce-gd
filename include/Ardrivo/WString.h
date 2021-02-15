@@ -18,12 +18,9 @@
 #ifndef WString_h
 #define WString_h
 
-#include <algorithm>
-#include <cctype>
-#include <charconv>
-#include <cstring>
-#include <iostream>
 #include <string>
+#include <type_traits>
+#include <utility>
 #include "SMCE_dll.hpp"
 
 enum StringBaseConv {
@@ -47,14 +44,10 @@ class SMCE__DLL_RT_API String {
     template <std::size_t N> inline /* explicit(false) */ String(const char (&charr)[N]) : m_u{charr, N} {}
     inline /* explicit(false) */ String(const char* cstr) : m_u{cstr} {}
     inline explicit String(char c) : m_u(1, c) {}
+
+    String(unsigned long long val,  StringBaseConv base = DEC);
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
-    inline String(T val, StringBaseConv base = DEC) {
-        m_u.resize(65);
-        const auto res = std::to_chars(&*m_u.begin(), &*m_u.rbegin(), val, +base);
-        if (static_cast<int>(res.ec))
-            throw;
-        m_u.resize(std::strlen(m_u.c_str()));
-    }
+    inline String(T val, StringBaseConv base = DEC) : String{+val, base} {}
 
     // template <class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
     // String(T val, int precision); // unimplemented
