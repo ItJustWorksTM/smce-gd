@@ -21,7 +21,6 @@
 
 #include <cstdint>
 #include <span>
-#include <vector>
 #include <SMCE/fwd.hpp>
 
 namespace smce {
