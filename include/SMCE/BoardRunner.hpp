@@ -22,7 +22,6 @@
 #include <functional>
 #include <sstream>
 #include <string_view>
-#include <thread>
 #include <SMCE/fwd.hpp>
 #include <SMCE/SMCE_fs.hpp>
 #include <SMCE/BoardConf.hpp>
