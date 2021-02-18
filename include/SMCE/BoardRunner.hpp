@@ -20,6 +20,7 @@
 #define SMCE_BOARDRUNNER_HPP
 
 #include <functional>
+#include <memory>
 #include <sstream>
 #include <string_view>
 #include <SMCE/fwd.hpp>
