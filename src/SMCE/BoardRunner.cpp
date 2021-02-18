@@ -38,9 +38,6 @@ __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 #endif
 
 #include <ctime>
-#include <iostream>
-#include <mutex>
-#include <span>
 #include <string>
 #include <boost/process.hpp>
 #include <SMCE/BoardConf.hpp>
