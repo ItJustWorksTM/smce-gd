@@ -42,6 +42,7 @@ __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 #include <boost/process.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
+#include <SMCE/ExecutionContext.hpp>
 #include <SMCE/internal/SharedBoardData.hpp>
 
 using namespace std::literals;

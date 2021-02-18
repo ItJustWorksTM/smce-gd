@@ -27,7 +27,6 @@
 #include <SMCE/SMCE_fs.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
-#include <SMCE/ExecutionContext.hpp>
 #include <SMCE/SketchConf.hpp>
 
 namespace smce {
