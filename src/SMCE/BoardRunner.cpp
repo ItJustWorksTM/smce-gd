@@ -177,6 +177,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
 
     cmake_config.join();
     m_build_log << cmake_conf_err.rdbuf();
+    m_build_log.flush();
     if (cmake_config.native_exit_code() != 0)
         return false;
 
@@ -192,6 +193,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
 
     m_build_log << cmake_build_out.rdbuf();
     m_build_log << cmake_build_err.rdbuf();
+    m_build_log.flush();
 
     if (build_res != 0 || !stdfs::exists(m_sketch_bin))
         return false;
