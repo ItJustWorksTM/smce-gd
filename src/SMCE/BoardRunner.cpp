@@ -139,14 +139,23 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
     std::string sketch_arg = "-DSKETCH_PATH=" + stdfs::absolute(sketch_src).string();
 
     namespace bp = boost::process;
-    bp::ipstream cmake_out;
-    auto cmake_config = bp::child(cmake_path, std::move(dir_arg), std::move(fqbn_arg), std::move(sketch_arg), "-P",
-                                  res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake", bp::std_out > cmake_out);
+    bp::ipstream cmake_conf_out;
+    bp::ipstream cmake_conf_err;
+    auto cmake_config = bp::child(
+        cmake_path,
+        std::move(dir_arg),
+        std::move(fqbn_arg),
+        std::move(sketch_arg),
+        "-P",
+        res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
+        bp::std_out > cmake_conf_out,
+        bp::std_err > cmake_conf_err
+    );
 
     {
         std::string line;
         int i = 0;
-        while (std::getline(cmake_out, line)) {
+        while (std::getline(cmake_conf_out, line)) {
             if (!line.starts_with("-- SMCE: ")) {
                 m_build_log << line << std::endl;
                 continue;
@@ -167,11 +176,22 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
     }
 
     cmake_config.join();
-
+    m_build_log << cmake_conf_err.rdbuf();
     if (cmake_config.native_exit_code() != 0)
         return false;
 
-    const int build_res = bp::system(cmake_path, "--build", (m_sketch_dir / "build").string());
+    bp::ipstream cmake_build_out;
+    bp::ipstream cmake_build_err;
+    const int build_res = bp::system(
+        cmake_path,
+        "--build",
+        (m_sketch_dir / "build").string(),
+        bp::std_out > cmake_build_out,
+        bp::std_err > cmake_build_err
+    );
+
+    m_build_log << cmake_build_out.rdbuf();
+    m_build_log << cmake_build_err.rdbuf();
 
     if (build_res != 0 || !stdfs::exists(m_sketch_bin))
         return false;
