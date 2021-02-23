@@ -39,7 +39,7 @@ void maybe_init() {
 
 }
 
-int SMCE__main(int argc, char** argv, SetupSig* setup, LoopSig* loop) noexcept try {
+int SMCE__main([[maybe_unused]] int argc, [[maybe_unused]] char** argv, SetupSig* setup, LoopSig* loop) noexcept try {
     smce::maybe_init();
     setup();
     for (;;)

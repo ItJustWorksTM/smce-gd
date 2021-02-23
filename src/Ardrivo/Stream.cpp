@@ -66,7 +66,7 @@ float Stream::parseFloat(LookaheadMode lookahead, char ignore) {
     bool isNegative = false;
     bool isFraction = false;
     long value = 0;
-    float fraction = 1.0;
+    float fraction = 1.0f;
     int c = peekNextDigit(lookahead, true);
 
     if (c < 0)
@@ -82,7 +82,7 @@ float Stream::parseFloat(LookaheadMode lookahead, char ignore) {
         else if (std::isdigit(c)) {
             value = value * 10 + c - '0';
             if (isFraction)
-                fraction *= 0.1;
+                fraction *= 0.1f;
         }
         read();
         c = peek();
@@ -119,7 +119,7 @@ long Stream::parseInt(LookaheadMode lookahead, char ignore) {
 }
 
 size_t Stream::readBytesUntil(char terminator, char* buffer, int length) {
-    size_t index = 0;
+    int index = 0;
     while (index < length) {
         const int c = read();
         if (c < 0 || c == terminator)
@@ -127,7 +127,7 @@ size_t Stream::readBytesUntil(char terminator, char* buffer, int length) {
         *buffer++ = static_cast<char>(c);
         ++index;
     }
-    return index;
+    return static_cast<size_t>(index);
 }
 
 String Stream::readStringUntil(char terminator) {

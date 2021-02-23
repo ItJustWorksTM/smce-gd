@@ -53,13 +53,13 @@ void String::getBytes(std::uint8_t* buffer, unsigned length) const noexcept{
     std::copy(m_u.begin(), (length > m_u.length()) ? m_u.end() : m_u.begin() + length, buffer);
 }
 
-[[nodiscard]] int String::indexOf(const char* c) const noexcept { return m_u.find(c); }
+[[nodiscard]] int String::indexOf(const char* c) const noexcept { return static_cast<int>(m_u.find(c)); }
 
-[[nodiscard]] int String::indexOf(const char* c, unsigned index) const noexcept { return m_u.find(c, index); }
+[[nodiscard]] int String::indexOf(const char* c, unsigned index) const noexcept { return static_cast<int>(m_u.find(c, index)); }
 
-[[nodiscard]] int String::indexOf(const String& str) const noexcept { return m_u.find(str.m_u); }
+[[nodiscard]] int String::indexOf(const String& str) const noexcept { return static_cast<int>(m_u.find(str.m_u)); }
 
-[[nodiscard]] int String::indexOf(const String& str, unsigned index) const noexcept { return m_u.find(str.m_u, index); }
+[[nodiscard]] int String::indexOf(const String& str, unsigned index) const noexcept { return static_cast<int>(m_u.find(str.m_u, index)); }
 
 void String::remove(unsigned idx) { m_u.erase(idx); }
 
@@ -86,15 +86,15 @@ void String::toCharArray(char* buffer, unsigned length) noexcept {
     std::memcpy(buffer, m_u.c_str(), (std::min)(static_cast<std::size_t>(length), m_u.length()));
 }
 
-[[nodiscard]] long String::toInt() const noexcept try { return std::stoi(m_u); } catch (const std::exception& e) {
+[[nodiscard]] long String::toInt() const noexcept try { return std::stoi(m_u); } catch (const std::exception&) {
     return 0;
 }
 
-[[nodiscard]] double String::toDouble() const noexcept try { return std::stod(m_u); } catch (const std::exception& e) {
+[[nodiscard]] double String::toDouble() const noexcept try { return std::stod(m_u); } catch (const std::exception&) {
     return 0;
 }
 
-[[nodiscard]] float String::toFloat() const noexcept try { return std::stof(m_u); } catch (const std::exception& e) {
+[[nodiscard]] float String::toFloat() const noexcept try { return std::stof(m_u); } catch (const std::exception&) {
     return 0;
 }
 

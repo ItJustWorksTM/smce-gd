@@ -43,7 +43,14 @@ class SMCE__DLL_RT_API MQTTClient {
     bool m_clean_session = true;
     int m_keepalive = 60;
     int m_timeout = 120;
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
     std::string m_host_uri = "tcp://localhost:1883";
+#if _MSC_VER
+#pragma warning(pop)
+#endif
     MQTTClientCallbacks m_callbacks{this};
 public:
     explicit MQTTClient(int bufSize = 128);

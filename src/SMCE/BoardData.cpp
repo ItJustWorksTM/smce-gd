@@ -67,8 +67,8 @@ BoardData::BoardData(
         data.baud_rate = conf.baud_rate;
         data.rx_pin_override = conf.rx_pin_override;
         data.tx_pin_override = conf.tx_pin_override;
-        data.max_buffered_rx = conf.rx_buffer_length;
-        data.max_buffered_tx = conf.tx_buffer_length;
+        data.max_buffered_rx = static_cast<std::uint16_t>(conf.rx_buffer_length);
+        data.max_buffered_tx = static_cast<std::uint16_t>(conf.tx_buffer_length);
     }
 }
 

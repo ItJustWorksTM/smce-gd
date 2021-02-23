@@ -23,7 +23,19 @@
 
 namespace SMCE__PAHO {
 extern "C" {
+#if __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#elif _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4201)
+#endif
 #include <MQTTClient.h>
+#if __GNUC__
+#pragma GCC diagnostic pop
+#elif _MSC_VER
+#pragma warning(pop)
+#endif
 }
 }
 
@@ -41,13 +53,13 @@ int SMCE__mqtt_callback(void* context, char* topic_name, [[maybe_unused]] int to
     return 1;
 }
 
-MQTTClient::MQTTClient(int bufSize) {}
+MQTTClient::MQTTClient([[maybe_unused]] int bufSize) {}
 
 MQTTClient::~MQTTClient() {
     SMCE__PAHO::MQTTClient_destroy(&m_client);
 }
 
-void MQTTClient::begin(Client& client){}
+void MQTTClient::begin([[maybe_unused]] Client& client){}
 void MQTTClient::begin(const char* hostname){
     setHost(hostname, 1883);
 }
@@ -67,9 +79,13 @@ void MQTTClient::setHost(const char* hostname, std::uint16_t port){
     m_host_uri += std::to_string(port);
 }
 
-void MQTTClient::setHost(IPAddress address, std::uint16_t port){}
+void MQTTClient::setHost([[maybe_unused]] IPAddress address, [[maybe_unused]] std::uint16_t port){}
 
-void MQTTClient::setWill(const char* topic, const char* payload, bool retained, int qos){}
+void MQTTClient::setWill([[maybe_unused]] const char* topic,
+                         [[maybe_unused]] const char* payload,
+                         [[maybe_unused]] bool retained,
+                         [[maybe_unused]] int qos){}
+
 void MQTTClient::clearWill(){}
 
 bool MQTTClient::connect(const char* clientID, const char* username, const char* password, [[maybe_unused]] bool skip) {

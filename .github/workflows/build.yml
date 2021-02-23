@@ -150,8 +150,8 @@ jobs:
         run: brew install boost
       - name: CMake configure
         run: |
-          [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-          [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -Wno-unused-command-line-argument"
+          [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -Wno-unused-command-line-argument"
           mkdir build
           cmake -G Ninja -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -S ./ -B ./build
       - name: CMake build

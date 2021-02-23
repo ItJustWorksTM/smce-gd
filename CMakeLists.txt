@@ -56,6 +56,13 @@ target_sources (Ardrivo PRIVATE
         src/Ardrivo/SMCE_main.cpp
 )
 target_link_libraries (Ardrivo PUBLIC Threads::Threads SMCE_Boost)
+if (NOT WIN32)
+   target_compile_options (Ardrivo PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
+   set_property (SOURCE src/Ardrivo/MQTT.cpp PROPERTY COMPILE_OPTIONS "-Wno-missing-field-initializers")
+elseif (MSVC)
+   target_compile_definitions (Ardrivo PRIVATE "_CRT_SECURE_NO_WARNINGS=1")
+   target_compile_options (Ardrivo PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
+endif ()
 FetchContent_Declare (Paho
         GIT_REPOSITORY "https://github.com/eclipse/paho.mqtt.c"
         GIT_TAG master)
@@ -77,6 +84,7 @@ add_library (SMCE)
 target_compile_features (SMCE PUBLIC cxx_std_20)
 target_include_directories (SMCE PUBLIC include)
 target_sources (SMCE PRIVATE
+      include/SMCE/internal/utils.hpp
       include/SMCE/SMCE_fs.hpp
       include/SMCE/internal/BoardData.hpp
       src/SMCE/BoardData.cpp
@@ -93,7 +101,9 @@ target_sources (SMCE PRIVATE
 )
 target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost)
 if (NOT WIN32)
-   target_compile_options (SMCE PUBLIC "-Wall" "-Wextra")
+   target_compile_options (SMCE PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
+elseif (MSVC)
+   target_compile_options (SMCE PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
 endif ()
 set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 

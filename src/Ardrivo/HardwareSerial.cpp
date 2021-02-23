@@ -55,7 +55,7 @@ void HardwareSerial::end() {
 int HardwareSerial::available() {
     if(!upcast(*this).view().is_active())
         return std::cerr << "HardwareSerial::available(): Device inactive" << std::endl, 0;
-    return upcast(*this).view().rx().size();
+    return static_cast<int>(upcast(*this).view().rx().size());
 }
 
 int HardwareSerial::availableForWrite() {

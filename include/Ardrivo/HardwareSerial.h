@@ -50,7 +50,7 @@
 #define SERIAL_7O2 0x3C
 #define SERIAL_8O2 0x3E
 
-class SMCE_HardwareSerialImpl;
+struct SMCE_HardwareSerialImpl;
 struct SMCE__DLL_RT_API HardwareSerial : Stream {
     void begin(unsigned long, std::uint8_t = SERIAL_8N1);
     void end();

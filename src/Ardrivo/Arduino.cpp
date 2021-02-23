@@ -122,10 +122,10 @@ static const auto start_time = std::chrono::steady_clock::now();
 
 unsigned long micros() {
     const auto current_time = std::chrono::steady_clock::now();
-    return std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time).count();
+    return static_cast<unsigned long>(std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time).count());
 }
 
 unsigned long millis() {
     const auto current_time = std::chrono::steady_clock::now();
-    return std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count();
+    return static_cast<unsigned long>(std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count());
 }

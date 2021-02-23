@@ -30,7 +30,14 @@ enum StringBaseConv {
 };
 
 class SMCE__DLL_RT_API String {
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
     std::string m_u;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
     String(std::string u) : m_u{std::move(u)} {}
 

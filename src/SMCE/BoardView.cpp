@@ -24,6 +24,7 @@
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
 #include "SMCE/internal/BoardData.hpp"
+#include "SMCE/internal/utils.hpp"
 
 using microsec_clock = boost::date_time::microsec_clock<boost::posix_time::ptime>;
 
@@ -125,6 +126,7 @@ VirtualPin VirtualPins::operator[](std::size_t pin_id) noexcept {
       case Direction::rx: return std::tie(chan.rx, chan.rx_mut);
       case Direction::tx: return std::tie(chan.tx, chan.tx_mut);
       }
+      unreachable();
     }();
     if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
         return 0;
@@ -144,6 +146,7 @@ std::size_t VirtualUartBuffer::read(std::span<char> buf) noexcept {
       case Direction::tx:
           return std::tie(chan.tx, chan.tx_mut, chan.max_buffered_tx);
       }
+      unreachable();
     }();
     if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
         return 0;
@@ -165,6 +168,7 @@ std::size_t VirtualUartBuffer::write(std::span<const char> buf) noexcept {
         case Direction::tx:
             return std::tie(chan.tx, chan.tx_mut, chan.max_buffered_tx);
         }
+        unreachable();
     }();
     if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
         return 0;
@@ -183,6 +187,7 @@ std::size_t VirtualUartBuffer::write(std::span<const char> buf) noexcept {
       case Direction::rx: return std::tie(chan.rx, chan.rx_mut);
       case Direction::tx: return std::tie(chan.tx, chan.tx_mut);
       }
+      unreachable();
     }();
     if (!mut.timed_lock(microsec_clock::universal_time() + boost::posix_time::seconds{1}))
         return 0;
