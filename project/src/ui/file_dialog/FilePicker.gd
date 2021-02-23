@@ -2,6 +2,9 @@ extends Control
 
 onready var _wrapped: FileDialog = $FileDialog
 
+enum dialog_type { SAVE, OPEN }
+export (dialog_type) var mode = dialog_type.OPEN
+
 
 func _ready():
 	# Trigger file refresh
@@ -16,6 +19,10 @@ func _process(_delta: float) -> void:
 	_wrapped.modulate = modulate
 	_wrapped.rect_pivot_offset = rect_pivot_offset
 	_wrapped.visible = visible
+	if mode == dialog_type.SAVE:
+		_wrapped.mode = FileDialog.MODE_SAVE_FILE
+	elif mode == dialog_type.OPEN:
+		_wrapped.mode = FileDialog.MODE_OPEN_FILE
 
 
 func connect(sig_name: String, object: Object, func_name: String, bind: Array = [], idx: int = 0) -> int:

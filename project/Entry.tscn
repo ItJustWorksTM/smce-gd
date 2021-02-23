@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Entry.gd" type="Script" id=1]
 [ext_resource path="res://src/environments/playground/Playground.tscn" type="PackedScene" id=2]
@@ -13,6 +13,14 @@ bg_color = Color( 0.368627, 0.368627, 0.368627, 0.231373 )
 bg_color = Color( 0, 0, 0, 0.231373 )
 
 [sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0.443137, 0.745098, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0, 0, 0, 0.231373 )
 
 [node name="Entry" type="Control"]
@@ -63,11 +71,10 @@ margin_left = -184.0
 margin_top = 96.0
 margin_right = 184.0
 margin_bottom = 136.0
-focus_mode = 0
 custom_styles/hover = SubResource( 2 )
 custom_styles/pressed = SubResource( 3 )
-custom_styles/normal = SubResource( 4 )
-enabled_focus_mode = 0
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 text = "Copy to clipboard"
 __meta__ = {
 "_edit_use_anchors_": false

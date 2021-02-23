@@ -68,7 +68,7 @@ border_width_right = 4
 border_color = Color( 0.145098, 0.145098, 0.164706, 1 )
 
 [sub_resource type="StyleBoxFlat" id=12]
-bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
 border_color = Color( 0, 0.74902, 1, 1 )
 
 [resource]

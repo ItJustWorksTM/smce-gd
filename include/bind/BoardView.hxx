@@ -43,6 +43,12 @@ class BoardView : public Node {
 
     smce::BoardView native();
 
+    void write_analog_pin(int pin, int value);
+    void write_digital_pin(int pin, bool value);
+
+    int read_analog_pin(int pin);
+    bool read_digital_pin(int pin);
+
     const smce::BoardConfig& board_config() const;
 };
 } // namespace godot

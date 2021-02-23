@@ -8,11 +8,15 @@ onready var _button: Button = $Button
 
 var error: String = ""
 
-
 func _ready():
 	_button.connect("pressed", self, "_on_clipboard_copy")
 
 	print("User dir: ", OS.get_user_data_dir())
+
+	var dir = Directory.new()
+	if ! dir.dir_exists("res://gdnative/lib/RtResources"):
+		return _error("RtResources not found!")
+
 	if ! Util.copy_dir("res://gdnative/lib/RtResources", "user://RtResources"):
 		return _error("Failed to copy in RtResources")
 
@@ -21,7 +25,8 @@ func _ready():
 	var bar = BoardRunner.new()
 	if bar == null:
 		return _error("Shared library not loaded")
-
+	bar.free()
+	
 	_continue()
 
 

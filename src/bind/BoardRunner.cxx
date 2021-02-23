@@ -16,6 +16,7 @@
  *
  */
 
+#include <array>
 #include "bind/BoardRunner.hxx"
 #include "bind/BoardView.hxx"
 
@@ -29,15 +30,28 @@ using namespace godot;
 
 void BoardRunner::_register_methods() {
     register_signal<BoardRunner>("status_changed", Dictionary{});
+    register_signal<BoardRunner>("runtime_log", Dictionary{});
+    register_signal<BoardRunner>("build_log", Dictionary{});
     register_fns(R(reset), R(start), R(suspend), R(resume), U(terminate), U(configure), U(build), U(status),
-                 U(emit_status), U(init_context), U(view), U(uart));
+                 U(emit_status), U(init_context), U(view), U(uart), U(_physics_process), U(_notification),
+                 U(get_exit_code));
 }
 
 #undef STR
 #undef R
 #undef U
 
-void BoardRunner::_init() { Godot::print("BoardRunner created"); }
+void BoardRunner::_init() {
+    Godot::print("BoardRunner created");
+    set_physics_process(false);
+}
+
+void BoardRunner::_notification(int what) {
+    if (what == Object::NOTIFICATION_PREDELETE) {
+        Godot::print("BoardRunner terminate due to dtor");
+        terminate();
+    }
+}
 
 std::optional<smce::BoardRunner>& BoardRunner::native() { return runner; }
 
@@ -106,11 +120,47 @@ bool BoardRunner::init_context(String context_path) {
         return false;
 
     exec_context = context;
-    runner.emplace(exec_context);
-
+    runner.emplace(exec_context, [&](int code) {
+        exit_code = code;
+        emit_status();
+        queue_free();
+    });
+    set_physics_process(true);
     emit_status();
 
     return true;
+}
+
+void BoardRunner::_physics_process() {
+
+    auto& build_stream = runner->build_log();
+    auto& runtime_stream = runner->runtime_log();
+
+    std::array<char, 100> buf;
+
+    const auto read_buf = [&](auto& stream) {
+        size_t bytes_read = 0;
+        if (auto* sb = stream.rdbuf()) {
+            try {
+                bytes_read = sb->sgetn(buf.data(), buf.size() - 1);
+            } catch (...) {
+            }
+        }
+        buf[bytes_read] = '\0';
+        return bytes_read;
+    };
+
+    if (read_buf(runtime_stream) > 0) {
+        emit_signal("runtime_log", String{buf.data()});
+        std::cout << buf.data();
+    }
+
+    if (read_buf(build_stream) > 0) {
+        emit_signal("build_log", String{buf.data()});
+        std::cout << buf.data();
+    }
+
+    runner->tick();
 }
 
 BoardView* BoardRunner::view() { return view_node; }
@@ -128,6 +178,8 @@ bool BoardRunner::terminate() {
 }
 
 int BoardRunner::status() { return runner ? static_cast<int>(runner->status()) : -1; }
+
+int BoardRunner::get_exit_code() { return exit_code; }
 
 void BoardRunner::emit_status() {
     if (runner)

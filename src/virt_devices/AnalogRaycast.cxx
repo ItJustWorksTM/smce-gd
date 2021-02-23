@@ -25,7 +25,7 @@ void AnalogRaycast::_physics_process(float delta) {
     if (!debug->get("disabled")) {
         debug->call("add_draw", pos, point, Color{0, 1, 0});
     }
-
+    
     std::uint16_t dist = pos.distance_to(point) * 100;
     board_view->native().pins[1].analog().write(dist);
 }

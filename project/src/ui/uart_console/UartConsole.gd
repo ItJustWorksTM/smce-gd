@@ -8,7 +8,8 @@ var uart_channel: int = 0 setget set_uart_channel
 
 onready var header: Label = $Header
 onready var console: RichTextLabel = $Console
-onready var input: LineEdit = $Input	
+onready var input: LineEdit = $Input
+
 
 func set_disabled(val: bool) -> void:
 	disabled = val
@@ -16,6 +17,8 @@ func set_disabled(val: bool) -> void:
 
 
 func set_runner(new_runner) -> void:
+	if runner:
+		runner.disconnect("status_changed", self, "_on_board_status_changed")
 	runner = new_runner
 	runner.connect("status_changed", self, "_on_board_status_changed")
 	runner.uart().connect("uart", self, "_on_uart")
@@ -51,6 +54,6 @@ func _on_uart(channel, text) -> void:
 
 
 func _on_board_status_changed(status: int) -> void:
-	set_disabled(status != SMCE.Status.RUNNING)
+	set_disabled(! (status == SMCE.Status.RUNNING || status == SMCE.Status.SUSPENDED))
 	if status == SMCE.Status.STOPPED:
 		runner = null
