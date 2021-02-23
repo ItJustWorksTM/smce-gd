@@ -41,6 +41,7 @@ class BoardRunner : public Node {
     GODOT_CLASS(BoardRunner, Node)
 
     std::optional<smce::BoardRunner> runner;
+    int exit_code = 0;
 
     template <auto func, class... Args>
     std::invoke_result_t<decltype(func), smce::BoardRunner> fw_wrap(Args&&... args) {
@@ -65,9 +66,13 @@ class BoardRunner : public Node {
 
     void _init();
 
+    void _notification(int what);
+
     static void _register_methods();
 
     bool init_context(String context_path);
+
+    void _physics_process();
 
     String context();
 
@@ -80,6 +85,8 @@ class BoardRunner : public Node {
     bool terminate();
 
     int status();
+
+    int get_exit_code();
 
     std::optional<smce::BoardRunner>& native();
 };

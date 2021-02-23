@@ -6,7 +6,8 @@ var _last_pressed: Button = null
 
 func _init():
 	for button in get_buttons():
-		button.connect("toggled", self, "_on_button_toggle", [button])
+		if ! button.is_connected("toggled", self, "_on_button_toggle"):
+			button.connect("toggled", self, "_on_button_toggle", [button])
 
 
 func _on_button_toggle(toggle: bool, button: Button):

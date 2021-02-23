@@ -18,8 +18,10 @@ onready var _parent: RigidBody = get_parent()
 
 onready var _force_pos: Vector3 = Vector3.ZERO
 
+
 func set_force(ratio: float) -> void:
 	throttle = min(1, max(0, ratio))
+
 
 func add_force(state: PhysicsDirectBodyState) -> void:
 	_force_pos = global_transform.origin - _parent.global_transform.origin
@@ -56,7 +58,7 @@ func _spring_force(state: PhysicsDirectBodyState):
 
 	var distance: float = point.distance_to(global_transform.origin)
 	var contact_depth: float = max_hit_distance - distance
-	
+
 	var velocity: float = (prev_contact_depth - contact_depth) / state.step
 	prev_contact_depth = contact_depth
 
@@ -70,7 +72,7 @@ func _spring_force(state: PhysicsDirectBodyState):
 		)
 
 	force = clamp(force, 0, max_force)
-	
+
 	var real_force: Vector3 = normal * force
 	state.add_force(real_force, _force_pos)
 
@@ -83,58 +85,57 @@ func _spring_force(state: PhysicsDirectBodyState):
 
 func _friction_force(state: PhysicsDirectBodyState) -> void:
 	var pos = global_transform.origin
-	
+
 	var v: Vector3 = (global_transform.origin - prev_pos) / state.step
-	var speed: float = sqrt(v.x*v.x + v.z*v.z);
-	
+	var speed: float = sqrt(v.x * v.x + v.z * v.z)
+
 	# Air drag
 	var Cdrag: float = 0.005
 	var fdrag: Vector3 = Vector3.ZERO
-	fdrag.x = - Cdrag * v.x * speed;
-	fdrag.z = - Cdrag * v.z * speed;
+	fdrag.x = -Cdrag * v.x * speed
+	fdrag.z = -Cdrag * v.z * speed
 
 	state.add_force(fdrag, _force_pos)
-	
+
 	if ! is_colliding():
 		return
-	
+
 	# Rolling resistance
 	var Crr: float = 0.05
-	var frolling: Vector3 = - Crr * v * Vector3(1,0,1)
+	var frolling: Vector3 = -Crr * v * Vector3(1, 0, 1)
 	state.add_force(frolling, _force_pos)
-	
+
 	if ! DebugCanvas.disabled:
 		DebugCanvas.add_draw(pos, pos + frolling, Color.orange)
 		DebugCanvas.add_draw(pos, pos + fdrag, Color.yellow)
 
 	# Tracktion
 	var Ctt: float = (1 - abs(throttle)) * 2
-	var ftraction: Vector3 = - Ctt * v.normalized() * min(4, speed)
+	var ftraction: Vector3 = -Ctt * v.normalized() * min(4, speed)
 	state.add_force(ftraction, _force_pos)
-	
+
 	if ! DebugCanvas.disabled:
 		DebugCanvas.add_draw(pos, pos + ftraction, Color.orange)
-	
-	
+
 	# TODO: Make it suck less
 	# Anti drifting
 	var fwd: Vector3 = _parent.transform.basis.xform(Vector3.FORWARD)
 	var left: Vector3 = _parent.transform.basis.xform(Vector3.LEFT)
-	
+
 	v.y = 0
 	var left_angle: float = v.normalized().dot(left.normalized())
 	var forward_angle: float = v.normalized().dot(fwd.normalized())
-	
+
 	var anglee: float = 1 - abs(forward_angle)
-	
+
 	# -1 is left 1 is right
 	if left_angle == 0 || forward_angle == 0:
 		return
-	
+
 	var dirr: int = left_angle / abs(left_angle)
-	
+
 	var freal: Vector3 = left * anglee * dirr * -speed
 	state.add_force(freal, _force_pos)
-	
+
 	if ! DebugCanvas.disabled:
 		DebugCanvas.add_draw(pos, pos + freal, Color.azure)

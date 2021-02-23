@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/objects/ray_car/RayCar.gd" type="Script" id=1]
-[ext_resource path="res://src/virt_devices/AnalogRaycast.gdns" type="Script" id=2]
+[ext_resource path="res://src/attachments/AnalogRaycast.gd" type="Script" id=2]
 [ext_resource path="res://media/images/icon.png" type="Texture" id=3]
 [ext_resource path="res://media/models/car_parts/SMCE-wheel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/utilities/raycast_spring/RayCastSpring.tscn" type="PackedScene" id=5]
 [ext_resource path="res://media/models/car_parts/SMCE-hull.glb" type="PackedScene" id=6]
+[ext_resource path="res://src/attachments/BrushedMotor.gd" type="Script" id=7]
 
-[sub_resource type="BoxShape" id=3]
+[sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 0.381946, 1.27087 )
 
 [sub_resource type="BoxShape" id=2]
@@ -23,7 +24,7 @@ transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0
 
 [node name="HullCollision" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.311966, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="FrontBumperCollision" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0619854, -1.72681 )
@@ -108,3 +109,9 @@ light_energy = 5.66
 light_indirect_energy = 2.44
 spot_range = 9.4
 spot_angle = 38.8
+
+[node name="LeftMotor" type="Node" parent="Attachments"]
+script = ExtResource( 7 )
+
+[node name="RightMotor" type="Node" parent="Attachments"]
+script = ExtResource( 7 )

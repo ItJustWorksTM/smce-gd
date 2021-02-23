@@ -33,10 +33,9 @@ float BrushedMotor::get_speed() {
     if (!board_view)
         return 0;
     
-    auto bv = board_view->native();
-    const auto abs_throttle = bv.pins[enable_pin].analog().read();
-    const auto forward = bv.pins[forward_pin].digital().read();
-    const auto backward = bv.pins[backward_pin].digital().read();
+    const auto abs_throttle = board_view->read_analog_pin(enable_pin);
+    const auto forward = board_view->read_digital_pin(forward_pin);
+    const auto backward = board_view->read_digital_pin(backward_pin);
 
     const auto throttle = (abs_throttle / 255.0f) * (forward - backward);
 
