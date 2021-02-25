@@ -17,9 +17,10 @@ onready var analog_raycast: AnalogRaycastGD = $Attachments/RayCast
 
 onready var attachments: Array = [analog_raycast, lmotor, rmotor]
 
-func set_runner(runner: BoardRunner):
-	if ! runner:
+func set_runner(_runner: BoardRunner):
+	if ! _runner:
 		return
+	runner = _runner
 	runner.connect("status_changed", self, "_on_board_status_changed")
 	
 	lmotor.set_view(runner.view())
@@ -55,13 +56,13 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 	)
 
 	for wheel in _rightw:
-		if lmotor:
+		if runner:
 			wheel.throttle = lmotor.get_speed()
 		else:
 			wheel.throttle = key_direction * int(! Input.is_action_pressed("ui_right"))
 
 	for wheel in _leftw:
-		if rmotor:
+		if runner:
 			wheel.throttle = rmotor.get_speed()
 		else:
 			wheel.throttle = key_direction * int(! Input.is_action_pressed("ui_left"))
