@@ -14,7 +14,7 @@ func _ready():
 	print("User dir: ", OS.get_user_data_dir())
 
 	var dir = Directory.new()
-	if ! dir.dir_exists("res://gdnative/lib/RtResources"):
+	if dir.open("res://gdnative/lib/RtResources"):
 		return _error("RtResources not found!")
 
 	if ! Util.copy_dir("res://gdnative/lib/RtResources", "user://RtResources"):
