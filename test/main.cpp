@@ -178,3 +178,13 @@ TEST_CASE("BoardView UART", "[BoardView]") {
 
     REQUIRE(br.stop());
 }
+
+TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
+    smce::ExecutionContext exec_ctx{SMCE_PATH};
+    REQUIRE(exec_ctx.check_suitable_environment());
+    smce::BoardRunner br{exec_ctx};
+    REQUIRE(br.configure("arduino:avr:nano", {}));
+    REQUIRE(br.build(SKETCHES_PATH "remote_pp", {
+        .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
+    }));
+}

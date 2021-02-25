@@ -44,6 +44,7 @@ __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 #include <SMCE/BoardView.hpp>
 #include <SMCE/ExecutionContext.hpp>
 #include <SMCE/internal/SharedBoardData.hpp>
+#include <SMCE/internal/utils.hpp>
 
 using namespace std::literals;
 namespace bp = boost::process;
@@ -130,13 +131,25 @@ bool BoardRunner::configure(std::string_view pp_fqbn, const BoardConfig& bconf) 
     return true;
 }
 
-bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const SketchConfig& skonf) noexcept {
+bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf) noexcept {
     const auto& res_path = m_exectx.resource_dir();
     const auto& cmake_path = m_exectx.cmake_path();
 
     std::string dir_arg = "-DSMCE_DIR=" + res_path.string();
     std::string fqbn_arg = "-DSKETCH_FQBN="s + m_internal->sbdata.get_board_data()->fqbn.c_str();
     std::string sketch_arg = "-DSKETCH_PATH=" + stdfs::absolute(sketch_src).string();
+    std::string pp_remote_libs_arg = "-DPREPROC_REMOTE_LIBS=";
+    for (const auto& lib : skonf.preproc_libs) {
+        std::visit(Visitor{
+           [&](const SketchConfig::RemoteArduinoLibrary& lib){
+               pp_remote_libs_arg += lib.name;
+               if(!lib.version.empty())
+                   pp_remote_libs_arg += '@' + lib.version;
+             pp_remote_libs_arg += ' ';
+           },
+           [](const auto&) {}
+        }, lib);
+    }
 
     namespace bp = boost::process;
     bp::ipstream cmake_conf_out;
@@ -146,6 +159,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, [[maybe_unused]] const Sk
         std::move(dir_arg),
         std::move(fqbn_arg),
         std::move(sketch_arg),
+        std::move(pp_remote_libs_arg),
         "-P",
         res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
         bp::std_out > cmake_conf_out,

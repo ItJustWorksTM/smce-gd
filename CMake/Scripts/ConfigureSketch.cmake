@@ -19,6 +19,7 @@
 # SMCE_DIR - Path to the SMCE dir
 # SKETCH_FQBN - Fully qualified board name to use
 # SKETCH_PATH - Path to the Arduino sketch
+# DPREPROC_REMOTE_LIBS - whitespace-separated of remote libs to pull for preprocessing
 
 cmake_policy (SET CMP0011 NEW)
 
@@ -45,7 +46,7 @@ list (GET SKETCH_FQBN_PARTS 0 SKETCH_FQBN_PACKAGER)
 list (GET SKETCH_FQBN_PARTS 1 SKETCH_FQBN_ARCH)
 cmaw_install_cores ("${SKETCH_FQBN_PACKAGER}:${SKETCH_FQBN_ARCH}")
 cmaw_update_library_index ()
-cmaw_install_libraries (MQTT)
+cmaw_install_libraries (${DPREPROC_REMOTE_LIBS})
 
 string (RANDOM LENGTH 13 COMP_DIRNAME)
 set (COMP_DIR "${SMCE_DIR}/tmp/${COMP_DIRNAME}")
