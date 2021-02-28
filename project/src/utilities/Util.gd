@@ -23,3 +23,9 @@ static func copy_dir(path: String, to: String, base = null) -> bool:
 		file_name = dir.get_next()
 
 	return true
+
+static func user2abs(path: String) -> String:
+	if ! path.begins_with("user://"):
+		return path
+	
+	return OS.get_user_data_dir() + "/" + path.substr(7)
