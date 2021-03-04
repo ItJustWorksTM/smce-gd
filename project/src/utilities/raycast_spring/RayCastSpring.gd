@@ -5,7 +5,6 @@ var prev_contact_depth: float = max_hit_distance
 
 onready var prev_pos: Vector3 = global_transform.origin
 
-var prev_sped: float = 0
 export (float, 0.1, 100, 0.1) var spring_force = 10
 export (float, 0.1, 100, 0.1) var damper_force = 1
 export (float, 0, 2, 0.1) var target = 0.6

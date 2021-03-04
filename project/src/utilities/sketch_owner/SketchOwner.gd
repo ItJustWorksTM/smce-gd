@@ -62,10 +62,12 @@ func reset() -> void:
 
 func reset_vehicle_pos() -> void:
 	if vehicle:
+		vehicle.freeze()
 		if spawn_point:
 			vehicle.global_transform = spawn_point.global_transform
 		else:
 			vehicle.global_transform.origin = Vector3(0, 3, 0)
+		vehicle.unfreeze()
 
 
 func build() -> bool:

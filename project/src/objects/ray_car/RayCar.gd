@@ -38,6 +38,11 @@ func freeze() -> void:
 
 func unfreeze() -> void:
 	mode = RigidBody.MODE_RIGID
+	# Trick the wheels to think they have not moved since last frame
+	# so that velocity calculation dont freak out in case
+	# we have been moved since
+	for i in range(_wheels.size()):
+		_wheels[i].prev_pos = _wheels[i].global_transform.origin
 
 
 func _process(delta):
