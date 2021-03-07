@@ -65,7 +65,7 @@ endforeach ()
 if (NOT ARDCLI_CONFIG_USERDIR)
     message (FATAL_ERROR "Could not find the userdir in the ArduinoCLI config dump")
 elseif (NOT EXISTS "${ARDCLI_CONFIG_USERDIR}")
-    message (FATAL_ERROR "ArduinoCLI userdir could not be found on disk (\"${ARDCLI_CONFIG_USERDIR}\")")
+    message (WARNING "ArduinoCLI userdir could not be found on disk (\"${ARDCLI_CONFIG_USERDIR}\")")
 endif ()
 
 string (RANDOM LENGTH 13 COMP_DIRNAME)
