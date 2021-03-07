@@ -31,10 +31,11 @@ class MQTTClient;
 using MQTTClientCallbackSimple = void(*)(String topic, String payload);
 using MQTTClientCallbackAdvanced = void(*)(MQTTClient* client, const char* topic, const char* bytes, int length);
 
-struct MQTTClientCallbacks {
+struct SMCE__DLL_RT_API MQTTClientCallbacks {
     MQTTClient* client;
     MQTTClientCallbackSimple simple = nullptr;
     MQTTClientCallbackAdvanced advanced = nullptr;
+    constexpr explicit MQTTClientCallbacks(MQTTClient* client) noexcept : client{client} {}
 };
 
 class SMCE__DLL_RT_API MQTTClient {
