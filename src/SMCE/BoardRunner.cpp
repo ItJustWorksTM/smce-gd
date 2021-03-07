@@ -171,7 +171,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
                 cl_remote_libs_arg += lib.patch_for;
                 cl_remote_libs_arg += ' ';
                 cl_patch_libs_arg += lib.root_dir.string();
-                cl_patch_libs_arg += ':';
+                cl_patch_libs_arg += '|';
                 cl_patch_libs_arg += lib.patch_for;
                 cl_patch_libs_arg += ';';
             },

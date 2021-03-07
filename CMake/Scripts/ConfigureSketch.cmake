@@ -75,7 +75,7 @@ message (STATUS "SMCE: Compilation directory is \"${COMP_DIR}\"")
 
 file (MAKE_DIRECTORY "${COMP_DIR}/libs")
 foreach (COMPLINK_PATCH_LIB ${COMPLINK_PATCH_LIBS})
-    string (REGEX MATCH "^([^:]+):([^@]*)(@?[0-9.]*)$" MATCH "${COMPLINK_PATCH_LIB}")
+    string (REGEX MATCH "^([^|]+)\\|([^@]*)(@?[0-9.]*)$" MATCH "${COMPLINK_PATCH_LIB}")
     if(NOT MATCH)
         message (FATAL_ERROR "Invalid COMPLINK_PATCH_LIB (\"${COMPLINK_PATCH_LIB}\")")
     endif ()
