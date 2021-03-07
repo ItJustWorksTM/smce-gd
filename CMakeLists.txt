@@ -66,7 +66,7 @@ if (NOT WIN32)
    set_property (SOURCE src/Ardrivo/MQTT.cpp PROPERTY COMPILE_OPTIONS "-Wno-missing-field-initializers")
 elseif (MSVC)
    target_compile_definitions (Ardrivo PRIVATE "_CRT_SECURE_NO_WARNINGS=1")
-   target_compile_options (Ardrivo PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
+   target_compile_options (Ardrivo PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/wd4716" "/WX")
 endif ()
 FetchContent_Declare (Paho
         GIT_REPOSITORY "https://github.com/eclipse/paho.mqtt.c"
