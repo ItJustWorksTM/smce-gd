@@ -139,17 +139,50 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
     std::string fqbn_arg = "-DSKETCH_FQBN="s + m_internal->sbdata.get_board_data()->fqbn.c_str();
     std::string sketch_arg = "-DSKETCH_PATH=" + stdfs::absolute(sketch_src).string();
     std::string pp_remote_libs_arg = "-DPREPROC_REMOTE_LIBS=";
+    std::string cl_remote_libs_arg = "-DCOMPLINK_REMOTE_LIBS=";
+    std::string cl_local_libs_arg = "-DCOMPLINK_LOCAL_LIBS=";
+    std::string cl_patch_libs_arg = "-DCOMPLINK_PATCH_LIBS=";
     for (const auto& lib : skonf.preproc_libs) {
         std::visit(Visitor{
            [&](const SketchConfig::RemoteArduinoLibrary& lib){
                pp_remote_libs_arg += lib.name;
                if(!lib.version.empty())
                    pp_remote_libs_arg += '@' + lib.version;
-             pp_remote_libs_arg += ' ';
+             pp_remote_libs_arg += ';';
            },
            [](const auto&) {}
         }, lib);
     }
+
+    for (const auto& lib : skonf.complink_libs) {
+        std::visit(Visitor{
+            [&](const SketchConfig::RemoteArduinoLibrary& lib){
+                cl_remote_libs_arg += lib.name;
+                if(!lib.version.empty())
+                    cl_remote_libs_arg += '@' + lib.version;
+                cl_remote_libs_arg += ';';
+            },
+            [&](const SketchConfig::LocalArduinoLibrary& lib){
+                if(lib.patch_for.empty()) {
+                    cl_local_libs_arg += lib.root_dir;
+                    cl_local_libs_arg += ';';
+                    return;
+                }
+                cl_remote_libs_arg += lib.patch_for;
+                cl_remote_libs_arg += ' ';
+                cl_patch_libs_arg += lib.root_dir;
+                cl_patch_libs_arg += ':';
+                cl_patch_libs_arg += lib.patch_for;
+                cl_patch_libs_arg += ';';
+            },
+            [](const SketchConfig::FreestandingLibrary&) {}
+        }, lib);
+    }
+
+    if(pp_remote_libs_arg.back() == ';') pp_remote_libs_arg.pop_back();
+    if(cl_remote_libs_arg.back() == ';') cl_remote_libs_arg.pop_back();
+    if(cl_local_libs_arg.back() == ';') cl_local_libs_arg.pop_back();
+    if(cl_patch_libs_arg.back() == ';') cl_patch_libs_arg.pop_back();
 
     namespace bp = boost::process;
     bp::ipstream cmake_conf_out;
@@ -160,6 +193,9 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
         std::move(fqbn_arg),
         std::move(sketch_arg),
         std::move(pp_remote_libs_arg),
+        std::move(cl_remote_libs_arg),
+        std::move(cl_local_libs_arg),
+        std::move(cl_patch_libs_arg),
         "-P",
         res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
         bp::std_out > cmake_conf_out,

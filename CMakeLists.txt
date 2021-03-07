@@ -46,6 +46,11 @@ target_sources (Ardrivo PRIVATE
         include/Ardrivo/WString.h
         src/Ardrivo/String.cpp
         include/Ardrivo/analogWrite.h
+        include/Ardrivo/Client.h
+        include/Ardrivo/IPAddress.h
+
+        include/Ardrivo/WiFi.h
+        src/Ardrivo/WiFi.cpp
 
         include/Ardrivo/MQTT.h
         src/Ardrivo/MQTT.cpp

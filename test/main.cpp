@@ -8,6 +8,7 @@
 
 #define SMCE_PATH SMCE_TEST_DIR "/smce_root"
 #define SKETCHES_PATH SMCE_TEST_DIR "/sketches/"
+#define PATCHES_PATH SMCE_TEST_DIR "/patches/"
 
 using namespace std::literals;
 
@@ -187,4 +188,42 @@ TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
     REQUIRE(br.build(SKETCHES_PATH "remote_pp", {
         .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
     }));
+}
+
+TEST_CASE("WiFi intended use", "[WiFi]") {
+    smce::ExecutionContext exec_ctx{SMCE_PATH};
+    REQUIRE(exec_ctx.check_suitable_environment());
+    smce::BoardRunner br{exec_ctx};
+    REQUIRE(br.configure("arduino:avr:nano", {}));
+    REQUIRE(br.build(SKETCHES_PATH "wifi", {
+        .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"WiFi", ""}, smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
+    }));
+}
+
+TEST_CASE("Patch lib", "[BoardRunner]") {
+    smce::ExecutionContext exec_ctx{SMCE_PATH};
+    REQUIRE(exec_ctx.check_suitable_environment());
+    smce::BoardRunner br{exec_ctx};
+    REQUIRE(br.configure("arduino:avr:nano", {
+        .pins = {0},
+        .gpio_drivers = {
+            smce::BoardConfig::GpioDrivers {
+                .pin_id = 0,
+                .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{
+                    .board_read = false,
+                    .board_write = true
+                }
+            }
+        }
+    }));
+    REQUIRE(br.build(SKETCHES_PATH "patch", {
+        .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{PATCHES_PATH "ESP32_analogRewrite", "ESP32 AnalogWrite"}}
+    }));
+    auto bv = br.view();
+    auto pin0 = bv.pins[0].analog();
+    REQUIRE(pin0.exists());
+    REQUIRE(br.start());
+    std::this_thread::sleep_for(1ms);
+    test_pin_delayable(pin0, 42, 16384, 1ms);
+    REQUIRE(br.stop());
 }

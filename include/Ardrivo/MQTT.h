@@ -22,10 +22,9 @@
 #include <cstring>
 #include <string>
 
+#include "Client.h"
+#include "IPAddress.h"
 #include "WString.h"
-
-class Client{};
-class IPAddress{};
 
 class MQTTClient;
 
@@ -58,7 +57,6 @@ public:
     ~MQTTClient();
 
     void begin(Client& client);
-    void begin(const char* hostname);
     inline void begin(const char* hostname, std::uint16_t port, Client& client) {
         this->begin(client);
         this->setHost(hostname, port);

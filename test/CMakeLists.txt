@@ -44,5 +44,6 @@ add_custom_command (TARGET SMCE_Tests POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_RESOURCES_ARK}"
 )
 file (COPY sketches DESTINATION "${SMCE_TEST_DIR}")
+file (COPY patches DESTINATION "${SMCE_TEST_DIR}")
 target_compile_definitions (SMCE_Tests PUBLIC "SMCE_TEST_DIR=\"${SMCE_TEST_DIR}\"")
 

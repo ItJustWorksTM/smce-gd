@@ -60,9 +60,6 @@ MQTTClient::~MQTTClient() {
 }
 
 void MQTTClient::begin([[maybe_unused]] Client& client){}
-void MQTTClient::begin(const char* hostname){
-    setHost(hostname, 1883);
-}
 
 void MQTTClient::onMessage(MQTTClientCallbackSimple cb){
     m_callbacks.simple = cb;

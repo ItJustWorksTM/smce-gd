@@ -38,7 +38,8 @@ struct SketchConfig {
         std::string version; // Version string; empty if latest
     };
     struct LocalArduinoLibrary {
-        stdfs::path root_dir;
+        stdfs::path root_dir; // Root directory of the library
+        std::string patch_for; // Name of the remote library being patched; none if not patching
     };
     using Library = std::variant<FreestandingLibrary, RemoteArduinoLibrary, LocalArduinoLibrary>;
     std::vector<std::string> extra_board_uris; /// Extra board.txt URIs for ArduinoCLI

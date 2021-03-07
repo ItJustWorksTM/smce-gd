@@ -19,7 +19,9 @@
 # SMCE_DIR - Path to the SMCE dir
 # SKETCH_FQBN - Fully qualified board name to use
 # SKETCH_PATH - Path to the Arduino sketch
-# DPREPROC_REMOTE_LIBS - whitespace-separated of remote libs to pull for preprocessing
+# PREPROC_REMOTE_LIBS - whitespace-separated of remote libs to pull for preprocessing
+# COMPLINK_REMOTE_LIBS - remote libs needed at compile/link-time
+# COMPLINK_PATCH_LIBS - remote libs to patch for compile/link-time
 
 cmake_policy (SET CMP0011 NEW)
 
@@ -46,12 +48,58 @@ list (GET SKETCH_FQBN_PARTS 0 SKETCH_FQBN_PACKAGER)
 list (GET SKETCH_FQBN_PARTS 1 SKETCH_FQBN_ARCH)
 cmaw_install_cores ("${SKETCH_FQBN_PACKAGER}:${SKETCH_FQBN_ARCH}")
 cmaw_update_library_index ()
-cmaw_install_libraries (${DPREPROC_REMOTE_LIBS})
+foreach (REMOTE_LIB ${PREPROC_REMOTE_LIBS} ${COMPLINK_REMOTE_LIBS})
+    cmaw_install_libraries ("${REMOTE_LIB}")
+endforeach ()
+
+cmaw_dump_config (ARDCLI_CONFIG)
+string (REGEX REPLACE ";" "\\\\;" ARDCLI_CONFIG "${ARDCLI_CONFIG}")
+string (REGEX REPLACE "\n" ";" ARDCLI_CONFIG "${ARDCLI_CONFIG}")
+set (ARDCLI_CONFIG_USERDIR "NOTFOUND")
+foreach (ARDCLI_CONFIG_LINE ${ARDCLI_CONFIG})
+    if (ARDCLI_CONFIG_LINE MATCHES "^  user: (.*)$")
+        string (STRIP "${CMAKE_MATCH_1}" ARDCLI_CONFIG_USERDIR)
+        break ()
+    endif ()
+endforeach ()
+if (NOT ARDCLI_CONFIG_USERDIR)
+    message (FATAL_ERROR "Could not find the userdir in the ArduinoCLI config dump")
+elseif (NOT EXISTS "${ARDCLI_CONFIG_USERDIR}")
+    message (FATAL_ERROR "ArduinoCLI userdir could not be found on disk (\"${ARDCLI_CONFIG_USERDIR}\")")
+endif ()
 
 string (RANDOM LENGTH 13 COMP_DIRNAME)
 set (COMP_DIR "${SMCE_DIR}/tmp/${COMP_DIRNAME}")
 file (MAKE_DIRECTORY "${COMP_DIR}")
 message (STATUS "SMCE: Compilation directory is \"${COMP_DIR}\"")
+
+file (MAKE_DIRECTORY "${COMP_DIR}/libs")
+foreach (COMPLINK_PATCH_LIB ${COMPLINK_PATCH_LIBS})
+    string (REGEX MATCH "^([^:]+):([^@]*)(@?[0-9.]*)$" MATCH "${COMPLINK_PATCH_LIB}")
+    if(NOT MATCH)
+        message (FATAL_ERROR "Invalid COMPLINK_PATCH_LIB (\"${COMPLINK_PATCH_LIB}\")")
+    endif ()
+    set (COMPLINK_PATCH_LIB_PATH "${CMAKE_MATCH_1}")
+    string (REPLACE " " "_" COMPLINK_PATCH_LIB_TARGET "${CMAKE_MATCH_2}")
+
+    message (STATUS "Processing library \"${COMPLINK_PATCH_LIB_TARGET}\" (patched by \"${COMPLINK_PATCH_LIB_PATH}\")")
+    # Copy original library
+    file (COPY "${ARDCLI_CONFIG_USERDIR}/libraries/${COMPLINK_PATCH_LIB_TARGET}" DESTINATION "${COMP_DIR}/libs")
+
+    # Merge-in the patch tree
+    file (GLOB_RECURSE COMPLINK_PATCH_LIB_FILEPATHS
+            LIST_DIRECTORIES false RELATIVE "${COMPLINK_PATCH_LIB_PATH}"
+            "${COMPLINK_PATCH_LIB_PATH}/*")
+    foreach (COMPLINK_PATCH_LIB_RELFILEPATH ${COMPLINK_PATCH_LIB_FILEPATHS})
+        if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20")
+            cmake_path (GET "${COMPLINK_PATCH_LIB_RELFILEPATH}" PARENT_PATH COMPLINK_PATCH_LIB_RELFILEDIR)
+        else ()
+            get_filename_component (COMPLINK_PATCH_LIB_RELFILEDIR "${COMPLINK_PATCH_LIB_RELFILEPATH}" DIRECTORY)
+        endif()
+        file (MAKE_DIRECTORY "${COMP_DIR}/libs/${COMPLINK_PATCH_LIB_TARGET}/${COMPLINK_PATCH_LIB_RELFILEDIR}")
+        file (COPY "${COMPLINK_PATCH_LIB_PATH}/${COMPLINK_PATCH_LIB_RELFILEPATH}" DESTINATION "${COMP_DIR}/libs/${COMPLINK_PATCH_LIB_TARGET}/${COMPLINK_PATCH_LIB_RELFILEDIR}")
+    endforeach ()
+endforeach ()
 
 cmaw_preprocess (PREPROCD_SKETCH "${SKETCH_FQBN}" "${SKETCH_PATH}")
 set (COMP_SRC "${COMP_DIR}/sketch.cpp")
