@@ -164,13 +164,13 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
             },
             [&](const SketchConfig::LocalArduinoLibrary& lib){
                 if(lib.patch_for.empty()) {
-                    cl_local_libs_arg += lib.root_dir;
+                    cl_local_libs_arg += lib.root_dir.string();
                     cl_local_libs_arg += ';';
                     return;
                 }
                 cl_remote_libs_arg += lib.patch_for;
                 cl_remote_libs_arg += ' ';
-                cl_patch_libs_arg += lib.root_dir;
+                cl_patch_libs_arg += lib.root_dir.string();
                 cl_patch_libs_arg += ':';
                 cl_patch_libs_arg += lib.patch_for;
                 cl_patch_libs_arg += ';';
