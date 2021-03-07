@@ -25,18 +25,18 @@
 #include "SMCE_dll.hpp"
 
 struct WiFiClass : Client {
-    inline int connect([[maybe_unused]] IPAddress ip, [[maybe_unused]] uint16_t port) override { assert(false); }
-    int connect([[maybe_unused]] const char* host, [[maybe_unused]] uint16_t port) override { assert(false); }
-    size_t write([[maybe_unused]] uint8_t) override { assert(false); }
-    size_t write([[maybe_unused]] const uint8_t* buf, [[maybe_unused]] size_t size) override { assert(false); }
-    int available() override { assert(false); }
-    int read() override { assert(false); }
-    int read([[maybe_unused]] uint8_t* buf, [[maybe_unused]] size_t size) override { assert(false); }
-    int peek() override { assert(false); }
-    void flush() override { assert(false); }
-    void stop() override { assert(false); }
-    uint8_t connected() override { assert(false); }
-    operator bool() override { assert(false); }
+    [[noreturn]] inline int connect([[maybe_unused]] IPAddress ip, [[maybe_unused]] uint16_t port) override { assert(false); }
+    [[noreturn]] int connect([[maybe_unused]] const char* host, [[maybe_unused]] uint16_t port) override { assert(false); }
+    [[noreturn]] size_t write([[maybe_unused]] uint8_t) override { assert(false); }
+    [[noreturn]] size_t write([[maybe_unused]] const uint8_t* buf, [[maybe_unused]] size_t size) override { assert(false); }
+    [[noreturn]] int available() override { assert(false); }
+    [[noreturn]] int read() override { assert(false); }
+    [[noreturn]] int read([[maybe_unused]] uint8_t* buf, [[maybe_unused]] size_t size) override { assert(false); }
+    [[noreturn]] int peek() override { assert(false); }
+    [[noreturn]] void flush() override { assert(false); }
+    [[noreturn]] void stop() override { assert(false); }
+    [[noreturn]] uint8_t connected() override { assert(false); }
+    [[noreturn]] operator bool() override { assert(false); }
 };
 
 SMCE__DLL_RT_API
