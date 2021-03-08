@@ -114,6 +114,8 @@ bool MQTTClient::unsubscribe(const char* topic) {
 }
 
 bool MQTTClient::loop(){
+    if(!connected())
+        return false;
     SMCE__PAHO::MQTTClient_yield();
     return true;
 }
