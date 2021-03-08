@@ -52,9 +52,9 @@ class SMCE__DLL_RT_API String {
     inline /* explicit(false) */ String(const char* cstr) : m_u{cstr} {}
     inline explicit String(char c) : m_u(1, c) {}
 
-    String(unsigned long long val,  StringBaseConv base = DEC);
+    String(long long val,  StringBaseConv base = DEC);
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
-    inline String(T val, StringBaseConv base = DEC) : String{+val, base} {}
+    inline String(T val, StringBaseConv base = DEC) : String{static_cast<long long>(val), base} {}
 
     // template <class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
     // String(T val, int precision); // unimplemented

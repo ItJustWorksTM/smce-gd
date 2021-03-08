@@ -22,7 +22,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "WString.h"
 
-String::String(unsigned long long val, StringBaseConv base) {
+String::String(long long val, StringBaseConv base) {
     m_u.resize(65);
     const auto res = std::to_chars(&*m_u.begin(), &*m_u.rbegin(), val, +base);
     if (static_cast<int>(res.ec))
