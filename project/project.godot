@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "",
-"class": "AnalogRaycast",
-"language": "NativeScript",
-"path": "res://src/virt_devices/AnalogRaycast.gdns"
-}, {
 "base": "RayCast",
 "class": "AnalogRaycastGD",
 "language": "GDScript",
@@ -33,11 +28,6 @@ _global_script_classes=[ {
 "class": "BoardView",
 "language": "NativeScript",
 "path": "res://src/bind/BoardView.gdns"
-}, {
-"base": "",
-"class": "BrushedMotor",
-"language": "NativeScript",
-"path": "res://src/virt_devices/BrushedMotor.gdns"
 }, {
 "base": "Node",
 "class": "BrushedMotorGD",
@@ -80,12 +70,10 @@ _global_script_classes=[ {
 "path": "res://src/utilities/Util.gd"
 } ]
 _global_script_class_icons={
-"AnalogRaycast": "",
 "AnalogRaycastGD": "",
 "BButtonGroup": "",
 "BoardRunner": "",
 "BoardView": "",
-"BrushedMotor": "",
 "BrushedMotorGD": "",
 "ControlUtil": "",
 "ExecutionContext": "",

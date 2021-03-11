@@ -21,8 +21,6 @@
 #include "bind/ExecutionContext.hxx"
 #include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
-#include "virt_devices/AnalogRaycast.hxx"
-#include "virt_devices/BrushedMotor.hxx"
 
 using namespace godot;
 
@@ -36,6 +34,5 @@ template <class... T> void register_classes() { (register_class<T>(), ...); };
 
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
-    register_classes<AnyTask, BoardRunner, ExecutionContext, AnalogRaycast, BoardView, UartSlurper,
-                     BrushedMotor>();
+    register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper>();
 }

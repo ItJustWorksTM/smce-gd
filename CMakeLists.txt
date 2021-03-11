@@ -33,7 +33,7 @@ set (SMCE_AUTODOWNLOAD True)
 include (FetchContent)
 include (fmt)
 include (SetupSMCE)
-list (APPEND GDCPP_NEEDED_CLASSES RayCast Reference Node)
+list (APPEND GDCPP_NEEDED_CLASSES Reference Node)
 include (SetupGodotCpp)
 
 add_library (godot-smce MODULE)
@@ -42,9 +42,7 @@ target_sources (godot-smce PRIVATE
         src/bind/BoardRunner.cxx
         src/bind/ExecutionContext.cxx
         src/bind/BoardView.cxx
-        src/virt_devices/AnalogRaycast.cxx
-        src/bind/UartSlurper.cxx
-        src/virt_devices/BrushedMotor.cxx)
+        src/bind/UartSlurper.cxx)
 target_include_directories (godot-smce PRIVATE include)
 target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -59,7 +57,7 @@ file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
         COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_ROOT}/share/SMCE/SMCE_Resources.zip"
-        COMMAND "${CMAKE_COMMAND}" -E copy_directory "./RtResources" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources"
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory "./RtResources" "${PROJECT_SOURCE_DIR}/project/share/RtResources"
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "./RtResources"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 )

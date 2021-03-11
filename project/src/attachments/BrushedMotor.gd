@@ -15,7 +15,7 @@ func set_view(_view: Node) -> void:
 	view = _view
 	
 	if view:
-		view.connect("invalidated", self, "set", ["view", null])
+		view.connect("invalidated", self, "set_view", [null])
 		set_physics_process(true)
 
 
@@ -41,13 +41,16 @@ func _physics_process(_delta: float) -> void:
 	
 	speed = (abs_speed / 255.0) * direction
 
+
 func name() -> String:
 	return "BrushedMotor"
+
 
 func visualize() -> Control:
 	var visualizer = NodeVisualizer.new()
 	visualizer.display_node(self, "visualize_content")
 	return visualizer
+
 
 var vs_dir: Array = ["None", "Forward", "Backward"]
 func visualize_content() -> String:

@@ -13,9 +13,10 @@ onready var _leftw: Array = [$LeftFront, $LeftBack]
 
 onready var lmotor: BrushedMotorGD = $Attachments/LeftMotor
 onready var rmotor: BrushedMotorGD = $Attachments/RightMotor
-onready var analog_raycast: AnalogRaycastGD = $Attachments/RayCast
+onready var lodo = $Attachments/LeftOdometer
+onready var rodo = $Attachments/RightOdometer
 
-onready var attachments: Array = [analog_raycast, lmotor, rmotor]
+onready var attachments: Array = $Attachments.get_children()
 
 func set_runner(_runner: BoardRunner):
 	if ! _runner:
@@ -23,13 +24,14 @@ func set_runner(_runner: BoardRunner):
 	runner = _runner
 	runner.connect("status_changed", self, "_on_board_status_changed")
 	
-	lmotor.set_view(runner.view())
-	lmotor.set_pins(2, 3, 4)
+	for attach in attachments:
+		if attach.has_method("set_view"):
+			attach.set_view(runner.view())
 
-	rmotor.set_view(runner.view())
-	rmotor.set_pins(5, 6, 7)
-	
-	$Attachments/RayCast.set_view(runner.view())
+
+func _ready():
+	lodo.forward_reference = self
+	rodo.forward_reference = self
 
 
 func freeze() -> void:
@@ -46,7 +48,7 @@ func unfreeze() -> void:
 
 
 func _process(delta):
-	$Attachments/SpotLight.light_color.h += delta * 0.1
+	$SpotLight.light_color.h += delta * 0.1
 
 
 func _integrate_forces(state: PhysicsDirectBodyState) -> void:

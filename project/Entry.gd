@@ -14,11 +14,14 @@ func _ready():
 	print("User dir: ", OS.get_user_data_dir())
 
 	var dir = Directory.new()
-	if dir.open("res://gdnative/lib/RtResources"):
+	if dir.open("res://share/RtResources"):
 		return _error("RtResources not found!")
 
-	if ! Util.copy_dir("res://gdnative/lib/RtResources", "user://RtResources"):
+	if ! Util.copy_dir("res://share/RtResources", "user://RtResources"):
 		return _error("Failed to copy in RtResources")
+
+	if ! Util.copy_dir("res://share/library_patches", "user://library_patches"):
+		return _error("Failed to copy in library_patches")
 
 	print("Copied RtResources")
 
