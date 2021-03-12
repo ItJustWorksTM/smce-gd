@@ -26,6 +26,7 @@ func _ready() -> void:
 	new_sketch_btn.connect("pressed", self, "_on_sketch_btn")
 	file_picker._wrapped.connect("file_selected", self, "_on_file_picked")
 	file_picker._wrapped.get_cancel().connect("pressed", self, "_on_file_picked", [""])
+	file_picker._wrapped.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 
 
 func _on_file_picked(path: String) -> void:
@@ -107,7 +108,8 @@ func _on_filepath_request(mode, node) -> void:
 
 	get_focus_owner().release_focus()
 	file_picker._wrapped.invalidate()
-
+	file_picker._wrapped.popup()
 	file_picker.visible = true
 	file_picker_backdrop.visible = true
+	
 	node.set_filepath(yield(self, "_file_picked"))
