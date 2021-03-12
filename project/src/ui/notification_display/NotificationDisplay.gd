@@ -12,9 +12,8 @@ func add_notification(node: Control, timeout: float = -1) -> void:
 	yield(tween,"tween_all_completed")
 	tween.queue_free()
 	
+	node.connect("stop_notify", self, "_remove_notification", [node])
 	
-	if node.has_signal("stop_notify"):
-		node.connect("stop_notify", self, "_remove_notification", [node])
 	if timeout >= 0:
 		yield(get_tree().create_timer(timeout), "timeout")
 		_remove_notification(node)

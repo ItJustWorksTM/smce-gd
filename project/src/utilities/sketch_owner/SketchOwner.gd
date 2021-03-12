@@ -45,8 +45,8 @@ func _on_build_log(part: String) -> void:
 func _on_runtime_log(part: String) -> void:
 	emit_signal("runtime_log", part)
 
-func reset() -> void:
-	if board && board.status() == SMCE.Status.CONFIGURED:
+func reset(force: bool = false) -> void:
+	if !force && board && board.status() == SMCE.Status.CONFIGURED:
 		return
 
 	if board:
@@ -73,8 +73,9 @@ func reset_vehicle_pos() -> void:
 func build() -> bool:
 	if ! board || board.status() != SMCE.Status.CONFIGURED:  # TODO: potentially not a coroutine in this case
 		return false
-
-	if ! yield(board.build(file_path), "completed"):
+	var res = yield(board.build(file_path), "completed")
+	if ! res:
+		reset(true)
 		return false
 	print("build finished")
 	_create_vehicle()

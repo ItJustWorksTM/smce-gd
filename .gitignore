@@ -10,5 +10,6 @@ cmake-build-*/
 # Godot
 project/.import
 project/gdnative/lib
+project/share/RtResources
 godot.log
 *.png~
