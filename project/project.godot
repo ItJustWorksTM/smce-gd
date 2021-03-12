@@ -19,6 +19,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/utilities/toggleable_bgroup/BButonGroup.gd"
 }, {
+"base": "",
+"class": "BoardConfig",
+"language": "NativeScript",
+"path": "res://src/bind/BoardConfig.gdns"
+}, {
 "base": "Node",
 "class": "BoardRunner",
 "language": "NativeScript",
@@ -43,6 +48,16 @@ _global_script_classes=[ {
 "class": "ExecutionContext",
 "language": "NativeScript",
 "path": "res://src/bind/ExecutionContext.gdns"
+}, {
+"base": "",
+"class": "GpioDriver",
+"language": "NativeScript",
+"path": "res://src/bind/GpioDriver.gdns"
+}, {
+"base": "",
+"class": "GpioDriverGroup",
+"language": "NativeScript",
+"path": "res://src/bind/GpioDriverGroup.gdns"
 }, {
 "base": "Label",
 "class": "NodeVisualizer",
@@ -72,11 +87,14 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AnalogRaycastGD": "",
 "BButtonGroup": "",
+"BoardConfig": "",
 "BoardRunner": "",
 "BoardView": "",
 "BrushedMotorGD": "",
 "ControlUtil": "",
 "ExecutionContext": "",
+"GpioDriver": "",
+"GpioDriverGroup": "",
 "NodeVisualizer": "",
 "SMCE": "",
 "SketchOwner": "",
