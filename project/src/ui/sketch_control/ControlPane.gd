@@ -21,7 +21,8 @@ onready var reset_pos_btn: Button = $PaddingBox/VehicleButtons/Reset
 onready var attachments = $Scroll/Attachments
 onready var attachments_empty = $Scroll/Attachments/empty
 
-onready var uart = $Serial/Panel7/Uart
+onready var serial_collapsable = $Serial
+onready var uart = $Serial/UartPanel/Uart
 onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
 
 var controller: SketchOwner = null
@@ -170,6 +171,7 @@ func _on_board_status_changed(status) -> void:
 		SMCE.Status.BUILT:
 			start_btn.disabled = false
 			start_btn.text = "Start"
+			serial_collapsable.disabled = false
 		SMCE.Status.RUNNING:
 			sketch_log.text = ""
 			pause_btn.disabled = false
@@ -184,3 +186,5 @@ func _on_board_status_changed(status) -> void:
 			compile_btn.disabled = false
 			pause_btn.disabled = true
 			reset_pos_btn.disabled = true
+			serial_collapsable.disabled = true
+			

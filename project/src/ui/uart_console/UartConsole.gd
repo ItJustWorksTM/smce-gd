@@ -54,6 +54,6 @@ func _on_uart(channel, text) -> void:
 
 
 func _on_board_status_changed(status: int) -> void:
-	set_disabled(! (status == SMCE.Status.RUNNING || status == SMCE.Status.SUSPENDED))
+	set_disabled(status == SMCE.Status.CLEAN || status == SMCE.Status.STOPPED || status == SMCE.Status.CONFIGURED)
 	if status == SMCE.Status.STOPPED:
 		runner = null
