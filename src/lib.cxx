@@ -21,6 +21,7 @@
 #include "bind/ExecutionContext.hxx"
 #include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
+#include "bind/BoardConfig.hxx"
 
 using namespace godot;
 
@@ -31,8 +32,10 @@ extern "C" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_opt
 }
 
 template <class... T> void register_classes() { (register_class<T>(), ...); };
+template <class... T> void register_tool_classes() { (register_tool_class<T>(), ...); };
 
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
     register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper>();
+    register_tool_classes<BoardConfig, GpioDriverGroup, GpioDriver>();
 }
