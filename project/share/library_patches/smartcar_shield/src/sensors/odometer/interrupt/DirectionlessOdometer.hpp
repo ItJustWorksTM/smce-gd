@@ -17,7 +17,8 @@ class DirectionlessOdometer : public Odometer {
     DirectionlessOdometer(Runtime& runtime, uint8_t pulsePin, InterruptCallback callback,
                           unsigned long pulsesPerMeter)
         : runtime{runtime}, fwd_dist_pin{pulsePin},
-          bwd_dist_pin{pulsePin + magic_offset * 2}, speed_pin{pulsePin + magic_offset} {
+          bwd_dist_pin{static_cast<uint8_t>(pulsePin + magic_offset * 2)}, speed_pin{static_cast<uint8_t>(
+                                                                               pulsePin + magic_offset)} {
         runtime.setPinDirection(fwd_dist_pin, runtime.getInputState());
         runtime.setPinDirection(speed_pin, runtime.getInputState());
         runtime.setPinDirection(bwd_dist_pin, runtime.getInputState());
@@ -25,8 +26,7 @@ class DirectionlessOdometer : public Odometer {
     ~DirectionlessOdometer() override = default;
 
     long getDistance() override {
-        return runtime.getAnalogPinState(fwd_dist_pin) +
-               runtime.getAnalogPinState(bwd_dist_pin);
+        return runtime.getAnalogPinState(fwd_dist_pin) + runtime.getAnalogPinState(bwd_dist_pin);
     }
 
     float getSpeed() override { return runtime.getAnalogPinState(speed_pin) / 1000.0; }
