@@ -20,12 +20,24 @@
 
 cmake_minimum_required (VERSION 3.10)
 
-project (Sketch)
+project (Sketch CXX)
+
+foreach (CXX_COMPILE_FEATURE ${CMAKE_CXX_COMPILE_FEATURES})
+    if (CXX_COMPILE_FEATURE MATCHES "cxx_std_([0-8][0-9]+)")
+        list(APPEND CXX_SUPPORTED_VERSIONS "${CMAKE_MATCH_1}")
+    endif ()
+endforeach ()
+list (SORT CXX_SUPPORTED_VERSIONS)
+list (REVERSE CXX_SUPPORTED_VERSIONS)
+list (GET CXX_SUPPORTED_VERSIONS 1 CXX_HIGHEST_SUPPORTED_VERSION)
+set (CMAKE_CXX_STANDARD "${CXX_HIGHEST_SUPPORTED_VERSION}")
+message ("Using CMAKE_CXX_STANDARD: ${CMAKE_CXX_STANDARD}")
 
 include ("${SMCE_DIR}/RtResources/Ardrivo/share/ArdrivoOutputNames.cmake")
 add_library (Ardrivo SHARED IMPORTED)
 target_include_directories (Ardrivo INTERFACE "${SMCE_DIR}/RtResources/Ardrivo/include/Ardrivo")
 target_compile_definitions (Ardrivo INTERFACE "__SMCE__=1")
+target_compile_features (Ardrivo INTERFACE cxx_std_11)
 set_property (TARGET Ardrivo PROPERTY IMPORTED_LOCATION "${SMCE_DIR}/RtResources/Ardrivo/bin/${ARDRIVO_FILE_NAME}")
 set_property (TARGET Ardrivo PROPERTY IMPORTED_IMPLIB "${SMCE_DIR}/RtResources/Ardrivo/bin/${ARDRIVO_LINKER_FILE_NAME}")
 
@@ -35,7 +47,6 @@ if (WIN32)
 endif ()
 
 add_executable (Sketch)
-target_compile_features (Sketch PUBLIC cxx_std_11)
 target_sources (Sketch PRIVATE "${PROJECT_SOURCE_DIR}/sketch.cpp" "${SMCE_DIR}/RtResources/Ardrivo/share/sketch_main.cpp")
 target_link_libraries (Sketch Ardrivo)
 target_compile_definitions(Sketch PUBLIC SMCE__COMPILING_USERCODE=1)
