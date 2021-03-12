@@ -19,7 +19,7 @@ var _board_config = null
 func init(
 	path: String, board_config = _board_config, fqbin: String = _fqbin, context: String = OS.get_user_data_dir()
 ) -> bool:
-	if path == "" && ! File.new().file_exists(path):
+	if path == "" || ! File.new().file_exists(path):
 		return false
 
 	_fqbin = fqbin
