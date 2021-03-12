@@ -26,14 +26,14 @@ onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
 
 var controller: SketchOwner = null
 
-
 func set_filepath(path: String) -> bool:
 	if controller:
 		return false
 
 	var ctrl: SketchOwner = SketchOwner.new()
-
-	if ! ctrl.init(path):
+	var board_config = preload("res://src/config/smartcar_shield/board_config.tres")
+	
+	if ! ctrl.init(path, board_config):
 		return false
 
 	ctrl.connect("reset", self, "_on_controller_reset")
@@ -59,6 +59,7 @@ func set_filepath(path: String) -> bool:
 
 func _on_board_log(part: String):
 	sketch_log.text += part
+
 
 func _on_controller_reset() -> void:
 	controller.board.connect("status_changed", self, "_on_board_status_changed")

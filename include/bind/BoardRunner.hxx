@@ -34,6 +34,7 @@
 #include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
 #include "gd/util.hxx"
+#include "bind/BoardConfig.hxx"
 
 namespace godot {
 
@@ -76,8 +77,7 @@ class BoardRunner : public Node {
 
     String context();
 
-    // TODO: take a real BoardConfig
-    bool configure(String pp_fqbn);
+    bool configure(String pp_fqbn, BoardConfig* board_config);
 
     // TODO: take a real SketchConfig
     Ref<AnyTask> build(const String sketch_src);

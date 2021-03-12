@@ -33,7 +33,7 @@ set (SMCE_AUTODOWNLOAD True)
 include (FetchContent)
 include (fmt)
 include (SetupSMCE)
-list (APPEND GDCPP_NEEDED_CLASSES Reference Node)
+list (APPEND GDCPP_NEEDED_CLASSES Reference Node Resource)
 include (SetupGodotCpp)
 
 add_library (godot-smce MODULE)
@@ -42,7 +42,8 @@ target_sources (godot-smce PRIVATE
         src/bind/BoardRunner.cxx
         src/bind/ExecutionContext.cxx
         src/bind/BoardView.cxx
-        src/bind/UartSlurper.cxx)
+        src/bind/UartSlurper.cxx
+        src/bind/BoardConfig.cxx)
 target_include_directories (godot-smce PRIVATE include)
 target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")

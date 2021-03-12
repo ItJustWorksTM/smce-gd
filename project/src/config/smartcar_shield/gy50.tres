@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://gdnative/smce.gdnlib" type="GDNativeLibrary" id=1]
+[ext_resource path="res://src/bind/GpioDriverGroup.gdns" type="Script" id=2]
+
+[sub_resource type="NativeScript" id=1]
+class_name = "GpioDriver"
+library = ExtResource( 1 )
+
+[sub_resource type="Resource" id=2]
+script = SubResource( 1 )
+type = 0
+pin = 205
+allow_read = true
+allow_write = true
+
+[resource]
+script = ExtResource( 2 )
+gpio_drivers = [ SubResource( 2 ) ]

@@ -13,18 +13,23 @@ var board: BoardRunner = null
 var vehicle: Spatial = null
 var file_path: String = ""
 
+var _fqbin = "arduino:avr:nano"
+var _board_config = null
 
 func init(
-	path: String, config: String = "arduino:avr:nano", context: String = OS.get_user_data_dir()
+	path: String, board_config = _board_config, fqbin: String = _fqbin, context: String = OS.get_user_data_dir()
 ) -> bool:
 	if path == "" && ! File.new().file_exists(path):
 		return false
 
+	_fqbin = fqbin
+	_board_config = board_config
+	
 	var new_board = BoardRunner.new()
 
 	if ! (
 		new_board.init_context(context)
-		&& new_board.configure(config)
+		&& new_board.configure(fqbin, board_config)
 		&& new_board.status() == SMCE.Status.CONFIGURED
 	):
 		return false

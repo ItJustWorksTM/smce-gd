@@ -55,47 +55,13 @@ void BoardRunner::_notification(int what) {
 
 std::optional<smce::BoardRunner>& BoardRunner::native() { return runner; }
 
-bool BoardRunner::configure(String pp_fqbn) {
-    if (!runner)
+bool BoardRunner::configure(String pp_fqbn, BoardConfig* board_config) {
+    if (!runner || !board_config)
         return false;
 
     const auto fqbin_view = std::string_view{pp_fqbn.alloc_c_string(), static_cast<size_t>(pp_fqbn.length())};
 
-    const auto config =
-        smce::BoardConfig{
-            .pins = {0, 1, 2, 3, 4, 5, 12, 14, 13, 25, 26, 27, 34, 35, 36, 39, 85, 135, 86, 136, 205},
-            .gpio_drivers =
-                {
-                    // Misc analog
-                    {.pin_id = 0, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 1, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 2, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 3, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 4, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 5, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    // Left Brushed Motor
-                    {.pin_id = 12, .digital_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 14, .digital_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 13, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    // Right Brushed Motor
-                    {.pin_id = 25, .digital_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 26, .digital_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 27, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    // Left Odometer
-                    {.pin_id = 35, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 34, .digital_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 85, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 135, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    // Right Odometer
-                    {.pin_id = 36, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 39, .digital_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 86, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    {.pin_id = 136, .analog_driver = {{.board_read = true, .board_write = true}}},
-                    // GY50
-                    {.pin_id = 205, .analog_driver = {{.board_read = true, .board_write = true}}},
-
-                },
-            .uart_channels = {{}}};
+    const auto config = board_config->to_native();
 
     if (!runner->configure(fqbin_view, config))
         return false;
