@@ -1,7 +1,6 @@
 extends RigidBody
 
 var runner: BoardRunner = null
-var _disabled: bool = false
 
 onready var _wheels: Array = [$RightFront, $LeftFront, $RightBack, $LeftBack]
 onready var _cosmetic_wheels: Array = [
@@ -17,6 +16,8 @@ onready var lodo = $Attachments/LeftOdometer
 onready var rodo = $Attachments/RightOdometer
 
 onready var attachments: Array = $Attachments.get_children()
+var frozen = false
+
 
 func set_runner(_runner: BoardRunner):
 	if ! _runner:
@@ -36,10 +37,12 @@ func _ready():
 
 func freeze() -> void:
 	mode = RigidBody.MODE_STATIC
+	frozen = true
 
 
 func unfreeze() -> void:
 	mode = RigidBody.MODE_RIGID
+	frozen = false
 	# Trick the wheels to think they have not moved since last frame
 	# so that velocity calculation dont freak out in case
 	# we have been moved since
