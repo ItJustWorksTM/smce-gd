@@ -28,3 +28,6 @@ generated .so and RtResources are copied to project/gdnative/lib
 
 Not a lot of time has been spend on export profiles yet,  
 Just make sure `res://gdnative/lib/RtResources/*` is included on export.
+
+Copyright ItJustWorksTM, Apache 2.0 licensed  
+Logo by [@Reves.sur.papier](https://instagram.com/reves.sur.papier/)
