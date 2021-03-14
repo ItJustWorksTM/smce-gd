@@ -69,6 +69,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/bind/SMCE.gd"
 }, {
+"base": "Spatial",
+"class": "Shooty",
+"language": "GDScript",
+"path": "res://src/attachments/Shooty.gd"
+}, {
+"base": "Button",
+"class": "ShootyVisualizer",
+"language": "GDScript",
+"path": "res://src/attachments/ShootyVisualizer.gd"
+}, {
 "base": "Node",
 "class": "SketchOwner",
 "language": "GDScript",
@@ -97,6 +107,8 @@ _global_script_class_icons={
 "GpioDriverGroup": "",
 "NodeVisualizer": "",
 "SMCE": "",
+"Shooty": "",
+"ShootyVisualizer": "",
 "SketchOwner": "",
 "UartSlurper": "",
 "Util": ""
@@ -106,6 +118,9 @@ _global_script_class_icons={
 
 config/name="SMCE"
 run/main_scene="res://Entry.tscn"
+boot_splash/image="res://media/images/icon.png"
+boot_splash/fullsize=false
+boot_splash/bg_color=Color( 0.12549, 0.12549, 0.12549, 1 )
 config/icon="res://media/images/icon.png"
 
 [autoload]

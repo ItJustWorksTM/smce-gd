@@ -39,7 +39,10 @@ func set_filepath(path: String) -> bool:
 
 	ctrl.connect("reset", self, "_on_controller_reset")
 
-	ctrl.vehicle_scene = preload("res://src/objects/ray_car/RayCar.tscn")
+	if path.ends_with("tank.ino"):
+		ctrl.vehicle_scene = preload("res://src/objects/ray_car/RayTank.tscn")
+	else:
+		ctrl.vehicle_scene = preload("res://src/objects/ray_car/RayCar.tscn")
 
 	ctrl.board.connect("status_changed", self, "_on_board_status_changed")
 	ctrl.connect("build_log", self, "_on_board_log")
