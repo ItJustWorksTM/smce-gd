@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/objects/ray_car/RayCar.gd" type="Script" id=1]
 [ext_resource path="res://src/attachments/AnalogRaycast.gd" type="Script" id=2]
@@ -11,7 +11,10 @@
 [ext_resource path="res://src/attachments/Odometer.gd" type="Script" id=9]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 1, 0.381946, 1.27087 )
+extents = Vector3( 1, 0.232967, 1.27087 )
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 0.628528, 0.232967, 0.868031 )
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 1.87983, 0.232459, 0.411813 )
@@ -25,8 +28,12 @@ script = ExtResource( 1 )
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
 
 [node name="HullCollision" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.311966, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0275062, 0 )
 shape = SubResource( 1 )
+
+[node name="HullTopCollision" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504267, 0 )
+shape = SubResource( 3 )
 
 [node name="FrontBumperCollision" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0619854, -1.72681 )
@@ -93,7 +100,7 @@ transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.6
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0393956, -2.19019 )
+transform = Transform( -0.08, 0, -3.72727e-06, 0, 0.08, 0, 2.98182e-07, 0, -1, 0, 0.037512, -2.19019 )
 texture = ExtResource( 3 )
 
 [node name="SpotLight" type="SpotLight" parent="."]

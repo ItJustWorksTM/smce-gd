@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/ui/sketch_control/ControlPane.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/uart_console/UartConsole.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/ui/collapsable/collapsable.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=4]
 [ext_resource path="res://src/ui/sketch_control/SketchLog.gd" type="Script" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -32,23 +33,6 @@ bg_color = Color( 0, 0.478431, 0.8, 1 )
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0, 0.478431, 0.8, 1 )
-
-[sub_resource type="StyleBoxFlat" id=8]
-bg_color = Color( 0.215686, 0.215686, 0.219608, 1 )
-
-[sub_resource type="StyleBoxFlat" id=9]
-bg_color = Color( 0.6, 0.6, 0.6, 0.0901961 )
-
-[sub_resource type="StyleBoxFlat" id=10]
-bg_color = Color( 0, 0, 0, 0 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0, 0.478431, 0.8, 1 )
-
-[sub_resource type="StyleBoxFlat" id=11]
-bg_color = Color( 0.164706, 0.164706, 0.164706, 1 )
 
 [sub_resource type="StyleBoxFlat" id=12]
 bg_color = Color( 0.0666667, 0.0666667, 0.0666667, 1 )
@@ -264,11 +248,7 @@ rect_min_size = Vector2( 0, 30 )
 margin_right = 634.0
 margin_bottom = 30.0
 size_flags_horizontal = 3
-custom_styles/hover = SubResource( 8 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 10 )
-custom_styles/disabled = SubResource( 11 )
-custom_styles/normal = SubResource( 9 )
+theme = ExtResource( 4 )
 text = "Reset pos"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -279,11 +259,7 @@ margin_left = 638.0
 margin_right = 1272.0
 margin_bottom = 30.0
 size_flags_horizontal = 3
-custom_styles/hover = SubResource( 8 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 10 )
-custom_styles/disabled = SubResource( 11 )
-custom_styles/normal = SubResource( 9 )
+theme = ExtResource( 4 )
 disabled = true
 text = "Follow"
 __meta__ = {
