@@ -37,6 +37,10 @@ add_executable (SMCE_Tests main.cpp)
 target_link_libraries (SMCE_Tests PUBLIC SMCE Catch2::Catch2WithMain)
 catch_discover_tests (SMCE_Tests)
 
+if (MSVC AND MSVC_VERSION EQUAL 1928)
+    target_link_options (SMCE_Tests PRIVATE "/d2:-FuncCache0")
+endif ()
+
 set (SMCE_TEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/test_dir")
 file (MAKE_DIRECTORY "${SMCE_TEST_DIR}/smce_root")
 add_custom_command (TARGET SMCE_Tests POST_BUILD
