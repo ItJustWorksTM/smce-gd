@@ -40,6 +40,7 @@ func name() -> String:
 
 func visualize() -> Control:
 	var visualizer: Button = ShootyVisualizer.new()
+	visualizer.theme = preload("res://src/ui/themes/regular_button/regular_button.tres")
 	visualizer.rect_min_size.y = 30
 	visualizer.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	visualizer.display_shooty(self)
