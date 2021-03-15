@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/attachments/BrushedMotor.gd"
 }, {
+"base": "Node",
+"class": "CamCtl",
+"language": "GDScript",
+"path": "res://src/utilities/controllable_camera/CamController.gd"
+}, {
 "base": "Reference",
 "class": "ControlUtil",
 "language": "GDScript",
@@ -101,6 +106,7 @@ _global_script_class_icons={
 "BoardRunner": "",
 "BoardView": "",
 "BrushedMotorGD": "",
+"CamCtl": "",
 "ControlUtil": "",
 "ExecutionContext": "",
 "GpioDriver": "",
@@ -126,6 +132,7 @@ config/icon="res://media/images/icon.png"
 [autoload]
 
 DebugCanvas="*res://src/utilities/debug_canvas/DebugCanvas.gd"
+FocusOwner="*res://src/utilities/focus_owner/FocusOwner.gd"
 
 [debug]
 
@@ -183,6 +190,16 @@ mouse_left={
 mouse_right={
 "deadzone": 0.5,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+scroll_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":4,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+scroll_down={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 

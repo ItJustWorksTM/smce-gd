@@ -17,6 +17,7 @@ onready var pause_btn: Button = $PaddingBox2/SketchButtons/Pause
 onready var start_btn: Button = $PaddingBox2/SketchButtons/Start
 
 onready var reset_pos_btn: Button = $PaddingBox/VehicleButtons/Reset
+onready var follow_btn: Button = $PaddingBox/VehicleButtons/Follow
 
 onready var attachments = $Scroll/Attachments
 onready var attachments_empty = $Scroll/Attachments/empty
@@ -26,6 +27,15 @@ onready var uart = $Serial/UartPanel/Uart
 onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
 
 var controller: SketchOwner = null
+
+var cam_ctl: CamCtl = null setget set_cam_ctl
+
+func set_cam_ctl(ctl: CamCtl) -> void:
+	if ! ctl:
+		return
+	cam_ctl = ctl
+	cam_ctl.connect("cam_locked", self, "_on_cam_ctl")
+	cam_ctl.connect("cam_freed", self, "_on_cam_ctl", [null])
 
 func set_filepath(path: String) -> bool:
 	if controller:
@@ -133,11 +143,25 @@ func _ready():
 	editor_switch.connect("toggled", self, "_on_editor_toggled")
 	start_btn.connect("pressed", self, "_on_start_button")
 	reset_pos_btn.connect("pressed", self, "_on_reset_pos")
+	follow_btn.connect("pressed", self, "_on_follow_button")
 	
 	var group = BButtonGroup.new()
 	$Log/Button.group = group
 	$Serial/Button.group = group
 	group._init()
+
+func _on_cam_ctl(node) -> void:
+	if controller.vehicle == node:
+		follow_btn.text = "Unfollow"
+	else:
+		follow_btn.text = "Follow"
+
+
+func _on_follow_button() -> void:
+	if cam_ctl.locked == controller.vehicle:
+		cam_ctl.free_cam()
+	else:
+		cam_ctl.lock_cam(controller.vehicle)
 
 
 func _on_reset_pos() -> void:
@@ -180,6 +204,7 @@ func _on_board_status_changed(status) -> void:
 			pause_btn.disabled = false
 			reset_pos_btn.disabled = false
 			start_btn.text = "Stop"
+			follow_btn.disabled = false
 		SMCE.Status.STOPPED:
 			if controller.board.get_exit_code() > 0:
 				_create_notification("Sketch '%s' crashed!\n[color=gray]Open the sketch log for more details.[/color]" % file_path_header.text, 5)
@@ -190,4 +215,6 @@ func _on_board_status_changed(status) -> void:
 			pause_btn.disabled = true
 			reset_pos_btn.disabled = true
 			serial_collapsable.disabled = true
+			follow_btn.disabled = true
+			
 			
