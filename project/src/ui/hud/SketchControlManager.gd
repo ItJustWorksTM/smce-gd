@@ -21,6 +21,8 @@ var button_group: BButtonGroup = BButtonGroup.new()
 
 var buttons: Array = []
 
+var cam_ctl: CamCtl = null
+
 func _ready() -> void:
 	button_group._init()
 	new_sketch_btn.connect("pressed", self, "_on_sketch_btn")
@@ -81,6 +83,8 @@ func _on_sketch_created(node, attch, button) -> void:
 	node.connect("grab_focus", button, "set", ["pressed", true])
 	node.connect("tree_exiting", self, "_on_sketch_panel_removed", [attch, button])
 	node.connect("create_notification", notification_display, "add_notification")
+	node.cam_ctl = cam_ctl
+	
 
 
 func _on_sketch_panel_removed(node, button) -> void:

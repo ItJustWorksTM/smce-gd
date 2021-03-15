@@ -1,9 +1,11 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
+[ext_resource path="res://src/utilities/controllable_camera/FreeCam.gd" type="Script" id=1]
 [ext_resource path="res://src/utilities/controllable_camera/ControllableCamera.gd" type="Script" id=2]
 [ext_resource path="res://src/ui/hud/SmceHud.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/environments/playground/Playground.gd" type="Script" id=4]
 [ext_resource path="res://src/objects/ray_car/RayCar.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/utilities/controllable_camera/CamController.gd" type="Script" id=6]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 100, 100 )
@@ -50,15 +52,22 @@ ambient_light_sky_contribution = 0.2
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 4 )
 
-[node name="Camera" type="Spatial" parent="."]
+[node name="CamCtl" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="LockedCam" type="Spatial" parent="."]
 transform = Transform( -0.848048, -0.101113, 0.520183, 0, 0.981627, 0.190809, -0.529919, 0.161815, -0.832467, 5.27666, 7.00551, -13.5647 )
 script = ExtResource( 2 )
+
+[node name="FreeCam" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.6073, 0 )
+script = ExtResource( 1 )
 
 [node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
 current = true
 near = 0.01
 far = 234.6
-target = NodePath("../Camera")
+target = NodePath("../FreeCam")
 speed = 15.0
 enabled = true
 
