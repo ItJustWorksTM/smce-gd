@@ -137,7 +137,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
 
     std::string dir_arg = "-DSMCE_DIR=" + res_path.string();
     std::string fqbn_arg = "-DSKETCH_FQBN="s + m_internal->sbdata.get_board_data()->fqbn.c_str();
-    std::string sketch_arg = "-DSKETCH_PATH=" + stdfs::absolute(sketch_src).string();
+    std::string sketch_arg = "-DSKETCH_PATH=" + stdfs::absolute(sketch_src).generic_string();
     std::string pp_remote_libs_arg = "-DPREPROC_REMOTE_LIBS=";
     std::string cl_remote_libs_arg = "-DCOMPLINK_REMOTE_LIBS=";
     std::string cl_local_libs_arg = "-DCOMPLINK_LOCAL_LIBS=";
