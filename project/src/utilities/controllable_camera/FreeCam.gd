@@ -15,7 +15,7 @@ var rot_x = 0
 var rot_y = 0
 
 func set_disabled(_disabled: bool) -> void:
-	set_process(! _disabled)
+	set_physics_process(! _disabled)
 	disabled = _disabled
 
 
@@ -32,9 +32,9 @@ func _update_pos():
 	transform.basis = Quat(Vector3(rot_y - PI /2, rot_x, 0))
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if disabled:
-		set_process(false)
+		set_physics_process(false)
 	
 	if FocusOwner.has_focus():
 		return
