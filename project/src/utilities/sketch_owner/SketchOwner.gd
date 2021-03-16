@@ -23,6 +23,11 @@ func init(
 	if path == "":
 		return Util.mk_err("Invalid sketch path")
 	
+	var base = path.get_base_dir().get_file()
+	var file = path.get_basename().get_file()
+	if base != file:
+		return Util.mk_err("Folder name should equal selected file name")
+	
 	var new_board = BoardRunner.new()
 	var res = null
 	
