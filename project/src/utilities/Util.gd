@@ -23,3 +23,8 @@ static func copy_dir(path: String, to: String, base = null) -> bool:
 		file_name = dir.get_next()
 
 	return true
+
+static func mk_err(msg: String):
+	var ret = GDResult.new()
+	ret.set_error(msg)
+	return ret

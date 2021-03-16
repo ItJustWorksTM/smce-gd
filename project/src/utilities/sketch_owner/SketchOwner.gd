@@ -18,21 +18,27 @@ var _board_config = null
 
 func init(
 	path: String, board_config = _board_config, fqbin: String = _fqbin, context: String = OS.get_user_data_dir()
-) -> bool:
-	if path == "" || ! File.new().file_exists(path):
-		return false
+):
 
-	_fqbin = fqbin
-	_board_config = board_config
+	if path == "":
+		return Util.mk_err("Invalid sketch path")
 	
 	var new_board = BoardRunner.new()
-
-	if ! (
-		new_board.init_context(context)
-		&& new_board.configure(fqbin, board_config)
-		&& new_board.status() == SMCE.Status.CONFIGURED
-	):
-		return false
+	var res = null
+	
+	res = new_board.init_context(context)
+	if ! res.ok():
+		return res
+	
+	res = new_board.configure(fqbin, board_config)
+	if ! res.ok():
+		return res
+	
+	if new_board.status() != SMCE.Status.CONFIGURED:
+		return Util.mk_err("Board did not configure")
+	
+	_fqbin = fqbin
+	_board_config = board_config
 
 	add_child(new_board)
 	board = new_board
@@ -42,7 +48,7 @@ func init(
 	
 	file_path = path
 
-	return true
+	return GDResult.new()
 
 func _on_build_log(part: String) -> void:
 	emit_signal("build_log", part)
@@ -81,8 +87,9 @@ func build() -> bool:
 	if ! board || board.status() != SMCE.Status.CONFIGURED:  # TODO: potentially not a coroutine in this case
 		return false
 	var res = yield(board.build(file_path), "completed")
-	if ! res:
+	if ! res.ok():
 		reset(true)
+		print("Sketch build failed: ", res.error())
 		return false
 	print("build finished")
 	_create_vehicle()

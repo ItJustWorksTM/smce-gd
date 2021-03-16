@@ -29,12 +29,13 @@
 #include <core/Godot.hpp>
 #include <gen/Node.hpp>
 #include <gen/Reference.hpp>
+#include "bind/BoardConfig.hxx"
 #include "bind/BoardView.hxx"
 #include "bind/ExecutionContext.hxx"
 #include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
+#include "gd/GDResult.hxx"
 #include "gd/util.hxx"
-#include "bind/BoardConfig.hxx"
 
 namespace godot {
 
@@ -71,13 +72,13 @@ class BoardRunner : public Node {
 
     static void _register_methods();
 
-    bool init_context(String context_path);
+    Ref<GDResult> init_context(String context_path);
 
     void _physics_process();
 
     String context();
 
-    bool configure(String pp_fqbn, BoardConfig* board_config);
+    Ref<GDResult> configure(String pp_fqbn, BoardConfig* board_config);
 
     // TODO: take a real SketchConfig
     Ref<AnyTask> build(const String sketch_src);

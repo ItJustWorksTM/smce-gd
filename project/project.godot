@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/attachments/AnalogRaycast.gd"
 }, {
+"base": "",
+"class": "AnyTask",
+"language": "NativeScript",
+"path": "res://src/bind/AnyTask.gdns"
+}, {
 "base": "ButtonGroup",
 "class": "BButtonGroup",
 "language": "GDScript",
@@ -53,6 +58,11 @@ _global_script_classes=[ {
 "class": "ExecutionContext",
 "language": "NativeScript",
 "path": "res://src/bind/ExecutionContext.gdns"
+}, {
+"base": "",
+"class": "GDResult",
+"language": "NativeScript",
+"path": "res://src/bind/GDResult.gdns"
 }, {
 "base": "",
 "class": "GpioDriver",
@@ -101,6 +111,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AnalogRaycastGD": "",
+"AnyTask": "",
 "BButtonGroup": "",
 "BoardConfig": "",
 "BoardRunner": "",
@@ -109,6 +120,7 @@ _global_script_class_icons={
 "CamCtl": "",
 "ControlUtil": "",
 "ExecutionContext": "",
+"GDResult": "",
 "GpioDriver": "",
 "GpioDriverGroup": "",
 "NodeVisualizer": "",

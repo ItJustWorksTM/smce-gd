@@ -37,15 +37,16 @@ func set_cam_ctl(ctl: CamCtl) -> void:
 	cam_ctl.connect("cam_locked", self, "_on_cam_ctl")
 	cam_ctl.connect("cam_freed", self, "_on_cam_ctl", [null])
 
-func set_filepath(path: String) -> bool:
+func set_filepath(path: String):
 	if controller:
-		return false
+		return Util.mk_err("Panel already configured")
 
 	var ctrl: SketchOwner = SketchOwner.new()
 	var board_config = preload("res://src/config/smartcar_shield/board_config.tres")
 	
-	if ! ctrl.init(path, board_config):
-		return false
+	var init_res = ctrl.init(path, board_config)
+	if ! init_res.ok():
+		return init_res
 
 	ctrl.connect("reset", self, "_on_controller_reset")
 
@@ -69,7 +70,7 @@ func set_filepath(path: String) -> bool:
 
 	file_path_header.text = path.get_file()
 
-	return true
+	return GDResult.new()
 
 func _on_board_log(part: String):
 	sketch_log.text += part

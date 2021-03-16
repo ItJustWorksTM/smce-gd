@@ -55,16 +55,18 @@ void BoardRunner::_notification(int what) {
 
 std::optional<smce::BoardRunner>& BoardRunner::native() { return runner; }
 
-bool BoardRunner::configure(String pp_fqbn, BoardConfig* board_config) {
-    if (!runner || !board_config)
-        return false;
+Ref<GDResult> BoardRunner::configure(String pp_fqbn, BoardConfig* board_config) {
+    if (!runner)
+        return GDResult::mk_err("BoardRunner not initialized");
+    if (!board_config)
+        return GDResult::mk_err("Invalid BoardConfig");
 
     const auto fqbin_view = std::string_view{pp_fqbn.alloc_c_string(), static_cast<size_t>(pp_fqbn.length())};
 
     const auto config = board_config->to_native();
 
     if (!runner->configure(fqbin_view, config))
-        return false;
+        return GDResult::mk_err("Failed to configure internal runner");
 
     view_node = BoardView::_new();
     view_node->view = runner->view();
@@ -78,37 +80,38 @@ bool BoardRunner::configure(String pp_fqbn, BoardConfig* board_config) {
 
     emit_status();
 
-    return true;
+    return GDResult::mk_ok();
 }
 
 Ref<AnyTask> BoardRunner::build(String sketch_src) {
     return AnyTask::make_awaitable([&, sketch_src = std::move(sketch_src)] {
         if (!runner)
-            return false;
+            return GDResult::mk_err("BoardRunner not initialized");
         const auto path = sketch_src.utf8();
         const auto src = std::string_view{path.get_data(), static_cast<size_t>(path.length())};
 
         if (!stdfs::exists(src))
-            return false;
+            return GDResult::mk_err("Sketch file does not exist");
 
-        auto ret = runner->build(
+        auto build_res = runner->build(
             src, {.preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT"}},
                   .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
                       exec_context.resource_dir() / "library_patches" / "smartcar_shield", "Smartcar shield"}}});
-        if (ret)
-            call_deferred("emit_status");
-        return ret;
+        if (!build_res)
+            return GDResult::mk_err("Sketch failed to compile");
+        call_deferred("emit_status");
+        return GDResult::mk_ok();
     });
 }
 
-bool BoardRunner::init_context(String context_path) {
+Ref<GDResult> BoardRunner::init_context(String context_path) {
     if (runner)
-        return false;
+        return GDResult::mk_err("BoardRunner already initialized");
 
     auto context = smce::ExecutionContext(context_path.utf8().get_data());
 
     if (!context.check_suitable_environment())
-        return false;
+        return GDResult::mk_err("Unsuitable environment");
 
     exec_context = context;
     runner.emplace(exec_context, [&](int code) {
@@ -119,7 +122,7 @@ bool BoardRunner::init_context(String context_path) {
     set_physics_process(true);
     emit_status();
 
-    return true;
+    return GDResult::mk_ok();
 }
 
 void BoardRunner::_physics_process() {

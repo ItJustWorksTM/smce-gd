@@ -11,12 +11,16 @@ onready var error_label: Label = $VBoxContainer/Error
 
 
 func set_filepath(path: String) -> void:
+	# Since cancel has been pressed we dont have to bother
+	if path == "":
+		return
 	var control_pane = control_pane_t.instance()
 	get_parent().add_child(control_pane)
-	if ! control_pane.set_filepath(path):
-		error_label.text = "*invalid path selected"
+	var res = control_pane.set_filepath(path)
+	if ! res.ok():
+		error_label.text = "Failed: %s" % res.error()
 		control_pane.free()
-		print("invalid path")
+		print("Sketch init err: ", res.error())
 		return
 
 	emit_signal("created", control_pane)
