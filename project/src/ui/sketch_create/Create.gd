@@ -1,4 +1,4 @@
-extends CenterContainer
+extends VBoxContainer
 
 signal created(node)
 
@@ -7,7 +7,7 @@ var control_pane_t = preload("res://src/ui/sketch_control/ControlPane.tscn")
 signal request_filepath(node, type)
 
 onready var open_file_btn: Button = $VBoxContainer/HBoxContainer/OpenFile
-onready var error_label: Label = $VBoxContainer/Error
+onready var error_label: Label = $Error
 
 
 func set_filepath(path: String) -> void:
@@ -18,7 +18,7 @@ func set_filepath(path: String) -> void:
 	get_parent().add_child(control_pane)
 	var res = control_pane.set_filepath(path)
 	if ! res.ok():
-		error_label.text = "Failed: %s" % res.error()
+		error_label.text = "Error: %s" % res.error()
 		control_pane.free()
 		print("Sketch init err: ", res.error())
 		return
