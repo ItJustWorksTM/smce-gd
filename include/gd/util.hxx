@@ -27,8 +27,18 @@ auto make_ref() -> godot::Ref<T> {
     return T::_new();
 }
 
-constexpr auto register_fns = []<class... T>(std::pair<const char*, T>... func) {
-    (register_method(func.first, func.second), ...);
+template<class T, class... S>
+constexpr auto register_signals(S... name) {
+  (register_signal<T>(name, godot::Dictionary{}), ...);
 };
+
+template<class... T>
+constexpr auto register_fns(std::pair<const char*, T>... func) {
+  (register_method(func.first, func.second), ...);
+};
+
+inline std::string std_str(const godot::String& str) {
+    return {str.alloc_c_string(), static_cast<size_t>(str.length())};
+}
 
 #endif // GODOT_SMCE_UTIL_HXX

@@ -23,7 +23,9 @@ using namespace godot;
 void BoardView::_init() {}
 
 void BoardView::_register_methods() {
-    register_signal<BoardView>("invalidated", Dictionary{});
+    register_signals<BoardView>("invalidated", "validated");
+
+    register_method("is_valid", &BoardView::is_valid);
     register_method("read_analog_pin", &BoardView::read_analog_pin);
     register_method("read_digital_pin", &BoardView::read_digital_pin);
     register_method("write_analog_pin", &BoardView::write_analog_pin);
@@ -32,7 +34,14 @@ void BoardView::_register_methods() {
 
 smce::BoardView BoardView::native() { return view; }
 
-const smce::BoardConfig& BoardView::board_config() const { return config; }
+void BoardView::set_view(smce::BoardView v) {
+    view = v;
+    if (view.valid()) {
+        emit_signal("validated");
+    } else {
+        emit_signal("invalidated");
+    }
+}
 
 int BoardView::read_analog_pin(int pin) {
     return view.pins[pin].analog().read();

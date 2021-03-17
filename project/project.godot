@@ -94,11 +94,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/attachments/ShootyVisualizer.gd"
 }, {
-"base": "Node",
-"class": "SketchOwner",
-"language": "GDScript",
-"path": "res://src/utilities/sketch_owner/SketchOwner.gd"
-}, {
 "base": "",
 "class": "UartSlurper",
 "language": "NativeScript",
@@ -127,7 +122,6 @@ _global_script_class_icons={
 "SMCE": "",
 "Shooty": "",
 "ShootyVisualizer": "",
-"SketchOwner": "",
 "UartSlurper": "",
 "Util": ""
 }
@@ -145,6 +139,7 @@ config/icon="res://media/images/icon.png"
 
 DebugCanvas="*res://src/utilities/debug_canvas/DebugCanvas.gd"
 FocusOwner="*res://src/utilities/focus_owner/FocusOwner.gd"
+SketchAttach="*res://src/utilities/sketch_attach/SketchAttach.gd"
 
 [debug]
 

@@ -50,8 +50,11 @@ void UartSlurper::_physics_process(float) {
     }
 }
 
-void UartSlurper::setup_bufs(smce::BoardView new_view) {
+void UartSlurper::set_view(smce::BoardView new_view) {
     view = new_view;
+    bufs.clear();
+
+    set_physics_process(false);
 
     if (!view.valid())
         return;
@@ -67,14 +70,18 @@ void UartSlurper::setup_bufs(smce::BoardView new_view) {
     set_physics_process(true);
 }
 
-bool UartSlurper::write(int channel, String msg) {
-    if (!view.valid() || !view.uart_channels[channel].rx().exists())
-        return false;
+Ref<GDResult> UartSlurper::write(int channel, String msg) {
+    if (!view.valid())
+        return GDResult::err("Invalid view");
+
+    if (!view.uart_channels[channel].rx().exists())
+        return GDResult::err("Uart channel does not exist");
+
 
     const auto str = msg.ascii();
     std::copy_n(str.get_data(), str.length(), std::back_inserter(bufs[channel].write_buf));
 
-    return true;
+    return GDResult::ok();
 }
 
 int UartSlurper::channels() { return view.valid() ? view.uart_channels.size() : -1; }

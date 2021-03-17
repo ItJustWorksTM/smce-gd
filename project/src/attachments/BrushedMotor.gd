@@ -11,12 +11,12 @@ var speed: float = 0
 var direction: int = 0
 
 func set_view(_view: Node) -> void:
-	set_physics_process(false)
-	view = _view
+	if ! _view:
+		return
 	
-	if view:
-		view.connect("invalidated", self, "set_view", [null])
-		set_physics_process(true)
+	view = _view
+	view.connect("validated", self, "set_physics_process", [true])
+	set_physics_process(view.is_valid())
 
 
 func set_pins(ebl: int, fwd: int, bwd: int) -> void:
@@ -40,6 +40,8 @@ func _physics_process(_delta: float) -> void:
 	direction = int(forward) - int(backward)
 	
 	speed = (abs_speed / 255.0) * direction
+	if ! view.is_valid():
+		set_physics_process(false)
 
 
 func name() -> String:

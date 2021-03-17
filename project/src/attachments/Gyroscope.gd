@@ -10,13 +10,13 @@ var view = null setget set_view
 
 var _y_rotate: float = 0
 
-func set_view(_view: Node) -> void:
-	set_physics_process(false)
-	view = _view
+func set_view(_view) -> void:
+	if ! _view:
+		return
 	
-	if view:
-		view.connect("invalidated", self, "set_view", [null])
-		set_physics_process(true)
+	view = _view
+	view.connect("invalidated", self, "set_physics_process", [false])
+	set_physics_process(view.is_valid())
 
 
 func _ready() -> void:
@@ -29,6 +29,9 @@ func _physics_process(delta) -> void:
 	
 	_y_rotate = _track_node.rotation_degrees.y + 180
 	view.write_analog_pin(pin, int(_y_rotate))
+	
+	if ! view.is_valid():
+		set_physics_process(false)
 
 
 func name() -> String:
