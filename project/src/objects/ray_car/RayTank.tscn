@@ -4,14 +4,14 @@
 [ext_resource path="res://media/models/car_parts/SMTE-hull.glb" type="PackedScene" id=6]
 [ext_resource path="res://src/attachments/Shooty.gd" type="Script" id=10]
 
-[sub_resource type="CylinderShape" id=3]
+[sub_resource type="CylinderShape" id=1]
 radius = 1.51925
 
 [node name="RayCar" instance=ExtResource( 1 )]
 
 [node name="BarrelCollision" type="CollisionShape" parent="." index="0"]
 transform = Transform( 0.05, 0, 0, 0, -5.24537e-08, -0.05, 0, 1.2, -2.18557e-09, 0, 0.558953, -1.85624 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="TankHull" parent="." index="1" instance=ExtResource( 6 )]
 transform = Transform( 4.88762e-07, 0, -1, 0, 1, 0, 1, 0, 4.88762e-07, 0, 0, 0 )

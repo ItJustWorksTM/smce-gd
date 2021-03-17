@@ -50,16 +50,10 @@ func _process(delta):
 
 
 func _integrate_forces(state: PhysicsDirectBodyState) -> void:
-	for i in range(_wheels.size()):
-		_wheels[i].add_force(state)
-		if _wheels[i].is_colliding():
-			_cosmetic_wheels[i].global_transform.origin = _wheels[i].get_collision_point()
-
 	var key_direction: int = (
 		int(Input.is_action_pressed("ui_up"))
 		- int(Input.is_action_pressed("ui_down"))
 	)
-
 	for wheel in _rightw:
 		if _view:
 			wheel.throttle = lmotor.get_speed()
@@ -71,4 +65,10 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 			wheel.throttle = rmotor.get_speed()
 		else:
 			wheel.throttle = key_direction * int(! Input.is_action_pressed("ui_left"))
+
+	for i in range(_wheels.size()):
+		_wheels[i].add_force(state)
+		if _wheels[i].is_colliding():
+			_cosmetic_wheels[i].global_transform.origin = _wheels[i].get_collision_point()
+
 
