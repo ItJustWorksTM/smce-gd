@@ -93,7 +93,7 @@ func _physics_process(delta):
 		dist = sqrt(distances[rand_range(0, distances.size())])
 	
 	distance = dist
-	_view.write_analog_pin(pin, dist)
+	_view.write_analog_pin(pin, int(dist * 10))
 
 
 func name() -> String:
