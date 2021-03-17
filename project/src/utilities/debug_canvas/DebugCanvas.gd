@@ -16,6 +16,9 @@ class Draw:
 
 export var disabled: bool = false setget set_disabled
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_debug_canvas"):
+		set_disabled(!disabled)
 
 func set_disabled(v: bool) -> void:
 	disabled = v
