@@ -42,7 +42,7 @@ func visualize() -> Control:
 func shoot() -> void:
 	timer = get_tree().create_timer(5)
 	var car = get_parent().get_parent()
-	car.add_force(transform.basis.xform(Vector3.BACK) * 64,  global_transform.origin - car.global_transform.origin + Vector3.UP)
+	car.add_force(car.transform.basis.xform(Vector3.BACK) * 64,  global_transform.origin - car.global_transform.origin + Vector3.UP)
 	var shell: RigidBody = preload("res://src/objects/tank_shell/Ball.tscn").instance()
 	get_parent().get_parent().get_parent().add_child(shell)
 	shell.global_transform.origin = global_transform.origin
