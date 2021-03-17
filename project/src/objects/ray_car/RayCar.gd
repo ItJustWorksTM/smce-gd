@@ -1,7 +1,5 @@
 extends RigidBody
 
-var runner: BoardRunner = null
-
 onready var _wheels: Array = [$RightFront, $LeftFront, $RightBack, $LeftBack]
 onready var _cosmetic_wheels: Array = [
 	$RightFront/wheel, $LeftFront/wheel, $RightBack/wheel, $LeftBack/wheel
@@ -18,16 +16,13 @@ onready var rodo = $Attachments/RightOdometer
 onready var attachments: Array = $Attachments.get_children()
 var frozen = false
 
+var _view = null
 
-func set_runner(_runner: BoardRunner):
-	if ! _runner:
-		return
-	runner = _runner
-	runner.connect("status_changed", self, "_on_board_status_changed")
-	
+func set_view(view):
+	_view = view
 	for attach in attachments:
 		if attach.has_method("set_view"):
-			attach.set_view(runner.view())
+			attach.set_view(view)
 
 
 func _ready():
@@ -66,18 +61,14 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 	)
 
 	for wheel in _rightw:
-		if runner:
+		if _view:
 			wheel.throttle = lmotor.get_speed()
 		else:
 			wheel.throttle = key_direction * int(! Input.is_action_pressed("ui_right"))
 
 	for wheel in _leftw:
-		if runner:
+		if _view:
 			wheel.throttle = rmotor.get_speed()
 		else:
 			wheel.throttle = key_direction * int(! Input.is_action_pressed("ui_left"))
 
-
-func _on_board_status_changed(status) -> void:
-	if status == SMCE.Status.STOPPED:
-		queue_free()  # just die

@@ -34,7 +34,8 @@ class BoardView : public Node {
     friend BoardRunner;
 
     smce::BoardView view;
-    smce::BoardConfig config;
+
+    void set_view(smce::BoardView v);
 
   public:
     static void _register_methods();
@@ -43,13 +44,14 @@ class BoardView : public Node {
 
     smce::BoardView native();
 
+    bool is_valid() { return view.valid(); }
+
     void write_analog_pin(int pin, int value);
     void write_digital_pin(int pin, bool value);
 
     int read_analog_pin(int pin);
     bool read_digital_pin(int pin);
 
-    const smce::BoardConfig& board_config() const;
 };
 } // namespace godot
 

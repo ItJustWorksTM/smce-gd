@@ -20,11 +20,12 @@
 #define GODOT_SMCE_GDRESULT_HXX
 
 #include <core/Godot.hpp>
+#include "gd/util.hxx"
 
 namespace godot {
 class GDResult : public Reference {
     GODOT_CLASS(GDResult, Reference);
-    String err;
+    String err_msg;
     bool has_error = false;
 
   public:
@@ -34,13 +35,13 @@ class GDResult : public Reference {
         register_method("set_error", &GDResult::set_error);
     }
 
-    static Ref<GDResult> mk_err(String str) {
+    static Ref<GDResult> err(String str) {
         auto ret = make_ref<GDResult>();
         ret->set_error(str);
         return ret;
     }
 
-    static Ref<GDResult> mk_ok() { return make_ref<GDResult>(); }
+    static Ref<GDResult> ok() { return make_ref<GDResult>(); }
 
     void _init() {}
 
@@ -48,11 +49,11 @@ class GDResult : public Reference {
 
     void set_error(String error) {
         if (!has_error)
-            err = error;
+            err_msg = error;
         has_error = true;
     }
 
-    String get_error() { return err; }
+    String get_error() { return err_msg; }
 };
 } // namespace godot
 

@@ -5,21 +5,13 @@ var view = null setget set_view
 
 onready var timer: SceneTreeTimer = get_tree().create_timer(0);
 
-func set_view(_view: Node) -> void:
-	if ! _view:
-		_on_view_invalidated()
-		return
-
+func set_view(_view) -> void:
 	view = _view
 
-	view.connect("invalidated", self, "_on_view_invalidated")
-
-	set_physics_process(true)
-
-
-func _on_view_invalidated() -> void:
-	view = null
-	set_physics_process(false)
+	view.connect("invalidated", self, "set_physics_process", [true])
+	view.connect("validated", self, "set_physics_process", [true])
+	
+	set_physics_process(view.is_valid())
 
 
 func _ready() -> void:

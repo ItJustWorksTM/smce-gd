@@ -19,16 +19,21 @@ var forward: bool = true
 var view = null setget set_view
 
 func set_view(_view: Node) -> void:
-	set_physics_process(false)
-	view = _view
-	
-	if view:
-		view.connect("invalidated", self, "set_view", [null])
+	if ! _view:
+		return
 		
-		view.write_analog_pin(distance_pin, 0)
-		view.write_analog_pin(distance_back_pin, 0)
-		view.write_analog_pin(speed_pin, 0)
-		set_physics_process(true)
+	view = _view
+	view.connect("validated", self, "_reset", [true])
+	view.connect("invalidated", self, "_reset", [false])
+	
+	_reset(view.is_valid())
+
+
+func _reset(psy: bool) -> void:
+	view.write_analog_pin(distance_pin, 0)
+	view.write_analog_pin(distance_back_pin, 0)
+	view.write_analog_pin(speed_pin, 0)
+	set_physics_process(psy)
 
 
 func _ready():
@@ -62,6 +67,9 @@ func _physics_process(delta):
 	
 
 	prev_pos = global_transform.origin
+	
+	if ! view.is_valid():
+		_reset(false)
 
 
 func _distance_count() -> float:

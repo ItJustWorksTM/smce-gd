@@ -10,19 +10,14 @@ var distance: float = 0
 
 func set_view(_view: Node) -> void:
 	if ! _view:
-		_on_view_invalidated()
 		return
 	
 	view = _view
 	
-	view.connect("invalidated", self, "_on_view_invalidated")
+	view.connect("validated", self, "set_physics_process", [true])
+	view.connect("invalidated", self, "set_physics_process", [false])
 	
 	set_physics_process(true)
-
-
-func _on_view_invalidated() -> void:
-	view = null
-	set_physics_process(false)
 
 
 func _ready() -> void:

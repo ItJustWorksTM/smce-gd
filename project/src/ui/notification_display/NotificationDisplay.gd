@@ -7,12 +7,13 @@ func add_notification(node: Control, timeout: float = -1) -> void:
 	
 	var tween: Tween = Tween.new()
 	add_child(tween)
+	node.connect("stop_notify", self, "_remove_notification", [node])
+	
 	tween.interpolate_property(node, "modulate:a", node.modulate.a, 1, 0.3, Tween.TRANS_CUBIC)
 	tween.start()
 	yield(tween,"tween_all_completed")
 	tween.queue_free()
 	
-	node.connect("stop_notify", self, "_remove_notification", [node])
 
 	if timeout >= 0:
 		yield(get_tree().create_timer(timeout), "timeout")

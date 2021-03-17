@@ -42,21 +42,19 @@ namespace godot {
 class BoardRunner : public Node {
     GODOT_CLASS(BoardRunner, Node)
 
+
+    smce::BoardConfig bconfig;
+    stdfs::path ctx_path;
+    std::string fqbin;
+
     std::optional<smce::BoardRunner> runner;
-    int exit_code = 0;
 
-    template <auto func, class... Args>
-    std::invoke_result_t<decltype(func), smce::BoardRunner> fw_wrap(Args&&... args) {
-        if (!runner)
-            return false;
-        decltype(auto) ret = std::invoke(func, *runner, std::forward<Args>(args)...);
-        emit_status();
-        return std::move(ret);
-    }
-
-    void emit_status();
+    bool queued_free = false;
+    bool building = false;
 
   public:
+    ~BoardRunner();
+
     smce::ExecutionContext exec_context = smce::ExecutionContext{"."};
 
     BoardView* view_node;
@@ -68,26 +66,29 @@ class BoardRunner : public Node {
 
     void _init();
 
-    void _notification(int what);
-
     static void _register_methods();
 
-    Ref<GDResult> init_context(String context_path);
+    Ref<GDResult> init(String context_path);
+    Ref<GDResult> configure(String pp_fqbn, BoardConfig* board_config);
+    Ref<GDResult> reconfigure();
+
+    Ref<AnyTask> build(String sketch_src);
+    Ref<GDResult> start();
+    Ref<GDResult> suspend();
+    Ref<GDResult> resume();
+    Ref<GDResult> terminate();
+    // Ref<GDResult> stop();
+    Ref<GDResult> reset(bool auto_configure);
+
+    void on_build_completed(Ref<GDResult> result);
+
+    void set_free();
 
     void _physics_process();
 
     String context();
 
-    Ref<GDResult> configure(String pp_fqbn, BoardConfig* board_config);
-
-    // TODO: take a real SketchConfig
-    Ref<AnyTask> build(const String sketch_src);
-
-    bool terminate();
-
     int status();
-
-    int get_exit_code();
 
     std::optional<smce::BoardRunner>& native();
 };

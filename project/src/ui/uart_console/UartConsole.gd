@@ -3,32 +3,28 @@ extends VBoxContainer
 export (int) var max_text = 1000
 
 var disabled: bool = true setget set_disabled
-var runner: BoardRunner = null setget set_runner
 var uart_channel: int = 0 setget set_uart_channel
 
 onready var header: Label = $Header
 onready var console: RichTextLabel = $Console
 onready var input: LineEdit = $Input
 
+var _uart = null
 
 func set_disabled(val: bool) -> void:
 	disabled = val
 	input.editable = ! val
 
-
-func set_runner(new_runner) -> void:
-	if runner:
-		runner.disconnect("status_changed", self, "_on_board_status_changed")
-	runner = new_runner
-	runner.connect("status_changed", self, "_on_board_status_changed")
-	runner.uart().connect("uart", self, "_on_uart")
-	_on_board_status_changed(runner.status())
+func set_uart(uart) -> void:
+	if _uart:
+		_uart.disconnect("uart", self, "_on_uart")
+	uart.connect("uart", self, "_on_uart")
+	_uart = uart
 	set_uart_channel(0)
 
 
 func set_uart_channel(val: int) -> void:
-	uart_channel = -1
-	if runner and runner.uart() and val < runner.uart().channels():  # muh shortcircuit??
+	if _uart and val < _uart.channels():
 		uart_channel = val
 	header.text = "Uart | " + str(uart_channel)
 	console.clear()
@@ -41,9 +37,10 @@ func _ready() -> void:
 
 
 func _on_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept") and input.text != "" and runner:
-		if ! runner.uart().write(uart_channel, input.text):
-			print("failed to write to uart channel", uart_channel)
+	if event.is_action_pressed("ui_accept") and input.text != "" and _uart:
+		var res = _uart.write(uart_channel, input.text)
+		if ! res.ok():
+			print("failed to write to uart channel %d: %s" % [uart_channel, res.error()])
 		input.text = ""
 
 
@@ -52,8 +49,3 @@ func _on_uart(channel, text) -> void:
 	if console.text.length() > max_text:
 		console.text = console.text.substr(console.text.length() - max_text)
 
-
-func _on_board_status_changed(status: int) -> void:
-	set_disabled(status == SMCE.Status.CLEAN || status == SMCE.Status.STOPPED || status == SMCE.Status.CONFIGURED)
-	if status == SMCE.Status.STOPPED:
-		runner = null

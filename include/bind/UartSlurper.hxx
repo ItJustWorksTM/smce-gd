@@ -22,6 +22,7 @@
 #include <unordered_map>
 #include <vector>
 #include <core/Godot.hpp>
+#include <gd/GDResult.hxx>
 #include <gen/Node.hpp>
 #include "BoardView.hxx"
 
@@ -32,7 +33,7 @@ class UartSlurper : public Node {
 
     smce::BoardView view;
 
-    void setup_bufs(smce::BoardView view);
+    void set_view(smce::BoardView view);
 
     struct UartBuffer {
         size_t available;
@@ -47,7 +48,7 @@ class UartSlurper : public Node {
 
     void _init();
 
-    bool write(int channel, String msg);
+    Ref<GDResult> write(int channel, String msg);
 
     int channels();
 

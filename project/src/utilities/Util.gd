@@ -24,7 +24,13 @@ static func copy_dir(path: String, to: String, base = null) -> bool:
 
 	return true
 
-static func mk_err(msg: String):
+
+static func err(msg: String):
 	var ret = GDResult.new()
 	ret.set_error(msg)
 	return ret
+
+
+static func print_if_err(err):
+	if ! err.ok():
+		print(err.error())
