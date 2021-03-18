@@ -55,6 +55,7 @@ func _draw() -> void:
 			camera.unproject_position(draw.begin),
 			camera.unproject_position(draw.end),
 			draw.color,
-			draw.tickness
+			draw.tickness,
+			true
 		)
 	_to_draw = []
