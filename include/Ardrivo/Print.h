@@ -66,22 +66,21 @@ class SMCE__DLL_RT_API Print {
     inline std::size_t print(const String& s) { return write(s.c_str(), s.length()); }
     inline std::size_t print(const char* czstr) { return write(czstr); }
     inline std::size_t print(char c) { return write(c); }
-    template <class Int, class = typename std::enable_if<std::is_integral<Int>::value>::type>
-    inline std::size_t print(Int val, StringBaseConv base = DEC) {
-        return print(String(val, base));
-    }
-    // inline std::size_t print(double val, int prec = 2) { return print(String(val, prec)); }
+    template <class Int, class Base, class = typename std::enable_if<std::is_integral<Int>::value>::type>
+    inline std::size_t print(Int val, Base) { return print(String{val, Base{}}); }
+    template <class Fp, class = typename std::enable_if<std::is_floating_point<Fp>::value>::type>
+    inline std::size_t print(Fp val, int prec = 2) { return print(String{val, prec}); }
     // std::size_t print(const struct Printable&); // FIXME: implement base Printable
 
-    template <std::size_t N> std::size_t println(const char (&lit)[N]) { return write(lit, N) + println(); }
+    template <std::size_t N>
+    std::size_t println(const char (&lit)[N]) { return write(lit, N) + println(); }
     inline std::size_t println(const String& s) { return print(s) + println(); }
     inline std::size_t println(const char* czstr) { return write(czstr) + println(); }
     inline std::size_t println(char c) { return write(c) + println(); }
-    template <class Int, class = typename std::enable_if<std::is_integral<Int>::value>::type>
-    std::size_t println(Int val, StringBaseConv base = DEC) {
-        return print(val, base) + println();
-    }
-    // inline std::size_t println(double val, int prec = 2) { return print(val, prec) + println(); }
+    template <class Int, class Base, class = typename std::enable_if<std::is_integral<Int>::value>::type>
+    std::size_t println(Int val,  Base) { return print(val, Base{}) + println(); }
+    template <class Fp, class = typename std::enable_if<std::is_floating_point<Fp>::value>::type>
+    inline std::size_t println(Fp val, int prec = 2) { return print(val, prec) + println(); }
     // inline std::size_t println(const Printable& p) { return print(p) + println(); }
     inline std::size_t println() { return print('\r') + print('\n'); }
 

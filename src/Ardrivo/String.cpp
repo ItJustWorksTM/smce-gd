@@ -16,18 +16,33 @@
  */
 
 #include <algorithm>
+#include <bit>
 #include <cctype>
 #include <cstring>
-#include <charconv>
 #include <boost/algorithm/string/predicate.hpp>
 #include "WString.h"
 
-String::String(long long val, StringBaseConv base) {
-    m_u.resize(65);
-    const auto res = std::to_chars(&*m_u.begin(), &*m_u.rbegin(), val, +base);
-    if (static_cast<int>(res.ec))
-        throw;
-    m_u.resize(std::strlen(m_u.c_str()));
+String::String(ConvTag, std::uintmax_t val, SMCE__BIN) {
+    if(val == 0) {
+        m_u = "0";
+        return;
+    }
+    m_u.resize(std::bit_width(val));
+    std::for_each(m_u.rbegin(), m_u.rend(), [&](char& c) { c = static_cast<std::uint8_t>(val & 1); val >>= 1; });
+
+}
+
+String::String(ConvTag, std::uintmax_t val, SMCE__HEX) {
+    if(val == 0) {
+        m_u = "0";
+        return;
+    }
+    const auto bits = std::bit_width(val);
+    m_u.resize(bits / 4 + static_cast<bool>(bits % 4));
+    std::for_each(m_u.rbegin(), m_u.rend(), [&](char& c) {
+        c = "0123456789ABCDEF"[val & 0xF];
+        val >>= 4;
+    });
 }
 
 [[nodiscard]] const char* String::c_str() const noexcept { return m_u.c_str(); }

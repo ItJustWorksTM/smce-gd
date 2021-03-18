@@ -18,18 +18,26 @@
 #ifndef WString_h
 #define WString_h
 
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
 #include "SMCE_dll.hpp"
+#include "SMCE_numeric.hpp"
 
-enum StringBaseConv {
-    BIN = 2,
-    DEC = 10,
-    HEX = 16,
-};
+struct SMCE__BIN : std::integral_constant<int, 2> {};
+constexpr SMCE__BIN BIN{};
+
+struct SMCE__DEC : std::integral_constant<int, 10> {};
+constexpr SMCE__DEC DEC{};
+
+struct SMCE__HEX : std::integral_constant<int, 16> {};
+constexpr SMCE__HEX HEX{};
 
 class SMCE__DLL_RT_API String {
+    struct ConvTag {};
+    constexpr static ConvTag conv_tag{};
+
 #if _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4251)
@@ -40,6 +48,9 @@ class SMCE__DLL_RT_API String {
 #endif
 
     String(std::string u) : m_u{std::move(u)} {}
+
+    String(ConvTag, std::uintmax_t val, SMCE__BIN);
+    String(ConvTag, std::uintmax_t val, SMCE__HEX);
 
     public:
     String() noexcept = default;
@@ -52,12 +63,17 @@ class SMCE__DLL_RT_API String {
     inline /* explicit(false) */ String(const char* cstr) : m_u{cstr} {}
     inline explicit String(char c) : m_u(1, c) {}
 
-    String(long long val,  StringBaseConv base = DEC);
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
-    inline String(T val, StringBaseConv base = DEC) : String{static_cast<long long>(val), base} {}
+    explicit String(T val) : m_u{std::to_string(val)} { }
+    template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
+    String(T val, SMCE__BIN) : String{conv_tag, SMCE__bit_cast<typename std::make_unsigned<T>::type>(val), BIN} {}
+    template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
+    String(T val, SMCE__DEC) : String{val} {}
+    template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
+    String(T val, SMCE__HEX) : String{conv_tag, SMCE__bit_cast<typename std::make_unsigned<T>::type>(val), HEX} {}
 
-    // template <class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-    // String(T val, int precision); // unimplemented
+    template <class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
+    explicit String(T val, [[maybe_unused]] int precision = -1) : m_u{std::to_string(val)}  {}
 
     [[nodiscard]] const char* c_str() const noexcept;
     [[nodiscard]] std::size_t length() const noexcept;
