@@ -1,50 +1,71 @@
 extends RayCast
 
 var max_hit_distance: float = abs(cast_to.y)
-var prev_contact_depth: float = max_hit_distance
+var prev_contact_depth: float = 0
 
 onready var prev_pos: Vector3 = global_transform.origin
 
 export (float, 0.1, 100, 0.1) var spring_force = 10
 export (float, 0.1, 100, 0.1) var damper_force = 1
 export (float, 0, 2, 0.1) var target = 0.6
-export (float, 0, 30, 0.1) var max_force = 10
+
+export (float, 0, 90) var slip_angle = 20
 
 export (float, 0, 100, 1) var motor_force = 5
+export (float, 0, 20, 0.1) var max_speed = 10
 export (float, -1, 1, 0.01) var throttle = 0
 
+export var force_offset = Vector3(0,-0.2,0)
 onready var _parent: RigidBody = get_parent()
 
 onready var _force_pos: Vector3 = Vector3.ZERO
 
+var _hit_delta: float = 0
 
 func set_force(ratio: float) -> void:
 	throttle = min(1, max(0, ratio))
 
 
 func add_force(state: PhysicsDirectBodyState) -> void:
-	_force_pos = global_transform.origin - _parent.global_transform.origin
+	max_hit_distance = abs(cast_to.y)
+	_hit_delta += state.step
+	
+	_force_pos = global_transform.origin - _parent.global_transform.origin + force_offset
+	
 	_spring_force(state)
 	_friction_force(state)
 	_motor_force(state)
+	
 	prev_pos = global_transform.origin
+	
+	if is_colliding():
+		_hit_delta = 0
 
 
 func _motor_force(state: PhysicsDirectBodyState) -> void:
-	if ! is_colliding() || throttle == 0:
+	if ! is_colliding():
 		return
+	
+	var normal = get_collision_normal()
 
-	# TODO: get forward direction from ground plane (collision normal)
-	var direction: Vector3 = _parent.transform.basis.xform(Vector3.FORWARD)
+	var direction =  _parent.global_transform.basis.xform_inv(normal)
+	direction = _parent.transform.basis.xform(direction.rotated(Vector3(1,0,0), -PI/2))
+	
+	var v: Vector3 = (global_transform.origin - prev_pos) / _hit_delta
+	var ssped: float = sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
+	var target = abs(max_speed * throttle)
+	
+	var desc = target - ssped 
+	desc = clamp(desc, -2, 2)
 
-	var fmotor: Vector3 = direction * motor_force * throttle
+	var fmotor: Vector3 = direction * motor_force * throttle * desc
 	state.add_force(fmotor, _force_pos)
 
 	if ! DebugCanvas.disabled:
 		var pos: Vector3 = global_transform.origin
 		DebugCanvas.add_draw(pos, pos + fmotor, Color.darkblue)
-
-
+		DebugCanvas.add_draw(pos, pos + direction)
+		
 func _spring_force(state: PhysicsDirectBodyState):
 	if ! is_colliding():
 		return
@@ -57,35 +78,35 @@ func _spring_force(state: PhysicsDirectBodyState):
 
 	var distance: float = point.distance_to(global_transform.origin)
 	var contact_depth: float = max_hit_distance - distance
-
-	var velocity: float = (prev_contact_depth - contact_depth) / state.step
-	prev_contact_depth = contact_depth
-
-	var s_force: float = contact_depth * spring_force
-	var d_force: float = velocity * damper_force
-	var force = 0
-	if distance != 0:
-		force = (
-			-spring_force * (abs(distance) - target) * (distance / abs(distance))
-			- damper_force * velocity
-		)
-
-	force = clamp(force, 0, max_force)
-
-	var real_force: Vector3 = normal * force
+	
+	var velocity: float = (prev_contact_depth - contact_depth) / _hit_delta
+	
+	var force: float = -spring_force * (abs(distance) - target) - damper_force * velocity
+	force = clamp(force, -spring_force, spring_force)
+	
+	# If the angle is not too great we allow to point straight up
+	# with the effect that the car will be in perfect balance
+	# even on slopes, basically anti slip.
+	var up = Vector3.UP
+	if rad2deg(normal.angle_to(Vector3.UP)) > slip_angle:
+		up = _parent.transform.basis.xform(Vector3.UP)
+	
+	var real_force: Vector3 = up * force
 	state.add_force(real_force, _force_pos)
 
-	# debug
+	prev_contact_depth = contact_depth
+	
 	if ! DebugCanvas.disabled:
 		var pos: Vector3 = global_transform.origin
 		DebugCanvas.add_draw(pos, pos + real_force, Color(1, 0, 0, 0.5))
 		DebugCanvas.add_draw(pos, point, Color(0, 0, 1, 0.5))
+		
 
 
 func _friction_force(state: PhysicsDirectBodyState) -> void:
 	var pos = global_transform.origin
 
-	var v: Vector3 = (global_transform.origin - prev_pos) / state.step
+	var v: Vector3 = (global_transform.origin - prev_pos) / _hit_delta
 	var speed: float = sqrt(v.x * v.x + v.z * v.z)
 
 	# Air drag

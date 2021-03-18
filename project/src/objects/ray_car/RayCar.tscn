@@ -12,13 +12,13 @@
 [ext_resource path="res://src/attachments/UltraSonic.gd" type="Script" id=10]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 1, 0.232967, 1.27087 )
+extents = Vector3( 1, 0.126468, 1.27087 )
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.628528, 0.232967, 0.868031 )
 
 [sub_resource type="BoxShape" id=3]
-extents = Vector3( 1.87983, 0.232459, 0.411813 )
+extents = Vector3( 1.92613, 0.140498, 0.426843 )
 
 [node name="RayCar" type="RigidBody"]
 can_sleep = false
@@ -29,7 +29,7 @@ script = ExtResource( 1 )
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
 
 [node name="HullCollision" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0275062, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14338, 0 )
 shape = SubResource( 1 )
 
 [node name="HullTopCollision" type="CollisionShape" parent="."]
@@ -37,20 +37,23 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.504267, 0 )
 shape = SubResource( 2 )
 
 [node name="FrontBumperCollision" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0619854, -1.72681 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.130106, -1.70033 )
 shape = SubResource( 3 )
 
 [node name="BackBumperCollision" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0619854, 1.63475 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 1.7 )
 shape = SubResource( 3 )
 
 [node name="LeftBack" parent="." instance=ExtResource( 5 )]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -0.934, -0.211, 0.675 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -0.934, 0, 0.675 )
 enabled = true
-cast_to = Vector3( 0, -1, 0 )
-spring_force = 50.0
-damper_force = 10.0
+cast_to = Vector3( 0, -1.2, 0 )
+spring_force = 30.0
+damper_force = 5.0
 target = 0.9
+motor_force = 2.0
+max_speed = 20.0
+force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="LeftBack"]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.700143, 0 )
@@ -59,12 +62,15 @@ transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.7
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="LeftFront" parent="." instance=ExtResource( 5 )]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -0.934, -0.211112, -0.668874 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -0.934, 0, -0.668874 )
 enabled = true
-cast_to = Vector3( 0, -1, 0 )
-spring_force = 50.0
-damper_force = 10.0
+cast_to = Vector3( 0, -1.2, 0 )
+spring_force = 30.0
+damper_force = 5.0
 target = 0.9
+motor_force = 2.0
+max_speed = 20.0
+force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="LeftFront"]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.660918, 0 )
@@ -73,12 +79,15 @@ transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.6
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="RightBack" parent="." instance=ExtResource( 5 )]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0.934, -0.211, 0.675 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0.934, 0, 0.675 )
 enabled = true
-cast_to = Vector3( 0, -1, 0 )
-spring_force = 50.0
-damper_force = 10.0
+cast_to = Vector3( 0, -1.2, 0 )
+spring_force = 30.0
+damper_force = 5.0
 target = 0.9
+motor_force = 2.0
+max_speed = 20.0
+force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="RightBack"]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.700143, 0 )
@@ -87,12 +96,15 @@ transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.7
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="RightFront" parent="." instance=ExtResource( 5 )]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0.934, -0.211112, -0.668874 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0.934, 0, -0.669 )
 enabled = true
-cast_to = Vector3( 0, -1, 0 )
-spring_force = 50.0
-damper_force = 10.0
+cast_to = Vector3( 0, -1.2, 0 )
+spring_force = 30.0
+damper_force = 5.0
 target = 0.9
+motor_force = 2.0
+max_speed = 20.0
+force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="RightFront"]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.660918, 0 )
@@ -106,6 +118,7 @@ texture = ExtResource( 3 )
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.97157, 0.236753, 0, -0.236753, 0.97157, 0, 0, -2.34608 )
+visible = false
 light_color = Color( 0.733333, 0, 1, 1 )
 light_energy = 5.66
 light_indirect_energy = 2.44
