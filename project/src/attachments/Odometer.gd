@@ -44,9 +44,9 @@ func _ready():
 
 func _physics_process(delta):
 	velocity = (global_transform.origin - prev_pos) * Vector3(1,0,1) / delta
-	speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z) # ignore y axis speed for now
+	speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z) / 10 # ignore y axis speed for now
 	
-	var new_dist = _distance_count() * 1000
+	var new_dist = _distance_count() * 100
 	
 	if new_dist > 0:
 		view.write_analog_pin(distance_pin, view.read_analog_pin(distance_pin) + new_dist)
