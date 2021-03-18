@@ -70,5 +70,5 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 		_wheels[i].add_force(state)
 		if _wheels[i].is_colliding():
 			_cosmetic_wheels[i].global_transform.origin = _wheels[i].get_collision_point()
-
+			_cosmetic_wheels[i].transform.origin *= Vector3(0,1,0)
 
