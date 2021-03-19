@@ -108,6 +108,7 @@ Ref<GDResult> BoardRunner::reconfigure() {
 Ref<AnyTask> BoardRunner::build(String sketch_src) {
     building = true;
     emit_signal("building");
+
     auto ret = AnyTask::make_awaitable([&, sketch_src = stdfs::path{std_str(sketch_src)}] {
         if (!runner)
             return GDResult::err("BoardRunner not initialized");
@@ -115,11 +116,13 @@ Ref<AnyTask> BoardRunner::build(String sketch_src) {
         if (!stdfs::exists(sketch_src))
             return GDResult::err("Sketch file does not exist");
 
+        Godot::print("Async build starting");
         auto build_res = runner->build(
             sketch_src,
             {.preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT"}},
              .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
                  exec_context.resource_dir() / "library_patches" / "smartcar_shield", "Smartcar shield"}}});
+        Godot::print("Async build completed");
 
         if (!build_res)
             return GDResult::err("Sketch failed to compile");
