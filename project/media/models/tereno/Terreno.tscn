@@ -116,9 +116,6 @@ transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 shape = SubResource( 2 )
 
-[node name="Icosphere003" parent="." index="4"]
-visible = false
-
 [node name="StaticBody3" type="StaticBody" parent="." index="5"]
 transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -3.93154, 8.18955, -1.44626 )
 
@@ -136,9 +133,6 @@ transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody5" index="0"]
 shape = SubResource( 5 )
-
-[node name="Icosphere004" parent="." index="11"]
-visible = false
 
 [node name="StaticBody6" type="StaticBody" parent="." index="12"]
 transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -2.25997, 8.18955, -5.75996 )
@@ -235,9 +229,6 @@ transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody21" index="0"]
 shape = SubResource( 21 )
-
-[node name="Icosphere002" parent="." index="44"]
-visible = false
 
 [node name="StaticBody22" type="StaticBody" parent="." index="45"]
 transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -8.73053, 8.18955, -4.03448 )
