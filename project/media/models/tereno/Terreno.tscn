@@ -100,176 +100,207 @@ data = PoolVector3Array( 0.0385, -0.0701, -0.0797, 0.0381, -0.0702, -0.0729, 0.0
 
 [node name="Terrenofbx" instance=ExtResource( 1 )]
 
-[node name="Terreno2" parent="." index="0"]
-cast_shadow = 0
+[node name="StaticBody" type="StaticBody" parent="." index="0"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0.0179335, 0.253929, -0.0717335 )
 
-[node name="StaticBody" type="StaticBody" parent="Terreno2" index="0"]
-
-[node name="CollisionShape" type="CollisionShape" parent="Terreno2/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 visible = false
 shape = SubResource( 1 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2014" index="0"]
+[node name="Terreno2" parent="." index="1"]
+cast_shadow = 0
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2014/StaticBody" index="0"]
+[node name="StaticBody2" type="StaticBody" parent="." index="2"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -0.00071907, 19.4276, 17.4872 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 shape = SubResource( 2 )
 
-[node name="Icosphere003" parent="." index="2"]
+[node name="Icosphere003" parent="." index="4"]
 visible = false
 
-[node name="StaticBody" type="StaticBody" parent="Arbol2" index="0"]
+[node name="StaticBody3" type="StaticBody" parent="." index="5"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -3.93154, 8.18955, -1.44626 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol2/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 3 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2008" index="0"]
+[node name="StaticBody4" type="StaticBody" parent="." index="7"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -8.73597, 19.5888, 21.1538 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2008/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
 shape = SubResource( 4 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2003" index="0"]
+[node name="StaticBody5" type="StaticBody" parent="." index="9"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -5.06932, 19.9651, 18.1882 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2003/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody5" index="0"]
 shape = SubResource( 5 )
 
-[node name="Icosphere004" parent="." index="6"]
+[node name="Icosphere004" parent="." index="11"]
 visible = false
 
-[node name="StaticBody" type="StaticBody" parent="Arbol017" index="0"]
+[node name="StaticBody6" type="StaticBody" parent="." index="12"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -2.25997, 8.18955, -5.75996 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol017/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody6" index="0"]
 shape = SubResource( 6 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol010" index="0"]
+[node name="StaticBody7" type="StaticBody" parent="." index="14"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -1.66684, 8.18955, -8.02466 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol010/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody7" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2015" index="0"]
+[node name="StaticBody8" type="StaticBody" parent="." index="16"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -10.785, 19.4276, 15.0607 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2015/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody8" index="0"]
 shape = SubResource( 8 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2009" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, -1.42109e-14, 0, 1.42109e-14, 1, 0, 0, 0 )
+[node name="StaticBody9" type="StaticBody" parent="." index="18"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -7.65754, 19.4276, 9.34508 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2009/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody9" index="0"]
 shape = SubResource( 9 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 3" index="0"]
+[node name="StaticBody10" type="StaticBody" parent="." index="20"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -4.09874, 19.4276, 22.448 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 3/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody10" index="0"]
 shape = SubResource( 10 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol007" index="0"]
+[node name="StaticBody11" type="StaticBody" parent="." index="22"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -5.98054, 8.18955, -6.78447 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol007/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody11" index="0"]
 shape = SubResource( 11 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol018" index="0"]
+[node name="StaticBody12" type="StaticBody" parent="." index="24"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -6.95113, 8.18955, -3.8188 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol018/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody12" index="0"]
 shape = SubResource( 12 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2016" index="0"]
+[node name="StaticBody13" type="StaticBody" parent="." index="26"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -1.88796, 19.4276, 21.2617 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2016/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody13" index="0"]
 shape = SubResource( 13 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol019" index="0"]
+[node name="StaticBody14" type="StaticBody" parent="." index="28"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 3.24, 8.18955, -7.91682 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol019/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody14" index="0"]
 shape = SubResource( 14 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol013" index="0"]
+[node name="StaticBody15" type="StaticBody" parent="." index="30"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -8.24524, 8.18955, -14.0099 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol013/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody15" index="0"]
 shape = SubResource( 15 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol020" index="0"]
+[node name="StaticBody16" type="StaticBody" parent="." index="32"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -2.69135, 8.57658, -5.00507 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol020/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody16" index="0"]
 shape = SubResource( 16 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2017" index="0"]
+[node name="StaticBody17" type="StaticBody" parent="." index="34"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -0.216404, 19.4276, 19.3744 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2017/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody17" index="0"]
 shape = SubResource( 17 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol021" index="0"]
+[node name="StaticBody18" type="StaticBody" parent="." index="36"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 1.29883, 8.18955, -6.29918 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol021/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody18" index="0"]
 shape = SubResource( 18 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2012" index="0"]
+[node name="StaticBody19" type="StaticBody" parent="." index="38"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -7.28009, 19.4276, 17.1637 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2012/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody19" index="0"]
 shape = SubResource( 19 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2005" index="0"]
+[node name="StaticBody20" type="StaticBody" parent="." index="40"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -2.96639, 19.6963, 15.546 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2005/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody20" index="0"]
 shape = SubResource( 20 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol011" index="0"]
+[node name="StaticBody21" type="StaticBody" parent="." index="42"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -10.0246, 8.18955, -11.3139 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol011/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody21" index="0"]
 shape = SubResource( 21 )
 
-[node name="Icosphere002" parent="." index="23"]
+[node name="Icosphere002" parent="." index="44"]
 visible = false
 
-[node name="StaticBody" type="StaticBody" parent="Arbol005" index="0"]
+[node name="StaticBody22" type="StaticBody" parent="." index="45"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -8.73053, 8.18955, -4.03448 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol005/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody22" index="0"]
 shape = SubResource( 22 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2011" index="0"]
+[node name="StaticBody23" type="StaticBody" parent="." index="47"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -9.22126, 19.4276, 13.1196 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2011/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody23" index="0"]
 shape = SubResource( 23 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2013" index="0"]
+[node name="StaticBody24" type="StaticBody" parent="." index="49"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -7.06441, 19.4276, 19.2127 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2013/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody24" index="0"]
 shape = SubResource( 24 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol008" index="0"]
+[node name="StaticBody25" type="StaticBody" parent="." index="51"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -3.93154, 8.06054, -4.95115 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol008/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody25" index="0"]
 shape = SubResource( 25 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2002" index="0"]
+[node name="StaticBody26" type="StaticBody" parent="." index="53"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -8.84381, 19.8576, 18.0264 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2002/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody26" index="0"]
 shape = SubResource( 26 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol002" index="0"]
+[node name="StaticBody27" type="StaticBody" parent="." index="55"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -1.61292, 8.64109, -4.03448 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol002/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody27" index="0"]
 shape = SubResource( 27 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol004" index="0"]
+[node name="StaticBody28" type="StaticBody" parent="." index="57"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -8.83837, 8.18955, -7.16192 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol004/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody28" index="0"]
 shape = SubResource( 28 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol 2010" index="0"]
+[node name="StaticBody29" type="StaticBody" parent="." index="59"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, -7.11833, 19.4276, 15.2764 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol 2010/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody29" index="0"]
 shape = SubResource( 29 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol014" index="0"]
+[node name="StaticBody30" type="StaticBody" parent="." index="61"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 3.24, 8.7056, -5.16683 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol014/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody30" index="0"]
 shape = SubResource( 30 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol022" index="0"]
+[node name="StaticBody31" type="StaticBody" parent="." index="63"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0.166483, 8.18955, -5.5982 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol022/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody31" index="0"]
 shape = SubResource( 31 )
 
-[node name="StaticBody" type="StaticBody" parent="Arbol023" index="0"]
+[node name="StaticBody32" type="StaticBody" parent="." index="65"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 1.89196, 8.18955, -2.309 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Arbol023/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody32" index="0"]
 shape = SubResource( 32 )
