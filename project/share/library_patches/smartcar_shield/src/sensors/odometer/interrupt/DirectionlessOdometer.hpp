@@ -29,7 +29,7 @@ class DirectionlessOdometer : public Odometer {
         return runtime.getAnalogPinState(fwd_dist_pin) + runtime.getAnalogPinState(bwd_dist_pin);
     }
 
-    float getSpeed() override { return runtime.getAnalogPinState(speed_pin) / 1000.0; }
+    float getSpeed() override { return static_cast<float>(runtime.getAnalogPinState(speed_pin) / 1000.0); }
 
     bool isAttached() const override { return true; }
     bool providesDirection() const override { return false; }

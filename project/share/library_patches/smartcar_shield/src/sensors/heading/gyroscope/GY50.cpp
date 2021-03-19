@@ -13,9 +13,9 @@ GY50::GY50(Runtime& runtime, int offset, unsigned long samplingInterval)
     attach();
 }
 
-int GY50::getHeading() { return mAngularDisplacement - 180; }
+int GY50::getHeading() { return static_cast<int>(mAngularDisplacement) - 180; }
 
-void GY50::update() { mAngularDisplacement = mRuntime.getAnalogPinState(gyro_pin); }
+void GY50::update() { mAngularDisplacement = static_cast<float>(mRuntime.getAnalogPinState(gyro_pin)); }
 
 void GY50::attach() {
     mRuntime.setPinDirection(gyro_pin, mRuntime.getInputState());
@@ -24,6 +24,6 @@ void GY50::attach() {
 
 int GY50::getOffset(int measurements) { return 0; } // for now we are perfect
 
-int GY50::getAngularVelocity() {}
+int GY50::getAngularVelocity() { return 0; }
 int GY50::readL3G4200DRegister(uint8_t registerAddress) { return 0; }
 void GY50::writeL3G4200DRegister(uint8_t, uint8_t) {}
