@@ -14,8 +14,7 @@ class DirectionlessOdometer : public Odometer {
     uint8_t speed_pin;
 
   public:
-    DirectionlessOdometer(Runtime& runtime, uint8_t pulsePin, InterruptCallback callback,
-                          unsigned long pulsesPerMeter)
+    DirectionlessOdometer(Runtime& runtime, uint8_t pulsePin, InterruptCallback, unsigned long)
         : runtime{runtime}, fwd_dist_pin{pulsePin},
           bwd_dist_pin{static_cast<uint8_t>(pulsePin + magic_offset * 2)}, speed_pin{static_cast<uint8_t>(
                                                                                pulsePin + magic_offset)} {
@@ -29,7 +28,7 @@ class DirectionlessOdometer : public Odometer {
         return runtime.getAnalogPinState(fwd_dist_pin) + runtime.getAnalogPinState(bwd_dist_pin);
     }
 
-    float getSpeed() override { return static_cast<float>(runtime.getAnalogPinState(speed_pin) / 1000.0); }
+    float getSpeed() override { return runtime.getAnalogPinState(speed_pin) / 1000.0f; }
 
     bool isAttached() const override { return true; }
     bool providesDirection() const override { return false; }

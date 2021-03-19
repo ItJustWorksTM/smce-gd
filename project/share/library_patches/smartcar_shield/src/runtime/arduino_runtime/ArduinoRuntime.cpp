@@ -13,13 +13,13 @@ void ArduinoRuntime::setPWM(uint8_t pin, int value) { analogWrite(pin, value); }
 
 void ArduinoRuntime::i2cInit() {}
 
-void ArduinoRuntime::i2cBeginTransmission(uint8_t address) {}
+void ArduinoRuntime::i2cBeginTransmission(uint8_t) {}
 
-size_t ArduinoRuntime::i2cWrite(uint8_t value) { return 0; }
+size_t ArduinoRuntime::i2cWrite(uint8_t) { return 0; }
 
 uint8_t ArduinoRuntime::i2cEndTransmission() { return true; }
 
-uint8_t ArduinoRuntime::i2cRequestFrom(uint8_t address, uint8_t numberOfBytes) { return 0; }
+uint8_t ArduinoRuntime::i2cRequestFrom(uint8_t, uint8_t) { return 0; }
 
 int ArduinoRuntime::i2cAvailable() { return 0; }
 

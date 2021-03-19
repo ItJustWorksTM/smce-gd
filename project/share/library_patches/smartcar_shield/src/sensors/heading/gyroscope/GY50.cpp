@@ -22,8 +22,8 @@ void GY50::attach() {
     mAttached = true;
 }
 
-int GY50::getOffset(int measurements) { return 0; } // for now we are perfect
+int GY50::getOffset(int) { return 0; } // for now we are perfect
 
 int GY50::getAngularVelocity() { return 0; }
-int GY50::readL3G4200DRegister(uint8_t registerAddress) { return 0; }
+int GY50::readL3G4200DRegister(uint8_t) { return 0; }
 void GY50::writeL3G4200DRegister(uint8_t, uint8_t) {}

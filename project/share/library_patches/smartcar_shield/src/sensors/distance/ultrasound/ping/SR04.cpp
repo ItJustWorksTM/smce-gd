@@ -18,7 +18,7 @@ SR04::SR04(Runtime& runtime, uint8_t triggerPin, uint8_t echoPin, unsigned int m
 void SR04::attach() {}
 
 unsigned int SR04::getDistance() {
-    const auto calculatedDistance = mRuntime.getAnalogPinState(kEchoPin);
+    const unsigned calculatedDistance = mRuntime.getAnalogPinState(kEchoPin);
     return calculatedDistance <= kMaxDistance ? calculatedDistance : kError;
 }
 
