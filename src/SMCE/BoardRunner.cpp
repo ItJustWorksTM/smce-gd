@@ -234,6 +234,9 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
     bp::ipstream cmake_build_out;
     bp::ipstream cmake_build_err;
     const int build_res = bp::system(
+#if BOOST_OS_WINDOWS
+        bp::env["MSBUILDDISABLENODEREUSE"] = "1", // MSBuild "feature" which uses your child processes as potential deamons, forever
+#endif
         cmake_path,
         "--build",
         (m_sketch_dir / "build").string(),
