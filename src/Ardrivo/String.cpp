@@ -30,6 +30,18 @@ static std::size_t bit_width(unsigned long long value) {
 }
 #endif
 
+String::String() noexcept = default;
+String::String(const String&) = default;
+String::String(String&&) noexcept = default;
+String& String::operator=(const String&) = default;
+String& String::operator=(String&&) noexcept = default;
+String::~String() = default;
+
+String::String(std::string u) : m_u{std::move(u)} {}
+
+String::String(const char* cstr) : m_u{cstr} {}
+String::String(char c) : m_u(1, c) {}
+
 String::String(ConvTag, std::uintmax_t val, SMCE__BIN) {
     if(val == 0) {
         m_u = "0";

@@ -47,21 +47,23 @@ class SMCE__DLL_RT_API String {
 #pragma warning(pop)
 #endif
 
-    String(std::string u) : m_u{std::move(u)} {}
+    String(std::string u);
 
     String(ConvTag, std::uintmax_t val, SMCE__BIN);
     String(ConvTag, std::uintmax_t val, SMCE__HEX);
 
-    public:
-    String() noexcept = default;
-    String(const String&) = default;
-    String(String&&) noexcept = default;
-    String& operator=(const String&) = default;
-    String& operator=(String&&) = default;
+public:
+    String() noexcept;
+    String(const String&);
+    String(String&&) noexcept;
+    String& operator=(const String&);
+    String& operator=(String&&) noexcept;
+    ~String();
 
-    template <std::size_t N> inline /* explicit(false) */ String(const char (&charr)[N]) : m_u{charr, N} {}
-    inline /* explicit(false) */ String(const char* cstr) : m_u{cstr} {}
-    inline explicit String(char c) : m_u(1, c) {}
+    template <std::size_t N>
+    /* explicit(false) */ String(const char (&charr)[N]) : m_u{charr, N} {}
+    /* explicit(false) */ String(const char* cstr);
+    explicit String(char c);
 
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
     explicit String(T val) : m_u{std::to_string(val)} { }
@@ -82,7 +84,8 @@ class SMCE__DLL_RT_API String {
     [[nodiscard]] char operator[](unsigned idx) const noexcept;
     [[nodiscard]] char& operator[](unsigned idx) noexcept;
 
-    template <class T> inline bool concat(const T& v) {
+    template <class T>
+    bool concat(const T& v) {
         m_u += String(v).m_u;
         return true;
     }

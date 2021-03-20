@@ -26,46 +26,30 @@
 #include "SMCE_dll.hpp"
 #include "WString.h"
 
-#if __cpp_constexpr >= 201304
-#define SMCE__CONSTEXPR1Y constexpr
-#else
-#define SMCE__CONSTEXPR1Y
-#endif
-
 class SMCE__DLL_RT_API Print {
     int write_error = 0;
 
   protected:
-    SMCE__CONSTEXPR1Y void setWriteError(int err = 1) noexcept { write_error = err; }
+    void setWriteError(int err = 1) noexcept;
 
   public:
-    Print() noexcept = default;
-    [[nodiscard]] SMCE__CONSTEXPR1Y int getWriteError() noexcept { return write_error; }
-    SMCE__CONSTEXPR1Y void clearWriteError() noexcept { setWriteError(0); }
+    Print() noexcept;
+    [[nodiscard]] int getWriteError() noexcept;
+    void clearWriteError() noexcept;
 
     virtual std::size_t write(std::uint8_t) = 0;
-    inline virtual std::size_t write(const uint8_t* buffer, std::size_t size) {
-        const auto beg = buffer;
-        while (size-- && write(*buffer++))
-            ;
-        return std::distance(beg, buffer);
-    }
-    inline std::size_t write(const char* str) {
-        if (!str)
-            return 0;
-        return write(str, std::strlen(str));
-    }
-    inline std::size_t write(const char* buffer, size_t size) { return write(reinterpret_cast<const std::uint8_t*>(buffer), size); }
+    virtual std::size_t write(const uint8_t* buffer, std::size_t size);
+    std::size_t write(const char* str);
+    std::size_t write(const char* buffer, size_t size);
 
-    // default to zero, meaning "a single write may block"
     // should be overridden by subclasses with buffering
-    inline virtual int availableForWrite() { return 0; }
+    virtual int availableForWrite();
 
     template <std::size_t N>
     std::size_t print(const char (&lit)[N]) { return write(lit, N); }
-    inline std::size_t print(const String& s) { return write(s.c_str(), s.length()); }
-    inline std::size_t print(const char* czstr) { return write(czstr); }
-    inline std::size_t print(char c) { return write(c); }
+    std::size_t print(const String& s);
+    std::size_t print(const char* czstr);
+    std::size_t print(char c);
     template <class Int, class Base, class = typename std::enable_if<std::is_integral<Int>::value>::type>
     inline std::size_t print(Int val, Base) { return print(String{val, Base{}}); }
     template <class Fp, class = typename std::enable_if<std::is_floating_point<Fp>::value>::type>
@@ -74,17 +58,17 @@ class SMCE__DLL_RT_API Print {
 
     template <std::size_t N>
     std::size_t println(const char (&lit)[N]) { return write(lit, N) + println(); }
-    inline std::size_t println(const String& s) { return print(s) + println(); }
-    inline std::size_t println(const char* czstr) { return write(czstr) + println(); }
-    inline std::size_t println(char c) { return write(c) + println(); }
+    std::size_t println(const String& s);
+    std::size_t println(const char* czstr);
+    std::size_t println(char c);
     template <class Int, class Base, class = typename std::enable_if<std::is_integral<Int>::value>::type>
     std::size_t println(Int val,  Base) { return print(val, Base{}) + println(); }
     template <class Fp, class = typename std::enable_if<std::is_floating_point<Fp>::value>::type>
     inline std::size_t println(Fp val, int prec = 2) { return print(val, prec) + println(); }
     // inline std::size_t println(const Printable& p) { return print(p) + println(); }
-    inline std::size_t println() { return print('\r') + print('\n'); }
+    std::size_t println();
 
-    inline virtual void flush() {} // Empty implementation for backward compatibility
+    virtual void flush(); // Empty implementation for backward compatibility
 };
 
 #endif // Print_h

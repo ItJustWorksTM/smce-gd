@@ -39,6 +39,7 @@ target_sources (Ardrivo PRIVATE
         include/Ardrivo/HardwareSerial.h
         src/Ardrivo/HardwareSerial.cpp
         include/Ardrivo/Print.h
+        src/Ardrivo/Print.cpp
         include/Ardrivo/SMCE.hpp
         include/Ardrivo/SMCE_dll.hpp
         include/Ardrivo/SMCE_numeric.hpp
