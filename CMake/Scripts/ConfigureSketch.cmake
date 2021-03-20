@@ -102,6 +102,9 @@ foreach (COMPLINK_PATCH_LIB ${COMPLINK_PATCH_LIBS})
 endforeach ()
 
 cmaw_preprocess (PREPROCD_SKETCH "${SKETCH_FQBN}" "${SKETCH_PATH}")
+if ("${PREPROCD_SKETCH}" STREQUAL "")
+    message (FATAL_ERROR "Preprocessing failed")
+endif ()
 set (COMP_SRC "${COMP_DIR}/sketch.cpp")
 file (WRITE "${COMP_SRC}" "${PREPROCD_SKETCH}")
 
