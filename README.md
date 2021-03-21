@@ -28,4 +28,6 @@ platform.
 * Or open up the project folder in the Godot editor and start from there.
 
 Copyright ItJustWorksTM, Apache 2.0 licensed  
-Logo by [@Reves.sur.papier](https://instagram.com/reves.sur.papier/)
+Logo by [@Reves.sur.papier](https://instagram.com/reves.sur.papier/)  
+Car model by [Ancelin Bouchet](https://github.com/anbouchet)  
+
