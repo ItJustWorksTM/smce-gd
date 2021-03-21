@@ -9,7 +9,7 @@ int ArduinoRuntime::getPinState(uint8_t pin) { return digitalRead(pin); }
 
 int ArduinoRuntime::getAnalogPinState(uint8_t pin) { return analogRead(pin); }
 
-void ArduinoRuntime::setPWM(uint8_t pin, int value) { analogWrite(pin, value); }
+void ArduinoRuntime::setPWM(uint8_t pin, int value) { analogWrite(pin, static_cast<byte>(value)); }
 
 void ArduinoRuntime::i2cInit() {}
 
