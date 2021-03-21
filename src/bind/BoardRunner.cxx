@@ -213,10 +213,11 @@ void BoardRunner::_physics_process() {
     };
 
     if (building) {
-        auto& build_stream = runner->build_log();
-        if (read_buf(build_stream) > 0) {
-            emit_signal("build_log", String{buf.data()});
-            std::cout << buf.data();
+        auto [_, str] = runner->build_log();
+        if (!str.empty()) {
+            emit_signal("build_log", String{str.data()});
+            std::cout << str;
+            str.clear();
         }
     }
 
