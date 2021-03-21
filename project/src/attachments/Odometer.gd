@@ -105,4 +105,4 @@ func visualize() -> Control:
 
 
 func visualize_content() -> String:
-	return "   forward: %s\n   speed: %.3f m/s\n   total distance: %.3f m" % [str(forward), speed, total_distance / 1000]
+	return "   Pins: %d,%d\n   Forward: %s\n   Speed: %.3f m/s\n   Total distance: %.3f m" % [distance_pin, direction_pin, str(forward), speed, total_distance / 1000]

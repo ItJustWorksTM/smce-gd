@@ -8,10 +8,10 @@ onready var _cosmetic_wheels: Array = [
 onready var _rightw: Array = [$RightFront, $RightBack]
 onready var _leftw: Array = [$LeftFront, $LeftBack]
 
-onready var lmotor: BrushedMotorGD = $Attachments/LeftMotor
-onready var rmotor: BrushedMotorGD = $Attachments/RightMotor
-onready var lodo = $Attachments/LeftOdometer
-onready var rodo = $Attachments/RightOdometer
+onready var lmotor: BrushedMotorGD = $"Attachments/Left BrushedMotor"
+onready var rmotor: BrushedMotorGD = $"Attachments/Right BrushedMotor"
+onready var lodo = $"Attachments/Left Odometer"
+onready var rodo = $"Attachments/Right Odometer"
 
 onready var attachments: Array = $Attachments.get_children()
 var frozen = false

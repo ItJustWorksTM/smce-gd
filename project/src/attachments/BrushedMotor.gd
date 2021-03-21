@@ -56,4 +56,4 @@ func visualize() -> Control:
 
 var vs_dir: Array = ["None", "Forward", "Backward"]
 func visualize_content() -> String:
-	return "   Throttle: %s \n   Direction: %s" % [str(int(abs(speed) * 100)) + '%',  vs_dir[direction]]
+	return "   Pins: %d,%d,%d\n   Throttle: %s \n   Direction: %s" % [forward_pin, backward_pin, enable_pin, str(int(abs(speed) * 100)) + '%',  vs_dir[direction]]

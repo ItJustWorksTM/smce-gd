@@ -127,26 +127,49 @@ spot_angle = 38.8
 
 [node name="Attachments" type="Spatial" parent="."]
 
-[node name="RayCast" type="RayCast" parent="Attachments"]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, -1.72524 )
+[node name="Front Infrared" type="RayCast" parent="Attachments"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -1.8 )
 enabled = true
-cast_to = Vector3( 5, 0, 0 )
+cast_to = Vector3( 0, 0, -4 )
 script = ExtResource( 2 )
 
-[node name="UltraSonic" type="Spatial" parent="Attachments"]
+[node name="Left Infrared" type="RayCast" parent="Attachments"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.974, 0.4, 0 )
+enabled = true
+cast_to = Vector3( -4, 0, 0 )
+script = ExtResource( 2 )
+pin = 1
+
+[node name="Right Infrared" type="RayCast" parent="Attachments"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.974, 0.4, 0 )
+enabled = true
+cast_to = Vector3( 4, 0, 0 )
+script = ExtResource( 2 )
+pin = 2
+
+[node name="Back Infrared" type="RayCast" parent="Attachments"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 1.8 )
+enabled = true
+cast_to = Vector3( 0, 0, 4 )
+script = ExtResource( 2 )
+pin = 3
+
+[node name="Front UltraSonic" type="Spatial" parent="Attachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.776154, -1.14053 )
 script = ExtResource( 10 )
+trigger_pin = 6
+echo_pin = 7
 max_angle = 1.3
 max_distance = 40
 layers = [ 16, 4, 1 ]
 
-[node name="LeftMotor" type="Node" parent="Attachments"]
+[node name="Left BrushedMotor" type="Node" parent="Attachments"]
 script = ExtResource( 7 )
 forward_pin = 12
 backward_pin = 14
 enable_pin = 13
 
-[node name="RightMotor" type="Node" parent="Attachments"]
+[node name="Right BrushedMotor" type="Node" parent="Attachments"]
 script = ExtResource( 7 )
 forward_pin = 25
 backward_pin = 26
@@ -157,13 +180,13 @@ script = ExtResource( 8 )
 node = NodePath("../..")
 pin = 205
 
-[node name="LeftOdometer" type="Spatial" parent="Attachments"]
+[node name="Left Odometer" type="Spatial" parent="Attachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934, -0.211, 0 )
 script = ExtResource( 9 )
 distance_pin = 35
 direction_pin = 34
 
-[node name="RightOdometer" type="Spatial" parent="Attachments"]
+[node name="Right Odometer" type="Spatial" parent="Attachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.934, -0.211, 0 )
 script = ExtResource( 9 )
 distance_pin = 36

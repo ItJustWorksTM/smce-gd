@@ -1,6 +1,7 @@
 extends Spatial
 
-export(int) var pin = 18
+export(int) var trigger_pin = 0
+export(int) var echo_pin = 0
 
 export(float, 0, 90, 0.1) var max_angle = 10.0 setget _update_angle
 export(int, 0, 50, 1) var max_distance = 10 setget _update_distance
@@ -93,7 +94,7 @@ func _physics_process(delta):
 		dist = sqrt(distances[rand_range(0, distances.size())])
 	
 	distance = dist
-	_view.write_analog_pin(pin, int(dist * 10))
+	_view.write_analog_pin(echo_pin, int(dist * 10))
 
 
 func name() -> String:
@@ -107,4 +108,4 @@ func visualize() -> Control:
 
 
 func visualize_content() -> String:
-	return "   Pin: %d\n   Distance: %.3fm" % [pin, distance]
+	return "   Pins: %d,%d\n   Distance: %.3fm" % [trigger_pin, echo_pin, distance / 10]

@@ -29,17 +29,22 @@ func _physics_process(_delta: float):
 	if is_colliding():
 		var pos = global_transform.origin
 		var hit = get_collision_point()
-		dist = pos.distance_to(hit)
+		dist =  global_transform.origin.distance_to(get_collision_point())
 	
 	if dist < min_distance:
 		dist = 0
 	
 	distance = dist
-	view.write_analog_pin(pin, int(dist * 100))
+	view.write_analog_pin(pin, int(dist * 10))
+	_draw_debug()
 
 
-func name() -> String:
-	return "Infrared Distance"
+func _draw_debug() -> void:
+	if ! DebugCanvas.disabled:
+		var pos = global_transform.origin
+		DebugCanvas.add_draw(pos, pos + global_transform.basis.xform(cast_to))
+		if is_colliding():
+			DebugCanvas.add_draw(pos, get_collision_point(), Color.red)
 
 
 func visualize() -> Control:
@@ -49,4 +54,4 @@ func visualize() -> Control:
 
 
 func visualize_content() -> String:
-	return "   Pin: %d\n   Distance: %.3fm" % [pin, distance]
+	return "   Pin: %d\n   Distance: %.3fm" % [pin, distance / 10]
