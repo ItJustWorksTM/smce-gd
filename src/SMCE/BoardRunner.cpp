@@ -70,7 +70,9 @@ BoardRunner::BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_no
     : m_exectx{ctx}
     , m_exit_notify{std::move(exit_notify)}
     , m_internal{std::make_unique<Internal>()}
-{}
+{
+    m_build_log.reserve(4096);
+}
 
 BoardRunner::~BoardRunner() {
     if (m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
@@ -112,9 +114,9 @@ bool BoardRunner::reset() noexcept {
         m_internal = std::make_unique<Internal>();
         if (!m_sketch_dir.empty())
             stdfs::remove_all(m_sketch_dir);
-        m_sketch_dir = stdfs::path{};
-        m_sketch_bin = stdfs::path{};
-        m_build_log = std::stringstream{};
+        m_sketch_dir.clear();
+        m_sketch_bin.clear();
+        m_build_log.clear();
         m_status = Status::clean;
         return true;
     }
@@ -206,7 +208,8 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
         int i = 0;
         while (std::getline(cmake_conf_out, line)) {
             if (!line.starts_with("-- SMCE: ")) {
-                m_build_log << line << std::endl;
+                [[maybe_unused]] std::lock_guard lk{m_build_log_mtx};
+                (m_build_log += line) += '\n';
                 continue;
             }
             line.erase(0, line.find_first_of('"') + 1);
@@ -225,7 +228,6 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
     }
 
     cmake_config.join();
-    m_build_log.flush();
     if (cmake_config.native_exit_code() != 0)
         return false;
 
@@ -240,8 +242,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
         (bp::std_out & bp::std_err) > cmake_build_out
     );
 
-    m_build_log << cmake_build_out.rdbuf();
-    m_build_log.flush();
+    m_build_log.append(std::istreambuf_iterator{cmake_build_out}, std::istreambuf_iterator<char>{});
 
     if (build_res != 0 || !stdfs::exists(m_sketch_bin))
         return false;

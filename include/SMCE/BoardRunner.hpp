@@ -21,8 +21,9 @@
 
 #include <functional>
 #include <memory>
-#include <sstream>
+#include <mutex>
 #include <string_view>
+#include <utility>
 #include <SMCE/fwd.hpp>
 #include <SMCE/SMCE_fs.hpp>
 #include <SMCE/BoardConf.hpp>
@@ -59,7 +60,7 @@ class BoardRunner {
     bool terminate() noexcept;
     bool stop() noexcept;
 
-    [[nodiscard]] inline std::istream& build_log() noexcept { return m_build_log; }
+    [[nodiscard]] inline std::pair<std::unique_lock<std::mutex>, std::string&> build_log() noexcept { return {std::unique_lock{m_build_log_mtx}, m_build_log}; }
     [[nodiscard]] std::istream& runtime_log() noexcept;
 
   private:
@@ -70,7 +71,8 @@ class BoardRunner {
     Status m_status{};
     stdfs::path m_sketch_dir;
     stdfs::path m_sketch_bin;
-    std::stringstream m_build_log;
+    std::string m_build_log;
+    std::mutex m_build_log_mtx;
     std::function<void(int)> m_exit_notify;
     std::unique_ptr<Internal> m_internal;
 };
