@@ -48,8 +48,7 @@ String::String(ConvTag, std::uintmax_t val, SMCE__BIN) {
         return;
     }
     m_u.resize(bit_width(val));
-    std::for_each(m_u.rbegin(), m_u.rend(), [&](char& c) { c = static_cast<std::uint8_t>(val & 1); val >>= 1; });
-
+    std::for_each(m_u.rbegin(), m_u.rend(), [&](char& c) { c = static_cast<char>((val & 1) + '0'); val >>= 1; });
 }
 
 String::String(ConvTag, std::uintmax_t val, SMCE__HEX) {
