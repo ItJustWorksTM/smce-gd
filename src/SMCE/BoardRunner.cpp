@@ -198,8 +198,7 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
         std::move(cl_patch_libs_arg),
         "-P",
         res_path.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
-        bp::std_out > cmake_conf_out,
-        bp::std_err > cmake_conf_err
+        (bp::std_out & bp::std_err) > cmake_conf_out
     );
 
     {
@@ -226,13 +225,11 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
     }
 
     cmake_config.join();
-    m_build_log << cmake_conf_err.rdbuf();
     m_build_log.flush();
     if (cmake_config.native_exit_code() != 0)
         return false;
 
     bp::ipstream cmake_build_out;
-    bp::ipstream cmake_build_err;
     const int build_res = bp::system(
 #if BOOST_OS_WINDOWS
         bp::env["MSBUILDDISABLENODEREUSE"] = "1", // MSBuild "feature" which uses your child processes as potential deamons, forever
@@ -240,12 +237,10 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
         cmake_path,
         "--build",
         (m_sketch_dir / "build").string(),
-        bp::std_out > cmake_build_out,
-        bp::std_err > cmake_build_err
+        (bp::std_out & bp::std_err) > cmake_build_out
     );
 
     m_build_log << cmake_build_out.rdbuf();
-    m_build_log << cmake_build_err.rdbuf();
     m_build_log.flush();
 
     if (build_res != 0 || !stdfs::exists(m_sketch_bin))
