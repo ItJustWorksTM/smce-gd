@@ -232,19 +232,20 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
         return false;
 
     bp::ipstream cmake_build_out;
-    const int build_res = bp::system(
+    auto cmake_build = bp::child {
 #if BOOST_OS_WINDOWS
         bp::env["MSBUILDDISABLENODEREUSE"] = "1", // MSBuild "feature" which uses your child processes as potential deamons, forever
 #endif
-        cmake_path,
-        "--build",
-        (m_sketch_dir / "build").string(),
-        (bp::std_out & bp::std_err) > cmake_build_out
-    );
+        cmake_path, "--build", (m_sketch_dir / "build").string(), (bp::std_out & bp::std_err) > cmake_build_out
+    };
 
-    m_build_log.append(std::istreambuf_iterator{cmake_build_out}, std::istreambuf_iterator<char>{});
+    for (std::string line; std::getline(cmake_build_out, line);) {
+        [[maybe_unused]] std::lock_guard lk{m_build_log_mtx};
+        (m_build_log += line) += '\n';
+    }
 
-    if (build_res != 0 || !stdfs::exists(m_sketch_bin))
+    cmake_build.join();
+    if (cmake_build.native_exit_code() != 0  || !stdfs::exists(m_sketch_bin))
         return false;
 
     std::error_code ec;
