@@ -138,6 +138,7 @@ func _on_runner_stopped(exit_code: int) -> void:
 	serial_collapsable.disabled = true
 	follow_btn.disabled = true
 	uart.disabled = true
+	uart.console.text = ""
 	
 	vehicle.queue_free()
 
