@@ -35,11 +35,17 @@ message ("Using CMAKE_CXX_STANDARD: ${CMAKE_CXX_STANDARD}")
 
 include ("${SMCE_DIR}/RtResources/Ardrivo/share/ArdrivoOutputNames.cmake")
 add_library (Ardrivo SHARED IMPORTED)
-target_include_directories (Ardrivo INTERFACE "${SMCE_DIR}/RtResources/Ardrivo/include/Ardrivo")
+target_include_directories (Ardrivo SYSTEM INTERFACE "${SMCE_DIR}/RtResources/Ardrivo/include/Ardrivo")
 target_compile_definitions (Ardrivo INTERFACE "__SMCE__=1")
 target_compile_features (Ardrivo INTERFACE cxx_std_11)
 set_property (TARGET Ardrivo PROPERTY IMPORTED_LOCATION "${SMCE_DIR}/RtResources/Ardrivo/bin/${ARDRIVO_FILE_NAME}")
 set_property (TARGET Ardrivo PROPERTY IMPORTED_IMPLIB "${SMCE_DIR}/RtResources/Ardrivo/bin/${ARDRIVO_LINKER_FILE_NAME}")
+
+if (MSVC)
+    target_compile_options (Ardrivo INTERFACE "/permissive-" "/WX" "/W4" "/w34265" "/w44289" "/w44296" "/w14545" "/w14546" "/w14547" "/w14548" "/w14549" "/w14555" "/w44574" "/w44582" "/w44583" "/w34619" "/w44749" "/w44777" "/w44837" "/w44841" "/w44842" "/w14928" "/w14946" "/w44986" "/w44987" "/w45022" "/w45023" "/w45029" "/w45038")
+else ()
+    target_compile_options (Ardrivo INTERFACE "-Wpedantic" "-Werror" "-Wall" "-Wextra" "-Wnon-virtual-dtor" "-Wold-style-cast" "-Wcast-align" "-Woverloaded-virtual" "-Wnull-dereference")
+endif ()
 
 if (WIN32)
     file (CREATE_LINK "${SMCE_DIR}/RtResources/Ardrivo/bin/${ARDRIVO_FILE_NAME}"

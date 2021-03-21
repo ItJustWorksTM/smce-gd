@@ -2,6 +2,7 @@
 #include <chrono>
 #include <filesystem>
 #include <future>
+#include <iostream>
 #include <catch2/catch.hpp>
 #include <SMCE/BoardRunner.hpp>
 #include <SMCE/ExecutionContext.hpp>
@@ -27,6 +28,8 @@ TEST_CASE("ExecutionContext valid", "[ExecutionContext]") {
     REQUIRE_FALSE(exec_ctx.cmake_path().empty());
 }
 
+#define ASSERT_BUILD(br, path, conf) do { const bool res = br.build(path, conf); if(!res) std::cerr << br.build_log().second ; REQUIRE(res); } while(0)
+
 TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
     REQUIRE(exec_ctx.check_suitable_environment());
@@ -36,7 +39,7 @@ TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
     REQUIRE(br.configure("arduino:avr:nano", {}));
     REQUIRE(br.status() == smce::BoardRunner::Status::configured);
     REQUIRE(br.view().valid());
-    REQUIRE(br.build(SKETCHES_PATH "noop", {}));
+    ASSERT_BUILD(br, SKETCHES_PATH "noop", {});
     REQUIRE(br.status() == smce::BoardRunner::Status::built);
     REQUIRE(br.view().valid());
     REQUIRE(br.start());
@@ -62,7 +65,7 @@ TEST_CASE("BoardRunner exit_notify", "[BoardRunner]") {
     std::promise<int> ex;
     smce::BoardRunner br{exec_ctx, [&](int ec){ ex.set_value(ec); }};
     REQUIRE(br.configure("arduino:avr:nano", {}));
-    REQUIRE(br.build(SKETCHES_PATH "uncaught", {}));
+    ASSERT_BUILD(br, SKETCHES_PATH "uncaught", {});
     REQUIRE(br.start());
     auto exfut = ex.get_future();
     int ticks = 0;
@@ -116,7 +119,7 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
         }
       }
     ));
-    REQUIRE(br.build(SKETCHES_PATH "pins", {}));
+    ASSERT_BUILD(br, SKETCHES_PATH "pins", {});
     auto bv = br.view();
     REQUIRE(bv.valid());
     auto pin0 = bv.pins[0].digital();
@@ -143,7 +146,7 @@ TEST_CASE("BoardView UART", "[BoardView]") {
        .uart_channels = {{}}
      }
     ));
-    REQUIRE(br.build(SKETCHES_PATH "uart", {}));
+    ASSERT_BUILD(br, SKETCHES_PATH "uart", {});
     auto bv = br.view();
     REQUIRE(bv.valid());
     auto uart0 = bv.uart_channels[0];
@@ -185,9 +188,12 @@ TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
     REQUIRE(exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano", {}));
-    REQUIRE(br.build(SKETCHES_PATH "remote_pp", {
+    const bool res = br.build(SKETCHES_PATH "remote_pp", {
         .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
-    }));
+    });
+    if(!res)
+        std::cerr << br.build_log().second;
+    REQUIRE(res);
 }
 
 TEST_CASE("WiFi intended use", "[WiFi]") {
@@ -195,9 +201,12 @@ TEST_CASE("WiFi intended use", "[WiFi]") {
     REQUIRE(exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano", {}));
-    REQUIRE(br.build(SKETCHES_PATH "wifi", {
+    const bool res = br.build(SKETCHES_PATH "wifi", {
         .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"WiFi", ""}, smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
-    }));
+    });
+    if(!res)
+        std::cerr << br.build_log().second;
+    REQUIRE(res);
 }
 
 TEST_CASE("Patch lib", "[BoardRunner]") {
@@ -216,9 +225,12 @@ TEST_CASE("Patch lib", "[BoardRunner]") {
             }
         }
     }));
-    REQUIRE(br.build(SKETCHES_PATH "patch", {
+    const bool res = br.build(SKETCHES_PATH "patch", {
         .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{PATCHES_PATH "ESP32_analogRewrite", "ESP32 AnalogWrite"}}
-    }));
+    });
+    if(!res)
+        std::cerr << br.build_log().second;
+    REQUIRE(res);
     auto bv = br.view();
     auto pin0 = bv.pins[0].analog();
     REQUIRE(pin0.exists());
