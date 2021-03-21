@@ -270,7 +270,7 @@ func _setup_attachments() -> void:
 	attachments_empty.visible = vehicle.attachments.empty()
 	for attachment in vehicle.attachments:
 		var collapsable = collapsable_t.instance()
-		collapsable.set_header_text(attachment.name())
+		collapsable.set_header_text(attachment.name)
 		collapsable.add_child(attachment.visualize())
 		attachments.add_child(collapsable)
 		attachment.connect("tree_exited", collapsable, "call", ["queue_free"])
