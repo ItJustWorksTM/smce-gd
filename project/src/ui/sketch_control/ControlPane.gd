@@ -169,7 +169,7 @@ func set_filepath(path: String):
 	if ! res.ok():
 		return res
 	
-	res = runner.configure("arduino:avr:nano", board_config)
+	res = runner.configure("arduino:sam:arduino_due_x", board_config)
 	if ! res.ok():
 		return res
 
