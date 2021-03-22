@@ -149,6 +149,10 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
     const auto& res_path = m_exectx.resource_dir();
     const auto& cmake_path = m_exectx.cmake_path();
 
+#if !BOOST_OS_WINDOWS
+    const char* const generator_override = std::getenv("CMAKE_GENERATOR");
+    const char* const generator = generator_override ? generator_override : (!bp::search_path("ninja").empty() ? "Ninja" : "");
+#endif
     std::string dir_arg = "-DSMCE_DIR=" + res_path.string();
     std::string fqbn_arg = "-DSKETCH_FQBN="s + m_internal->sbdata.get_board_data()->fqbn.c_str();
     std::string sketch_arg = "-DSKETCH_PATH=" + stdfs::absolute(sketch_src).generic_string();
@@ -202,6 +206,9 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
     bp::ipstream cmake_conf_out;
     auto cmake_config = bp::child(
         cmake_path,
+#if !BOOST_OS_WINDOWS
+        bp::env["CMAKE_GENERATOR"] = generator,
+#endif
         std::move(dir_arg),
         std::move(fqbn_arg),
         std::move(sketch_arg),
