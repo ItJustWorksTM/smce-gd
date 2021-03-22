@@ -188,7 +188,6 @@ bool BoardRunner::build(const stdfs::path& sketch_src, const SketchConfig& skonf
 
     namespace bp = boost::process;
     bp::ipstream cmake_conf_out;
-    bp::ipstream cmake_conf_err;
     auto cmake_config = bp::child(
         cmake_path,
         std::move(dir_arg),
