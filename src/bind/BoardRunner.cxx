@@ -197,37 +197,21 @@ Ref<GDResult> BoardRunner::reset(bool auto_configure) {
 }
 
 void BoardRunner::_physics_process() {
-
-    std::array<char, 100> buf;
-
-    const auto read_buf = [&](auto& stream) {
-        size_t bytes_read = 0;
-        if (auto* sb = stream.rdbuf()) {
-            try {
-                bytes_read = sb->sgetn(buf.data(), buf.size() - 1);
-            } catch (...) {
-            }
-        }
-        buf[bytes_read] = '\0';
-        return bytes_read;
-    };
-
-    if (building) {
-        auto [_, str] = runner->build_log();
+    const auto read_log = [&](auto log, const char* signame) {
+        auto& [_, str] = log;
         if (!str.empty()) {
-            emit_signal("build_log", String{str.data()});
+            emit_signal(signame, String{str.data()});
             std::cout << str;
             str.clear();
         }
-    }
+    };
+
+    if (building)
+        read_log(runner->build_log(), "build_log");
 
     if (runner->status() == smce::BoardRunner::Status::running ||
         runner->status() == smce::BoardRunner::Status::suspended) {
-        auto& runtime_stream = runner->runtime_log();
-        if (read_buf(runtime_stream) > 0) {
-            emit_signal("runtime_log", String{buf.data()});
-            std::cout << buf.data();
-        }
+        read_log(runner->runtime_log(), "runtime_log");
     }
 
     runner->tick();
