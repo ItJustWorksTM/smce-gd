@@ -61,7 +61,7 @@ class BoardRunner {
     bool stop() noexcept;
 
     [[nodiscard]] inline std::pair<std::unique_lock<std::mutex>, std::string&> build_log() noexcept { return {std::unique_lock{m_build_log_mtx}, m_build_log}; }
-    [[nodiscard]] std::istream& runtime_log() noexcept;
+    [[nodiscard]] inline std::pair<std::unique_lock<std::mutex>, std::string&> runtime_log() noexcept { return {std::unique_lock{m_runtime_log_mtx}, m_runtime_log}; }
 
   private:
     struct Internal;
@@ -72,7 +72,9 @@ class BoardRunner {
     stdfs::path m_sketch_dir;
     stdfs::path m_sketch_bin;
     std::string m_build_log;
+    std::string m_runtime_log;
     std::mutex m_build_log_mtx;
+    std::mutex m_runtime_log_mtx;
     std::function<void(int)> m_exit_notify;
     std::unique_ptr<Internal> m_internal;
 };

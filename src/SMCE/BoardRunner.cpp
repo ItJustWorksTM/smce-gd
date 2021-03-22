@@ -20,13 +20,10 @@
 #include <SMCE/BoardRunner.hpp>
 
 #if BOOST_OS_UNIX || BOOST_OS_MACOS
-#include <fcntl.h>
 #include <csignal>
 #elif BOOST_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include <namedpipeapi.h>
-#pragma comment(lib, "Kernel32.lib")
 #include <winternl.h>
 #pragma comment(lib, "ntdll.lib")
 extern "C" {
@@ -39,6 +36,7 @@ __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 
 #include <ctime>
 #include <string>
+#include <type_traits>
 #include <boost/process.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
@@ -64,6 +62,7 @@ struct BoardRunner::Internal {
     SharedBoardData sbdata;
     bp::child sketch;
     bp::ipstream sketch_log;
+    std::thread sketch_log_grabber;
 };
 
 BoardRunner::BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_notify) noexcept
@@ -72,11 +71,18 @@ BoardRunner::BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_no
     , m_internal{std::make_unique<Internal>()}
 {
     m_build_log.reserve(4096);
+    m_runtime_log.reserve(4096);
 }
 
 BoardRunner::~BoardRunner() {
-    if (m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
-        m_internal->sketch.terminate();
+    if (m_internal) {
+        auto& in = *m_internal;
+        if (in.sketch.valid() && in.sketch.running())
+            in.sketch.terminate();
+        if (in.sketch_log_grabber.joinable())
+            in.sketch_log_grabber.join();
+    }
+
     if (!m_sketch_dir.empty()) {
         [[maybe_unused]] std::error_code ec;
         stdfs::remove_all(m_sketch_dir, ec);
@@ -109,14 +115,20 @@ bool BoardRunner::reset() noexcept {
     case Status::suspended:
         return false;
     default:
-        if (m_internal && m_internal->sketch.valid() && m_internal->sketch.running())
-            m_internal->sketch.terminate();
+        if (m_internal) {
+            auto& in = *m_internal;
+            if (in.sketch.valid() && in.sketch.running())
+                in.sketch.terminate();
+            if (in.sketch_log_grabber.joinable())
+                in.sketch_log_grabber.join();
+        }
         m_internal = std::make_unique<Internal>();
         if (!m_sketch_dir.empty())
             stdfs::remove_all(m_sketch_dir);
         m_sketch_dir.clear();
         m_sketch_bin.clear();
         m_build_log.clear();
+        m_runtime_log.clear();
         m_status = Status::clean;
         return true;
     }
@@ -264,12 +276,25 @@ bool BoardRunner::start() noexcept {
             bp::std_out > bp::null,
             bp::std_err > m_internal->sketch_log
     );
-#if BOOST_OS_UNIX || BOOST_OS_MACOS
-    ::fcntl(m_internal->sketch_log.pipe().native_source(), F_SETFL, O_NONBLOCK);
-#elif BOOST_OS_WINDOWS
-    DWORD pmode = PIPE_NOWAIT;
-    ::SetNamedPipeHandleState(m_internal->sketch_log.pipe().native_source(), &pmode, nullptr, nullptr);
-#endif
+
+    m_internal->sketch_log_grabber = std::thread{[&]{
+        auto& stream = m_internal->sketch_log;
+        std::string buf;
+        buf.reserve(1024);
+        while(!stream.fail()) {
+            const int head = stream.get();
+            if(head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
+                break;
+            buf.resize(stream.rdbuf()->in_avail());
+            const auto count = stream.readsome(buf.data(), buf.size());
+            [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
+            const auto existing = m_runtime_log.size();
+            m_runtime_log.resize(existing + count + 1);
+            m_runtime_log[existing] = static_cast<char>(head);
+            std::memcpy(m_runtime_log.data() + existing + 1, buf.data(), count);
+        }
+    }};
+
     m_status = Status::running;
     return true;
 }
@@ -334,13 +359,5 @@ bool BoardRunner::stop() noexcept {
 // FIXME
 bool BoardRunner::stop() noexcept { return terminate(); }
 
-static std::istream null_istream{nullptr};
-std::istream& BoardRunner::runtime_log() noexcept {
-    if (m_status == Status::running
-        || m_status == Status::suspended
-        || m_status == Status::stopped)
-        return m_internal->sketch_log;
-    return null_istream;
-}
 
 }
