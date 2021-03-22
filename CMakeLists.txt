@@ -17,7 +17,7 @@
 
 cmake_minimum_required (VERSION 3.16)
 
-project (libSMCE VERSION 1.0.0)
+project (libSMCE VERSION 1.1.0)
 
 if (NOT DEFINED SMCE_ARCH)
    set (SMCE_ARCH x86_64)
