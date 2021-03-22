@@ -24,8 +24,8 @@
 # Outvars:
 # - SMCE_ROOT : The location of the used libSMCE install tree
 
-set (SMCE_EXPECTED_TAG ignore)
-set (SMCE_EXPECTED_VERSION 0.0.0)
+set (SMCE_EXPECTED_TAG 1.0.0)
+set (SMCE_EXPECTED_VERSION 1.0.0)
 set (SMCE_EXPECTED_ARCH x86_64)
 
 if (NOT SMCE_ROOT AND SMCE_AUTODOWNLOAD)
