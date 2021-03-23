@@ -13,6 +13,13 @@ SR04::SR04(Runtime& runtime, uint8_t triggerPin, uint8_t echoPin, unsigned int m
       mRuntime(runtime), kOutput{}, kInput{}, kLow{}, kHigh{} {
     mRuntime.setPinDirection(kEchoPin, mRuntime.getInputState());
     mAttached = true;
+    // Unused
+    static_cast<void>(kTriggerPin);
+    static_cast<void>(kTimeout);
+    static_cast<void>(kOutput);
+    static_cast<void>(kInput);
+    static_cast<void>(kLow);
+    static_cast<void>(kHigh);
 }
 
 void SR04::attach() {}

@@ -11,6 +11,10 @@ GY50::GY50(Runtime& runtime, int offset, unsigned long samplingInterval)
     : kOffset{offset}, kSamplingInterval{samplingInterval}, mRuntime{runtime},
       mPreviousSample{0}, mAttached{false}, mAngularDisplacement{0} {
     attach();
+    // unused
+    static_cast<void>(kOffset);
+    static_cast<void>(kSamplingInterval);
+    static_cast<void>(mPreviousSample);
 }
 
 int GY50::getHeading() { return static_cast<int>(mAngularDisplacement) - 180; }
