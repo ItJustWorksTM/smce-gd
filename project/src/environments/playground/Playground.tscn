@@ -83,10 +83,10 @@ light_specular = 0.05
 shadow_enabled = true
 
 [node name="Terrenofbx" parent="." instance=ExtResource( 7 )]
-transform = Transform( 25, 0, 0, 0, 25, 0, 0, 0, 25, -85.735, -5.55932, -43.8305 )
+transform = Transform( 25, 0, 0, 0, 25, 0, 0, 0, 25, -106.236, -5.55932, -114.085 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -239.058, -2, -46.699 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -259.559, -2, -116.953 )
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
 
@@ -96,7 +96,7 @@ material/0 = SubResource( 4 )
 shape = SubResource( 5 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 103.962, 3.67438, -52.0842 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 83.4607, 3.67438, -122.339 )
 mesh = SubResource( 6 )
 material/0 = SubResource( 4 )
 
@@ -106,7 +106,7 @@ material/0 = SubResource( 4 )
 shape = SubResource( 7 )
 
 [node name="MeshInstance3" type="MeshInstance" parent="."]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -79.637, 3, 127.755 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -100.138, 3, 57.5006 )
 mesh = SubResource( 6 )
 material/0 = SubResource( 4 )
 
@@ -116,7 +116,7 @@ material/0 = SubResource( 4 )
 shape = SubResource( 8 )
 
 [node name="MeshInstance4" type="MeshInstance" parent="."]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -72.6852, 3, -230.612 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -93.1865, 3, -300.866 )
 mesh = SubResource( 6 )
 material/0 = SubResource( 4 )
 
