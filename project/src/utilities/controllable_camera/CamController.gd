@@ -18,7 +18,8 @@ func lock_cam(node: Spatial) -> void:
 	free_cam.set_disabled(true)
 	emit_signal("cam_locked", node)
 	locked = node
-	node.connect("tree_exiting", self, "_on_free", [node])
+	if ! node.is_connected("tree_exiting", self, "_on_free"):
+		node.connect("tree_exiting", self, "_on_free", [node])
 
 
 func free_cam() -> void:
