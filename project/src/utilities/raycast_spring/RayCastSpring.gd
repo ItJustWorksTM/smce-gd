@@ -19,6 +19,8 @@ export var force_offset = Vector3(0,-0.2,0)
 onready var _parent: RigidBody = get_parent()
 
 onready var _force_pos: Vector3 = Vector3.ZERO
+var _speed: float = 0
+var v_global: Vector3 = Vector3.ZERO
 
 var _hit_delta: float = 0
 
@@ -31,7 +33,9 @@ func add_force(state: PhysicsDirectBodyState) -> void:
 	_hit_delta += state.step
 	
 	_force_pos = global_transform.origin - _parent.global_transform.origin + force_offset
-	
+
+	v_global = (global_transform.origin - prev_pos) / _hit_delta
+	_speed = sqrt(v_global.x * v_global.x + v_global.y * v_global.y + v_global.z * v_global.z)
 	_spring_force(state)
 	_friction_force(state)
 	_motor_force(state)
@@ -55,12 +59,12 @@ func _motor_force(state: PhysicsDirectBodyState) -> void:
 	var ssped: float = sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
 	var target = abs(max_speed * throttle)
 	
-	var desc = target - ssped 
+	var desc = target - ssped
 	desc = clamp(desc, -2, 2)
-
+	
 	var fmotor: Vector3 = direction * motor_force * throttle * desc
 	state.add_force(fmotor, _force_pos)
-
+	
 	if ! DebugCanvas.disabled:
 		var pos: Vector3 = global_transform.origin
 		DebugCanvas.add_draw(pos, pos + fmotor, Color.darkblue)
@@ -100,7 +104,6 @@ func _spring_force(state: PhysicsDirectBodyState):
 		var pos: Vector3 = global_transform.origin
 		DebugCanvas.add_draw(pos, pos + real_force, Color(1, 0, 0, 0.5))
 		DebugCanvas.add_draw(pos, point, Color(0, 0, 1, 0.5))
-		
 
 
 func _friction_force(state: PhysicsDirectBodyState) -> void:
@@ -131,31 +134,33 @@ func _friction_force(state: PhysicsDirectBodyState) -> void:
 
 	# Tracktion
 	var Ctt: float = (1 - abs(throttle)) * 2
-	var ftraction: Vector3 = -Ctt * v.normalized() * min(4, speed)
+	
+	# TODO: Only god know what this does, is probably wrong but it works
+	var brr = v.normalized().angle_to(_parent.transform.basis.xform(Vector3.FORWARD))
+	if abs(throttle) > 0:
+		var angleee = 1 - (abs(90 - rad2deg(brr)) / 90)
+		Ctt *= angleee
+	
+	var ftraction: Vector3 = -Ctt * v.normalized()  * min(4, speed)
+	
 	state.add_force(ftraction, _force_pos)
-
+	
 	if ! DebugCanvas.disabled:
-		DebugCanvas.add_draw(pos, pos + ftraction, Color.orange)
-
-	# TODO: Make it suck less
-	# Anti drifting
-	var fwd: Vector3 = _parent.transform.basis.xform(Vector3.FORWARD)
+		DebugCanvas.add_draw(pos, pos + ftraction, Color.red)
+	
+	# Side traction
+	var v_local = _parent.global_transform.basis.xform_inv(v_global)
 	var left: Vector3 = _parent.transform.basis.xform(Vector3.LEFT)
-
-	v.y = 0
-	var left_angle: float = v.normalized().dot(left.normalized())
-	var forward_angle: float = v.normalized().dot(fwd.normalized())
-
-	var anglee: float = 1 - abs(forward_angle)
-
-	# -1 is left 1 is right
-	if left_angle == 0 || forward_angle == 0:
-		return
-
-	var dirr: int = left_angle / abs(left_angle)
-
-	var freal: Vector3 = left * anglee * dirr * -speed
-	state.add_force(freal, _force_pos)
-
+	var side_comp = v_local.x
+	
+	if int(side_comp * 10) != 0:
+		side_comp += clamp(_speed, 0, 1) * side_comp / abs(side_comp)
+	
+	var fside_trac = side_comp * left
+	
+	var col_pos = get_collision_point()
+	var _ground_force_pos = col_pos - _parent.global_transform.origin
+	state.add_force(fside_trac, _ground_force_pos)
+	
 	if ! DebugCanvas.disabled:
-		DebugCanvas.add_draw(pos, pos + freal, Color.azure)
+		DebugCanvas.add_draw(col_pos, col_pos + fside_trac, Color.goldenrod)
