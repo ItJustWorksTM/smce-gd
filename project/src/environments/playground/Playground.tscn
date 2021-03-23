@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://src/utilities/controllable_camera/FreeCam.gd" type="Script" id=1]
 [ext_resource path="res://src/utilities/controllable_camera/ControllableCamera.gd" type="Script" id=2]
 [ext_resource path="res://src/ui/hud/SmceHud.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/environments/playground/Playground.gd" type="Script" id=4]
-[ext_resource path="res://src/objects/ray_car/RayCar.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/utilities/controllable_camera/CamController.gd" type="Script" id=6]
 [ext_resource path="res://media/models/tereno/Terreno.tscn" type="PackedScene" id=7]
 
@@ -82,9 +81,6 @@ light_color = Color( 0.964706, 0.819608, 0.698039, 1 )
 light_indirect_energy = 0.0
 light_specular = 0.05
 shadow_enabled = true
-
-[node name="RayCar" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4915, 7.23898, 14.049 )
 
 [node name="Terrenofbx" parent="." instance=ExtResource( 7 )]
 transform = Transform( 25, 0, 0, 0, 25, 0, 0, 0, 25, -85.735, -5.55932, -43.8305 )
