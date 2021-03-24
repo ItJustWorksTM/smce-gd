@@ -56,13 +56,13 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 	)
 	for wheel in _rightw:
 		if _view:
-			wheel.throttle = lmotor.get_speed()
+			wheel.throttle = rmotor.get_speed()
 		else:
 			wheel.throttle = 1 * key_direction * int(! Input.is_action_pressed("ui_right"))
 
 	for wheel in _leftw:
 		if _view:
-			wheel.throttle = rmotor.get_speed()
+			wheel.throttle = lmotor.get_speed()
 		else:
 			wheel.throttle = 1 * key_direction * int(! Input.is_action_pressed("ui_left"))
 
