@@ -247,7 +247,7 @@ func _create_notification(text: String, timeout: float = -1, progress: bool = fa
 	emit_signal("create_notification", notification, timeout)
 	notification.progress.visible = progress
 	notification.button.visible = button
-	notification.header.bbcode_text = text
+	notification.header.text = text
 	notification.connect("pressed", self, "emit_signal", ["grab_focus"])
 	
 	# TODO: dont do this here
