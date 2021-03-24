@@ -22,6 +22,8 @@ onready var follow_btn: Button = $PaddingBox/VehicleButtons/Follow
 onready var attachments = $Scroll/Attachments
 onready var attachments_empty = $Scroll/Attachments/empty
 
+onready var log_box = $Log
+
 onready var serial_collapsable = $Serial
 onready var uart = $Serial/UartPanel/Uart
 onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
@@ -92,6 +94,7 @@ func _on_runner_built(result) -> void:
 		print("Compile failed: ", result.error())
 		_create_notification("Build failed for sketch '%s':\nReason: \"%s\"" % [file_path_header.text, result.error()], 5)
 		compile_btn.disabled = false
+		log_box.header.pressed = true
 		return
 	
 	print("Compile finished succesfully")
@@ -128,6 +131,7 @@ func _on_runner_stopped(exit_code: int) -> void:
 	print("Sketch stopped: ", exit_code)
 	if exit_code > 0:
 		_create_notification("Sketch '%s' crashed!\n[color=gray]Open the sketch log for more details.[/color]" % file_path_header.text, 5)
+		log_box.header.pressed = true
 	
 	attachments_empty.visible = true
 	start_btn.text = "Start"
