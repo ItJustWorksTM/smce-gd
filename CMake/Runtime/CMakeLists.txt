@@ -61,7 +61,7 @@ add_custom_command (TARGET Sketch POST_BUILD COMMAND "${CMAKE_COMMAND}" -E renam
 file (GLOB LIBS LIST_DIRECTORIES true "${PROJECT_SOURCE_DIR}/libs/*")
 foreach (LIB ${LIBS})
     if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20")
-        cmake_path (GET "${LIB}" FILENAME LIB_NAME)
+        cmake_path (GET LIB FILENAME LIB_NAME)
     else ()
         get_filename_component (LIB_NAME "${LIB}" NAME)
     endif()
