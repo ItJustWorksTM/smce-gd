@@ -19,6 +19,7 @@
 #ifndef MQTT_H
 #define MQTT_H
 
+#include <cstdint>
 #include <cstring>
 #include <string>
 
@@ -47,10 +48,11 @@ class SMCE__DLL_RT_API MQTTClient {
 #pragma warning(push)
 #pragma warning(disable: 4251)
 #endif
-    std::string m_host_uri = "tcp://localhost:1883";
+    std::string m_host_uri = "localhost";
 #if _MSC_VER
 #pragma warning(pop)
 #endif
+    std::uint16_t m_port = 1883;
     MQTTClientCallbacks m_callbacks{this};
 public:
     explicit MQTTClient(int bufSize = 128);

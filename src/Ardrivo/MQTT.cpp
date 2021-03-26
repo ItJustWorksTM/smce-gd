@@ -16,47 +16,39 @@
  *
  */
 
-#include <cassert>
-#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include "MQTT.h"
 
-namespace SMCE__PAHO {
-extern "C" {
-#if __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
-#elif _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4201)
-#endif
-#include <MQTTClient.h>
-#if __GNUC__
-#pragma GCC diagnostic pop
-#elif _MSC_VER
-#pragma warning(pop)
-#endif
-}
-}
+#include <mosquitto.h>
 
+using Mosquitto = struct mosquitto;
+using MosquittoMessage = struct mosquitto_message;
 
-extern "C"
-int SMCE__mqtt_callback(void* context, char* topic_name, [[maybe_unused]] int topic_len, SMCE__PAHO::MQTTClient_message* message){
+static int mosquitto_lib_init_res = []() noexcept {
+  const int res = mosquitto_lib_init();
+  if(res == MOSQ_ERR_SUCCESS)
+      std::atexit(+[]{ mosquitto_lib_cleanup(); });
+  else
+      std::fputs("Mosquitto init failed", stderr);
+  return res;
+}();
+
+static void mqtt_message_callback(Mosquitto*, void* context, const MosquittoMessage* message){
     const auto& callbacks = *reinterpret_cast<const MQTTClientCallbacks*>(context);
     if(callbacks.advanced)
-        callbacks.advanced(callbacks.client, topic_name, static_cast<const char*>(message->payload), message->payloadlen);
+        callbacks.advanced(callbacks.client, message->topic, static_cast<const char*>(message->payload), message->payloadlen);
     if(callbacks.simple)
-        callbacks.simple(String{topic_name}, String{static_cast<const char*>(message->payload)});
-
-    SMCE__PAHO::MQTTClient_free(topic_name);
-    SMCE__PAHO::MQTTClient_freeMessage(&message);
-    return 1;
+        callbacks.simple(message->topic, String{static_cast<const char*>(message->payload)});
 }
 
 MQTTClient::MQTTClient([[maybe_unused]] int bufSize) {}
 
 MQTTClient::~MQTTClient() {
-    SMCE__PAHO::MQTTClient_destroy(&m_client);
+    if(m_client)
+        mosquitto_destroy(static_cast<Mosquitto*>(m_client));
 }
 
 void MQTTClient::begin([[maybe_unused]] Client& client){}
@@ -70,58 +62,70 @@ void MQTTClient::onMessageAdvanced(MQTTClientCallbackAdvanced cb){
 }
 
 void MQTTClient::setHost(const char* hostname, std::uint16_t port){
-    m_host_uri = "tcp://";
-    m_host_uri += hostname;
-    m_host_uri += ':';
-    m_host_uri += std::to_string(port);
+    m_host_uri = hostname;
+    m_port = port;
 }
 
 void MQTTClient::setHost([[maybe_unused]] IPAddress address, [[maybe_unused]] std::uint16_t port){}
 
-void MQTTClient::setWill([[maybe_unused]] const char* topic,
-                         [[maybe_unused]] const char* payload,
-                         [[maybe_unused]] bool retained,
-                         [[maybe_unused]] int qos){}
+void MQTTClient::setWill(const char* topic, const char* payload, bool retained, int qos){
+    mosquitto_will_set(static_cast<Mosquitto*>(m_client), topic, static_cast<int>(std::strlen(payload)), payload, qos, retained);
+}
 
-void MQTTClient::clearWill(){}
+void MQTTClient::clearWill(){
+    mosquitto_will_clear(static_cast<Mosquitto*>(m_client));
+}
 
 bool MQTTClient::connect(const char* clientID, const char* username, const char* password, [[maybe_unused]] bool skip) {
     if(this->connected())
         this->disconnect();
-    if(SMCE__PAHO::MQTTClient_create(&m_client, m_host_uri.c_str(), clientID, MQTTCLIENT_PERSISTENCE_NONE, nullptr) != MQTTCLIENT_SUCCESS) {
-        m_client = nullptr;
-        return false;
+
+    if(m_client)
+        mosquitto_reinitialise(static_cast<Mosquitto*>(m_client), clientID, m_clean_session, &m_callbacks);
+    else {
+        m_client = mosquitto_new(clientID, m_clean_session, &m_callbacks);
+        if(!m_client)
+            return false;
     }
-    assert(SMCE__PAHO::MQTTClient_setCallbacks(m_client, &m_callbacks, nullptr, SMCE__mqtt_callback, nullptr) == MQTTCLIENT_SUCCESS);
-    SMCE__PAHO::MQTTClient_connectOptions opts = MQTTClient_connectOptions_initializer;
-    opts.username = username;
-    opts.password = password;
-    opts.cleansession = m_clean_session;
-    const int res = SMCE__PAHO::MQTTClient_connect(m_client, &opts);
-    return res == MQTTCLIENT_SUCCESS;
+    if(mosquitto_username_pw_set(static_cast<Mosquitto*>(m_client), username, password) != MOSQ_ERR_SUCCESS)
+        return false;
+
+    mosquitto_message_callback_set(static_cast<Mosquitto*>(m_client), mqtt_message_callback);
+
+    const int res = mosquitto_connect(static_cast<Mosquitto*>(m_client), m_host_uri.c_str(), m_port, 60);
+    switch (res) {
+    case MOSQ_ERR_SUCCESS:
+        return true;
+    case MOSQ_ERR_INVAL:
+        std::fprintf(stderr, "MQTTClient::connect failed: invalid arguments in mosquitto_connect(%p, %s, %d, %d)", m_client, m_host_uri.c_str(), m_port, 60);
+        break;
+    case MOSQ_ERR_ERRNO:
+        ::perror("MQTTClient::connect failed");
+        break;
+    default:
+        std::fprintf(stderr, "MQTTClient::connect failed: mosquitto_connect unknown return code %d", res);
+    }
+    return false;
 }
 
 bool MQTTClient::publish(const char* topic, const char* payload, int length, bool retained, int qos) {
-    return SMCE__PAHO::MQTTClient_publish(m_client, topic, length, payload, qos, retained, nullptr) == MQTTCLIENT_SUCCESS;
+    return mosquitto_publish(static_cast<Mosquitto*>(m_client), nullptr, topic, length, payload, qos, retained) == MOSQ_ERR_SUCCESS;
 }
 
 bool MQTTClient::subscribe(const char* topic, int qos) {
-    return SMCE__PAHO::MQTTClient_subscribe(m_client, topic, qos) == MQTTCLIENT_SUCCESS;
+    return mosquitto_subscribe(static_cast<Mosquitto*>(m_client), nullptr, topic, qos) == MOSQ_ERR_SUCCESS;
 }
 
 bool MQTTClient::unsubscribe(const char* topic) {
-    return SMCE__PAHO::MQTTClient_unsubscribe(m_client, topic) == MQTTCLIENT_SUCCESS;
+    return mosquitto_unsubscribe(static_cast<Mosquitto*>(m_client), nullptr, topic) == MOSQ_ERR_SUCCESS;
 }
 
 bool MQTTClient::loop(){
-    if(!connected())
-        return false;
-    SMCE__PAHO::MQTTClient_yield();
-    return true;
+    return mosquitto_loop(static_cast<Mosquitto*>(m_client), 0, 1024) == MOSQ_ERR_SUCCESS;
 }
 bool MQTTClient::connected() {
-    return m_client && SMCE__PAHO::MQTTClient_isConnected(m_client);
+    return m_client && mosquitto_socket(static_cast<Mosquitto*>(m_client)) != -1;
 }
 bool MQTTClient::disconnect() {
-    return SMCE__PAHO::MQTTClient_disconnect(m_client, m_timeout) == MQTTCLIENT_SUCCESS;
+    return mosquitto_disconnect(static_cast<Mosquitto*>(m_client)) == MOSQ_ERR_SUCCESS;
 }
