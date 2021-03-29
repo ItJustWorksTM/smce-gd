@@ -20,6 +20,7 @@
 #define SMCE_BOARDDATA_HPP
 
 #include <atomic>
+#include <cstddef>
 #include <cstdint>
 #include <deque>
 #include <memory>
@@ -108,9 +109,35 @@ struct BoardData {
         std::optional<std::uint16_t> tx_pin_override; //ro
         explicit UartChannel(const ShmAllocator<void>&);
     };
+    struct FrameBuffer {
+        enum struct Direction {
+            in,
+            out,
+        };
+        enum PixelFormat : std::uint8_t {
+            RGB888,
+            RGB444,
+            RGB565,
+        };
+        struct Transform {
+            std::uint8_t horiz_flip : 1 = false;
+            std::uint8_t vert_flip : 1 = false;
+            std::uint8_t pixel_format : 6 = RGB888;
+        };
+        std::size_t key; //ro
+        Direction direction; // ro
+        IpcAtomicValue<std::uint16_t> width = 0; //rw
+        IpcAtomicValue<std::uint16_t> height = 0; //rw
+        IpcAtomicValue<std::uint8_t> freq = 0; //rw
+        IpcAtomicValue<Transform> transform{}; //rw
+        IpcMovableMutex data_mut;
+        boost::interprocess::vector<std::byte, ShmAllocator<std::byte>> data; //rw
+        explicit FrameBuffer(const ShmAllocator<void>&);
+    };
 
     boost::interprocess::vector<Pin, ShmAllocator<Pin>> pins; // sorted by id
     boost::interprocess::vector<UartChannel, ShmAllocator<UartChannel>> uart_channels;
+    boost::interprocess::vector<FrameBuffer, ShmAllocator<FrameBuffer>> frame_buffers;
     ShmString fqbn;
 
     BoardData(const ShmAllocator<void>&,

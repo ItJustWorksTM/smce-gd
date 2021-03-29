@@ -54,10 +54,20 @@ struct BoardConfig {
         std::optional<std::uint16_t> tx_pin_override;
     };
 */
+    struct FrameBuffer {
+        enum struct Direction {
+            in,
+            out,
+        };
+        std::size_t key;
+        Direction direction;
+    };
+
     std::vector<std::uint16_t> pins;
     std::vector<GpioDrivers> gpio_drivers;
     std::vector<UartChannel> uart_channels;
 //  std::vector<I2cBus> i2c_buses;
+    std::vector<FrameBuffer> frame_buffers;
 };
 
 }

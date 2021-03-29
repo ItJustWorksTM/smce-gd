@@ -233,4 +233,113 @@ void VirtualUart::set_active(bool value) noexcept {
     return m_vu[m_index];
 }
 
+[[nodiscard]] bool FrameBuffer::exists() noexcept {
+    return m_bdat && m_idx < m_bdat->frame_buffers.size();
+}
+
+[[nodiscard]] auto FrameBuffer::direction() noexcept -> Direction {
+    return exists() ? Direction{static_cast<uint8_t>(m_bdat->frame_buffers[m_idx].direction)} : Direction::in;
+}
+
+[[nodiscard]] bool FrameBuffer::needs_horizontal_flip() noexcept {
+    return exists() && m_bdat->frame_buffers[m_idx].transform.load().horiz_flip;
+}
+
+void FrameBuffer::needs_horizontal_flip(bool val) noexcept {
+    if(!exists())
+        return;
+
+    auto trans = m_bdat->frame_buffers[m_idx].transform.load();
+    trans.horiz_flip = val;
+    m_bdat->frame_buffers[m_idx].transform.store(trans);
+}
+
+[[nodiscard]] bool FrameBuffer::needs_vertical_flip() noexcept {
+    return exists() && m_bdat->frame_buffers[m_idx].transform.load().vert_flip;
+}
+
+void FrameBuffer::needs_vertical_flip(bool val) noexcept {
+    if(!exists())
+        return;
+
+    auto trans = m_bdat->frame_buffers[m_idx].transform.load();
+    trans.vert_flip = val;
+    m_bdat->frame_buffers[m_idx].transform.store(trans);
+}
+
+[[nodiscard]] std::uint16_t FrameBuffer::get_width() noexcept {
+    return exists() ? m_bdat->frame_buffers[m_idx].width.load() : 0;
+}
+
+void FrameBuffer::set_width(std::uint16_t width) noexcept {
+    if(!exists())
+        return;
+    auto& fb = m_bdat->frame_buffers[m_idx];
+    fb.width = width;
+    fb.data.resize(width * fb.height * 3);
+}
+
+[[nodiscard]] std::uint16_t FrameBuffer::get_height() noexcept {
+    return exists() ? m_bdat->frame_buffers[m_idx].height.load() : 0;
+}
+
+void FrameBuffer::set_height(std::uint16_t height) noexcept {
+    if(!exists())
+        return;
+    auto& fb = m_bdat->frame_buffers[m_idx];
+    fb.height = height;
+    fb.data.resize(height * fb.width * 3);
+}
+
+[[nodiscard]] std::uint8_t FrameBuffer::get_freq() noexcept {
+    return exists() ? m_bdat->frame_buffers[m_idx].freq.load() : 0;
+}
+
+void FrameBuffer::set_freq(std::uint8_t freq) noexcept {
+    if(!exists())
+        return;
+    m_bdat->frame_buffers[m_idx].freq = freq;
+}
+
+bool FrameBuffer::write_rgb888(std::span<const std::byte> buf) {
+    if(!exists())
+        return false;
+
+    auto& frame_buf = m_bdat->frame_buffers[m_idx];
+    if(buf.size() != frame_buf.data.size())
+        return false;
+
+    [[maybe_unused]] std::lock_guard lk{frame_buf.data_mut};
+    std::memcpy(frame_buf.data.data(), buf.data(), buf.size());
+    return true;
+}
+
+bool FrameBuffer::read_rgb888(std::span<std::byte> buf) {
+    if(!exists())
+        return false;
+
+    auto& frame_buf = m_bdat->frame_buffers[m_idx];
+    if(buf.size() != frame_buf.data.size())
+        return false;
+    [[maybe_unused]] std::lock_guard lk{frame_buf.data_mut};
+    std::memcpy(buf.data(), frame_buf.data.data(), buf.size());
+    return true;
+}
+
+FrameBuffer FrameBuffers::operator[](std::size_t key) noexcept {
+    if(!m_bdat)
+        return {m_bdat, 0};
+    const auto it = std::lower_bound(
+        m_bdat->frame_buffers.begin(),
+        m_bdat->frame_buffers.end(), key,
+        [](const auto& pin, std::size_t key){
+          return pin.key < key;
+        });
+    if (it != m_bdat->frame_buffers.end()) {
+        if (const auto delta = std::distance(m_bdat->frame_buffers.begin(), it); delta >= 0 && m_bdat->frame_buffers[delta].key == key)
+            return {m_bdat, static_cast<std::size_t>(delta)};
+    }
+    return {nullptr, std::size_t(-1)};
+}
+
 }

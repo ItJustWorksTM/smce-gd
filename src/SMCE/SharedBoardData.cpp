@@ -32,7 +32,7 @@ SharedBoardData::~SharedBoardData() {
 bool SharedBoardData::configure(std::string_view seg_name, std::string_view fqbn, const BoardConfig& bconf) {
     m_master = true;
     m_name = seg_name;
-    m_shm = bip::managed_shared_memory(bip::create_only, m_name.c_str(), 1024*1024);
+    m_shm = bip::managed_shared_memory(bip::create_only, m_name.c_str(), 2*1024*1024);
     m_bd = m_shm.construct<BoardData>("BoardData")
         (ShmVoidAllocator{m_shm.get_segment_manager()}, fqbn, bconf);
     return true;

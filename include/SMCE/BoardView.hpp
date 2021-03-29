@@ -128,6 +128,45 @@ class VirtualUarts {
     [[nodiscard]] std::size_t size() noexcept;
 };
 
+class FrameBuffer {
+    friend class FrameBuffers;
+    BoardData* m_bdat;
+    std::size_t m_idx;
+
+    constexpr FrameBuffer(BoardData* bdat, std::size_t idx) noexcept : m_bdat{bdat}, m_idx{idx} {}
+  public:
+    enum struct Direction {
+        in,
+        out,
+    };
+
+    [[nodiscard]] bool exists() noexcept;
+    [[nodiscard]] Direction direction() noexcept;
+    [[nodiscard]] bool needs_horizontal_flip() noexcept;
+    void needs_horizontal_flip(bool) noexcept;
+    [[nodiscard]] bool needs_vertical_flip() noexcept;
+    void needs_vertical_flip(bool) noexcept;
+    [[nodiscard]] std::uint16_t get_width() noexcept;
+    void set_width(std::uint16_t) noexcept;
+    [[nodiscard]] std::uint16_t get_height() noexcept;
+    void set_height(std::uint16_t) noexcept;
+    [[nodiscard]] std::uint8_t get_freq() noexcept;
+    void set_freq(std::uint8_t) noexcept;
+    bool write_rgb888(std::span<const std::byte>);
+    bool read_rgb888(std::span<std::byte>);
+};
+
+class FrameBuffers {
+    friend BoardView;
+    BoardData* m_bdat;
+    constexpr FrameBuffers() noexcept = default;
+    constexpr explicit FrameBuffers(BoardData* bdat) noexcept : m_bdat{bdat} {}
+  public:
+    constexpr FrameBuffers(const FrameBuffers&) noexcept = default;
+
+    [[nodiscard]] FrameBuffer operator[](std::size_t) noexcept;
+};
+
 class BoardView {
     BoardData* m_bdat{};
   public:
@@ -135,6 +174,7 @@ class BoardView {
     VirtualUarts uart_channels{m_bdat};
 //  VirtualI2cs i2c_buses;
 //  VirtualOpaqueDevices opaque_devices;
+    FrameBuffers frame_buffers{m_bdat};
 
     constexpr BoardView() noexcept = default;
     explicit BoardView(BoardData& bdat)

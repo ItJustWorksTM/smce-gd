@@ -38,6 +38,8 @@ target_sources (Ardrivo PRIVATE
         src/Ardrivo/Arduino.cpp
         include/Ardrivo/HardwareSerial.h
         src/Ardrivo/HardwareSerial.cpp
+        include/Ardrivo/OV767X.h
+        src/Ardrivo/OV767X.cpp
         include/Ardrivo/Print.h
         src/Ardrivo/Print.cpp
         include/Ardrivo/SMCE.hpp

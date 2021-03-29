@@ -27,12 +27,15 @@ namespace smce {
 
 BoardData::UartChannel::UartChannel(const ShmAllocator<void>& shm_valloc) : rx{shm_valloc}, tx{shm_valloc} {}
 
+BoardData::FrameBuffer::FrameBuffer(const ShmAllocator<void>& shm_valloc) : data{shm_valloc} {}
+
 BoardData::BoardData(
         const ShmAllocator<void>& shm_valloc,
         std::string_view fqbn,
         const BoardConfig& c) noexcept
     : pins{shm_valloc},
       uart_channels{shm_valloc},
+      frame_buffers{shm_valloc},
       fqbn{fqbn, shm_valloc} {
     auto sorted_pins = c.pins;
     std::sort(sorted_pins.begin(), sorted_pins.end());
@@ -69,6 +72,13 @@ BoardData::BoardData(
         data.tx_pin_override = conf.tx_pin_override;
         data.max_buffered_rx = static_cast<std::uint16_t>(conf.rx_buffer_length);
         data.max_buffered_tx = static_cast<std::uint16_t>(conf.tx_buffer_length);
+    }
+
+    frame_buffers.reserve(c.frame_buffers.size());
+    for(const auto& conf : c.frame_buffers) {
+        auto& data = frame_buffers.emplace_back(shm_valloc);
+        data.key = conf.key;
+        data.direction = BoardData::FrameBuffer::Direction{static_cast<std::uint8_t>(conf.direction)};
     }
 }
 
