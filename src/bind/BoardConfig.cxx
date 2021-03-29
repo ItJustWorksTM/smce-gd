@@ -88,5 +88,6 @@ smce::BoardConfig BoardConfig::to_native() {
 
     for (size_t i = 0; i < uart_channels; ++i)
         ret.uart_channels.emplace_back();
+    ret.frame_buffers.push_back({.direction = smce::BoardConfig::FrameBuffer::Direction::in});
     return ret;
 }

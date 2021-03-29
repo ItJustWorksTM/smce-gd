@@ -120,7 +120,8 @@ Ref<AnyTask> BoardRunner::build(String sketch_src) {
         auto build_res = runner->build(
             sketch_src,
             {.preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT"},
-                              smce::SketchConfig::RemoteArduinoLibrary{"WiFi"}},
+                              smce::SketchConfig::RemoteArduinoLibrary{"WiFi"},
+                              smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X"}},
              .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
                  exec_context.resource_dir() / "library_patches" / "smartcar_shield", "Smartcar shield"}}});
         Godot::print("Async build completed");
@@ -205,7 +206,6 @@ void BoardRunner::_physics_process() {
             str.clear();
         }
     };
-
     if (building)
         read_log(runner->build_log(), "build_log");
 

@@ -37,6 +37,6 @@ template <class... T> void register_tool_classes() { (register_tool_class<T>(), 
 
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
-    register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper, GDResult>();
+    register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper, GDResult, FrameBuffer>();
     register_tool_classes<BoardConfig, GpioDriverGroup, GpioDriver>();
 }

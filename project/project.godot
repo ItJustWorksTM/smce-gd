@@ -60,6 +60,11 @@ _global_script_classes=[ {
 "path": "res://src/bind/ExecutionContext.gdns"
 }, {
 "base": "",
+"class": "FrameBuffer",
+"language": "NativeScript",
+"path": "res://src/bind/FrameBuffer.gdns"
+}, {
+"base": "",
 "class": "GDResult",
 "language": "NativeScript",
 "path": "res://src/bind/GDResult.gdns"
@@ -115,6 +120,7 @@ _global_script_class_icons={
 "CamCtl": "",
 "ControlUtil": "",
 "ExecutionContext": "",
+"FrameBuffer": "",
 "GDResult": "",
 "GpioDriver": "",
 "GpioDriverGroup": "",

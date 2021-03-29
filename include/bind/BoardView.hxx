@@ -25,6 +25,7 @@
 #include <core/Godot.hpp>
 #include <gen/Node.hpp>
 #include "gd/util.hxx"
+#include "FrameBuffer.hxx"
 
 namespace godot {
 class BoardRunner;
@@ -52,6 +53,7 @@ class BoardView : public Node {
     int read_analog_pin(int pin);
     bool read_digital_pin(int pin);
 
+    Ref<FrameBuffer> framebuffers(int id);
 };
 } // namespace godot
 

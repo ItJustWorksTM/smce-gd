@@ -43,8 +43,10 @@ target_sources (godot-smce PRIVATE
         src/bind/ExecutionContext.cxx
         src/bind/BoardView.cxx
         src/bind/UartSlurper.cxx
-        src/bind/BoardConfig.cxx)
-target_include_directories (godot-smce PRIVATE include)
+        src/bind/BoardConfig.cxx
+        src/bind/FrameBuffer.cxx)
+
+target_include_directories (godot-smce PUBLIC include)
 target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)

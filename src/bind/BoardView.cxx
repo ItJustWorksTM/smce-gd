@@ -30,6 +30,7 @@ void BoardView::_register_methods() {
     register_method("read_digital_pin", &BoardView::read_digital_pin);
     register_method("write_analog_pin", &BoardView::write_analog_pin);
     register_method("write_digital_pin", &BoardView::write_digital_pin);
+    register_method("framebuffers", &BoardView::framebuffers);
 }
 
 smce::BoardView BoardView::native() { return view; }
@@ -59,3 +60,9 @@ void BoardView::write_digital_pin(int pin, bool value) {
     view.pins[pin].digital().write(value);
 }
 
+Ref<FrameBuffer> BoardView::framebuffers(int id) {
+    auto ret = make_ref<FrameBuffer>();
+    ret->frame_buf = view.frame_buffers[id];
+
+    return ret;
+}
