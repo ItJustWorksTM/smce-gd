@@ -143,6 +143,7 @@ SketchAttach="*res://src/utilities/sketch_attach/SketchAttach.gd"
 
 [debug]
 
+settings/fps/force_fps=144
 gdscript/warnings/unsafe_property_access=true
 
 [display]
