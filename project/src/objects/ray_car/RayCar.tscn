@@ -208,6 +208,9 @@ hdr = false
 render_target_v_flip = true
 render_target_clear_mode = 1
 render_target_update_mode = 3
+shadow_atlas_size = 1
+shadow_atlas_quad_0 = 1
+shadow_atlas_quad_3 = 3
 
 [node name="Camera" type="Camera" parent="Attachments/Front Camera/Viewport"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3172, -2.71631 )
