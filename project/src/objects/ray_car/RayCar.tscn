@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/objects/ray_car/RayCar.gd" type="Script" id=1]
 [ext_resource path="res://src/attachments/AnalogRaycast.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://src/attachments/Odometer.gd" type="Script" id=9]
 [ext_resource path="res://src/attachments/UltraSonic.gd" type="Script" id=10]
 [ext_resource path="res://src/attachments/Camera.gd" type="Script" id=11]
+[ext_resource path="res://src/shaders/LensDistort.shader" type="Shader" id=12]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 0.126468, 1.27087 )
@@ -20,6 +21,11 @@ extents = Vector3( 0.628528, 0.232967, 0.868031 )
 
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 1.92613, 0.140498, 0.426843 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 12 )
+shader_param/resolution = Vector2( 1024, 720 )
+shader_param/factor = 0.898
 
 [node name="RayCar" type="RigidBody"]
 can_sleep = false
@@ -196,6 +202,7 @@ direction_pin = 39
 [node name="Front Camera" type="Spatial" parent="Attachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735401, -2.30562 )
 script = ExtResource( 11 )
+distort = 0.9
 
 [node name="Timer" type="Timer" parent="Attachments/Front Camera"]
 process_mode = 0
@@ -215,4 +222,15 @@ shadow_atlas_quad_3 = 3
 [node name="Camera" type="Camera" parent="Attachments/Front Camera/Viewport"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3172, -2.71631 )
 current = true
-far = 200.0
+fov = 90.0
+far = 300.0
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Attachments/Front Camera/Viewport"]
+copy_mode = 2
+
+[node name="Effect" type="ColorRect" parent="Attachments/Front Camera/Viewport"]
+material = SubResource( 4 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -640.0
+margin_bottom = -480.0

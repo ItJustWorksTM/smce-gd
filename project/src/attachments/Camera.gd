@@ -2,8 +2,10 @@ extends Spatial
 
 onready var viewport: Viewport = $Viewport
 onready var timer: Timer = $Timer
+onready var effect = $Viewport/Effect
 
 export var pin = 0
+export(float, 0, 1) var distort = 0.5
 
 var view = null
 
@@ -15,7 +17,6 @@ var hflip: bool = false
 func set_view(_view: Node) -> void:
 	if ! _view:
 		return
-	
 	view = _view
 
 
@@ -44,6 +45,8 @@ func _physics_process(delta):
 	
 	viewport.get_camera().global_transform.origin = global_transform.origin
 	viewport.get_camera().global_transform.basis = global_transform.basis
+	effect.get_material().set_shader_param("resolution", viewport.size)
+	effect.get_material().set_shader_param("factor", distort)
 	
 	if ! view || ! view.is_valid():
 		return
