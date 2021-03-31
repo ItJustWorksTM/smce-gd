@@ -79,8 +79,8 @@ Ref<GDResult> BoardRunner::init(String context_path) {
     return GDResult::ok();
 }
 
-Ref<GDResult> BoardRunner::configure(String pp_fqbn, BoardConfig* board_config) {
-    if (!board_config)
+Ref<GDResult> BoardRunner::configure(String pp_fqbn, Ref<BoardConfig> board_config) {
+    if (!board_config.is_valid())
         return GDResult::err("Invalid BoardConfig");
 
     fqbin = std_str(pp_fqbn);

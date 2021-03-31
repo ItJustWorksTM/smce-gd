@@ -25,6 +25,20 @@ static func copy_dir(path: String, to: String, base = null) -> bool:
 	return true
 
 
+static func read_json_file(path):
+	var config = File.new()
+	if config.open(path, File.READ) != OK:
+		return null
+	var json = config.get_as_text()
+	config.close()
+
+	var ret = JSON.parse(json)
+	if typeof(ret.result) != TYPE_DICTIONARY:
+		return null
+
+	return ret.result
+
+
 static func err(msg: String):
 	var ret = GDResult.new()
 	ret.set_error(msg)

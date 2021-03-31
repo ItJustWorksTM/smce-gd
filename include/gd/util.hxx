@@ -21,20 +21,21 @@
 
 #include <core/Godot.hpp>
 
-template <class T>
-auto make_ref() -> godot::Ref<T> {
+template <class T> auto make_ref() -> godot::Ref<T> {
     static_assert(std::is_base_of_v<godot::Reference, T>);
     return T::_new();
 }
 
-template<class T, class... S>
-constexpr auto register_signals(S... name) {
-  (register_signal<T>(name, godot::Dictionary{}), ...);
+template <class T, class... S> constexpr auto register_signals(S... name) {
+    (register_signal<T>(name, godot::Dictionary{}), ...);
 };
 
-template<class... T>
-constexpr auto register_fns(std::pair<const char*, T>... func) {
-  (register_method(func.first, func.second), ...);
+template <class... T> constexpr auto register_fns(std::pair<const char*, T>... func) {
+    (register_method(func.first, func.second), ...);
+};
+
+template <class... T> constexpr auto register_props(T... prop) {
+    (register_property(std::get<0>(prop), std::get<1>(prop), std::get<2>(prop)), ...);
 };
 
 inline std::string std_str(const godot::String& str) {

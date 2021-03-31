@@ -3,7 +3,7 @@
 [ext_resource path="res://gdnative/smce.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "FrameBuffer"
-class_name = "FrameBuffer"
+resource_name = "UartChannelConfig"
+class_name = "UartChannelConfig"
 library = ExtResource( 1 )
-script_class_name = "FrameBuffer"
+script_class_name = "UartChannelConfig"

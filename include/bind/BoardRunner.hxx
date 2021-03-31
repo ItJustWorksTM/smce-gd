@@ -69,7 +69,7 @@ class BoardRunner : public Node {
     static void _register_methods();
 
     Ref<GDResult> init(String context_path);
-    Ref<GDResult> configure(String pp_fqbn, BoardConfig* board_config);
+    Ref<GDResult> configure(String pp_fqbn, Ref<BoardConfig> board_config);
     Ref<GDResult> reconfigure();
 
     Ref<AnyTask> build(String sketch_src);

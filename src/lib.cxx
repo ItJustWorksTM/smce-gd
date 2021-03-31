@@ -33,10 +33,11 @@ extern "C" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_opt
 }
 
 template <class... T> void register_classes() { (register_class<T>(), ...); };
-template <class... T> void register_tool_classes() { (register_tool_class<T>(), ...); };
 
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
-    register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper, GDResult, FrameBuffer>();
-    register_tool_classes<BoardConfig, GpioDriverGroup, GpioDriver>();
+
+    register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper, GDResult, FrameBuffer,
+                     BoardConfig, BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
+                     BoardConfig::FrameBufferConfig>();
 }

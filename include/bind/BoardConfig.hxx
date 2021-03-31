@@ -20,6 +20,7 @@
 #define GODOT_SMCE_BOARDCONFIG_HXX
 
 #include <functional>
+#include <tuple>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
 #include <core/Godot.hpp>
@@ -29,54 +30,70 @@
 
 namespace godot {
 
-class GpioDriver : public Resource {
-    GODOT_CLASS(GpioDriver, Resource)
+class BoardConfig : public Reference {
+    GODOT_CLASS(BoardConfig, Reference);
 
   public:
-    uint16_t pin;
-    int type;
-    bool allow_read = true;
-    bool allow_write = true;
+    class GpioDriverConfig : public Reference {
+        GODOT_CLASS(GpioDriverConfig, Reference);
 
-    static void _register_methods();
+      public:
+        int pin = 0;
+        bool analog = false;
+        bool analog_read = true;
+        bool analog_write = true;
+        bool digital = false;
+        bool digital_read = true;
+        bool digital_write = true;
 
-    void _init() {}
+        static void _register_methods();
 
-    smce::BoardConfig::GpioDrivers to_native();
-};
+        void _init() {}
 
-class GpioDriverGroup : public Resource {
-    GODOT_CLASS(GpioDriverGroup, Resource)
+        smce::BoardConfig::GpioDrivers to_native() const;
+    };
 
-  public:
+    class UartChannelConfig : public Reference {
+        GODOT_CLASS(UartChannelConfig, Reference)
+      public:
+        int rx_pin_override = -1;
+        int tx_pin_override = -1;
+        int baud_rate = 9600;
+        int rx_buffer_length = 64;
+        int tx_buffer_length = 64;
+        int flushing_threshold = 0;
+
+        static void _register_methods();
+
+        void _init() {}
+
+        smce::BoardConfig::UartChannel to_native() const;
+    };
+
+    class FrameBufferConfig : public Reference {
+        GODOT_CLASS(FrameBufferConfig, Reference)
+
+      public:
+        int key = 0;
+        bool direction = true; // true = in, false = out
+
+        static void _register_methods();
+
+        void _init() {}
+
+        smce::BoardConfig::FrameBuffer to_native() const;
+    };
+
     Array gpio_drivers;
+    Array uart_channels;
+    Array frame_buffers;
 
     static void _register_methods();
-
     void _init() {}
 
-    Array get_arr();
-    void set_arr(Array arr);
-
-    std::vector<smce::BoardConfig::GpioDrivers> to_native();
+    smce::BoardConfig to_native() const;
 };
 
-class BoardConfig : public Resource {
-    GODOT_CLASS(BoardConfig, Resource)
-
-  public:
-    Array gpio_drivers;
-    int uart_channels = 0;
-
-    static void _register_methods();
-
-    void _init() {}
-
-    Array get_arr();
-    void set_arr(Array arr);
-
-    smce::BoardConfig to_native();
-};
 } // namespace godot
 
 #endif // GODOT_SMCE_BOARDCONFIG_HXX

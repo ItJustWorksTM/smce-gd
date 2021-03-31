@@ -3,7 +3,7 @@
 [ext_resource path="res://gdnative/smce.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "GpioDriverGroup"
-class_name = "GpioDriverGroup"
+resource_name = "FrameBufferConfig"
+class_name = "FrameBufferConfig"
 library = ExtResource( 1 )
-script_class_name = "GpioDriverGroup"
+script_class_name = "FrameBufferConfig"

@@ -167,7 +167,7 @@ func set_filepath(path: String):
 	
 	sketch_path = path
 	
-	var board_config = preload("res://src/config/smartcar_shield/board_config.tres")
+	var board_config = BoardConfigGD.from_dict(Util.read_json_file("res://src/config/smartcar_shield.json"))
 	
 	var res = runner.init(OS.get_user_data_dir())
 	if ! res.ok():
