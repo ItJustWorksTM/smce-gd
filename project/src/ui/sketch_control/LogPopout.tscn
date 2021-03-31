@@ -11,19 +11,19 @@ border_width_bottom = 1
 border_color = Color( 0, 0.478431, 0.8, 1 )
 shadow_color = Color( 0, 0, 0, 0.192157 )
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 1, 1, 1, 0.137255 )
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 1, 1, 1, 0.243137 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=6]
 
-[sub_resource type="StyleBoxEmpty" id=3]
-
 [sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxEmpty" id=8]
 
 [node name="LogPopout" type="MarginContainer"]
 anchor_right = 1.0
@@ -76,10 +76,10 @@ rect_min_size = Vector2( 32, 32 )
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
-custom_styles/hover = SubResource( 4 )
-custom_styles/pressed = SubResource( 5 )
-custom_styles/focus = SubResource( 6 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 text = "x"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -92,10 +92,10 @@ rect_min_size = Vector2( 32, 32 )
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_styles/hover = SubResource( 4 )
-custom_styles/pressed = SubResource( 5 )
-custom_styles/focus = SubResource( 6 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 text = " Copy to Clipboard "
 
 [node name="TextAttach" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
@@ -111,10 +111,11 @@ custom_constants/margin_left = 8
 margin_left = 8.0
 margin_right = 1014.0
 margin_bottom = 554.0
+focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/focus = SubResource( 7 )
-custom_styles/normal = SubResource( 8 )
+custom_styles/focus = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
 custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
 scroll_following = true
 selection_enabled = true
