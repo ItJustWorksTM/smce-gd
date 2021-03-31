@@ -16,8 +16,8 @@
         { "pin": 18, "analog": true },
 
         { "pin": 25, "digital": true },
-        { "pin": 26, "analog": true },
-        { "pin": 27, "digital": true },
+        { "pin": 26, "digital": true },
+        { "pin": 27, "analog": true },
         
         { "pin": 34, "digital": true },
         { "pin": 35, "analog": true },
