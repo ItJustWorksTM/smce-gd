@@ -27,6 +27,7 @@
 #include "SMCE_dll.hpp"
 
 #define PROGMEM
+#define F(str) str
 
 enum {
     LOW,
