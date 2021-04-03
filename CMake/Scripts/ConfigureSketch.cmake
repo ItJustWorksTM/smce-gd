@@ -115,8 +115,12 @@ endif ()
 set (COMP_SRC "${COMP_DIR}/sketch.cpp")
 file (WRITE "${COMP_SRC}" "${PREPROCD_SKETCH}")
 
+if (DEFINED ENV{SMCE_TOOLCHAIN})
+    set (TOOLCHAIN "-DCMAKE_TOOLCHAIN_FILE=\"$ENV{SMCE_TOOLCHAIN}\"")
+endif ()
+
 file (COPY "${SMCE_DIR}/RtResources/SMCE/share/Runtime/CMakeLists.txt" DESTINATION "${COMP_DIR}")
 file (MAKE_DIRECTORY "${COMP_DIR}/build")
-execute_process (COMMAND "${CMAKE_COMMAND}" "-DSMCE_DIR=${SMCE_DIR}" -S "${COMP_DIR}" -B "${COMP_DIR}/build")
+execute_process (COMMAND "${CMAKE_COMMAND}" "-DSMCE_DIR=${SMCE_DIR}" ${TOOLCHAIN} -S "${COMP_DIR}" -B "${COMP_DIR}/build")
 
 message (STATUS "SMCE: Sketch binary will be at \"${COMP_DIR}/build/Sketch\"")
