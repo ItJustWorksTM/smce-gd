@@ -24,6 +24,7 @@
 
 enum SMCE_OV767_Format {
     RGB888,
+    RGB444,
 };
 
 enum SMCE_OV767_Resolution {
@@ -36,6 +37,7 @@ enum SMCE_OV767_Resolution {
 
 class SMCE__DLL_RT_API OV767X {
     std::size_t m_key = 0;
+    SMCE_OV767_Format m_format;
     bool m_begun = false;
 
   public:
