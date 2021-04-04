@@ -21,6 +21,11 @@
 
 #include <filesystem>
 
+/**
+ * Handy alias
+ *
+ * \todo Move into smce namespace to avoid collisions in consumer code
+ **/
 namespace stdfs = std::filesystem;
 
 #endif // SMCE_SMCE_FWD_HPP

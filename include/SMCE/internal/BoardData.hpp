@@ -45,6 +45,7 @@
 
 namespace smce {
 
+/// \internal
 template <class T>
 struct IpcAtomicValue : boost::ipc_atomic<T> {
     using boost::ipc_atomic<T>::ipc_atomic;
@@ -56,6 +57,7 @@ struct IpcAtomicValue : boost::ipc_atomic<T> {
     IpcAtomicValue& operator=(IpcAtomicValue&& other) noexcept { boost::ipc_atomic<T>::store(other.load()); return *this; }
 };
 
+/// \internal
 struct IpcMovableMutex : boost::interprocess::ipcdetail::spin_mutex {
     IpcMovableMutex() noexcept = default;
     IpcMovableMutex(IpcMovableMutex&&) noexcept {} //HSD never
@@ -68,12 +70,16 @@ using Shm = boost::interprocess::managed_windows_shared_memory;
 using Shm = boost::interprocess::managed_shared_memory;
 #endif
 
+/// \internal
 template <class T>
 using ShmAllocator = boost::interprocess::allocator<T, Shm::segment_manager>;
+/// \internal
 template <class T>
 using ShmBasicString = boost::interprocess::basic_string<T, std::char_traits<T>, ShmAllocator<T>>;
+/// \internal
 using ShmString = ShmBasicString<char>;
 
+/// \internal
 struct BoardData {
     struct Pin {
         enum class DataDirection {

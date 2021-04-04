@@ -43,12 +43,20 @@ class BoardRunner {
         stopped
     };
 
+    using LockedLog = std::pair<std::unique_lock<std::mutex>, std::string&>;
+
+    /**
+     * Constructor
+     * \param ctx - execution context to use for the sketches run in this runner
+     * \param exit_notify - optional notification handler of the sketch's unexpected exit; called by `tick`
+     **/
     explicit BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_notify = nullptr) noexcept;
     ~BoardRunner();
 
     [[nodiscard]] Status status() const noexcept { return m_status; }
     [[nodiscard]] BoardView view() noexcept;
 
+    /// Tick runner; call in your frontend physics loop
     void tick() noexcept;
 
     bool reset() noexcept;
@@ -60,8 +68,8 @@ class BoardRunner {
     bool terminate() noexcept;
     bool stop() noexcept;
 
-    [[nodiscard]] inline std::pair<std::unique_lock<std::mutex>, std::string&> build_log() noexcept { return {std::unique_lock{m_build_log_mtx}, m_build_log}; }
-    [[nodiscard]] inline std::pair<std::unique_lock<std::mutex>, std::string&> runtime_log() noexcept { return {std::unique_lock{m_runtime_log_mtx}, m_runtime_log}; }
+    [[nodiscard]] inline LockedLog build_log() noexcept { return {std::unique_lock{m_build_log_mtx}, m_build_log}; }
+    [[nodiscard]] inline LockedLog runtime_log() noexcept { return {std::unique_lock{m_runtime_log_mtx}, m_runtime_log}; }
 
   private:
     struct Internal;

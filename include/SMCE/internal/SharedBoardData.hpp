@@ -24,6 +24,7 @@
 
 namespace smce {
 
+/// \internal
 class SharedBoardData {
     boost::interprocess::managed_shared_memory m_shm;
     std::string m_name;

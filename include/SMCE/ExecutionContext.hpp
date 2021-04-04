@@ -25,14 +25,34 @@
 
 namespace smce {
 
+/**
+ * The context of execution for sketches in board-runners
+ *
+ * Ideally there should only ever be one instance of this type
+ * used at a given type in an application.
+ **/
 class ExecutionContext {
     stdfs::path m_res_dir;
     std::string m_cmake_path = "cmake";
 
   public:
+    /**
+     * Constructor
+     * \param resources_dir - path to the SMCE resources directory (inflated SMCE_Resources.zip)
+     **/
     explicit ExecutionContext(stdfs::path resources_dir) : m_res_dir{std::move(resources_dir)} {};
+
+    /// Getter for the SMCE resource directory
     [[nodiscard]] const stdfs::path& resource_dir() const noexcept { return m_res_dir; }
+    /// Getter for the CMake path
     [[nodiscard]] const std::string& cmake_path() const noexcept { return m_cmake_path; }
+
+    /**
+     * Checks whether the required tools are provided
+     *
+     * \warning This function currently only checks for CMake's availability through the PATH env var
+     * \todo Extend to check for a C++ >=11 compiler
+     **/
     [[nodiscard]] bool check_suitable_environment() noexcept;
 };
 

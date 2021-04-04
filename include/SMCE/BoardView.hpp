@@ -25,12 +25,16 @@
 
 namespace smce {
 
+/**
+ * Analog driver for a GPIO pin
+ **/
 class VirtualAnalogDriver {
     friend class VirtualPin;
     BoardData* m_bdat;
     std::size_t m_idx;
     constexpr VirtualAnalogDriver(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_idx{idx} {}
   public:
+    /// Object validity check
     [[nodiscard]] bool exists() noexcept;
     [[nodiscard]] bool can_read() noexcept;
     [[nodiscard]] bool can_write() noexcept;
@@ -44,6 +48,7 @@ class VirtualDigitalDriver {
     std::size_t m_idx;
     constexpr VirtualDigitalDriver(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_idx{idx} {}
   public:
+    /// Object validity check
     [[nodiscard]] bool exists() noexcept;
     [[nodiscard]] bool can_read() noexcept;
     [[nodiscard]] bool can_write() noexcept;
@@ -58,6 +63,7 @@ class VirtualPin {
     constexpr VirtualPin(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_idx{idx} {}
   public:
     enum class DataDirection { in, out };
+    /// Object validity check
     [[nodiscard]] bool exists() noexcept;
     [[nodiscard]] bool locked() noexcept;
     void set_direction(DataDirection) noexcept;
@@ -88,6 +94,7 @@ class VirtualUartBuffer {
     Direction m_dir;
     constexpr VirtualUartBuffer(BoardData* bdat, std::size_t idx, Direction dir) : m_bdat{bdat}, m_index{idx}, m_dir{dir} {}
   public:
+    /// Object validity check
     [[nodiscard]] bool exists() noexcept;
     [[nodiscard]] std::size_t max_size() noexcept;
     [[nodiscard]] std::size_t size() noexcept;
@@ -102,6 +109,7 @@ class VirtualUart {
     std::size_t m_index;
     constexpr VirtualUart(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_index{idx} {}
   public:
+    /// Object validity check
     [[nodiscard]] bool exists() noexcept;
     [[nodiscard]] bool is_active() noexcept;
     void set_active(bool) noexcept; // Board-only
@@ -128,6 +136,10 @@ class VirtualUarts {
     [[nodiscard]] std::size_t size() noexcept;
 };
 
+/**
+ * An RGB888 framebuffer, holding a single frame.
+ * Intended to be used to implement cameras and screen library shims.
+ **/
 class FrameBuffer {
     friend class FrameBuffers;
     BoardData* m_bdat;
@@ -135,24 +147,43 @@ class FrameBuffer {
 
     constexpr FrameBuffer(BoardData* bdat, std::size_t idx) noexcept : m_bdat{bdat}, m_idx{idx} {}
   public:
+    /// Data direction
     enum struct Direction {
-        in,
-        out,
+        in, /// host-to-board (camera)
+        out, /// board-to-host (screen)
     };
 
+    /// Object validity check
     [[nodiscard]] bool exists() noexcept;
+    /// Data direction getter
     [[nodiscard]] Direction direction() noexcept;
+
+    /// Flag getter for hflip
     [[nodiscard]] bool needs_horizontal_flip() noexcept;
+    /// Flag setter for hflip
     void needs_horizontal_flip(bool) noexcept;
+    /// Flag getter for vflip
     [[nodiscard]] bool needs_vertical_flip() noexcept;
+    /// Flag setter for vflip
     void needs_vertical_flip(bool) noexcept;
+
+    /// \note Size in px
     [[nodiscard]] std::uint16_t get_width() noexcept;
+    /// \note Size in px
     void set_width(std::uint16_t) noexcept;
+    /// \note Size in px
     [[nodiscard]] std::uint16_t get_height() noexcept;
+    /// \note Size in px
     void set_height(std::uint16_t) noexcept;
+
+    /// \note Frequency is in Hz
     [[nodiscard]] std::uint8_t get_freq() noexcept;
+    /// \note Frequency is in Hz
     void set_freq(std::uint8_t) noexcept;
+
+    /// Copies a frame from an RGB888 buffer
     bool write_rgb888(std::span<const std::byte>);
+    /// Copies a frame into an RGB888 buffer
     bool read_rgb888(std::span<std::byte>);
 };
 
@@ -167,20 +198,25 @@ class FrameBuffers {
     [[nodiscard]] FrameBuffer operator[](std::size_t) noexcept;
 };
 
+/**
+ * Mutable view of the virtual board.
+ * \note Must stay a no-fail interface (operations all silently fail on error and never cause UB)
+ **/
 class BoardView {
     BoardData* m_bdat{};
   public:
-    VirtualPins pins{m_bdat};
-    VirtualUarts uart_channels{m_bdat};
+    VirtualPins pins{m_bdat}; /// GPIO pins
+    VirtualUarts uart_channels{m_bdat}; /// UART channels
 //  VirtualI2cs i2c_buses;
 //  VirtualOpaqueDevices opaque_devices;
-    FrameBuffers frame_buffers{m_bdat};
+    FrameBuffers frame_buffers{m_bdat}; /// Camera/Screen frame-buffers
 
     constexpr BoardView() noexcept = default;
     explicit BoardView(BoardData& bdat)
         : m_bdat{&bdat}
     {}
 
+    /// Object validity check
     [[nodiscard]] bool valid() noexcept { return m_bdat; }
 };
 

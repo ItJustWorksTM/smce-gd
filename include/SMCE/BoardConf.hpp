@@ -25,6 +25,9 @@
 
 namespace smce {
 
+/**
+ * Configuration for running a sketch
+ **/
 struct BoardConfig {
     struct GpioDrivers {
         struct DigitalDriver {
@@ -55,6 +58,7 @@ struct BoardConfig {
     };
 */
     struct FrameBuffer {
+        /// \ref smce::FrameBuffer::Direction
         enum struct Direction {
             in,
             out,
@@ -63,11 +67,11 @@ struct BoardConfig {
         Direction direction;
     };
 
-    std::vector<std::uint16_t> pins;
-    std::vector<GpioDrivers> gpio_drivers;
-    std::vector<UartChannel> uart_channels;
+    std::vector<std::uint16_t> pins; /// GPIO pins
+    std::vector<GpioDrivers> gpio_drivers; /// GPIO drivers to apply on existing pins
+    std::vector<UartChannel> uart_channels; /// UART channels
 //  std::vector<I2cBus> i2c_buses;
-    std::vector<FrameBuffer> frame_buffers;
+    std::vector<FrameBuffer> frame_buffers; /// Frame-buffers (cameras & screens)
 };
 
 }

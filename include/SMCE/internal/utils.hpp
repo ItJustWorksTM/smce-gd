@@ -24,7 +24,10 @@
 
 namespace smce {
 
-[[noreturn]] inline void unreachable() {
+/**
+ * UBaaS - UB-as-a-Service
+ **/
+[[noreturn]] inline void unreachable() noexcept {
 #if _MSC_VER
     __assume(false);
 #elif __GNUC__
@@ -32,6 +35,10 @@ namespace smce {
 #endif
 }
 
+/**
+ * Jason Turner's C++ Weekly visitor
+ * \tparam Base - Callables to inherit from; intended to be provided via CTAD
+ **/
 template <class... Base>
 struct Visitor : Base... {
     template <class... Ts>
