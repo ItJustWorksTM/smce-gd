@@ -52,7 +52,7 @@ cpack
 
 
 ### Future development
-- Doxygen all the things
+- Serve the Doxygen-generated docs
 - Making a proper [Hugo](https://gohugo.io)-generated wiki in Markdown
 - `std::error_code`ify `smce::BoardRunner`
 - Removal of the strong dependency on ArduinoCLI (preprocess ourselves)
