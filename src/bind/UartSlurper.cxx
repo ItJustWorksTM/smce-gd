@@ -17,6 +17,8 @@
  */
 
 #include <algorithm>
+#include <string>
+#include <iostream>
 #include "bind/UartSlurper.hxx"
 
 using namespace godot;
@@ -39,10 +41,18 @@ void UartSlurper::_physics_process(float) {
 
         available = view.uart_channels[i].tx().read({read_buf.data(), read_buf.size() - 1});
         if (available > 0) {
+            const auto distance = std::distance(read_buf.begin(), read_buf.begin() + available);
+            Godot::print("UART INFO:");
+            Godot::print(std::to_string(available).c_str());
+            Godot::print(std::to_string(distance).c_str());
+
             std::replace_if(
                 read_buf.begin(), read_buf.begin() + available,
                 [](const auto& letter) { return letter == '\0'; }, '\r'); // godot seems to ignore \r
             read_buf[available] = '\0';
+            const auto perceived_size = String(read_buf.data()).length();
+            std::cout << "perceived size: " << std::to_string(perceived_size) << "\n";
+            std::cout << "MESSAGE\n" << std::string{read_buf.data(), available} << "\nENDMESSAGE\n";
             emit_signal("uart", 0, String(static_cast<const char*>(read_buf.data())));
         }
 
