@@ -30,7 +30,7 @@ else ()
 #   set (Boost_DEBUG True)
     set (BOOST_ENABLE_CMAKE True)
 
-    if(EXISTS "${PROJECT_SOURCE_DIR}/ext_deps/boost")
+    if (EXISTS "${PROJECT_SOURCE_DIR}/ext_deps/boost")
         set (boost_SOURCE_DIR ext_deps/boost)
     else ()
         message ("Downloading Boost")
@@ -42,7 +42,7 @@ else ()
         if (NOT boost_POPULATED)
             FetchContent_Populate (Boost)
         endif ()
-    endif()
+    endif ()
     add_subdirectory ("${boost_SOURCE_DIR}" "${boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
 
     target_link_libraries (SMCE_Boost INTERFACE
@@ -72,7 +72,7 @@ if (WIN32)
 elseif (NOT APPLE)
     target_link_libraries (Boost_ipc INTERFACE rt)
 endif ()
-add_library(Boost::ipc ALIAS Boost_ipc)
+add_library (Boost::ipc ALIAS Boost_ipc)
 
 target_link_libraries (SMCE_Boost INTERFACE Boost_ipc)
 

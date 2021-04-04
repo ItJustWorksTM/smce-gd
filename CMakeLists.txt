@@ -83,7 +83,7 @@ FetchContent_Declare (mosquitto
         GIT_REPOSITORY "https://github.com/eclipse/mosquitto"
         GIT_TAG v2.0.9)
 FetchContent_GetProperties (mosquitto)
-if(NOT mosquitto_POPULATED)
+if (NOT mosquitto_POPULATED)
    set (CMAKE_POLICY_DEFAULT_CMP0048 NEW)
    FetchContent_Populate (mosquitto)
    set (OPENSSL_USE_STATIC_LIBS True CACHE INTERNAL "")
@@ -98,7 +98,7 @@ if(NOT mosquitto_POPULATED)
    set (WITH_CJSON False CACHE INTERNAL "")
    set (WITH_LIB_CPP False CACHE INTERNAL "")
 
-   list(APPEND CMAKE_MODULE_PATH "${mosquitto_SOURCE_DIR}/cmake/")
+   list (APPEND CMAKE_MODULE_PATH "${mosquitto_SOURCE_DIR}/cmake/")
    add_subdirectory ("${mosquitto_SOURCE_DIR}" "${mosquitto_BINARY_DIR}" EXCLUDE_FROM_ALL)
    target_include_directories (libmosquitto_static INTERFACE "${mosquitto_SOURCE_DIR}/include")
    if (WIN32)

@@ -15,7 +15,7 @@
 #  limitations under the License.
 #
 
-find_package(Catch2 QUIET)
+find_package (Catch2 QUIET)
 if (NOT Catch2_FOUND)
     FetchContent_Declare (
         Catch2
