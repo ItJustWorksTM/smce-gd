@@ -326,6 +326,43 @@ bool FrameBuffer::read_rgb888(std::span<std::byte> buf) {
     return true;
 }
 
+bool FrameBuffer::write_rgb444(std::span<const std::byte> buf) {
+    if(!exists())
+        return false;
+
+    auto& frame_buf = m_bdat->frame_buffers[m_idx];
+    if(buf.size() != frame_buf.data.size() / 2)
+        return false;
+
+    [[maybe_unused]] std::lock_guard lk{frame_buf.data_mut};
+
+    auto* to = frame_buf.data.data();
+    for(std::byte from : buf) {
+        *to++ = from & std::byte{0xF};
+        *to++ = from << 4; // Might be a bug there in the case where we have an odd number of pixels in the frame
+    }
+
+    return true;
+}
+
+bool FrameBuffer::read_rgb444(std::span<std::byte> buf) {
+    if(!exists())
+        return false;
+
+    auto& frame_buf = m_bdat->frame_buffers[m_idx];
+    if(buf.size() != frame_buf.data.size())
+        return false;
+    [[maybe_unused]] std::lock_guard lk{frame_buf.data_mut};
+
+    const auto* from = frame_buf.data.data();
+    for(std::byte& to : buf) {
+        to = (from[0] & std::byte{0xF}) | (from[1] >> 4);
+        from += 2;
+    }
+
+    return true;
+}
+
 FrameBuffer FrameBuffers::operator[](std::size_t key) noexcept {
     if(!m_bdat)
         return {m_bdat, 0};
