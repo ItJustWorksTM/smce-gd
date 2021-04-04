@@ -11,7 +11,7 @@ This cross-platform C++ library provides its consumers the ability to compile an
 - GPIO (Arduino's `digitalRead`, `analogWrite`, etc)
 - UART (Arduino's `Serial` global)
 - MQTT (interface of [arduino-mqtt](https://github.com/256dpi/arduino-mqtt)) - Note: cannot be monitored by host application
-
+- OV767X Camera (interface of [Arduino_OV767X](https://github.com/arduino-libraries/Arduino_OV767X)) - Note: available pixel formats differ
 
 ### Build Requirements
 
