@@ -202,7 +202,7 @@ direction_pin = 39
 [node name="Front Camera" type="Spatial" parent="Attachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735401, -2.30562 )
 script = ExtResource( 11 )
-distort = 0.9
+distort = 0.75
 
 [node name="Timer" type="Timer" parent="Attachments/Front Camera"]
 process_mode = 0
@@ -230,7 +230,5 @@ copy_mode = 2
 
 [node name="Effect" type="ColorRect" parent="Attachments/Front Camera/Viewport"]
 material = SubResource( 4 )
-anchor_right = 1.0
-anchor_bottom = 1.0
 margin_right = -640.0
 margin_bottom = -480.0

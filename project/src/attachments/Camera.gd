@@ -42,10 +42,8 @@ func _on_frame() -> void:
 
 
 func _physics_process(delta):
-	
 	viewport.get_camera().global_transform.origin = global_transform.origin
 	viewport.get_camera().global_transform.basis = global_transform.basis
-	effect.get_material().set_shader_param("resolution", viewport.size)
 	effect.get_material().set_shader_param("factor", distort)
 	
 	if ! view || ! view.is_valid():
@@ -56,6 +54,8 @@ func _physics_process(delta):
 	var new_freq = buffer.get_freq()
 	if new_res != resolution:
 		viewport.size = new_res
+		effect.get_material().set_shader_param("resolution", viewport.size)
+		effect.rect_size = new_res
 		resolution = new_res
 		
 	if new_freq != fps && new_freq != 0:
