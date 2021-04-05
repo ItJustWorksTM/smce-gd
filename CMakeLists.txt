@@ -118,6 +118,8 @@ else ()
         file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\" USE_SOURCE_PERMISSIONS)
     ")
 endif ()
+file (WRITE "${PROJECT_BINARY_DIR}/export/version.txt" "${PROJECT_VERSION}")
+install (FILES "${PROJECT_BINARY_DIR}/export/version.txt" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
 
 if (APPLE)
     set (CPACK_GENERATOR DragNDrop)
