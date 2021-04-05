@@ -11,7 +11,19 @@ var error: String = ""
 func _ready():
 	_button.connect("pressed", self, "_on_clipboard_copy")
 
-	print("User dir: ", OS.get_user_data_dir())
+	var file = File.new()
+	var version = "unknown"
+	var exec_path = OS.get_executable_path()
+	if file.open(exec_path.get_base_dir() + "/version.txt", File.READ) == OK:
+		version = file.get_as_text()
+		file.close()
+
+	OS.set_window_title("SMCE-gd: %s" % version)
+	print("Version: %s" % version)
+	print("Executable: %s" % exec_path)
+	print("Mode: %s" % "Debug" if OS.is_debug_build() else "Release")
+	print("User dir: %s" % OS.get_user_data_dir())
+	print()
 
 	var dir = Directory.new()
 	if dir.open("res://share/RtResources"):
