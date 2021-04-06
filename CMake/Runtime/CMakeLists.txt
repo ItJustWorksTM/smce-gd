@@ -17,6 +17,7 @@
 
 ## Expected variables
 # SMCE_DIR - Path to the SMCE dir
+# SKETCH_DIR - Path to the sketch
 
 cmake_minimum_required (VERSION 3.10)
 
@@ -54,6 +55,7 @@ endif ()
 
 add_executable (Sketch)
 target_sources (Sketch PRIVATE "${PROJECT_SOURCE_DIR}/sketch.cpp" "${SMCE_DIR}/RtResources/Ardrivo/share/sketch_main.cpp")
+target_include_directories (Sketch PRIVATE "${SKETCH_DIR}")
 target_link_libraries (Sketch Ardrivo)
 target_compile_definitions (Sketch PUBLIC SMCE__COMPILING_USERCODE=1)
 add_custom_command (TARGET Sketch POST_BUILD COMMAND "${CMAKE_COMMAND}" -E rename "$<TARGET_FILE:Sketch>" "${PROJECT_BINARY_DIR}/Sketch")

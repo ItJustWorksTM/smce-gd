@@ -82,6 +82,12 @@ set (COMP_DIR "${SMCE_DIR}/tmp/${COMP_DIRNAME}")
 file (MAKE_DIRECTORY "${COMP_DIR}")
 message (STATUS "SMCE: Compilation directory is \"${COMP_DIR}\"")
 
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20")
+    cmake_path (GET SKETCH_PATH PARENT_PATH SKETCH_DIR)
+else ()
+    get_filename_component (SKETCH_DIR "${SKETCH_PATH}" DIRECTORY)
+endif ()
+
 file (MAKE_DIRECTORY "${COMP_DIR}/libs")
 foreach (COMPLINK_PATCH_LIB ${COMPLINK_PATCH_LIBS})
     string (REGEX MATCH "^([^|]+)\\|([^@]*)(@?[0-9.]*)$" MATCH "${COMPLINK_PATCH_LIB}")
@@ -123,6 +129,6 @@ endif ()
 
 file (COPY "${SMCE_DIR}/RtResources/SMCE/share/Runtime/CMakeLists.txt" DESTINATION "${COMP_DIR}")
 file (MAKE_DIRECTORY "${COMP_DIR}/build")
-execute_process (COMMAND "${CMAKE_COMMAND}" "-DSMCE_DIR=${SMCE_DIR}" ${TOOLCHAIN} -S "${COMP_DIR}" -B "${COMP_DIR}/build")
+execute_process (COMMAND "${CMAKE_COMMAND}" "-DSMCE_DIR=${SMCE_DIR}" "-DSKETCH_DIR=${SKETCH_DIR}" ${TOOLCHAIN} -S "${COMP_DIR}" -B "${COMP_DIR}/build")
 
 message (STATUS "SMCE: Sketch binary will be at \"${COMP_DIR}/build/Sketch\"")
