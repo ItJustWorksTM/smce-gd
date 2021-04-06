@@ -24,7 +24,7 @@ class DirectionalOdometer : public DirectionlessOdometer {
         : DirectionalOdometer(runtime, pins.pulse, pins.direction, callback, pulsesPerMeter) {}
 
     long getDistance() override {
-        return runtime.getAnalogPinState(fwd_dist_pin) - runtime.getAnalogPinState(bwd_dist_pin);
+        return (runtime.getAnalogPinState(fwd_dist_pin) - runtime.getAnalogPinState(bwd_dist_pin)) / 10;
     }
 
     bool providesDirection() const override { return true; }

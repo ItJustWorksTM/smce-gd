@@ -25,7 +25,7 @@ class DirectionlessOdometer : public Odometer {
     ~DirectionlessOdometer() override = default;
 
     long getDistance() override {
-        return runtime.getAnalogPinState(fwd_dist_pin) + runtime.getAnalogPinState(bwd_dist_pin);
+        return (runtime.getAnalogPinState(fwd_dist_pin) + runtime.getAnalogPinState(bwd_dist_pin)) / 10;
     }
 
     float getSpeed() override { return runtime.getAnalogPinState(speed_pin) / 1000.0f; }
