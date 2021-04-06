@@ -17,7 +17,7 @@ GY50::GY50(Runtime& runtime, int offset, unsigned long samplingInterval)
     static_cast<void>(mPreviousSample);
 }
 
-int GY50::getHeading() { return static_cast<int>(mAngularDisplacement) - 180; }
+int GY50::getHeading() { return static_cast<int>(mAngularDisplacement); }
 
 void GY50::update() { mAngularDisplacement = static_cast<float>(mRuntime.getAnalogPinState(gyro_pin)); }
 
