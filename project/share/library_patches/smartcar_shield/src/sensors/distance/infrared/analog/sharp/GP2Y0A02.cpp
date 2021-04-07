@@ -6,5 +6,6 @@ GP2Y0A02::GP2Y0A02(Runtime& runtime, uint8_t pin)
 }
 
 unsigned int GP2Y0A02::getDistance() {
+    mRuntime.delayMillis(1);
     return mRuntime.getAnalogPinState(kPin);
 }

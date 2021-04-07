@@ -6,5 +6,6 @@ GP2D120::GP2D120(Runtime& runtime, uint8_t pin)
 }
 
 unsigned int GP2D120::getDistance() {
+    mRuntime.delayMillis(1);
     return mRuntime.getAnalogPinState(kPin);
 }

@@ -2,6 +2,7 @@
 #include "SR04.hpp"
 
 const unsigned long kMedianMeasurementDelay = 15;
+const unsigned long kTimeToMeasureOneCm = 120;
 
 using namespace smartcarlib::constants::sr04;
 using namespace smartcarlib::constants::distanceSensor;
@@ -9,7 +10,8 @@ using namespace smartcarlib::utils;
 
 SR04::SR04(Runtime& runtime, uint8_t triggerPin, uint8_t echoPin, unsigned int maxDistance)
     : kTriggerPin{triggerPin}, kEchoPin{echoPin},
-      kMaxDistance{maxDistance > 0 ? maxDistance : kDefaultMaxDistance}, kTimeout{},
+      kMaxDistance{maxDistance > 0 ? maxDistance : kDefaultMaxDistance}, kTimeout{kMaxDistance *
+                                                                                  kTimeToMeasureOneCm},
       mRuntime(runtime), kOutput{}, kInput{}, kLow{}, kHigh{} {
     mRuntime.setPinDirection(kEchoPin, mRuntime.getInputState());
     mAttached = true;
@@ -26,7 +28,9 @@ void SR04::attach() {}
 
 unsigned int SR04::getDistance() {
     const unsigned calculatedDistance = mRuntime.getAnalogPinState(kEchoPin);
-    return calculatedDistance <= kMaxDistance ? calculatedDistance : kError;
+    const auto ret = calculatedDistance <= kMaxDistance ? calculatedDistance : kError;
+    mRuntime.delayMicros(ret != kError ? ret * kTimeToMeasureOneCm : kTimeout);
+    return ret;
 }
 
 unsigned int SR04::getMedianDistance(uint8_t iterations) {
