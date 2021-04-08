@@ -25,19 +25,14 @@ _global_script_classes=[ {
 "path": "res://src/utilities/toggleable_bgroup/BButonGroup.gd"
 }, {
 "base": "",
+"class": "Board",
+"language": "NativeScript",
+"path": "res://src/bind/Board.gdns"
+}, {
+"base": "Reference",
 "class": "BoardConfig",
 "language": "NativeScript",
 "path": "res://src/bind/BoardConfig.gdns"
-}, {
-"base": "Reference",
-"class": "BoardConfigGD",
-"language": "GDScript",
-"path": "res://src/bind/BoardConfig.gd"
-}, {
-"base": "Node",
-"class": "BoardRunner",
-"language": "NativeScript",
-"path": "res://src/bind/BoardRunner.gdns"
 }, {
 "base": "",
 "class": "BoardView",
@@ -59,11 +54,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/utilities/control_util/ControlUtil.gd"
 }, {
-"base": "",
-"class": "ExecutionContext",
-"language": "NativeScript",
-"path": "res://src/bind/ExecutionContext.gdns"
-}, {
 "base": "Reference",
 "class": "FrameBufferConfig",
 "language": "NativeScript",
@@ -84,6 +74,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/node_visualizer/NodeVisualizer.gd"
 }, {
+"base": "VBoxContainer",
+"class": "NotificationDisplay",
+"language": "GDScript",
+"path": "res://src/ui/notification_display/NotificationDisplay.gd"
+}, {
+"base": "Reference",
+"class": "ProfileConfig",
+"language": "GDScript",
+"path": "res://src/ui/master_control/ProfileConfig.gd"
+}, {
+"base": "Reference",
+"class": "ProfileManager",
+"language": "GDScript",
+"path": "res://src/ui/master_control/ProfileManager.gd"
+}, {
 "base": "Reference",
 "class": "SMCE",
 "language": "GDScript",
@@ -98,6 +103,36 @@ _global_script_classes=[ {
 "class": "ShootyVisualizer",
 "language": "GDScript",
 "path": "res://src/attachments/ShootyVisualizer.gd"
+}, {
+"base": "Button",
+"class": "SimpleNotification",
+"language": "GDScript",
+"path": "res://src/ui/simple_notification/SimpleNotiifcation.gd"
+}, {
+"base": "",
+"class": "Sketch",
+"language": "NativeScript",
+"path": "res://src/bind/Sketch.gdns"
+}, {
+"base": "Node",
+"class": "SketchManager",
+"language": "GDScript",
+"path": "res://src/ui/master_control/SketchManager.gd"
+}, {
+"base": "Control",
+"class": "SmceHud",
+"language": "GDScript",
+"path": "res://src/ui/hud/SketchControlManager.gd"
+}, {
+"base": "Tween",
+"class": "TempTween",
+"language": "GDScript",
+"path": "res://src/ui/temp_tween/TempTween.gd"
+}, {
+"base": "",
+"class": "Toolchain",
+"language": "NativeScript",
+"path": "res://src/bind/Toolchain.gdns"
 }, {
 "base": "Reference",
 "class": "UartChannelConfig",
@@ -118,21 +153,28 @@ _global_script_class_icons={
 "AnalogRaycastGD": "",
 "AnyTask": "",
 "BButtonGroup": "",
+"Board": "",
 "BoardConfig": "",
-"BoardConfigGD": "",
-"BoardRunner": "",
 "BoardView": "",
 "BrushedMotorGD": "",
 "CamCtl": "",
 "ControlUtil": "",
-"ExecutionContext": "",
 "FrameBufferConfig": "",
 "GDResult": "",
 "GpioDriverConfig": "",
 "NodeVisualizer": "",
+"NotificationDisplay": "",
+"ProfileConfig": "",
+"ProfileManager": "",
 "SMCE": "",
 "Shooty": "",
 "ShootyVisualizer": "",
+"SimpleNotification": "",
+"Sketch": "",
+"SketchManager": "",
+"SmceHud": "",
+"TempTween": "",
+"Toolchain": "",
 "UartChannelConfig": "",
 "UartSlurper": "",
 "Util": ""
@@ -147,11 +189,16 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.12549, 0.12549, 0.12549, 1 )
 config/icon="res://media/images/icon.png"
 
+[audio]
+
+driver="None"
+
 [autoload]
 
 DebugCanvas="*res://src/utilities/debug_canvas/DebugCanvas.gd"
 FocusOwner="*res://src/utilities/focus_owner/FocusOwner.gd"
-SketchAttach="*res://src/utilities/sketch_attach/SketchAttach.gd"
+Global="*res://Global.gd"
+ModManager="*res://src/ui/master_control/ModManager.gd"
 
 [debug]
 
@@ -162,6 +209,10 @@ gdscript/warnings/unsafe_property_access=true
 
 window/size/width=1280
 window/size/height=720
+
+[gui]
+
+theme/custom_font="res://media/fonts/Open_Sans/OpenSasn-Regular.tres"
 
 [input]
 
@@ -235,6 +286,11 @@ debug_car_spawn={
 debug_car_cam={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777255,"unicode":0,"echo":false,"script":null)
+ ]
+}
+reload={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777248,"unicode":0,"echo":false,"script":null)
  ]
 }
 

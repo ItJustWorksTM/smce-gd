@@ -33,14 +33,15 @@ set (SMCE_AUTODOWNLOAD True)
 include (FetchContent)
 include (fmt)
 include (SetupSMCE)
-list (APPEND GDCPP_NEEDED_CLASSES Reference Node Resource)
+list (APPEND GDCPP_NEEDED_CLASSES Reference Node Resource _ResourceLoader)
 include (SetupGodotCpp)
 
 add_library (godot-smce MODULE)
 target_sources (godot-smce PRIVATE
         src/lib.cxx
-        src/bind/BoardRunner.cxx
-        src/bind/ExecutionContext.cxx
+        src/bind/Board.cxx
+        src/bind/Toolchain.cxx
+        src/bind/Sketch.cxx
         src/bind/BoardView.cxx
         src/bind/UartSlurper.cxx
         src/bind/BoardConfig.cxx

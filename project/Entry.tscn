@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Entry.gd" type="Script" id=1]
-[ext_resource path="res://src/environments/playground/Playground.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/ui/master_control/Master.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )

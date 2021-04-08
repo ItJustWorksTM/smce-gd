@@ -28,11 +28,11 @@
 #include "FrameBuffer.hxx"
 
 namespace godot {
-class BoardRunner;
+class Board;
 
 class BoardView : public Node {
     GODOT_CLASS(BoardView, Node)
-    friend BoardRunner;
+    friend Board;
 
     smce::BoardView view;
 

@@ -4,9 +4,9 @@ extends Node
 signal cam_locked
 signal cam_freed
 
-var locked_cam = null
-var free_cam = null
-var interp_cam = null
+var locked_cam: Spatial = null
+var free_cam: Spatial = null
+var interp_cam: Spatial = null
 
 var locked = null
 
@@ -30,6 +30,13 @@ func free_cam() -> void:
 	if is_instance_valid(locked):
 		locked.disconnect("tree_exiting", self, "_on_free")
 	locked = null
+
+
+func set_cam_position(transform: Transform = Transform()) -> void:
+	free_cam()
+	locked_cam.global_transform = transform
+	free_cam.global_transform = transform
+	interp_cam.global_transform = transform
 
 
 func _on_free(node) -> void:

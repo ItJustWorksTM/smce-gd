@@ -29,7 +29,7 @@
 namespace godot {
 class UartSlurper : public Node {
     GODOT_CLASS(UartSlurper, Node)
-    friend BoardRunner;
+    friend Board;
 
     smce::BoardView view;
 

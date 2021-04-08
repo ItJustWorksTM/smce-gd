@@ -8,9 +8,16 @@ onready var _button: Button = $Button
 
 var error: String = ""
 
-func _ready():
-	_button.connect("pressed", self, "_on_clipboard_copy")
 
+func _ready():
+	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
+	if custom_dir != "":
+		print("Custom user directory set")
+		if !Global.set_user_dir(custom_dir):
+			return _error("Failed to setup custom user directory")
+	
+	_button.connect("pressed", self, "_on_clipboard_copy")
+	print("Reading version file..")
 	var file = File.new()
 	var version = "unknown"
 	var exec_path = OS.get_executable_path()
@@ -18,32 +25,45 @@ func _ready():
 		version = file.get_as_text()
 		file.close()
 
+	Global.version = version
+
 	OS.set_window_title("SMCE-gd: %s" % version)
 	print("Version: %s" % version)
 	print("Executable: %s" % exec_path)
 	print("Mode: %s" % "Debug" if OS.is_debug_build() else "Release")
-	print("User dir: %s" % OS.get_user_data_dir())
+	print("User dir: %s" % Global.user_dir)
 	print()
-
+	
 	var dir = Directory.new()
-	if dir.open("res://share/RtResources"):
-		return _error("RtResources not found!")
-
-	if ! Util.copy_dir("res://share/RtResources", "user://RtResources"):
+	
+	if dir.open("res://share/RtResources") != OK:
+		return _error("Internal RtResources not found!")
+	
+	if ! Util.copy_dir("res://share/RtResources", Global.usr_dir_plus("RtResources")):
 		return _error("Failed to copy in RtResources")
-
-	if ! Util.copy_dir("res://share/library_patches", "user://library_patches"):
+	
+	if ! Util.copy_dir("res://share/library_patches", Global.usr_dir_plus("library_patches")):
 		return _error("Failed to copy in library_patches")
-
+	
+	Util.mkdir(Global.usr_dir_plus("mods"))
+	Util.mkdir(Global.usr_dir_plus("config/profiles"), true)
+	
 	print("Copied RtResources")
 
-	var bar = BoardRunner.new()
-	if bar == null:
+	var bar = Toolchain.new()
+	if ! is_instance_valid(bar):
 		return _error("Shared library not loaded")
+	
+	var res = bar.init(Global.user_dir)
+	if ! res.ok():
+		return _error("Unsuitable environment: " % res.error())
+	print(bar.resource_dir())
 	bar.free()
 	
+	# somehow destroys res://
+	ModManager.load_mods()
+	
 	_continue()
-
 
 func _continue():
 	if ! main_scene:

@@ -1,5 +1,5 @@
 /*
- *  ExecutionContext.hxx
+ *  Sketch.hxx
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,31 +16,35 @@
  *
  */
 
-#ifndef GODOT_SMCE_EXECUTIONCONTEXT_HXX
-#define GODOT_SMCE_EXECUTIONCONTEXT_HXX
+#ifndef GODOT_SMCE_SKETCH_HXX
+#define GODOT_SMCE_SKETCH_HXX
 
-#include <SMCE/ExecutionContext.hpp>
-#include <core/Godot.hpp>
+#include "SMCE/Sketch.hpp"
+#include "core/Godot.hpp"
+#include "gen/Reference.hpp"
 
 namespace godot {
-class ExecutionContext : public Reference {
-    GODOT_CLASS(ExecutionContext, Reference)
 
-    smce::ExecutionContext context = smce::ExecutionContext{"."};
+class Sketch : public Reference {
+    GODOT_CLASS(Sketch, Reference)
+
+    smce::Sketch sketch{"", {}};
 
   public:
     static void _register_methods();
+    void _init() {}
 
-    static Ref<ExecutionContext> make_context(String path);
+    smce::Sketch& native() { return sketch; }
 
-    void _init();
+    // TODO: support SketchConfig
+    // TOOD: remove home_dir§
+    void init(String src, String home_dir);
 
-    smce::ExecutionContext& native();
-
-    String resource_dir();
-
-    bool check_suitable_environment();
+    String get_source();
+    bool is_compiled();
+    String get_uuid();
 };
+
 } // namespace godot
 
-#endif // GODOT_SMCE_EXECUTIONCONTEXT_HXX
+#endif // GODOT_SMCE_SKETCH_HXX

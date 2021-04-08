@@ -3,7 +3,7 @@
 [ext_resource path="res://gdnative/smce.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "BoardRunner"
-class_name = "BoardRunner"
+resource_name = "Board"
+class_name = "Board"
 library = ExtResource( 1 )
-script_class_name = "BoardRunner"
+script_class_name = "Board"

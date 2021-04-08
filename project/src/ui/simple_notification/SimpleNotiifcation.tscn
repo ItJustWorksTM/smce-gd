@@ -3,7 +3,7 @@
 [ext_resource path="res://src/ui/simple_notification/SimpleNotiifcation.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.196078, 0.196078, 0.196078, 1 )
+bg_color = Color( 0.141176, 0.141176, 0.141176, 1 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -13,7 +13,7 @@ shadow_color = Color( 0.231373, 0.231373, 0.231373, 0.658824 )
 shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.145098, 0.145098, 0.14902, 1 )
+bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -65,7 +65,7 @@ margin_left = -160.0
 margin_top = -32.0
 margin_right = 160.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 0, 64 )
+rect_min_size = Vector2( 0, 72 )
 rect_clip_content = true
 focus_mode = 0
 custom_styles/hover = SubResource( 1 )
@@ -79,19 +79,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="RichTextLabel" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="RichTextLabel" parent="MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = -8.0
-margin_bottom = -6.0
+margin_right = 312.0
+margin_bottom = 64.0
 rect_pivot_offset = Vector2( 464, -56 )
 mouse_filter = 2
 custom_constants/line_separation = 2
 bbcode_enabled = true
 bbcode_text = "Compiling sketch: 'testing'"
 text = "Compiling sketch: 'testing'"
+fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

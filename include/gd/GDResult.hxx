@@ -43,6 +43,14 @@ class GDResult : public Reference {
 
     static Ref<GDResult> ok() { return make_ref<GDResult>(); }
 
+    static Ref<GDResult> from(const std::error_code& ec) {
+        if (ec) {
+            const auto msg = ec.message();
+            return err(msg.c_str());
+        }
+        return ok();
+    }
+
     void _init() {}
 
     bool is_ok() { return !has_error; }
