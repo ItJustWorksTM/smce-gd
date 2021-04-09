@@ -29,7 +29,7 @@ func _unhandled_input(event) -> void:
 
 func _update_pos():
 	rot_y = clamp(rot_y, _y_angle_limit, PI - _y_angle_limit)
-	transform.basis = Quat(Vector3(rot_y - PI /2, rot_x, 0))
+	transform.basis = Basis(Quat(Vector3(rot_y - PI /2, rot_x, 0)))
 
 
 func _physics_process(delta: float) -> void:

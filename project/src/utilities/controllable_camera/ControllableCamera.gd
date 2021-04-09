@@ -53,7 +53,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _update_pos():
 	rot_y = clamp(rot_y, _y_angle_limit, PI - _y_angle_limit)
 	if target:
-		target.transform.basis = Quat(Vector3(rot_y, rot_x, 0))
+		target.transform.basis = Basis(Quat(Vector3(rot_y, rot_x, 0)))
 
 
 func _ready():
