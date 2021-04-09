@@ -72,8 +72,12 @@ jobs:
       - name: CPack
         run: |
           mkdir build/packages
-          (cd build/; cpack -B packages)
-          rm -rd build/packages/_CPack_Packages
+          cd build/
+          cpack -B packages
+          cmake -DGODOT_DEBUG=On .
+          cpack -B packages
+          rm -rd packages/_CPack_Packages
+          cd ..
       - name: Upload artifacts
         uses: 'actions/upload-artifact@v2'
         with:
@@ -134,8 +138,12 @@ jobs:
       - name: CPack
         run: |
           mkdir build/packages
-          (cd build/; cpack -B packages)
-          rm -rd build/packages/_CPack_Packages
+          cd build/
+          cpack -B packages
+          cmake -DGODOT_DEBUG=On .
+          cpack -B packages
+          rm -rd packages/_CPack_Packages
+          cd ..
       - name: Upload artifacts
         uses: 'actions/upload-artifact@v2'
         with:
@@ -195,6 +203,8 @@ jobs:
         run: |
           mkdir ./build/packages
           cd build
+          cpack -B packages
+          cmake -DGODOT_DEBUG=On .
           cpack -B packages
           rm -R packages/_CPack_Packages
           cd ..
