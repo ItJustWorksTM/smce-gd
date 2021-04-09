@@ -25,6 +25,14 @@
 
 namespace smce {
 
+enum struct exec_ctx_error {
+    no_res_dir = 1,
+    cmake_not_found,
+    cmake_unknown_output,
+    cmake_failing,
+    generic = 255
+};
+
 /**
  * The context of execution for sketches in board-runners
  *
@@ -53,7 +61,7 @@ class ExecutionContext {
      * \warning This function currently only checks for CMake's availability through the PATH env var
      * \todo Extend to check for a C++ >=11 compiler
      **/
-    [[nodiscard]] bool check_suitable_environment() noexcept;
+    [[nodiscard]] std::error_code check_suitable_environment() noexcept;
 };
 
 }

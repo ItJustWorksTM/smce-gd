@@ -17,13 +17,13 @@ TEST_CASE("ExecutionContext invalid", "[ExecutionContext]") {
     const auto path = SMCE_TEST_DIR "/empty_dir";
     std::filesystem::create_directory(path);
     smce::ExecutionContext exec_ctx{path};
-    REQUIRE_FALSE(exec_ctx.check_suitable_environment());
+    REQUIRE(exec_ctx.check_suitable_environment());
     REQUIRE(exec_ctx.resource_dir() == path);
 }
 
 TEST_CASE("ExecutionContext valid", "[ExecutionContext]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     REQUIRE(exec_ctx.resource_dir() == SMCE_PATH);
     REQUIRE_FALSE(exec_ctx.cmake_path().empty());
 }
@@ -32,7 +32,7 @@ TEST_CASE("ExecutionContext valid", "[ExecutionContext]") {
 
 TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.status() == smce::BoardRunner::Status::clean);
     REQUIRE_FALSE(br.view().valid());
@@ -61,7 +61,7 @@ TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
 
 TEST_CASE("BoardRunner exit_notify", "[BoardRunner]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     std::promise<int> ex;
     smce::BoardRunner br{exec_ctx, [&](int ec){ ex.set_value(ec); }};
     REQUIRE(br.configure("arduino:avr:nano", {}));
@@ -88,7 +88,7 @@ void test_pin_delayable(Pin pin, Value expected_value, std::size_t ticks, Durati
 
 TEST_CASE("BoardView GPIO", "[BoardView]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano",
       {
@@ -139,7 +139,7 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
 
 TEST_CASE("BoardView UART", "[BoardView]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano",
      {
@@ -185,7 +185,7 @@ TEST_CASE("BoardView UART", "[BoardView]") {
 
 TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano", {}));
     const bool res = br.build(SKETCHES_PATH "remote_pp", {
@@ -198,7 +198,7 @@ TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
 
 TEST_CASE("WiFi intended use", "[WiFi]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano", {}));
     const bool res = br.build(SKETCHES_PATH "wifi", {
@@ -211,7 +211,7 @@ TEST_CASE("WiFi intended use", "[WiFi]") {
 
 TEST_CASE("Patch lib", "[BoardRunner]") {
     smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(exec_ctx.check_suitable_environment());
+    REQUIRE(!exec_ctx.check_suitable_environment());
     smce::BoardRunner br{exec_ctx};
     REQUIRE(br.configure("arduino:avr:nano", {
         .pins = {0},

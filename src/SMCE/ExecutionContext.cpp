@@ -18,23 +18,74 @@
 
 #include <SMCE/ExecutionContext.hpp>
 
+#include <string>
+#include <system_error>
+
 #include <boost/process.hpp>
 
 namespace bp = boost::process;
 
-namespace smce {
 
-[[nodiscard]] bool ExecutionContext::check_suitable_environment() noexcept {
+
+namespace std {
+template <>
+struct is_error_code_enum<smce::exec_ctx_error> : std::bool_constant<true> {};
+} // std
+
+namespace smce {
+namespace detail {
+
+struct exec_ctx_error_category : public std::error_category {
+public:
+    const char* name() const noexcept override {
+        return "smce.exec_ctx";
+    }
+
+    std::string message(int ev) const override {
+        switch(static_cast<exec_ctx_error>(ev)) {
+        case exec_ctx_error::no_res_dir: return "Resource directory empty";
+        case exec_ctx_error::cmake_not_found: return "CMake not found in PATH";
+        default: return "smce.exec_ctx error";
+        }
+    }
+
+    std::error_condition default_error_condition(int ev) const noexcept override {
+        return std::error_condition{ev, *this};
+    }
+
+    bool equivalent(int ev, const std::error_condition& condition) const noexcept override {
+        return condition.value() == ev && &condition.category() == this;
+    }
+
+    bool equivalent(const std::error_code& error, int ev) const noexcept override {
+        return error.value() == ev && &error.category() == this;
+    }
+};
+
+const std::error_category& get_exec_ctx_error_category() noexcept {
+    static const exec_ctx_error_category cat{};
+    return cat;
+}
+
+} // detail
+
+inline std::error_code make_error_code(exec_ctx_error ev){
+    return std::error_code{
+        static_cast<std::underlying_type<exec_ctx_error>::type>(ev),
+        detail::get_exec_ctx_error_category()};
+}
+
+[[nodiscard]] std::error_code ExecutionContext::check_suitable_environment() noexcept {
     if(std::error_code ec; stdfs::is_empty(m_res_dir, ec) || ec)
-        return false;
+        return exec_ctx_error::no_res_dir;
 
     if(m_cmake_path != "cmake") {
         if(std::error_code ec; stdfs::is_empty(m_cmake_path, ec) || ec)
-            return false;
+            return exec_ctx_error::cmake_not_found;
     } else {
         m_cmake_path = bp::search_path(m_cmake_path).string();
         if(m_cmake_path.empty())
-            return false;
+            return exec_ctx_error::cmake_not_found;
     }
     bp::ipstream cmake_out;
     bp::child cmake_child{m_cmake_path, "--version", bp::std_out > cmake_out};
@@ -42,12 +93,14 @@ namespace smce {
     while (cmake_child.running() && std::getline(cmake_out, line) && !line.empty()) {
         if(!line.starts_with("cmake")) {
             cmake_child.join();
-            return false;
+            return exec_ctx_error::cmake_unknown_output;
         }
         break;
     }
     cmake_child.join();
-    return cmake_child.native_exit_code() == 0;
+    if(cmake_child.native_exit_code() != 0)
+        return exec_ctx_error::cmake_failing;
+    return {};
 }
 
 }
