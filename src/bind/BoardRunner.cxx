@@ -63,8 +63,10 @@ Ref<GDResult> BoardRunner::init(String context_path) {
 
     auto context = smce::ExecutionContext{ctx_path};
 
-    if (!context.check_suitable_environment())
-        return GDResult::err("Unsuitable environment");
+    if (const auto ec = context.check_suitable_environment(); ec) {
+        const auto err_msg = ec.message();
+        return GDResult::err(err_msg.c_str());
+    }
 
     exec_context = context;
     runner.emplace(exec_context, [&](int code) {

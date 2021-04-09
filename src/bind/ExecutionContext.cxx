@@ -38,6 +38,6 @@ void ExecutionContext::_init() { Godot::print("ExecutionContext created"); }
 // Allocates full String, so dont use :)
 String ExecutionContext::resource_dir() { return context.resource_dir().c_str(); }
 
-bool ExecutionContext::check_suitable_environment() { return context.check_suitable_environment(); }
+bool ExecutionContext::check_suitable_environment() { return ! static_cast<bool>(context.check_suitable_environment()); }
 
 smce::ExecutionContext& ExecutionContext::native() { return context; }
