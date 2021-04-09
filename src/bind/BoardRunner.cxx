@@ -119,11 +119,11 @@ Ref<AnyTask> BoardRunner::build(String sketch_src) {
         Godot::print("Async build starting");
         auto build_res = runner->build(
             sketch_src,
-            {.preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT"},
-                              smce::SketchConfig::RemoteArduinoLibrary{"WiFi"},
-                              smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X"}},
+            {.preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT@2.5.0"},
+                              smce::SketchConfig::RemoteArduinoLibrary{"WiFi@1.2.7"},
+                              smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X@0.0.2"}},
              .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
-                 exec_context.resource_dir() / "library_patches" / "smartcar_shield", "Smartcar shield"}}});
+                 exec_context.resource_dir() / "library_patches" / "smartcar_shield", "Smartcar shield@7.0.1"}}});
         Godot::print("Async build completed");
 
         if (!build_res)
