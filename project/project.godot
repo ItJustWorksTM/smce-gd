@@ -64,7 +64,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/ExecutionContext.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "FrameBufferConfig",
 "language": "NativeScript",
 "path": "res://src/bind/FrameBufferConfig.gdns"
@@ -74,7 +74,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/GDResult.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "GpioDriverConfig",
 "language": "NativeScript",
 "path": "res://src/bind/GpioDriverConfig.gdns"
@@ -99,7 +99,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/attachments/ShootyVisualizer.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "UartChannelConfig",
 "language": "NativeScript",
 "path": "res://src/bind/UartChannelConfig.gdns"
