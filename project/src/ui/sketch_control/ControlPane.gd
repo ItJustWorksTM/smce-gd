@@ -128,9 +128,15 @@ func _on_runner_suspended_resumed(suspended: bool) -> void:
 
 
 func _on_runner_stopped(exit_code: int) -> void:
-	print("Sketch stopped: ", exit_code)
-	if exit_code > 0:
-		_create_notification("Sketch '%s' crashed!\n[color=gray]Open the sketch log for more details.[/color]" % file_path_header.text, 5)
+	var exit_str = str(exit_code)
+	if exit_code < 0:
+		exit_code &= 0xFFFFFFFF
+	if exit_code > 255 || exit_code < 0:
+		exit_str = "0x%X" % exit_code
+	
+	print("Sketch stopped: ", exit_str)
+	if exit_code != 0:
+		_create_notification("Sketch '%s' crashed!\nexit code: %s" % [file_path_header.text, exit_str], 5)
 		log_box.header.pressed = true
 	
 	attachments_empty.visible = true
