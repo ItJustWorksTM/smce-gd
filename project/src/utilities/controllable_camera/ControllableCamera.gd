@@ -17,24 +17,23 @@ func set_y_angle_limit(limit: float) -> void:
 var _zoom = 9
 
 var target: Spatial = null setget set_target, get_target
-func set_target(trgt: Spatial) -> void:
-	if ! trgt:
-		return
-	
-	if target:
+func set_target(trgt: Spatial) -> void:	
+	if is_instance_valid(target):
 		target.queue_free()
-	target = Spatial.new()
-
-	trgt.add_child(target)
+		target = null
+		set_process(false)
+	
+	if is_instance_valid(trgt):
+		target = Spatial.new()
+		trgt.add_child(target)
+		set_process(true)
+	
 	_update_pos()
-	set_process(true)
 
 
 func get_target():
-	if ! target:
-		return null
-	return target.get_parent()
-	
+	return target.get_parent() if is_instance_valid(target) else null
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if FocusOwner.has_focus():
@@ -52,7 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _update_pos():
 	rot_y = clamp(rot_y, _y_angle_limit, PI - _y_angle_limit)
-	if target:
+	if is_instance_valid(target):
 		target.transform.basis = Basis(Quat(Vector3(rot_y, rot_x, 0)))
 
 
@@ -62,7 +61,7 @@ func _ready():
 
 
 func _process(delta: float) -> void:
-	if ! target:
+	if ! is_instance_valid(target):
 		set_process(false)
 		return
 	global_transform.origin = target.global_transform.origin + target.global_transform.basis.xform((Vector3.UP) * _zoom)

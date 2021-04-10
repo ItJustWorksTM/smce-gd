@@ -65,7 +65,7 @@ force_offset = Vector3( 0, -0.1, 0 )
 [node name="wheel" type="Spatial" parent="LeftBack"]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.700143, 0 )
 
-[node name="whell" parent="LeftBack/wheel" instance=ExtResource( 4 )]
+[node name="wheel" parent="LeftBack/wheel" instance=ExtResource( 4 )]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
 [node name="LeftFront" parent="." instance=ExtResource( 5 )]

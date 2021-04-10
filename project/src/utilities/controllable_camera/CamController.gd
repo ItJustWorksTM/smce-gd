@@ -11,7 +11,7 @@ var interp_cam = null
 var locked = null
 
 func lock_cam(node: Spatial) -> void:
-	if ! node || ! node.is_inside_tree():
+	if ! is_instance_valid(node) || ! node.is_inside_tree():
 		return
 	interp_cam.set_target(locked_cam)
 	locked_cam.set_target(node)
@@ -27,7 +27,7 @@ func free_cam() -> void:
 	free_cam.set_disabled(false)
 	free_cam.transform = locked_cam.transform
 	emit_signal("cam_freed")
-	if locked:
+	if is_instance_valid(locked):
 		locked.disconnect("tree_exiting", self, "_on_free")
 	locked = null
 

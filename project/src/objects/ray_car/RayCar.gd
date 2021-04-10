@@ -67,11 +67,13 @@ func _integrate_forces(state: PhysicsDirectBodyState) -> void:
 			wheel.throttle = 1 * key_direction * int(! Input.is_action_pressed("ui_left"))
 
 	for i in range(_wheels.size()):
+		var wheel: Spatial = _cosmetic_wheels[i]
 		_wheels[i].add_force(state)
 		if _wheels[i].is_colliding():
-			_cosmetic_wheels[i].global_transform.origin = _wheels[i].get_collision_point()
-			_cosmetic_wheels[i].transform.origin *= Vector3(0,1,0)
-		_cosmetic_wheels[i].get_child(0).rotate(Vector3(1,0,0), _wheels[i].throttle * PI/5)
+			wheel.global_transform.origin = _wheels[i].get_collision_point()
+			wheel.transform.origin *= Vector3(0,1,0)
+		if wheel.get_children().size() > 0:
+			wheel.get_child(0).rotate(Vector3(1,0,0), _wheels[i].throttle * PI/5)
 		
 
 
