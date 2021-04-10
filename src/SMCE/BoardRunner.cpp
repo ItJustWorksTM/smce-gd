@@ -291,7 +291,7 @@ bool BoardRunner::start() noexcept {
         auto& stream = m_internal->sketch_log;
         std::string buf;
         buf.reserve(1024);
-        while(!stream.fail()) {
+        while(stream.good()) {
             const int head = stream.get();
             if(head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
                 break;
