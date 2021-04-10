@@ -26,7 +26,9 @@
 namespace smce {
 
 enum struct exec_ctx_error {
-    no_res_dir = 1,
+    resdir_absent = 1,
+    resdir_file,
+    resdir_empty,
     cmake_not_found,
     cmake_unknown_output,
     cmake_failing,

@@ -43,7 +43,9 @@ public:
 
     std::string message(int ev) const override {
         switch(static_cast<exec_ctx_error>(ev)) {
-        case exec_ctx_error::no_res_dir: return "Resource directory empty";
+        case exec_ctx_error::resdir_absent: return "Resource directory does not exist";
+        case exec_ctx_error::resdir_empty: return "Resource directory empty";
+        case exec_ctx_error::resdir_file: return "Resource directory is a file";
         case exec_ctx_error::cmake_not_found: return "CMake not found in PATH";
         default: return "smce.exec_ctx error";
         }
@@ -76,12 +78,26 @@ inline std::error_code make_error_code(exec_ctx_error ev){
 }
 
 [[nodiscard]] std::error_code ExecutionContext::check_suitable_environment() noexcept {
-    if(std::error_code ec; stdfs::is_empty(m_res_dir, ec) || ec)
-        return exec_ctx_error::no_res_dir;
+    if(std::error_code ec; !stdfs::exists(m_res_dir, ec))
+        return exec_ctx_error::resdir_absent;
+    else if(ec)
+        return ec;
+
+    if(std::error_code ec; !stdfs::is_directory(m_res_dir, ec))
+        return exec_ctx_error::resdir_file;
+    else if(ec)
+        return ec;
+
+    if(std::error_code ec; stdfs::is_empty(m_res_dir, ec))
+        return exec_ctx_error::resdir_empty;
+    else if(ec)
+        return ec;
 
     if(m_cmake_path != "cmake") {
-        if(std::error_code ec; stdfs::is_empty(m_cmake_path, ec) || ec)
+        if(std::error_code ec; stdfs::is_empty(m_cmake_path, ec))
             return exec_ctx_error::cmake_not_found;
+        else if(ec)
+            return ec;
     } else {
         m_cmake_path = bp::search_path(m_cmake_path).string();
         if(m_cmake_path.empty())
