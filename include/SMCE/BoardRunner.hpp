@@ -75,6 +75,10 @@ class BoardRunner {
     struct Internal;
     enum class Command;
 
+    void do_spawn() noexcept;
+    void do_sweep() noexcept;
+    void do_reap() noexcept;
+
     ExecutionContext& m_exectx;
     Status m_status{};
     stdfs::path m_sketch_dir;

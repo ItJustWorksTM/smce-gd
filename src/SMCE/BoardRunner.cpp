@@ -75,13 +75,7 @@ BoardRunner::BoardRunner(ExecutionContext& ctx, std::function<void(int)> exit_no
 }
 
 BoardRunner::~BoardRunner() {
-    if (m_internal) {
-        auto& in = *m_internal;
-        if (in.sketch.valid() && in.sketch.running())
-            in.sketch.terminate();
-        if (in.sketch_log_grabber.joinable())
-            in.sketch_log_grabber.join();
-    }
+    do_reap();
 
     if (!m_sketch_dir.empty()) {
         [[maybe_unused]] std::error_code ec;
@@ -98,12 +92,15 @@ BoardRunner::~BoardRunner() {
 void BoardRunner::tick() noexcept {
    switch (m_status) {
    case Status::running:
-   case Status::suspended:
-       if (!m_internal->sketch.running()) {
+   case Status::suspended: {
+       auto& in = *m_internal;
+       if (!in.sketch.running()) {
+           do_sweep();
            m_status = Status::stopped;
            if (m_exit_notify)
                m_exit_notify(m_internal->sketch.exit_code());
        }
+   }
    default:
        ;
    }
@@ -115,13 +112,7 @@ bool BoardRunner::reset() noexcept {
     case Status::suspended:
         return false;
     default:
-        if (m_internal) {
-            auto& in = *m_internal;
-            if (in.sketch.valid() && in.sketch.running())
-                in.sketch.terminate();
-            if (in.sketch_log_grabber.joinable())
-                in.sketch_log_grabber.join();
-        }
+        do_reap();
         m_internal = std::make_unique<Internal>();
         if (!m_sketch_dir.empty())
             stdfs::remove_all(m_sketch_dir);
@@ -279,31 +270,7 @@ bool BoardRunner::start() noexcept {
     if (m_status != Status::built)
         return false;
 
-    m_internal->sketch =
-        bp::child(
-            bp::env["SEGNAME"] = "SMCE-Runner-" + std::to_string(m_internal->sketch_id),
-            "\""+m_sketch_bin.string()+"\"",
-            bp::std_out > bp::null,
-            bp::std_err > m_internal->sketch_log
-    );
-
-    m_internal->sketch_log_grabber = std::thread{[&]{
-        auto& stream = m_internal->sketch_log;
-        std::string buf;
-        buf.reserve(1024);
-        while(stream.good()) {
-            const int head = stream.get();
-            if(head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
-                break;
-            buf.resize(stream.rdbuf()->in_avail());
-            const auto count = stream.readsome(buf.data(), buf.size());
-            [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
-            const auto existing = m_runtime_log.size();
-            m_runtime_log.resize(existing + count + 1);
-            m_runtime_log[existing] = static_cast<char>(head);
-            std::memcpy(m_runtime_log.data() + existing + 1, buf.data(), count);
-        }
-    }};
+    do_spawn();
 
     m_status = Status::running;
     return true;
@@ -341,11 +308,10 @@ bool BoardRunner::terminate() noexcept {
     if (m_status != Status::running && m_status != Status::suspended)
         return false;
 
-    std::error_code ec;
-    m_internal->sketch.terminate(ec);
-    if (!ec)
-        m_status = Status::stopped;
-    return !ec;
+    do_reap();
+
+    m_status = Status::stopped;
+    return true;
 }
 
 /*
@@ -369,5 +335,62 @@ bool BoardRunner::stop() noexcept {
 // FIXME
 bool BoardRunner::stop() noexcept { return terminate(); }
 
+/**
+ * Spawns the child process and its log grabber
+ **/
+void BoardRunner::do_spawn() noexcept {
+    m_internal->sketch =
+        bp::child(
+            bp::env["SEGNAME"] = "SMCE-Runner-" + std::to_string(m_internal->sketch_id),
+            "\""+m_sketch_bin.string()+"\"",
+            bp::std_out > bp::null,
+            bp::std_err > m_internal->sketch_log
+        );
+
+    m_internal->sketch_log_grabber = std::thread{[&]{
+      auto& stream = m_internal->sketch_log;
+      std::string buf;
+      buf.reserve(1024);
+      while(stream.good()) {
+          const int head = stream.get();
+          if(head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
+              break;
+          buf.resize(stream.rdbuf()->in_avail());
+          const auto count = stream.readsome(buf.data(), buf.size());
+          [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
+          const auto existing = m_runtime_log.size();
+          m_runtime_log.resize(existing + count + 1);
+          m_runtime_log[existing] = static_cast<char>(head);
+          std::memcpy(m_runtime_log.data() + existing + 1, buf.data(), count);
+      }
+    }};
+}
+
+/**
+ * Cleans up after a suicidal sketch
+ **/
+void BoardRunner::do_sweep() noexcept {
+    auto& in = *m_internal;
+    [[maybe_unused]] std::error_code ignored;
+    in.sketch.wait(ignored);
+    in.sketch = bp::child{}; // clear pid
+    if(in.sketch_log_grabber.joinable())
+        in.sketch_log_grabber.join();
+}
+
+/**
+ * Reap a sketch and clean it up
+ **/
+void BoardRunner::do_reap() noexcept {
+    if(!m_internal)
+        return;
+    auto& in = *m_internal;
+
+    [[maybe_unused]] std::error_code ignored;
+    in.sketch.terminate(ignored);
+    in.sketch = bp::child{}; // clear pid
+    if(in.sketch_log_grabber.joinable())
+        in.sketch_log_grabber.join();
+}
 
 }
