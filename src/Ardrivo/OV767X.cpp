@@ -54,6 +54,7 @@ constexpr std::array<std::pair<uint16_t, uint16_t>, 5> resolutions{{
 }};
 
 int OV767X::begin(SMCE_OV767_Resolution resolution, SMCE_OV767_Format format, int fps) {
+    const auto error = [=](const char* msg) { return std::cerr << "ERROR: OV767X::begin(" << resolution << ", " << format << ", " << fps << "): " << msg << std::endl, -1; };
     if(m_begun) {
         std::cerr << "OV767X::begin: device already active" << std::endl;
         return -1;
@@ -64,16 +65,18 @@ int OV767X::begin(SMCE_OV767_Resolution resolution, SMCE_OV767_Format format, in
         m_format = format;
         break;
     default:
-        std::cerr << "OV767X::begin: invalid value " << +format << " specified as format" << std::endl;
-        return -1;
+        return error("Unknown format");
     }
 
-    if(resolution >= resolutions.size()) {
-        std::cerr << "OV767X::begin: invalid value " << +resolution << " specified as resolution" << std::endl;
-        return -1;
-    }
+    if(resolution >= resolutions.size())
+        return error("Unknown resolution");
 
     auto fb = smce::board_view.frame_buffers[m_key];
+    if(!fb.exists())
+        return error("Framebuffer does not exist");
+    if(fb.direction() != smce::FrameBuffer::Direction::in)
+        return error("Framebuffer not in input mode");
+
     fb.set_width(resolutions[resolution].first);
     fb.set_height(resolutions[resolution].second);
     fb.set_freq(static_cast<std::uint8_t>(fps));
