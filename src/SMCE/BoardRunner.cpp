@@ -34,9 +34,18 @@ __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 #error "Unsupported platform"
 #endif
 
+#if BOOST_OS_LINUX
+extern "C" {
+#include <pthread.h>
+#include <unistd.h>
+}
+#include <array>
+#else
+#include <type_traits>
+#endif
+
 #include <ctime>
 #include <string>
-#include <type_traits>
 #include <boost/process.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
@@ -349,11 +358,32 @@ void BoardRunner::do_spawn() noexcept {
 
     m_internal->sketch_log_grabber = std::thread{[&]{
       auto& stream = m_internal->sketch_log;
+
+      constexpr size_t buf_len = 1024;
+#if BOOST_OS_LINUX
+      std::array<char, buf_len> buf;
+      for(;;) {
+          const int fd = stream.pipe().native_source();
+          const auto count = ::read(fd, buf.data(), buf_len);
+          if (count == 0) // eof
+              break;
+          if (count == -1) {
+              if(errno == EINTR)
+                  continue;
+              else
+                  break;
+          }
+          [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
+          const auto existing = m_runtime_log.size();
+          m_runtime_log.resize(existing + count);
+          std::memcpy(m_runtime_log.data() + existing, buf.data(), count);
+      }
+#else
       std::string buf;
-      buf.reserve(1024);
+      buf.reserve(buf_len);
       while(stream.good()) {
           const int head = stream.get();
-          if(head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
+          if (head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
               break;
           buf.resize(stream.rdbuf()->in_avail());
           const auto count = stream.readsome(buf.data(), buf.size());
@@ -363,6 +393,8 @@ void BoardRunner::do_spawn() noexcept {
           m_runtime_log[existing] = static_cast<char>(head);
           std::memcpy(m_runtime_log.data() + existing + 1, buf.data(), count);
       }
+#endif
+      stream.pipe().close();
     }};
 }
 
@@ -388,9 +420,14 @@ void BoardRunner::do_reap() noexcept {
 
     [[maybe_unused]] std::error_code ignored;
     in.sketch.terminate(ignored);
+    in.sketch.wait(ignored);
     in.sketch = bp::child{}; // clear pid
-    if(in.sketch_log_grabber.joinable())
+    if(in.sketch_log_grabber.joinable()) {
+#if BOOST_OS_LINUX
+        ::pthread_cancel(in.sketch_log_grabber.native_handle());
+#endif
         in.sketch_log_grabber.join();
+    }
 }
 
 }
