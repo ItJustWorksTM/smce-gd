@@ -144,10 +144,8 @@ struct BoardData {
     boost::interprocess::vector<Pin, ShmAllocator<Pin>> pins; // sorted by id
     boost::interprocess::vector<UartChannel, ShmAllocator<UartChannel>> uart_channels;
     boost::interprocess::vector<FrameBuffer, ShmAllocator<FrameBuffer>> frame_buffers;
-    ShmString fqbn;
 
-    BoardData(const ShmAllocator<void>&,
-              std::string_view fqbn, const BoardConfig&) noexcept;
+    BoardData(const ShmAllocator<void>&, const BoardConfig&) noexcept;
 };
 
 }

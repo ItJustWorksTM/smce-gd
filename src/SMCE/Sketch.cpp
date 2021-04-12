@@ -1,5 +1,5 @@
 /*
- *  SMCE_fs.hpp
+ *  Sketch.cpp
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +16,15 @@
  *
  */
 
-#ifndef SMCE_FS_HPP
-#define SMCE_FS_HPP
-
-#include <filesystem>
+#include <SMCE/Sketch.hpp>
 
 namespace smce {
 
-/**
- * Handy alias
- *
- **/
-namespace stdfs = std::filesystem;
-
+Sketch::~Sketch() {
+    if (!m_tmpdir.empty()) {
+        [[maybe_unused]] std::error_code ec;
+        stdfs::remove_all(m_tmpdir, ec);
+    }
 }
 
-#endif // SMCE_SMCE_FWD_HPP
+}

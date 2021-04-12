@@ -118,12 +118,16 @@ target_sources (SMCE PRIVATE
       include/SMCE/BoardView.hpp
       src/SMCE/BoardView.cpp
       include/SMCE/BoardConf.hpp
-      include/SMCE/BoardRunner.hpp
-      src/SMCE/BoardRunner.cpp
-      include/SMCE/ExecutionContext.hpp
-      src/SMCE/ExecutionContext.cpp
+        include/SMCE/Board.hpp
+        src/SMCE/Board.cpp
+      include/SMCE/Toolchain.hpp
+      src/SMCE/Toolchain.cpp
       include/SMCE/internal/SharedBoardData.hpp
       src/SMCE/SharedBoardData.cpp
+      include/SMCE/Sketch.hpp
+      src/SMCE/Sketch.cpp
+      include/SMCE/Uuid.hpp
+      src/SMCE/Uuid.cpp
       include/SMCE/SketchConf.hpp
 )
 target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost)

@@ -22,10 +22,12 @@
 namespace smce {
 
 struct BoardConfig;
-class BoardRunner;
+class Board;
 class BoardView;
-class ExecutionContext;
+class Sketch;
+class Toolchain;
 struct SketchConfig;
+class Uuid;
 
 /// \internal
 struct BoardData;

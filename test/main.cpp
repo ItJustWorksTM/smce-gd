@@ -3,9 +3,10 @@
 #include <filesystem>
 #include <future>
 #include <iostream>
+#include <SMCE/Board.hpp>
+#include <SMCE/Sketch.hpp>
+#include <SMCE/Toolchain.hpp>
 #include <catch2/catch.hpp>
-#include <SMCE/BoardRunner.hpp>
-#include <SMCE/ExecutionContext.hpp>
 
 #define SMCE_PATH SMCE_TEST_DIR "/smce_root"
 #define SKETCHES_PATH SMCE_TEST_DIR "/sketches/"
@@ -16,56 +17,64 @@ using namespace std::literals;
 TEST_CASE("ExecutionContext invalid", "[ExecutionContext]") {
     const auto path = SMCE_TEST_DIR "/empty_dir";
     std::filesystem::create_directory(path);
-    smce::ExecutionContext exec_ctx{path};
-    REQUIRE(exec_ctx.check_suitable_environment());
-    REQUIRE(exec_ctx.resource_dir() == path);
+    smce::Toolchain tc{path};
+    REQUIRE(tc.check_suitable_environment());
+    REQUIRE(tc.resource_dir() == path);
 }
 
 TEST_CASE("ExecutionContext valid", "[ExecutionContext]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    REQUIRE(exec_ctx.resource_dir() == SMCE_PATH);
-    REQUIRE_FALSE(exec_ctx.cmake_path().empty());
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    REQUIRE(tc.resource_dir() == SMCE_PATH);
+    REQUIRE_FALSE(tc.cmake_path().empty());
 }
 
-#define ASSERT_BUILD(br, path, conf) do { const bool res = br.build(path, conf); if(!res) std::cerr << br.build_log().second ; REQUIRE(res); } while(0)
-
 TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    smce::BoardRunner br{exec_ctx};
-    REQUIRE(br.status() == smce::BoardRunner::Status::clean);
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "noop", { .fqbn = "arduino:avr:nano" }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
+    REQUIRE(sk.is_compiled());
+    smce::Board br{};
+    REQUIRE(br.status() == smce::Board::Status::clean);
     REQUIRE_FALSE(br.view().valid());
-    REQUIRE(br.configure("arduino:avr:nano", {}));
-    REQUIRE(br.status() == smce::BoardRunner::Status::configured);
-    REQUIRE(br.view().valid());
-    ASSERT_BUILD(br, SKETCHES_PATH "noop", {});
-    REQUIRE(br.status() == smce::BoardRunner::Status::built);
-    REQUIRE(br.view().valid());
+    REQUIRE(br.configure({}));
+    REQUIRE(br.status() == smce::Board::Status::configured);
+    REQUIRE_FALSE(br.view().valid());
+    REQUIRE(br.attach_sketch(sk));
+    REQUIRE_FALSE(br.view().valid());
     REQUIRE(br.start());
-    REQUIRE(br.status() == smce::BoardRunner::Status::running);
+    REQUIRE(br.status() == smce::Board::Status::running);
     REQUIRE(br.view().valid());
     REQUIRE(br.suspend());
-    REQUIRE(br.status() == smce::BoardRunner::Status::suspended);
+    REQUIRE(br.status() == smce::Board::Status::suspended);
     REQUIRE(br.view().valid());
     REQUIRE(br.resume());
-    REQUIRE(br.status() == smce::BoardRunner::Status::running);
+    REQUIRE(br.status() == smce::Board::Status::running);
     REQUIRE(br.view().valid());
     REQUIRE(br.stop());
-    REQUIRE(br.status() == smce::BoardRunner::Status::stopped);
+    REQUIRE(br.status() == smce::Board::Status::stopped);
     REQUIRE_FALSE(br.view().valid());
     REQUIRE(br.reset());
-    REQUIRE(br.status() == smce::BoardRunner::Status::clean);
+    REQUIRE(br.status() == smce::Board::Status::clean);
     REQUIRE_FALSE(br.view().valid());
 }
 
 TEST_CASE("BoardRunner exit_notify", "[BoardRunner]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "uncaught", { .fqbn = "arduino:avr:nano" }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
     std::promise<int> ex;
-    smce::BoardRunner br{exec_ctx, [&](int ec){ ex.set_value(ec); }};
-    REQUIRE(br.configure("arduino:avr:nano", {}));
-    ASSERT_BUILD(br, SKETCHES_PATH "uncaught", {});
+    smce::Board br{[&](int ec){ ex.set_value(ec); }};
+    REQUIRE(br.configure({}));
+    REQUIRE(br.attach_sketch(sk));
     REQUIRE(br.start());
     auto exfut = ex.get_future();
     int ticks = 0;
@@ -87,10 +96,15 @@ void test_pin_delayable(Pin pin, Value expected_value, std::size_t ticks, Durati
 }
 
 TEST_CASE("BoardView GPIO", "[BoardView]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    smce::BoardRunner br{exec_ctx};
-    REQUIRE(br.configure("arduino:avr:nano",
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "pins", { .fqbn = "arduino:avr:nano" }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
+    smce::Board br{};
+    REQUIRE(br.configure(
       {
         .pins = {0, 2},
         .gpio_drivers = {
@@ -119,7 +133,8 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
         }
       }
     ));
-    ASSERT_BUILD(br, SKETCHES_PATH "pins", {});
+    REQUIRE(br.attach_sketch(sk));
+    REQUIRE(br.start());
     auto bv = br.view();
     REQUIRE(bv.valid());
     auto pin0 = bv.pins[0].digital();
@@ -128,8 +143,8 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
     REQUIRE_FALSE(pin1.exists());
     auto pin2 = bv.pins[2].digital();
     REQUIRE(pin2.exists());
-    REQUIRE(br.start());
     std::this_thread::sleep_for(1ms);
+
     pin0.write(false);
     test_pin_delayable(pin2, true, 16384, 1ms);
     pin0.write(true);
@@ -138,15 +153,19 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
 }
 
 TEST_CASE("BoardView UART", "[BoardView]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    smce::BoardRunner br{exec_ctx};
-    REQUIRE(br.configure("arduino:avr:nano",
-     {
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "uart", { .fqbn = "arduino:avr:nano" }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
+    smce::Board br{};
+    REQUIRE(br.configure({
        .uart_channels = {{}}
-     }
-    ));
-    ASSERT_BUILD(br, SKETCHES_PATH "uart", {});
+    }));
+    REQUIRE(br.attach_sketch(sk));
+    REQUIRE(br.start());
     auto bv = br.view();
     REQUIRE(bv.valid());
     auto uart0 = bv.uart_channels[0];
@@ -157,8 +176,8 @@ TEST_CASE("BoardView UART", "[BoardView]") {
     REQUIRE_FALSE(uart1.exists());
     REQUIRE_FALSE(uart1.rx().exists());
     REQUIRE_FALSE(uart1.tx().exists());
-    REQUIRE(br.start());
     std::this_thread::sleep_for(1ms);
+
     std::array out = {'H', 'E', 'L', 'L', 'O', ' ', 'U', 'A', 'R', 'T', '\0'};
     std::array<char, out.size()> in{};
     uart0.rx().write(out);
@@ -184,36 +203,47 @@ TEST_CASE("BoardView UART", "[BoardView]") {
 }
 
 TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    smce::BoardRunner br{exec_ctx};
-    REQUIRE(br.configure("arduino:avr:nano", {}));
-    const bool res = br.build(SKETCHES_PATH "remote_pp", {
-        .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
-    });
-    if(!res)
-        std::cerr << br.build_log().second;
-    REQUIRE(res);
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "remote_pp", {
+       .fqbn = "arduino:avr:nano",
+       .preproc_libs = { smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""} }
+    }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
 }
 
 TEST_CASE("WiFi intended use", "[WiFi]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    smce::BoardRunner br{exec_ctx};
-    REQUIRE(br.configure("arduino:avr:nano", {}));
-    const bool res = br.build(SKETCHES_PATH "wifi", {
-        .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"WiFi", ""}, smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}}
-    });
-    if(!res)
-        std::cerr << br.build_log().second;
-    REQUIRE(res);
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "wifi", {
+        .fqbn = "arduino:avr:nano",
+        .preproc_libs = {
+           smce::SketchConfig::RemoteArduinoLibrary{"WiFi", ""},
+           smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}
+        }
+    }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
 }
 
 TEST_CASE("Patch lib", "[BoardRunner]") {
-    smce::ExecutionContext exec_ctx{SMCE_PATH};
-    REQUIRE(!exec_ctx.check_suitable_environment());
-    smce::BoardRunner br{exec_ctx};
-    REQUIRE(br.configure("arduino:avr:nano", {
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "patch", {
+        .fqbn = "arduino:avr:nano",
+        .complink_libs = { smce::SketchConfig::LocalArduinoLibrary{PATCHES_PATH "ESP32_analogRewrite", "ESP32 AnalogWrite"} }
+    }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
+    smce::Board br{};
+    REQUIRE(br.configure({
         .pins = {0},
         .gpio_drivers = {
             smce::BoardConfig::GpioDrivers {
@@ -225,16 +255,11 @@ TEST_CASE("Patch lib", "[BoardRunner]") {
             }
         }
     }));
-    const bool res = br.build(SKETCHES_PATH "patch", {
-        .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{PATCHES_PATH "ESP32_analogRewrite", "ESP32 AnalogWrite"}}
-    });
-    if(!res)
-        std::cerr << br.build_log().second;
-    REQUIRE(res);
+    REQUIRE(br.attach_sketch(sk));
+    REQUIRE(br.start());
     auto bv = br.view();
     auto pin0 = bv.pins[0].analog();
     REQUIRE(pin0.exists());
-    REQUIRE(br.start());
     std::this_thread::sleep_for(1ms);
     test_pin_delayable(pin0, 42, 16384, 1ms);
     REQUIRE(br.stop());

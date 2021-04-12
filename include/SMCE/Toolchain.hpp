@@ -1,5 +1,5 @@
 /*
- *  ExecutionContext.hpp
+ *  Toolchain.hpp
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,22 +16,30 @@
  *
  */
 
-#ifndef SMCE_EXECUTIONCONTEXT_HPP
-#define SMCE_EXECUTIONCONTEXT_HPP
+#ifndef SMCE_TOOLCHAIN_HPP
+#define SMCE_TOOLCHAIN_HPP
 
+#include <mutex>
+#include <string>
 #include <system_error>
 #include <SMCE/fwd.hpp>
 #include <SMCE/SMCE_fs.hpp>
+#include <SMCE/Sketch.hpp>
 
 namespace smce {
 
-enum struct exec_ctx_error {
+enum struct toolchain_error {
     resdir_absent = 1,
     resdir_file,
     resdir_empty,
     cmake_not_found,
     cmake_unknown_output,
     cmake_failing,
+
+    sketch_invalid,
+    configure_failed,
+    build_failed,
+
     generic = 255
 };
 
@@ -41,21 +49,31 @@ enum struct exec_ctx_error {
  * Ideally there should only ever be one instance of this type
  * used at a given type in an application.
  **/
-class ExecutionContext {
+class Toolchain {
     stdfs::path m_res_dir;
     std::string m_cmake_path = "cmake";
 
+    std::string m_build_log;
+    std::mutex m_build_log_mtx;
+
+    std::error_code do_configure(Sketch& sketch) noexcept;
+    std::error_code do_build(Sketch& sketch) noexcept;
+
   public:
+    using LockedLog = std::pair<std::unique_lock<std::mutex>, std::string&>;
+
     /**
      * Constructor
      * \param resources_dir - path to the SMCE resources directory (inflated SMCE_Resources.zip)
      **/
-    explicit ExecutionContext(stdfs::path resources_dir) : m_res_dir{std::move(resources_dir)} {};
+    explicit Toolchain(stdfs::path resources_dir) noexcept;
 
     /// Getter for the SMCE resource directory
     [[nodiscard]] const stdfs::path& resource_dir() const noexcept { return m_res_dir; }
     /// Getter for the CMake path
     [[nodiscard]] const std::string& cmake_path() const noexcept { return m_cmake_path; }
+
+    [[nodiscard]] inline LockedLog build_log() noexcept { return {std::unique_lock{m_build_log_mtx}, m_build_log}; }
 
     /**
      * Checks whether the required tools are provided
@@ -64,8 +82,13 @@ class ExecutionContext {
      * \todo Extend to check for a C++ >=11 compiler
      **/
     [[nodiscard]] std::error_code check_suitable_environment() noexcept;
+
+    /**
+     * Compile a sketch
+     **/
+     std::error_code compile(Sketch& sketch) noexcept;
 };
 
 }
 
-#endif // SMCE_EXECUTIONCONTEXT_HPP
+#endif // SMCE_TOOLCHAIN_HPP

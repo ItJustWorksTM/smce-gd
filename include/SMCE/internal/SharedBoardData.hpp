@@ -33,7 +33,7 @@ class SharedBoardData {
   public:
     SharedBoardData() = default;
     ~SharedBoardData();
-    bool configure(std::string_view, std::string_view fqbn, const BoardConfig&);
+    bool configure(std::string_view, const BoardConfig&);
     bool open_as_child(const char*);
     void reset();
 

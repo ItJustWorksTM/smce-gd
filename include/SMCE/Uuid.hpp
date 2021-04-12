@@ -1,5 +1,5 @@
 /*
- *  SMCE_fs.hpp
+ *  Uuid.hpp
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +16,25 @@
  *
  */
 
-#ifndef SMCE_FS_HPP
-#define SMCE_FS_HPP
+#ifndef SMCE_UUID_HPP
+#define SMCE_UUID_HPP
 
-#include <filesystem>
+#include <array>
+#include <cstddef>
+#include <string>
+#include <SMCE/fwd.hpp>
 
 namespace smce {
 
-/**
- * Handy alias
- *
- **/
-namespace stdfs = std::filesystem;
+class Uuid {
+  public:
+    std::array<std::byte, 16> bytes;
+
+    std::string to_hex() const noexcept;
+
+    static Uuid generate() noexcept;
+};
 
 }
 
-#endif // SMCE_SMCE_FWD_HPP
+#endif // SMCE_UUID_HPP

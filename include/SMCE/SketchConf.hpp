@@ -57,7 +57,10 @@ struct SketchConfig {
         stdfs::path root_dir; // Root directory of the library
         std::string patch_for; // Name of the remote library being patched; none if not patching
     };
+
     using Library = std::variant<FreestandingLibrary, RemoteArduinoLibrary, LocalArduinoLibrary>;
+
+    std::string fqbn; /// Fully-qualified board name that the sketch is targeting
     std::vector<std::string> extra_board_uris; /// Extra board.txt URIs for ArduinoCLI
     std::vector<Library> preproc_libs; /// Libraries to use during preprocessing
     std::vector<Library> complink_libs; /// Libraries to use at compile and link time

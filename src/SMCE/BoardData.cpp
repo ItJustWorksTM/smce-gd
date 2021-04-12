@@ -31,12 +31,10 @@ BoardData::FrameBuffer::FrameBuffer(const ShmAllocator<void>& shm_valloc) : data
 
 BoardData::BoardData(
         const ShmAllocator<void>& shm_valloc,
-        std::string_view fqbn,
         const BoardConfig& c) noexcept
     : pins{shm_valloc},
       uart_channels{shm_valloc},
-      frame_buffers{shm_valloc},
-      fqbn{fqbn, shm_valloc} {
+      frame_buffers{shm_valloc} {
     auto sorted_pins = c.pins;
     std::sort(sorted_pins.begin(), sorted_pins.end());
 
