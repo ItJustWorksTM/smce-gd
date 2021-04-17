@@ -30,6 +30,7 @@ SharedBoardData::~SharedBoardData() {
 }
 
 bool SharedBoardData::configure(std::string_view seg_name, const BoardConfig& bconf) {
+    reset();
     m_master = true;
     m_name = seg_name;
     m_shm = bip::managed_shared_memory(bip::create_only, m_name.c_str(), 2*1024*1024);
