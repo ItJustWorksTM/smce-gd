@@ -104,10 +104,11 @@ void Board::tick() noexcept {
    case Status::suspended: {
        auto& in = *m_internal;
        if (!in.sketch.running()) {
+           const auto exit_code = m_internal->sketch.exit_code();
            do_sweep();
            m_status = Status::stopped;
            if (m_exit_notify)
-               m_exit_notify(m_internal->sketch.exit_code());
+               m_exit_notify(exit_code);
        }
    }
    default:
@@ -295,6 +296,7 @@ void Board::do_reap() noexcept {
     if(in.sketch_log_grabber.joinable()) {
 #if BOOST_OS_LINUX
         ::pthread_cancel(in.sketch_log_grabber.native_handle());
+        in.sketch_log.pipe().close();
 #endif
         in.sketch_log_grabber.join();
     }
