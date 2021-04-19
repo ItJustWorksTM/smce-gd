@@ -91,6 +91,8 @@ class BoardConfig : public Reference {
     static void _register_methods();
     void _init() {}
 
+    Dictionary type_info();
+
     smce::BoardConfig to_native() const;
 };
 

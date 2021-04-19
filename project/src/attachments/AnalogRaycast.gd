@@ -27,7 +27,6 @@ func _ready() -> void:
 func _physics_process(_delta: float):
 	var dist = 0 # if not coliding 0 is reported
 	if is_colliding():
-		var pos = global_transform.origin
 		var hit = get_collision_point()
 		dist =  global_transform.origin.distance_to(get_collision_point())
 	

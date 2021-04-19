@@ -4,14 +4,9 @@
 [ext_resource path="res://src/ui/file_dialog/FilePicker.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
-border_width_left = 1
-border_width_top = 12
-border_width_right = 1
-border_width_bottom = 1
+bg_color = Color( 0, 0, 0, 0 )
 border_color = Color( 0, 0.45098, 0.752941, 1 )
 shadow_color = Color( 0, 0, 0, 0.282353 )
-shadow_size = 5
 
 [node name="FilePicker" type="PanelContainer"]
 anchor_right = 1.0
@@ -25,10 +20,8 @@ __meta__ = {
 
 [node name="FileDialog" type="FileDialog" parent="."]
 visible = true
-margin_left = 1.0
-margin_top = 12.0
-margin_right = 1279.0
-margin_bottom = 719.0
+margin_right = 1280.0
+margin_bottom = 720.0
 rect_pivot_offset = Vector2( 640, 360 )
 theme = ExtResource( 1 )
 window_title = ""

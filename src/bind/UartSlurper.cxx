@@ -41,9 +41,9 @@ void UartSlurper::_physics_process(float) {
         if (available > 0) {
             std::replace_if(
                 read_buf.begin(), read_buf.begin() + available,
-                [](const auto& letter) { return letter == '\0'; }, '\r'); // godot seems to ignore \r
+                [](const auto& letter) { return letter == '\0' || letter == '\r'; }, '\t');
             read_buf[available] = '\0';
-            emit_signal("uart", 0, String(static_cast<const char*>(read_buf.data())));
+            emit_signal("uart", 0,  String(static_cast<const char*>(read_buf.data())));
         }
 
         ++i;

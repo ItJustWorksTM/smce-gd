@@ -1,0 +1,229 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://media/fonts/Open_Sans/OpenSasn-Regular.tres" type="DynamicFont" id=1]
+[ext_resource path="res://src/ui/file_dialog/FilePicker.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=3]
+[ext_resource path="res://src/ui/themes/regular_button/hover.tres" type="StyleBox" id=4]
+[ext_resource path="res://src/ui/sketch_select/SketchSelect.gd" type="Script" id=5]
+[ext_resource path="res://media/fonts/Open_Sans/OpenSans-Light.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+shadow_color = Color( 0, 0, 0, 0.231373 )
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 1, 1, 0.137255 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 1, 1, 0.243137 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="DynamicFont" id=6]
+size = 22
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0, 0, 0, 0 )
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 640, 320 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LogPopout" type="MarginContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
+rect_pivot_offset = Vector2( 640, 320 )
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 256
+custom_constants/margin_top = 128
+custom_constants/margin_left = 256
+custom_constants/margin_bottom = 128
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="LogPopout"]
+margin_left = 256.0
+margin_top = 128.0
+margin_right = 1024.0
+margin_bottom = 592.0
+rect_min_size = Vector2( 100, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="Control" type="MarginContainer" parent="LogPopout/Panel"]
+margin_right = 768.0
+margin_bottom = 464.0
+mouse_filter = 2
+
+[node name="EmptyLabel" type="Label" parent="LogPopout/Panel/Control"]
+margin_top = 222.0
+margin_right = 768.0
+margin_bottom = 242.0
+custom_colors/font_color = Color( 0.286275, 0.286275, 0.286275, 1 )
+text = "Such Empty!"
+align = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LogPopout/Panel/Control"]
+margin_right = 768.0
+margin_bottom = 464.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LogPopout/Panel/Control/VBoxContainer"]
+margin_right = 768.0
+margin_bottom = 45.0
+mouse_filter = 2
+
+[node name="CloseButton" type="Button" parent="LogPopout/Panel/Control/VBoxContainer/MarginContainer"]
+margin_left = 723.0
+margin_right = 768.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 45, 45 )
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewSketch" type="Button" parent="LogPopout/Panel/Control/VBoxContainer/MarginContainer"]
+margin_right = 89.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 45, 45 )
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "  + Add New  "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LogPopout/Panel/Control/VBoxContainer/MarginContainer"]
+margin_right = 768.0
+margin_bottom = 45.0
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 6 )
+text = "Select sketch"
+align = 1
+valign = 1
+
+[node name="ItemList" type="ItemList" parent="LogPopout/Panel/Control/VBoxContainer"]
+margin_top = 49.0
+margin_right = 768.0
+margin_bottom = 49.0
+mouse_default_cursor_shape = 2
+custom_styles/cursor = ExtResource( 4 )
+custom_styles/selected_focus = ExtResource( 4 )
+custom_styles/bg_focus = SubResource( 7 )
+custom_styles/selected = ExtResource( 4 )
+custom_styles/bg = SubResource( 8 )
+custom_colors/guide_color = Color( 0.215686, 0.211765, 0.211765, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_constants/vseparation = 8
+allow_rmb_select = true
+auto_height = true
+
+[node name="HBoxContainer" type="MarginContainer" parent="LogPopout/Panel/Control"]
+margin_top = 416.0
+margin_right = 768.0
+margin_bottom = 464.0
+size_flags_vertical = 8
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
+
+[node name="SelectButton" type="Button" parent="LogPopout/Panel/Control/HBoxContainer"]
+margin_left = 696.0
+margin_top = 8.0
+margin_right = 760.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 64, 32 )
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 8
+theme = ExtResource( 3 )
+disabled = true
+text = "Select"
+
+[node name="ErrorLabel" type="Label" parent="LogPopout/Panel/Control/HBoxContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 760.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+valign = 1
+
+[node name="Filepicker" type="MarginContainer" parent="LogPopout/Panel"]
+visible = false
+margin_right = 768.0
+margin_bottom = 464.0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="LogPopout/Panel/Filepicker"]
+margin_right = 768.0
+margin_bottom = 464.0
+
+[node name="TextAttach" type="MarginContainer" parent="LogPopout/Panel/Filepicker/VBoxContainer"]
+margin_right = 768.0
+margin_bottom = 464.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FilePicker" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 768.0
+margin_bottom = 464.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach"]
+margin_right = 768.0
+margin_bottom = 464.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 9 )
+custom_styles/normal = SubResource( 10 )
+custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
+scroll_following = true
+selection_enabled = true

@@ -3,7 +3,7 @@ extends MarginContainer
 signal exited
 
 onready var close_btn = $Panel/MarginContainer/VBoxContainer/Control/CloseButton
-onready var clopy_btn = $Panel/MarginContainer/VBoxContainer/Control/CopyButton
+onready var copy_btn = $Panel/MarginContainer/VBoxContainer/Control/CopyButton
 
 onready var _text_attach = $Panel/MarginContainer/VBoxContainer/TextAttach
 onready var text_field = null setget set_text_field
@@ -14,9 +14,9 @@ func _gui_input(event: InputEvent):
 
 
 func _ready() -> void:
-	clopy_btn.disabled = true
+	copy_btn.disabled = true
 	close_btn.connect("pressed", self, "_on_close")
-	clopy_btn.connect("pressed", self, "_on_copy")
+	copy_btn.connect("pressed", self, "_on_copy")
 
 
 func _on_copy() -> void:
@@ -40,19 +40,20 @@ func _on_close() -> void:
 
 
 func set_text_field(node: Control) -> void:
-	clopy_btn.disabled = true
-	if text_field:
+	copy_btn.disabled = true
+	if is_instance_valid(text_field):
 		remove_child(text_field)
 	if node:
 		_text_attach.add_child(node)
 		text_field = node
-		clopy_btn.disabled = false
-		node.grab_focus()
+		copy_btn.disabled = false
 
 
-func _enter_tree():
-	var tween = Tween.new()
+func _enter_tree() -> void:
+	FocusOwner.release_focus()
+	var tween: Tween = TempTween.new()
 	add_child(tween)
 	tween.interpolate_property(self, "rect_scale:y", 0.5, 1, 0.15, Tween.TRANS_CUBIC)
 	tween.interpolate_property(self, "modulate:a", 0, 1, 0.15)
 	tween.start()
+	

@@ -23,6 +23,7 @@
 #include <future>
 #include <core/Godot.hpp>
 #include <gen/Reference.hpp>
+#include <cstddef>
 #include "gd/util.hxx"
 
 namespace godot {
@@ -31,6 +32,7 @@ class AnyTask : public Reference {
     GODOT_CLASS(AnyTask, Reference)
 
     std::future<Ref<AnyTask>> thread;
+    std::function<void(Variant)> callback;
 
   public:
     static auto _register_methods() -> void {
@@ -38,11 +40,14 @@ class AnyTask : public Reference {
         register_method("_completed", &AnyTask::_completed);
     }
 
-    template <class F>
-    static Ref<AnyTask> make_awaitable(F&& task) {
+    template <class F, class D> static Ref<AnyTask> make_awaitable(F&& task, D&& callback) {
         static_assert(std::is_invocable_r_v<Variant, F>);
+
         auto runner = make_ref<AnyTask>();
-        runner->thread = std::async([runner, task = std::forward<F>(task)]() mutable {
+
+        runner->callback = std::forward<D>(callback);
+
+        runner->thread = std::async(std::launch::async, [runner, task = std::forward<F>(task)]() mutable {
             runner->call_deferred("_completed", task());
             return runner;
         });
@@ -50,7 +55,12 @@ class AnyTask : public Reference {
         return runner;
     }
 
+    template <class F> static Ref<AnyTask> make_awaitable(F&& task) {
+        return make_awaitable(std::forward<F>(task), std::nullptr_t{});
+    }
+
     void _completed(Variant ret) {
+        callback(ret);
         emit_signal("completed", ret);
         thread.get();
     }

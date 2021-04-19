@@ -1,18 +1,21 @@
 extends VBoxContainer
 
-var compile_notification_t = preload("res://src/ui/simple_notification/SimpleNotiifcation.tscn")
+var notification_t = preload("res://src/ui/simple_notification/SimpleNotiifcation.tscn")
 var collapsable_t = preload("res://src/ui/collapsable/collapsable.tscn")
 
-signal request_filepath(type)
-signal show_editor(show)
-signal create_notification(node, timemout)
+signal notification_created
 signal grab_focus
 
-onready var close_btn: ToolButton = $VBoxContainer2/Close
-onready var editor_switch: ToolButton = $VBoxContainer2/EditorSwitch
-onready var file_path_header: Label = $VBoxContainer2/SketchPath
+var _toolchain: Toolchain = null
+var _board = null
 
-onready var compile_btn: Button = $PaddingBox2/SketchButtons/Compile
+onready var compile_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Compile
+onready var compile_log_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/CompileLog
+onready var sketch_status: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchStatus
+
+onready var close_btn: ToolButton = $MarginContainer/CloseButton
+onready var file_path_header: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchPath
+
 onready var pause_btn: Button = $PaddingBox2/SketchButtons/Pause
 onready var start_btn: Button = $PaddingBox2/SketchButtons/Start
 
@@ -28,97 +31,136 @@ onready var serial_collapsable = $Serial
 onready var uart = $Serial/UartPanel/Uart
 onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
 
-var runner: BoardRunner = null
 var sketch_path: String = ""
+
+var cam_ctl: CamCtl = null setget set_cam_ctl
 
 var vehicle_t: PackedScene = null
 var vehicle = null
 
 
-func _ready():
-	runner = SketchAttach.make_runner()
+func init(sketch: Sketch, toolchain: Toolchain):
 	
-	for sig in ["configured", "building", "built", "started", "suspended_resumed", "stopped", "cleaned"]:
-		runner.connect(sig, self, "_on_runner_" + sig)
+	sketch_path = sketch.get_source()
+	
+	var board_config = BoardConfig.new()
+	Util.inflate_ref(board_config, Util.read_json_file("res://share/config/smartcar_shield.json"))
+	
+	var board = Board.new()
+	
+	var res = board.configure(board_config)
+	if ! res.ok():
+		board.free()
+		return res
+	
+	var attach_res = board.attach_sketch(sketch)
+	if ! attach_res.ok():
+		board.free()
+		return attach_res
+	
+	if sketch.get_source().ends_with("tank.ino"):
+		vehicle_t = preload("res://src/objects/ray_car/RayTank.tscn")
+	else:
+		vehicle_t = preload("res://src/objects/ray_car/RayCar.tscn")
+	
+	_toolchain = toolchain
+	_board = board
+	
+	_toolchain.connect("building", self, "_on_toolchain_building")
+	_toolchain.connect("built", self, "_on_toolchain_built")
+	_toolchain.connect("log", self, "_on_toolchain_log")
+	
+	add_child(board)
+	
+	return GDResult.new()
 
-	# TODO: move this into its own scene
-	runner.connect("build_log", self, "_on_board_log")
-	runner.connect("runtime_log", self, "_on_board_log")
+
+func _ready():
+	for sig in ["started", "suspended_resumed", "stopped", "cleaned"]:
+		_board.connect(sig, self, "_on_board_" + sig)
+	
+	_board.connect("log", self, "_on_board_log")
 	
 	compile_btn.connect("pressed", self, "_on_compile")
+	compile_log_btn.connect("pressed", self, "_show_compile_log")
+	
 	close_btn.connect("pressed", self, "_on_close")
 	pause_btn.connect("pressed", self, "_on_pause")
-	editor_switch.connect("toggled", self, "_on_editor_toggled")
 	start_btn.connect("pressed", self, "_on_start")
 	reset_pos_btn.connect("pressed", self, "_on_reset_pos")
 	follow_btn.connect("pressed", self, "_on_follow")
 	
-	uart.set_uart(runner.uart())
+	
+	uart.set_uart(_board.uart())
+	file_path_header.text = " " + sketch_path.get_file().get_file()
 	
 	var group = BButtonGroup.new()
 	$Log/Button.group = group
 	$Serial/Button.group = group
 	group._init()
 	
-	_on_runner_cleaned()
+	
+	_on_board_cleaned()
+	if _board.get_sketch().is_compiled():
+		_built()
 
 
-func _on_runner_cleaned() -> void:
-	print("Sketch cleaned")
+func _on_board_cleaned() -> void:
+	sketch_status.text = " Not Compiled" if ! _toolchain.is_building() else " Compiling..."
 	pause_btn.disabled = true
 	start_btn.disabled = true
 	pause_btn.disabled = true
 	reset_pos_btn.disabled = true
 	follow_btn.disabled = true
+	compile_btn.disabled = _toolchain.is_building()
 
 
-func _on_runner_configured() -> void:
-	print("Sketch configured")
-	compile_btn.disabled = false
-
-
-var _building_notification = null
-func _on_runner_building() -> void:
-	print("Building")
-	
-	_building_notification = _create_notification("Compiling sketch '%s' ..." % file_path_header.text, -1, true)
-	
-	sketch_log.text = ""
-	compile_btn.disabled = true
-
-
-func _on_runner_built(result) -> void:
-	_building_notification.emit_signal("stop_notify")
-	
-	if ! result.ok():
-		print("Compile failed: ", result.error())
-		_create_notification("Build failed for sketch '%s':\nReason: \"%s\"" % [file_path_header.text, result.error()], 5)
-		compile_btn.disabled = false
-		log_box.header.pressed = true
+func _on_toolchain_building(sketch) -> void:
+	if sketch != _board.get_sketch():
 		return
 	
-	print("Compile finished succesfully")
-	_create_notification("Compile succeeded for sketch '%s'" % file_path_header.text , 5)
+	sketch_log.text = ""
+	sketch_status.text = " Compiling..."
+	compile_btn.disabled = true
+	start_btn.disabled = true
 	
-	_create_vehicle()
+	_board.terminate()
+
+
+func _on_toolchain_built(sketch, result) -> void:
+	if sketch != _board.get_sketch():
+		return
 	
+	compile_btn.disabled = false
+	
+	if ! result.ok():
+		sketch_status.text = " Not Compiled"
+		return
+	_built()
+
+
+func _built():
 	start_btn.disabled = false
 	start_btn.text = "Start"
 	serial_collapsable.disabled = false
 	uart.disabled = false
+	sketch_status.text = " Compiled"
 
 
-func _on_runner_started() -> void:
+func _on_board_started() -> void:
 	print("Sketch Started")
+	_create_vehicle()
+	vehicle.unfreeze()
+	
 	sketch_log.text = ""
+	uart.console.text = ""	
 	pause_btn.disabled = false
 	reset_pos_btn.disabled = false
 	start_btn.text = "Stop"
 	follow_btn.disabled = false
-	vehicle.unfreeze()
 
 
-func _on_runner_suspended_resumed(suspended: bool) -> void:
+func _on_board_suspended_resumed(suspended: bool) -> void:
 	pause_btn.text = "Resume" if suspended else "Suspend"
 	
 	if suspended:
@@ -127,7 +169,7 @@ func _on_runner_suspended_resumed(suspended: bool) -> void:
 		vehicle.unfreeze()
 
 
-func _on_runner_stopped(exit_code: int) -> void:
+func _on_board_stopped(exit_code: int) -> void:
 	var exit_str = str(exit_code)
 	if exit_code < 0:
 		exit_code &= 0xFFFFFFFF
@@ -136,24 +178,19 @@ func _on_runner_stopped(exit_code: int) -> void:
 	
 	print("Sketch stopped: ", exit_str)
 	if exit_code != 0:
-		_create_notification("Sketch '%s' crashed!\nexit code: %s" % [file_path_header.text, exit_str], 5)
+		var notif = _create_notification("Sketch '%s' crashed!\nexit code: %s" % [file_path_header.text, exit_str], 5)
+		# notif.connect("pressed", self, "emit_signal", ["grab_focus"])
 		log_box.header.pressed = true
 	
 	attachments_empty.visible = true
 	start_btn.text = "Start"
-	start_btn.disabled = true
-	compile_btn.disabled = false
 	pause_btn.disabled = true
 	reset_pos_btn.disabled = true
-	serial_collapsable.disabled = true
 	follow_btn.disabled = true
 	uart.disabled = true
-	uart.console.text = ""
 	
 	vehicle.queue_free()
 
-
-var cam_ctl: CamCtl = null setget set_cam_ctl
 
 func set_cam_ctl(ctl: CamCtl) -> void:
 	if ! ctl:
@@ -162,55 +199,17 @@ func set_cam_ctl(ctl: CamCtl) -> void:
 	cam_ctl.connect("cam_locked", self, "_on_cam_ctl")
 	cam_ctl.connect("cam_freed", self, "_on_cam_ctl", [null])
 
-func set_filepath(path: String):
-	if path == "":
-		return Util.err("Invalid sketch path")
-	
-	var base = path.get_base_dir().get_file()
-	var file = path.get_basename().get_file()
-	if base != file:
-		return Util.err("Folder name should equal selected file name")
-	
-	sketch_path = path
-	
-	var board_config = BoardConfigGD.from_dict(Util.read_json_file("res://share/config/smartcar_shield.json"))
-	
-	var res = runner.init(OS.get_user_data_dir())
-	if ! res.ok():
-		return res
-	
-	res = runner.configure("arduino:sam:arduino_due_x", board_config)
-	if ! res.ok():
-		return res
 
-	if path.ends_with("tank.ino"):
-		vehicle_t = preload("res://src/objects/ray_car/RayTank.tscn")
-	else:
-		vehicle_t = preload("res://src/objects/ray_car/RayCar.tscn")
-
-	file_path_header.text = path.get_file()
-
-	return GDResult.new()
-
-# TODO: move this into its own scene
 func _on_board_log(part: String):
 	sketch_log.text += part
 
 
 func _on_compile() -> void:
-	if runner.status() != SMCE.Status.CONFIGURED:
-		var res = runner.reset(true)
-		if res.ok():
-			runner.build(sketch_path)
-		else:
-			_create_notification("Failed to reinitialize: '%s'" % res.error(), 5)
-	else:
-		runner.build(sketch_path)
+	if ! _toolchain.compile(_board.get_sketch()):
+		_create_notification("Failed to start compilation", 5)
 
 
 func _on_close() -> void:
-	if runner:
-		runner.set_free()
 	queue_free()
 
 
@@ -230,46 +229,51 @@ func _on_reset_pos() -> void:
 
 
 func _on_start() -> void:
-	match runner.status():
+	match _board.status():
 		SMCE.Status.RUNNING, SMCE.Status.SUSPENDED:
-			Util.print_if_err(runner.terminate())
-		SMCE.Status.BUILT:
-			Util.print_if_err(runner.start())
+			Util.print_if_err(_board.terminate())
+			return
+	
+	Util.print_if_err(_board.start())
 
 
 func _on_pause() -> void:
-	if runner.status() == SMCE.Status.RUNNING:
-		Util.print_if_err(runner.suspend())
-	elif runner.status() == SMCE.Status.SUSPENDED:
-		Util.print_if_err(runner.resume())
-
-
-func _on_editor_toggled(toggle) -> void:
-	emit_signal("show_editor", toggle)
+	if _board.status() == SMCE.Status.RUNNING:
+		Util.print_if_err(_board.suspend())
+	elif _board.status() == SMCE.Status.SUSPENDED:
+		Util.print_if_err(_board.resume())
 
 
 func _create_notification(text: String, timeout: float = -1, progress: bool = false, button: bool = false) -> Control:
-	var notification: Control = compile_notification_t.instance()
-	emit_signal("create_notification", notification, timeout)
-	notification.progress.visible = progress
-	notification.button.visible = button
-	notification.header.bbcode_text = text
+	var notification: Control = notification_t.instance().setup(self, text, timeout, progress, button)
+	
+	emit_signal("notification_created", notification, timeout)
 	notification.connect("pressed", self, "emit_signal", ["grab_focus"])
 	
-	# TODO: dont do this here
-	if timeout > 0:
-		notification.connect("pressed", notification, "emit_signal", ["stop_notify"])
-	
-	connect("tree_exiting", notification, "emit_signal", ["stop_notify"])
-	
 	return notification
+
+
+var compile_log_text_field = null
+func _show_compile_log() -> void:
+	var window = preload("res://src/ui/sketch_control/LogPopout.tscn").instance()
+	get_tree().root.add_child(window)
+	compile_log_text_field = RichTextLabel.new()
+	compile_log_text_field.scroll_following = true
+	window.set_text_field(compile_log_text_field)
+	compile_log_text_field.text = _toolchain.get_log()
+	
+
+
+func _on_toolchain_log(text) -> void:
+	if is_instance_valid(compile_log_text_field):
+		compile_log_text_field.text += text
 
 
 func _create_vehicle() -> void:
 	vehicle = vehicle_t.instance()
 	add_child(vehicle)
 	
-	vehicle.set_view(runner.view())
+	vehicle.set_view(_board.view())
 	vehicle.freeze()
 	
 	_setup_attachments()
@@ -288,7 +292,7 @@ func _setup_attachments() -> void:
 
 
 func reset_vehicle_pos() -> void:
-	if !vehicle:
+	if !is_instance_valid(vehicle):
 		return
 	var was_frozen = vehicle.frozen
 	vehicle.freeze()
@@ -296,3 +300,8 @@ func reset_vehicle_pos() -> void:
 	vehicle.global_transform.basis = Basis()
 	if ! was_frozen:
 		vehicle.unfreeze()
+
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE && is_instance_valid(compile_log_text_field):
+		compile_log_text_field.queue_free()

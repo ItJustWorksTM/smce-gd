@@ -17,6 +17,7 @@
  */
 
 #include "bind/BoardConfig.hxx"
+#include "gen/ResourceLoader.hpp"
 
 using namespace godot;
 
@@ -73,6 +74,19 @@ void BoardConfig::_register_methods() {
     register_property("gpio_drivers", &BoardConfig::gpio_drivers, Array{});
     register_property("uart_channels", &BoardConfig::uart_channels, Array{});
     register_property("frame_buffers", &BoardConfig::frame_buffers, Array{});
+    register_method("type_info", &BoardConfig::type_info);
+}
+
+
+Dictionary BoardConfig::type_info() {
+    auto ret = Dictionary{};
+    auto res_loader = ResourceLoader::get_singleton();
+
+    auto get_res = [&](auto path) { auto ret = Ref(res_loader->load(path)); ret->unreference(); return ret; };
+    ret["gpio_drivers"] = get_res("res://src/bind/GpioDriverConfig.gdns");
+    ret["uart_channels"] = get_res("res://src/bind/UartChannelConfig.gdns");
+    ret["frame_buffers"] = get_res("res://src/bind/FrameBufferConfig.gdns");
+    return ret;
 }
 
 smce::BoardConfig BoardConfig::to_native() const {

@@ -1,0 +1,126 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=1]
+[ext_resource path="res://src/ui/profile_selector/ProfileSelector.gd" type="Script" id=3]
+[ext_resource path="res://media/fonts/Open_Sans/OpenSans-Light.ttf" type="DynamicFontData" id=4]
+
+
+
+[sub_resource type="DynamicFont" id=1]
+size = 36
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.203922, 0.203922, 0.203922, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.262745, 0.262745, 0.262745, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.858824, 0.858824, 0.858824, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_top = 4.0
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="Theme" id=7]
+HScrollBar/icons/decrement = null
+HScrollBar/icons/decrement_highlight = null
+HScrollBar/icons/increment = null
+HScrollBar/icons/increment_highlight = null
+HScrollBar/styles/grabber = SubResource( 2 )
+HScrollBar/styles/grabber_highlight = SubResource( 3 )
+HScrollBar/styles/grabber_pressed = SubResource( 4 )
+HScrollBar/styles/scroll = SubResource( 5 )
+HScrollBar/styles/scroll_focus = SubResource( 6 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 24
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 4 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+margin_top = 48.0
+margin_bottom = 148.0
+rect_min_size = Vector2( 0, 100 )
+custom_fonts/font = SubResource( 1 )
+text = "Select Your Profile"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="ScrollContainer" parent="VBoxContainer"]
+margin_top = 227.0
+margin_right = 1280.0
+margin_bottom = 493.0
+rect_min_size = Vector2( 0, 250 )
+size_flags_horizontal = 3
+theme = SubResource( 7 )
+follow_focus = true
+scroll_vertical_enabled = false
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/CenterContainer"]
+margin_right = 1280.0
+margin_bottom = 266.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 32
+custom_constants/margin_top = 0
+custom_constants/margin_left = 32
+custom_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CenterContainer/MarginContainer"]
+margin_left = 32.0
+margin_right = 1248.0
+margin_bottom = 250.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 32
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="VBoxContainer/CenterContainer/MarginContainer/HBoxContainer"]
+margin_left = 460.0
+margin_right = 756.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 296, 250 )
+mouse_default_cursor_shape = 2
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+custom_fonts/font = SubResource( 8 )
+text = "Start Fresh"

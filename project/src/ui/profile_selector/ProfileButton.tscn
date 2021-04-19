@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://src/ui/themes/regular_button/focus.tres" type="StyleBox" id=1]
+[ext_resource path="res://media/fonts/Open_Sans/OpenSans-Light.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://src/ui/profile_selector/ProfileButton.gd" type="Script" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 0.0352941 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 0.219608 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.00784314, 0.00784314, 0.00784314, 0.360784 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 24
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -20
+font_data = ExtResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer"]
+margin_right = 296.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 296, 0 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button6" type="Button" parent="."]
+margin_right = 296.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 296, 0 )
+mouse_default_cursor_shape = 2
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = ExtResource( 1 )
+custom_styles/disabled = SubResource( 3 )
+custom_styles/normal = SubResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 296.0
+margin_bottom = 250.0
+mouse_filter = 2
+custom_constants/margin_top = 16
+custom_constants/margin_left = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 296.0
+margin_bottom = 250.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+margin_right = 280.0
+margin_bottom = 31.0
+custom_fonts/font = SubResource( 4 )
+text = "
+My Fancy Playground"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+margin_top = 35.0
+margin_right = 280.0
+margin_bottom = 77.0
+mouse_filter = 2
+bbcode_enabled = true
+bbcode_text = "[color=red]World: Playground[/color]
+Sketches: 1"
+text = "World: Playground
+Sketches: 1"
+fit_content_height = true

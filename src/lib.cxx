@@ -17,9 +17,10 @@
  */
 
 #include <core/Godot.hpp>
+#include "bind/Board.hxx"
 #include "bind/BoardConfig.hxx"
-#include "bind/BoardRunner.hxx"
-#include "bind/ExecutionContext.hxx"
+#include "bind/Sketch.hxx"
+#include "bind/Toolchain.hxx"
 #include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
 #include "gd/GDResult.hxx"
@@ -37,7 +38,7 @@ template <class... T> void register_classes() { (register_class<T>(), ...); };
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
 
-    register_classes<AnyTask, BoardRunner, ExecutionContext, BoardView, UartSlurper, GDResult, FrameBuffer,
+    register_classes<AnyTask, Board, Toolchain, Sketch, BoardView, UartSlurper, GDResult, FrameBuffer,
                      BoardConfig, BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
                      BoardConfig::FrameBufferConfig>();
 }

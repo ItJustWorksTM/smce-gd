@@ -21,7 +21,6 @@ func set_disabled(_disabled: bool) -> void:
 
 func _unhandled_input(event) -> void:
 	if event is InputEventMouseMotion and Input.is_action_pressed("mouse_left") and ! FocusOwner.has_focus():
-
 		rot_x -= event.relative.x * lookaround_speed
 		rot_y -= event.relative.y * lookaround_speed
 		_update_pos()

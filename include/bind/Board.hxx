@@ -1,5 +1,5 @@
 /*
- *  BoardRunner.hxx
+ *  Board.hxx
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,73 +16,68 @@
  *
  */
 
-#ifndef GODOT_SMCE_BOARDRUNNER_HXX
-#define GODOT_SMCE_BOARDRUNNER_HXX
+#ifndef GODOT_SMCE_BOARD_HXX
+#define GODOT_SMCE_BOARD_HXX
 
 #include <functional>
 #include <optional>
 #include <type_traits>
 #include <SMCE/BoardConf.hpp>
-#include <SMCE/BoardRunner.hpp>
-#include <SMCE/ExecutionContext.hpp>
+#include <SMCE/Board.hpp>
 #include <SMCE/SketchConf.hpp>
 #include <core/Godot.hpp>
 #include <gen/Node.hpp>
 #include <gen/Reference.hpp>
 #include "bind/BoardConfig.hxx"
 #include "bind/BoardView.hxx"
-#include "bind/ExecutionContext.hxx"
 #include "bind/UartSlurper.hxx"
+#include "bind/Sketch.hxx"
 #include "gd/AnyTask.hxx"
 #include "gd/GDResult.hxx"
 #include "gd/util.hxx"
 
 namespace godot {
 
-class BoardRunner : public Node {
-    GODOT_CLASS(BoardRunner, Node)
+namespace stdfs = std::filesystem;
 
+class Board : public Node {
+    GODOT_CLASS(Board, Node)
 
     smce::BoardConfig bconfig;
-    stdfs::path ctx_path;
-    std::string fqbin;
+    smce::Board board;
 
-    std::optional<smce::BoardRunner> runner;
+    Ref<Sketch> sketch;
 
-    bool queued_free = false;
-    bool building = false;
+    template<class ...Status>
+    bool is_status(Status ...x) {
+        return ((board.status() == x) ||  ...);
+    }
+
+    void set_view();
 
   public:
-    ~BoardRunner();
-
-    smce::ExecutionContext exec_context = smce::ExecutionContext{"."};
+    Board();
 
     BoardView* view_node;
     UartSlurper* uart_node;
 
     BoardView* view();
-
     UartSlurper* uart();
 
     void _init();
 
     static void _register_methods();
 
-    Ref<GDResult> init(String context_path);
-    Ref<GDResult> configure(String pp_fqbn, Ref<BoardConfig> board_config);
+    Ref<GDResult> configure(Ref<BoardConfig> board_config);
     Ref<GDResult> reconfigure();
 
-    Ref<AnyTask> build(String sketch_src);
+    Ref<GDResult> attach_sketch(Ref<Sketch> sketch);
+    Ref<Sketch> get_sketch();
     Ref<GDResult> start();
     Ref<GDResult> suspend();
     Ref<GDResult> resume();
     Ref<GDResult> terminate();
-    // Ref<GDResult> stop();
-    Ref<GDResult> reset(bool auto_configure);
-
-    void on_build_completed(Ref<GDResult> result);
-
-    void set_free();
+    Ref<GDResult> reset();
 
     void _physics_process();
 
@@ -90,8 +85,8 @@ class BoardRunner : public Node {
 
     int status();
 
-    std::optional<smce::BoardRunner>& native();
+    smce::Board& native();
 };
 } // namespace godot
 
-#endif // GODOT_SMCE_BOARDRUNNER_HXX
+#endif // GODOT_SMCE_BOARD_HXX
