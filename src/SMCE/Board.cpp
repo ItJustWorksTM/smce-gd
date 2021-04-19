@@ -23,6 +23,7 @@
 #include <csignal>
 #elif BOOST_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
+#include <boost/process/windows.hpp>
 #include <Windows.h>
 #include <winternl.h>
 #pragma comment(lib, "ntdll.lib")
@@ -44,7 +45,6 @@ extern "C" {
 #include <type_traits>
 #endif
 
-#include <ctime>
 #include <string>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
@@ -225,6 +225,9 @@ void Board::do_spawn() noexcept {
             "\""+m_sketch_ptr->m_executable.string()+"\"",
             bp::std_out > bp::null,
             bp::std_err > m_internal->sketch_log
+#if BOOST_OS_WINDOWS
+           ,bp::windows::create_no_window
+#endif
         );
 
     m_internal->sketch_log_grabber = std::thread{[&]{

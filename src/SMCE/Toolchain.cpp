@@ -20,7 +20,11 @@
 
 #include <string>
 #include <system_error>
+#include <boost/predef.h>
 #include <boost/process.hpp>
+#if BOOST_OS_WINDOWS
+#include <boost/process/windows.hpp>
+#endif
 #include <SMCE/internal/utils.hpp>
 #include <SMCE/Sketch.hpp>
 #include <SMCE/SketchConf.hpp>
@@ -164,6 +168,9 @@ std::error_code Toolchain::do_configure(Sketch& sketch) noexcept {
         "-P",
         m_res_dir.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
         (bp::std_out & bp::std_err) > cmake_conf_out
+#if BOOST_OS_WINDOWS
+       ,bp::windows::create_no_window
+#endif
     );
 
     {
@@ -206,6 +213,9 @@ std::error_code Toolchain::do_build(Sketch& sketch) noexcept {
         "--build", (sketch.m_tmpdir / "build").string(),
         "--config", "Release",
         (bp::std_out & bp::std_err) > cmake_build_out
+#if BOOST_OS_WINDOWS
+       ,bp::windows::create_no_window
+#endif
     };
 
     for (std::string line; std::getline(cmake_build_out, line);) {
@@ -253,7 +263,14 @@ std::error_code Toolchain::do_build(Sketch& sketch) noexcept {
             return toolchain_error::cmake_not_found;
     }
     bp::ipstream cmake_out;
-    bp::child cmake_child{m_cmake_path, "--version", bp::std_out > cmake_out};
+    bp::child cmake_child{
+        m_cmake_path,
+        "--version",
+        bp::std_out > cmake_out
+#if BOOST_OS_WINDOWS
+       ,bp::windows::create_no_window
+#endif
+    };
     std::string line;
     while (cmake_child.running() && std::getline(cmake_out, line) && !line.empty()) {
         if(!line.starts_with("cmake")) {
