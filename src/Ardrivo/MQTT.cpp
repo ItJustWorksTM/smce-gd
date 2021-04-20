@@ -92,7 +92,7 @@ bool MQTTClient::connect(const char* clientID, const char* username, const char*
 
     mosquitto_message_callback_set(static_cast<Mosquitto*>(m_client), mqtt_message_callback);
 
-    const int res = mosquitto_connect(static_cast<Mosquitto*>(m_client), m_host_uri.c_str(), m_port, 60);
+    const int res = mosquitto_connect(static_cast<Mosquitto*>(m_client), m_host_uri.c_str(), m_port, m_keepalive);
     switch (res) {
     case MOSQ_ERR_SUCCESS:
         return true;
