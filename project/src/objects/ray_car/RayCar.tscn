@@ -167,7 +167,8 @@ script = ExtResource( 10 )
 trigger_pin = 6
 echo_pin = 7
 max_angle = 1.3
-max_distance = 40
+max_distance = 40.0
+min_distance = 0.2
 layers = [ 16, 4, 1 ]
 
 [node name="Left BrushedMotor" type="Node" parent="Attachments"]

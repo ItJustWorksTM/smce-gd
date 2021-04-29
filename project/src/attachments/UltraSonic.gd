@@ -4,8 +4,8 @@ export(int) var trigger_pin = 0
 export(int) var echo_pin = 0
 
 export(float, 0, 90, 0.1) var max_angle = 10.0 setget _update_angle
-export(int, 0, 50, 1) var max_distance = 10 setget _update_distance
-export(int, 0, 50, 1) var min_distance = 2
+export(float, 0, 50, 0.1) var max_distance = 10 setget _update_distance
+export(float, 0, 50, 0.1) var min_distance = 2
 export(Array, int) var layers = [] setget _update_layers
 
 var raycasts = []
