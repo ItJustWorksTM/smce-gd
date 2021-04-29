@@ -40,8 +40,11 @@ static void mqtt_message_callback(Mosquitto*, void* context, const MosquittoMess
     const auto& callbacks = *reinterpret_cast<const MQTTClientCallbacks*>(context);
     if(callbacks.advanced)
         callbacks.advanced(callbacks.client, message->topic, static_cast<const char*>(message->payload), message->payloadlen);
-    if(callbacks.simple)
-        callbacks.simple(message->topic, String{static_cast<const char*>(message->payload)});
+    if(callbacks.simple) {
+        String topic = message->topic;
+        String msg = String{static_cast<const char*>(message->payload)};
+        callbacks.simple(topic, msg);
+    }
 }
 
 MQTTClient::MQTTClient([[maybe_unused]] int bufSize) {}

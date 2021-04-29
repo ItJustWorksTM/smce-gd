@@ -29,7 +29,7 @@
 
 class MQTTClient;
 
-using MQTTClientCallbackSimple = void(*)(String topic, String payload);
+using MQTTClientCallbackSimple = void(*)(String& topic, String& payload);
 using MQTTClientCallbackAdvanced = void(*)(MQTTClient* client, const char* topic, const char* bytes, int length);
 
 struct SMCE__DLL_RT_API MQTTClientCallbacks {
