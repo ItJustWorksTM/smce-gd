@@ -56,7 +56,7 @@ func _ready():
 	
 	var res = bar.init(Global.user_dir)
 	if ! res.ok():
-		return _error("Unsuitable environment: " % res.error())
+		return _error("Unsuitable environment: %s" % res.error())
 	print(bar.resource_dir())
 	bar.free()
 	
