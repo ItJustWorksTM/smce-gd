@@ -60,6 +60,8 @@ func _ready():
 	print(bar.resource_dir())
 	bar.free()
 	
+	Global.scan_named_classes("res://src")
+	
 	# somehow destroys res://
 	ModManager.load_mods()
 	

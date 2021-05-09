@@ -178,3 +178,8 @@ static func duplicate_ref(orig):
 	inflate_ref(new, dictify(orig))
 	
 	return new
+
+
+static func merge_dict_shallow(target, new):
+	for key in new:
+		target[key] = new[key]
