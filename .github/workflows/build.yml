@@ -59,7 +59,7 @@ jobs:
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
           export BOOST_ARK_BASENAME=$(echo ${{ matrix.boost.version }} | sed "s/^/boost_/;s/\./_/g")
-          wget -qOboost_src.tgz https://dl.bintray.com/boostorg/release/${{ matrix.boost.version }}/source/$BOOST_ARK_BASENAME.tar.gz
+          wget -qOboost_src.tgz https://boostorg.jfrog.io/artifactory/main/release/${{ matrix.boost.version }}/source/$BOOST_ARK_BASENAME.tar.gz
           tar -xzf ./boost_src.tgz
           mkdir boost_root
           cd $BOOST_ARK_BASENAME
