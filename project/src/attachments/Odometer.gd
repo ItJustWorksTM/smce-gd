@@ -17,6 +17,7 @@ var speed: float = 0
 var forward: bool = true
 
 var view = null setget set_view
+var _traveled: float = 0
 
 func set_view(_view: Node) -> void:
 	if ! _view:
@@ -46,7 +47,10 @@ func _physics_process(delta):
 	velocity = (global_transform.origin - prev_pos) * Vector3(1,0,1) / delta
 	speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z) / 10 # ignore y axis speed for now
 	
-	var new_dist = _distance_count() * 100
+	_traveled += _distance_count() * 10
+	
+	var new_dist = int(_traveled)
+	_traveled -= new_dist
 	
 	if new_dist > 0:
 		view.write_analog_pin(distance_pin, view.read_analog_pin(distance_pin) + new_dist)
@@ -105,4 +109,4 @@ func visualize() -> Control:
 
 
 func visualize_content() -> String:
-	return "   Pins: %d,%d\n   Forward: %s\n   Speed: %.3f m/s\n   Total distance: %.3f m" % [distance_pin, direction_pin, str(forward), speed, total_distance / 1000]
+	return "   Pins: %d,%d\n   Forward: %s\n   Speed: %.3f m/s\n   Total distance: %.3f m" % [distance_pin, direction_pin, str(forward), speed, total_distance / 100]
