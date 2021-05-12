@@ -10,11 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "RayCast",
-"class": "AnalogRaycastGD",
+"class": "AnalogRaycast",
 "language": "GDScript",
 "path": "res://src/attachments/AnalogRaycast.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "AnyTask",
 "language": "NativeScript",
 "path": "res://src/bind/AnyTask.gdns"
@@ -24,7 +24,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/utilities/toggleable_bgroup/BButonGroup.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "Board",
 "language": "NativeScript",
 "path": "res://src/bind/Board.gdns"
@@ -34,13 +34,13 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/BoardConfig.gdns"
 }, {
-"base": "",
+"base": "Node",
 "class": "BoardView",
 "language": "NativeScript",
 "path": "res://src/bind/BoardView.gdns"
 }, {
 "base": "Node",
-"class": "BrushedMotorGD",
+"class": "BrushedMotor",
 "language": "GDScript",
 "path": "res://src/attachments/BrushedMotor.gd"
 }, {
@@ -59,7 +59,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/FrameBufferConfig.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "GDResult",
 "language": "NativeScript",
 "path": "res://src/bind/GDResult.gdns"
@@ -89,6 +89,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/master_control/ProfileManager.gd"
 }, {
+"base": "RigidBody",
+"class": "RayCar",
+"language": "GDScript",
+"path": "res://src/objects/ray_car/RayCar.gd"
+}, {
+"base": "RayCast",
+"class": "RayWheel",
+"language": "GDScript",
+"path": "res://src/utilities/raycast_spring/RayCastSpring.gd"
+}, {
 "base": "Reference",
 "class": "SMCE",
 "language": "GDScript",
@@ -109,10 +119,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/simple_notification/SimpleNotiifcation.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "Sketch",
 "language": "NativeScript",
 "path": "res://src/bind/Sketch.gdns"
+}, {
+"base": "Reference",
+"class": "SketchConfig",
+"language": "GDScript",
+"path": "res://SketchConfig.gd"
 }, {
 "base": "Node",
 "class": "SketchManager",
@@ -129,7 +144,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/temp_tween/TempTween.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "Toolchain",
 "language": "NativeScript",
 "path": "res://src/bind/Toolchain.gdns"
@@ -139,10 +154,15 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/UartChannelConfig.gdns"
 }, {
-"base": "",
+"base": "Node",
 "class": "UartSlurper",
 "language": "NativeScript",
 "path": "res://src/bind/UartSlurper.gdns"
+}, {
+"base": "Spatial",
+"class": "UltraSonic",
+"language": "GDScript",
+"path": "res://src/attachments/UltraSonic.gd"
 }, {
 "base": "Reference",
 "class": "Util",
@@ -150,13 +170,13 @@ _global_script_classes=[ {
 "path": "res://src/utilities/Util.gd"
 } ]
 _global_script_class_icons={
-"AnalogRaycastGD": "",
+"AnalogRaycast": "",
 "AnyTask": "",
 "BButtonGroup": "",
 "Board": "",
 "BoardConfig": "",
 "BoardView": "",
-"BrushedMotorGD": "",
+"BrushedMotor": "",
 "CamCtl": "",
 "ControlUtil": "",
 "FrameBufferConfig": "",
@@ -166,17 +186,21 @@ _global_script_class_icons={
 "NotificationDisplay": "",
 "ProfileConfig": "",
 "ProfileManager": "",
+"RayCar": "",
+"RayWheel": "",
 "SMCE": "",
 "Shooty": "",
 "ShootyVisualizer": "",
 "SimpleNotification": "",
 "Sketch": "",
+"SketchConfig": "",
 "SketchManager": "",
 "SmceHud": "",
 "TempTween": "",
 "Toolchain": "",
 "UartChannelConfig": "",
 "UartSlurper": "",
+"UltraSonic": "",
 "Util": ""
 }
 
@@ -305,7 +329,6 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
-quality/filters/anisotropic_filter_level=2
 quality/directional_shadow/size=2048
 quality/shadow_atlas/size=2048
 quality/shadow_atlas/quadrant_3_subdiv=3
@@ -314,6 +337,7 @@ quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/reflections/irradiance_max_size=32
 quality/shading/force_blinn_over_ggx=true
+quality/filters/anisotropic_filter_level=2
 quality/subsurface_scattering/quality=0
 quality/reflections/atlas_size=0
 quality/reflections/atlas_subdiv=16

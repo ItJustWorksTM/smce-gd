@@ -1,5 +1,5 @@
-class_name ShootyVisualizer
 extends Button
+class_name ShootyVisualizer
 
 var _shooty = null
 
@@ -19,3 +19,5 @@ func _process(_delta: float) -> void:
 	var cooldown = _shooty.cooldown()
 	disabled = cooldown > 0
 	text = "Ready" if cooldown == 0 else "Cooldown: %.2f" % [cooldown]
+
+

@@ -1,18 +1,21 @@
 extends RayCast
+class_name RayWheel
+func extern_class_name():
+	return "RayWheel"
 
 var max_hit_distance: float = abs(cast_to.y)
 var prev_contact_depth: float = 0
 
 onready var prev_pos: Vector3 = global_transform.origin
 
-export (float, 0.1, 100, 0.1) var spring_force = 10
-export (float, 0.1, 100, 0.1) var damper_force = 1
-export (float, 0, 2, 0.1) var target = 0.6
+export (float, 0.1, 100, 0.1) var spring_force = 30
+export (float, 0.1, 100, 0.1) var damper_force = 5
+export (float, 0, 2, 0.1) var target = 0.9
 
 export (float, 0, 90) var slip_angle = 20
 
-export (float, 0, 100, 1) var motor_force = 5
-export (float, 0, 20, 0.1) var max_speed = 10
+export (float, 0, 100, 1) var motor_force = 2
+export (float, 0, 20, 0.1) var max_speed = 20
 export (float, -1, 1, 0.01) var throttle = 0
 
 export var force_offset = Vector3(0,-0.2,0)
@@ -69,7 +72,8 @@ func _motor_force(state: PhysicsDirectBodyState) -> void:
 		var pos: Vector3 = global_transform.origin
 		DebugCanvas.add_draw(pos, pos + fmotor, Color.darkblue)
 		DebugCanvas.add_draw(pos, pos + direction)
-		
+
+
 func _spring_force(state: PhysicsDirectBodyState):
 	if ! is_colliding():
 		return

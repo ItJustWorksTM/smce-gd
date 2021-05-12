@@ -1,8 +1,11 @@
-class_name AnalogRaycastGD
 extends RayCast
+class_name AnalogRaycast
+func extern_class_name():
+	return "AnalogRaycast"
 
 export(int, 100) var pin = 0
 export(float) var min_distance = 0
+export(float) var max_distance = 4
 
 var view = null setget set_view
 
@@ -21,6 +24,9 @@ func set_view(_view: Node) -> void:
 
 
 func _ready() -> void:
+	enabled = true
+	
+	cast_to = transform.basis.xform(Vector3.FORWARD) * max_distance
 	set_physics_process(false)
 
 

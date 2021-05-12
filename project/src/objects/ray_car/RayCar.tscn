@@ -1,17 +1,13 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/objects/ray_car/RayCar.gd" type="Script" id=1]
-[ext_resource path="res://src/attachments/AnalogRaycast.gd" type="Script" id=2]
 [ext_resource path="res://media/images/icon.png" type="Texture" id=3]
 [ext_resource path="res://media/models/car_parts/SMCE-wheel.tscn" type="PackedScene" id=4]
-[ext_resource path="res://src/utilities/raycast_spring/RayCastSpring.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/utilities/raycast_spring/RayCastSpring.gd" type="Script" id=5]
 [ext_resource path="res://media/models/car_parts/SMCE-hull.glb" type="PackedScene" id=6]
 [ext_resource path="res://src/attachments/BrushedMotor.gd" type="Script" id=7]
 [ext_resource path="res://src/attachments/Gyroscope.gd" type="Script" id=8]
 [ext_resource path="res://src/attachments/Odometer.gd" type="Script" id=9]
-[ext_resource path="res://src/attachments/UltraSonic.gd" type="Script" id=10]
-[ext_resource path="res://src/attachments/Camera.gd" type="Script" id=11]
-[ext_resource path="res://src/shaders/LensDistort.shader" type="Shader" id=12]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 0.126468, 1.27087 )
@@ -22,15 +18,15 @@ extents = Vector3( 0.628528, 0.232967, 0.868031 )
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 1.92613, 0.140498, 0.426843 )
 
-[sub_resource type="ShaderMaterial" id=4]
-shader = ExtResource( 12 )
-shader_param/resolution = Vector2( 1024, 720 )
-shader_param/factor = 0.898
-
 [node name="RayCar" type="RigidBody"]
 can_sleep = false
 angular_damp = 0.0
 script = ExtResource( 1 )
+cosmetic_wheels = [ NodePath("LeftBack/wheel"), NodePath("LeftFront/wheel"), NodePath("RightBack/wheel"), NodePath("RightFront/wheel") ]
+right_wheels = [ NodePath("RightBack"), NodePath("RightFront") ]
+left_wheels = [ NodePath("LeftBack"), NodePath("LeftFront") ]
+left_motor = NodePath("BuiltinAttachments/Left BrushedMotor")
+right_motor = NodePath("BuiltinAttachments/Right BrushedMotor")
 
 [node name="Hull" parent="." instance=ExtResource( 6 )]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
@@ -51,49 +47,41 @@ shape = SubResource( 3 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 1.7 )
 shape = SubResource( 3 )
 
-[node name="LeftBack" parent="." instance=ExtResource( 5 )]
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform( -0.08, 0, -3.72727e-06, 0, 0.08, 0, 2.98182e-07, 0, -1, 0, 0.037512, -2.19019 )
+texture = ExtResource( 3 )
+
+[node name="LeftBack" type="RayCast" parent="."]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -0.934, 0, 0.675 )
 enabled = true
 cast_to = Vector3( 0, -1.2, 0 )
-spring_force = 30.0
-damper_force = 5.0
-target = 0.9
-motor_force = 2.0
-max_speed = 20.0
+script = ExtResource( 5 )
 force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="LeftBack"]
 transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.700143, 0 )
 
 [node name="wheel" parent="LeftBack/wheel" instance=ExtResource( 4 )]
-transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
+transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.502, 0 )
 
-[node name="LeftFront" parent="." instance=ExtResource( 5 )]
+[node name="LeftFront" type="RayCast" parent="."]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, -0.934, 0, -0.668874 )
 enabled = true
 cast_to = Vector3( 0, -1.2, 0 )
-spring_force = 30.0
-damper_force = 5.0
-target = 0.9
-motor_force = 2.0
-max_speed = 20.0
+script = ExtResource( 5 )
 force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="LeftFront"]
-transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.660918, 0 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -0.7, 0 )
 
 [node name="wheel" parent="LeftFront/wheel" instance=ExtResource( 4 )]
-transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, 0.501972, 0 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.501972, 0 )
 
-[node name="RightBack" parent="." instance=ExtResource( 5 )]
+[node name="RightBack" type="RayCast" parent="."]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0.934, 0, 0.675 )
 enabled = true
 cast_to = Vector3( 0, -1.2, 0 )
-spring_force = 30.0
-damper_force = 5.0
-target = 0.9
-motor_force = 2.0
-max_speed = 20.0
+script = ExtResource( 5 )
 force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="RightBack"]
@@ -102,134 +90,67 @@ transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.7
 [node name="wheel" parent="RightBack/wheel" instance=ExtResource( 4 )]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.501972, 0 )
 
-[node name="RightFront" parent="." instance=ExtResource( 5 )]
+[node name="RightFront" type="RayCast" parent="."]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0.934, 0, -0.669 )
 enabled = true
 cast_to = Vector3( 0, -1.2, 0 )
-spring_force = 30.0
-damper_force = 5.0
-target = 0.9
-motor_force = 2.0
-max_speed = 20.0
+script = ExtResource( 5 )
 force_offset = Vector3( 0, -0.1, 0 )
 
 [node name="wheel" type="Spatial" parent="RightFront"]
-transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.660918, 0 )
+transform = Transform( -1.62921e-07, 0, -1, 0, 1, 0, 1, 0, -1.62921e-07, 0, -0.7, 0 )
 
 [node name="wheel" parent="RightFront/wheel" instance=ExtResource( 4 )]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.501972, 0 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0.502, 0 )
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform( -0.08, 0, -3.72727e-06, 0, 0.08, 0, 2.98182e-07, 0, -1, 0, 0.037512, -2.19019 )
-texture = ExtResource( 3 )
+[node name="AttachmentSlots" type="Spatial" parent="."]
 
-[node name="SpotLight" type="SpotLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.97157, 0.236753, 0, -0.236753, 0.97157, 0, 0, -2.34608 )
-visible = false
-light_color = Color( 0.733333, 0, 1, 1 )
-light_energy = 5.66
-light_indirect_energy = 2.44
-spot_range = 9.4
-spot_angle = 38.8
-
-[node name="Attachments" type="Spatial" parent="."]
-
-[node name="Front Infrared" type="RayCast" parent="Attachments"]
+[node name="Front" type="Position3D" parent="AttachmentSlots"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -1.8 )
-enabled = true
-cast_to = Vector3( 0, 0, -4 )
-script = ExtResource( 2 )
 
-[node name="Left Infrared" type="RayCast" parent="Attachments"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.974, 0.4, 0 )
-enabled = true
-cast_to = Vector3( -4, 0, 0 )
-script = ExtResource( 2 )
-pin = 1
+[node name="Front2" type="Position3D" parent="AttachmentSlots"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735401, -2.30562 )
 
-[node name="Right Infrared" type="RayCast" parent="Attachments"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.974, 0.4, 0 )
-enabled = true
-cast_to = Vector3( 4, 0, 0 )
-script = ExtResource( 2 )
-pin = 2
-
-[node name="Back Infrared" type="RayCast" parent="Attachments"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 1.8 )
-enabled = true
-cast_to = Vector3( 0, 0, 4 )
-script = ExtResource( 2 )
-pin = 3
-
-[node name="Front UltraSonic" type="Spatial" parent="Attachments"]
+[node name="FrontTop" type="Position3D" parent="AttachmentSlots"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.776154, -1.14053 )
-script = ExtResource( 10 )
-trigger_pin = 6
-echo_pin = 7
-max_angle = 1.3
-max_distance = 40.0
-min_distance = 0.2
-layers = [ 16, 4, 1 ]
 
-[node name="Left BrushedMotor" type="Node" parent="Attachments"]
+[node name="Left" type="Position3D" parent="AttachmentSlots"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.974, 0.4, 0 )
+
+[node name="Right" type="Position3D" parent="AttachmentSlots"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.974, 0.4, 0 )
+
+[node name="Back" type="Position3D" parent="AttachmentSlots"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.4, 1.8 )
+
+[node name="BuiltinAttachments" type="Spatial" parent="."]
+
+[node name="Left BrushedMotor" type="Node" parent="BuiltinAttachments"]
 script = ExtResource( 7 )
 forward_pin = 12
 backward_pin = 14
 enable_pin = 13
 
-[node name="Right BrushedMotor" type="Node" parent="Attachments"]
+[node name="Right BrushedMotor" type="Node" parent="BuiltinAttachments"]
 script = ExtResource( 7 )
 forward_pin = 25
 backward_pin = 26
 enable_pin = 27
 
-[node name="Gyroscope" type="Node" parent="Attachments"]
+[node name="Gyroscope" type="Node" parent="BuiltinAttachments"]
 script = ExtResource( 8 )
 node = NodePath("../..")
-pin = 205
 
-[node name="Left Odometer" type="Spatial" parent="Attachments"]
+[node name="Left Odometer" type="Spatial" parent="BuiltinAttachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934, -0.211, 0 )
 script = ExtResource( 9 )
+_forward_reference = NodePath("../..")
 distance_pin = 35
 direction_pin = 34
 
-[node name="Right Odometer" type="Spatial" parent="Attachments"]
+[node name="Right Odometer" type="Spatial" parent="BuiltinAttachments"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.934, -0.211, 0 )
 script = ExtResource( 9 )
+_forward_reference = NodePath("../..")
 distance_pin = 36
 direction_pin = 39
-
-[node name="Front Camera" type="Spatial" parent="Attachments"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735401, -2.30562 )
-script = ExtResource( 11 )
-distort = 0.75
-
-[node name="Timer" type="Timer" parent="Attachments/Front Camera"]
-process_mode = 0
-autostart = true
-
-[node name="Viewport" type="Viewport" parent="Attachments/Front Camera"]
-size = Vector2( 640, 480 )
-handle_input_locally = false
-hdr = false
-render_target_v_flip = true
-render_target_clear_mode = 1
-render_target_update_mode = 3
-shadow_atlas_size = 1
-shadow_atlas_quad_0 = 1
-shadow_atlas_quad_3 = 3
-
-[node name="Camera" type="Camera" parent="Attachments/Front Camera/Viewport"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3172, -2.71631 )
-current = true
-fov = 90.0
-far = 300.0
-
-[node name="BackBufferCopy" type="BackBufferCopy" parent="Attachments/Front Camera/Viewport"]
-copy_mode = 2
-
-[node name="Effect" type="ColorRect" parent="Attachments/Front Camera/Viewport"]
-material = SubResource( 4 )
-margin_right = -640.0
-margin_bottom = -480.0

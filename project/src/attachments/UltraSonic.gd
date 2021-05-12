@@ -1,12 +1,15 @@
 extends Spatial
+class_name UltraSonic
+func extern_class_name():
+	return "UltraSonic"
 
 export(int) var trigger_pin = 0
 export(int) var echo_pin = 0
 
-export(float, 0, 90, 0.1) var max_angle = 10.0 setget _update_angle
-export(float, 0, 50, 0.1) var max_distance = 10 setget _update_distance
-export(float, 0, 50, 0.1) var min_distance = 2
-export(Array, int) var layers = [] setget _update_layers
+export(float, 0, 90, 0.1) var max_angle = 1.3 setget _update_angle
+export(float, 0, 50, 0.1) var max_distance = 40 setget _update_distance
+export(float, 0, 50, 0.1) var min_distance = 0.2
+export(Array, int) var layers = [16, 4, 1] setget _update_layers
 
 var raycasts = []
 var _flat_raycasts = []

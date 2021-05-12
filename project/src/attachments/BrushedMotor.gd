@@ -1,5 +1,7 @@
-class_name BrushedMotorGD
 extends Node
+class_name BrushedMotor
+func extern_class_name():
+	return "BrusedMotor"
 
 export(int, 100) var forward_pin = 0
 export(int, 100) var backward_pin = 0

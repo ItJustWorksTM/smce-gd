@@ -1,10 +1,12 @@
 extends Spatial
+func extern_class_name():
+	return "Odometer"
 
 onready var prev_pos: Vector3 = global_transform.origin
 onready var velocity: Vector3 = Vector3.ZERO
 
-
-var forward_reference: Spatial = null
+export(NodePath) var _forward_reference
+onready var forward_reference: Spatial = get_node_or_null(_forward_reference)
 
 export(bool) var provides_direction = true
 export(int, 100) var distance_pin = 99
