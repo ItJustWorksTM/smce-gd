@@ -35,16 +35,22 @@ var sketch_path: String = ""
 
 var cam_ctl: CamCtl = null setget set_cam_ctl
 
-var vehicle_t: PackedScene = null
 var vehicle = null
-
 
 func init(sketch: Sketch, toolchain: Toolchain):
 	
 	sketch_path = sketch.get_source()
 	
 	var board_config = BoardConfig.new()
-	Util.inflate_ref(board_config, Util.read_json_file("res://share/config/smartcar_shield.json"))
+	var json_config = Util.read_json_file(sketch_path.get_base_dir().plus_file("board_config.json"))
+	if json_config == null:
+		json_config = Util.read_json_file("res://share/config/smartcar_shield_board.json")
+		print("Using built in board config")
+	else:
+		print("Using custom board config")
+	assert(json_config)
+	
+	Util.inflate_ref(board_config, json_config)
 	
 	var board = Board.new()
 	
@@ -57,11 +63,6 @@ func init(sketch: Sketch, toolchain: Toolchain):
 	if ! attach_res.ok():
 		board.free()
 		return attach_res
-	
-	if sketch.get_source().ends_with("tank.ino"):
-		vehicle_t = preload("res://src/objects/ray_car/RayTank.tscn")
-	else:
-		vehicle_t = preload("res://src/objects/ray_car/RayCar.tscn")
 	
 	_toolchain = toolchain
 	_board = board
@@ -261,7 +262,6 @@ func _show_compile_log() -> void:
 	compile_log_text_field.scroll_following = true
 	window.set_text_field(compile_log_text_field)
 	compile_log_text_field.text = _toolchain.get_log()
-	
 
 
 func _on_toolchain_log(text) -> void:
@@ -270,10 +270,59 @@ func _on_toolchain_log(text) -> void:
 
 
 func _create_vehicle() -> void:
-	vehicle = vehicle_t.instance()
+	
+	var stock_config = Util.read_json_file("res://share/config/smartcar_shield_vehicle.json")
+	var json_config = Util.read_json_file(sketch_path.get_base_dir().plus_file("vehicle_config.json"))
+	
+	if json_config == null:
+		json_config = stock_config
+		if sketch_path.ends_with("tank.ino"):
+			json_config["vehicle"] = "RayTank"
+	elif ! json_config.get("from_scratch", false):
+		json_config = Util.merge_dict(stock_config, json_config)
+		print("Using patched vehicle config")
+	else:
+		print("Using config from scratch")
+	assert(json_config)
+	
+	var vehicle_name = json_config.get("vehicle", "")
+	var vehicle_scene = Global.vehicles.get(vehicle_name)
+	
+	# TODO: handle failure
+	assert(vehicle_scene is PackedScene, "Specified vehicle does not exist!")
+	
+	vehicle = vehicle_scene.instance()
 	add_child(vehicle)
 	
 	vehicle.set_view(_board.view())
+	
+	print("Using vehicle: %s" % vehicle_name)
+	var attachments = []
+	print("Attachments:")
+	for slot_name in json_config.get("slots", {}):
+		var slot = json_config["slots"][slot_name]
+		var attachment_class = slot.get("class")
+		var attachment_name = slot.get("name")
+		var script = Global.classes.get(attachment_class)
+		assert(attachment_class && script)
+		
+		var attachment: Node = script.new()
+		
+		if attachment_name != null:
+			attachment.name = attachment_name
+		Util.set_props(attachment, slot.get("props", {}))
+		
+		print("class: %s, name: %s " % [attachment_class, attachment.name])
+		var res = vehicle.add_aux_attachment(slot_name, attachment)
+		if ! res.ok():
+			printerr(res.error())
+	
+	var builtin_attachments = vehicle.get_node_or_null("BuiltinAttachments")
+	if builtin_attachments != null:
+		var builtin_props = json_config.get("builtin", {})
+		for attach in builtin_attachments.get_children():
+			Util.set_props(attach, builtin_props.get(attach.name, {}))
+	
 	vehicle.freeze()
 	
 	_setup_attachments()

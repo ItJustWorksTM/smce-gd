@@ -1,5 +1,7 @@
-class_name Shooty
 extends Spatial
+class_name Shooty
+func extern_class_name():
+	return "Shooty"
 
 var view = null setget set_view
 

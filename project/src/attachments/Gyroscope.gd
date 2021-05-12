@@ -1,10 +1,11 @@
 extends Node
+func extern_class_name():
+	return "Gyroscope"
 
 export(NodePath) var node = ""
 onready var _track_node: Spatial = get_node_or_null(node)
 
-export(int, 256) var pin = 0;
-
+export(int, 256) var pin = 205;
 
 var view = null setget set_view
 
@@ -32,10 +33,6 @@ func _physics_process(delta) -> void:
 	
 	if ! view.is_valid():
 		set_physics_process(false)
-
-
-func name() -> String:
-	return "Gyroscope"
 
 
 func visualize() -> Control:

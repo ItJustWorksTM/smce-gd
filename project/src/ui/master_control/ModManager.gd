@@ -17,17 +17,30 @@ func load_mods() -> void:
 		if !ResourceLoader.exists(path, "GDScript"):
 			continue
 
-		var inst = load(path).new()
-		
-		if !_is_mod(inst) || !(inst is Reference):
-			printerr("'%s' is not a valid mod" % mod)
+		var script = load(path)
+		if ! is_instance_valid(script):
 			continue
+			
+		var inst = script.new()
+		
+		if !_is_mod(inst):
+			printerr("'%s' is not a valid mod" % mod)
+			
+			if ! (inst is Reference):
+				inst.free()
+			continue
+		
+		if inst is Node:
+			inst.name = inst.mod_name
+			add_child(inst)
 		
 		print("Initializing mod: %s" % inst.mod_name)
 		inst.init(Global)
 
 
-func _is_mod(ref: Reference) -> bool:
+func _is_mod(ref) -> bool:
+	if ! is_instance_valid(ref):
+		return false
 	var props = Util.get_custom_pops(ref)
 	
 	for prop in ["mod_name"]:

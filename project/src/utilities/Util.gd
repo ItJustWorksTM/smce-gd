@@ -174,12 +174,30 @@ static func ls(path: String) -> Array:
 static func duplicate_ref(orig):
 	var new = orig.get_script().new()
 	
-	
 	inflate_ref(new, dictify(orig))
 	
 	return new
 
 
-static func merge_dict_shallow(target, new):
+static func merge_dict_shallow(target, new) -> void:
 	for key in new:
 		target[key] = new[key]
+
+
+static func set_props(object: Object, props: Dictionary) -> void:
+	for prop in props:
+		var val = props[prop]
+		if val is String:
+			val = str2var(val)
+		object.set(prop, val)
+
+
+static func merge_dict(a: Dictionary, b: Dictionary) -> Dictionary:
+	var ret: Dictionary = a.duplicate()
+	for key in b:
+		var val = b[key]
+		if val is Dictionary and a.get(key) is Dictionary:
+			ret[key] = merge_dict(a.get(key), val)
+		else:
+			ret[key] = b[key]
+	return ret

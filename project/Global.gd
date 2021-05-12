@@ -8,6 +8,11 @@ var environments: Dictionary = {
 	"playground/Playground": preload("res://src/environments/playground/Playground.tscn"),
 }
 
+var vehicles: Dictionary = {
+	"RayCar": preload("res://src/objects/ray_car/RayCar.tscn"),
+	"RayTank": preload("res://src/objects/ray_car/RayTank.tscn")
+}
+
 var user_dir: String = OS.get_user_data_dir() setget set_user_dir
 var version: String = "unknown"
 
@@ -34,6 +39,15 @@ func register_environment(name: String, scene: PackedScene) -> bool:
 	
 	environments[name] = scene
 	print("Registered environment: %s" % name)
+	return true
+
+
+func register_vehicle(name: String, scene: PackedScene) -> bool:
+	if name == "" || !is_instance_valid(scene) || !scene.can_instance():
+		return false
+	
+	vehicles[name] = scene
+	print("Registered vehicle: %s" % name)
 	return true
 
 
@@ -67,8 +81,8 @@ func _scan_named_classes(path: String) -> Dictionary:
 		if ext == "gd" || ext == "gdns":
 			var script = load(path.plus_file(next))
 			var instance: Object = script.new()
-			if instance.has_method("_class_name"):
-				named_classes[instance.call("_class_name")] = script
+			if instance.has_method("extern_class_name"):
+				named_classes[instance.call("extern_class_name")] = script
 			if ! (instance is Reference):
 				instance.free()
 		

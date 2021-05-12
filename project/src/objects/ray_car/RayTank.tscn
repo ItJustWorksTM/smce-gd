@@ -19,6 +19,9 @@ transform = Transform( 4.88762e-07, 0, -1, 0, 1, 0, 1, 0, 4.88762e-07, 0, 0, 0 )
 [node name="Hull" parent="." index="2"]
 visible = false
 
-[node name="Shooty" type="Spatial" parent="Attachments" index="6"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0010988, 0.555933, -3.2402 )
+[node name="wheel" parent="LeftBack/wheel" index="0"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.502, 0 )
+
+[node name="Shooty" type="Spatial" parent="BuiltinAttachments" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.547026, -3.10493 )
 script = ExtResource( 10 )
