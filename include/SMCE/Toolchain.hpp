@@ -44,7 +44,7 @@ enum struct toolchain_error {
 };
 
 /**
- * The context of execution for sketches in board-runners
+ * Compilation environment for sketches
  *
  * Ideally there should only ever be one instance of this type
  * used at a given type in an application.
