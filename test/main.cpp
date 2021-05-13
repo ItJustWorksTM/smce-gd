@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <future>
 #include <iostream>
+#include <thread>
 #include <SMCE/Board.hpp>
 #include <SMCE/Sketch.hpp>
 #include <SMCE/Toolchain.hpp>
