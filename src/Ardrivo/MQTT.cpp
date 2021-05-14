@@ -42,7 +42,7 @@ static void mqtt_message_callback(Mosquitto*, void* context, const MosquittoMess
         callbacks.advanced(callbacks.client, message->topic, static_cast<const char*>(message->payload), message->payloadlen);
     if(callbacks.simple) {
         String topic = message->topic;
-        String msg = String{static_cast<const char*>(message->payload)};
+        String msg = String{String::internal_tag, static_cast<const char*>(message->payload), static_cast<std::size_t>(message->payloadlen)};
         callbacks.simple(topic, msg);
     }
 }
