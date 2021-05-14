@@ -42,6 +42,8 @@ String::String(std::string u) : m_u{std::move(u)} {}
 String::String(const char* cstr) : m_u{cstr} {}
 String::String(char c) : m_u(1, c) {}
 
+String::String(InternalTag, const char* ptr, std::size_t len) : m_u{ptr, len} {}
+
 String::String(ConvTag, std::uintmax_t val, SMCE__BIN) {
     if(val == 0) {
         m_u = "0";

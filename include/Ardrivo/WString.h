@@ -35,6 +35,7 @@ struct SMCE__HEX : std::integral_constant<int, 16> {};
 constexpr SMCE__HEX HEX{};
 
 class SMCE__DLL_RT_API String {
+    struct InternalTag {};
     struct ConvTag {};
     constexpr static ConvTag conv_tag{};
 
@@ -53,6 +54,11 @@ class SMCE__DLL_RT_API String {
     String(ConvTag, std::uintmax_t val, SMCE__HEX);
 
 public:
+#if !SMCE__COMPILING_USERCODE
+    constexpr static InternalTag internal_tag{};
+#endif
+    String(InternalTag, const char*, std::size_t);
+
     String() noexcept;
     String(const String&);
     String(String&&) noexcept;
