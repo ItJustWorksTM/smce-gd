@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <span>
+#include <string_view>
 #include <SMCE/fwd.hpp>
 
 namespace smce {
@@ -209,6 +210,12 @@ class FrameBuffers {
 class BoardView {
     BoardData* m_bdat{};
   public:
+    enum class Link {
+        UART,
+        SPI,
+        I2C,
+    };
+
     VirtualPins pins{m_bdat}; /// GPIO pins
     VirtualUarts uart_channels{m_bdat}; /// UART channels
 //  VirtualI2cs i2c_buses;
@@ -222,6 +229,9 @@ class BoardView {
 
     /// Object validity check
     [[nodiscard]] bool valid() noexcept { return m_bdat; }
+
+    /// Obtain the path to the root file of a storage device
+    [[nodiscard]] std::string_view storage_get_root(Link link, std::uint16_t accessor) noexcept;
 };
 
 class VirtualUarts::Iterator {

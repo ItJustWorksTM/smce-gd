@@ -53,6 +53,9 @@ target_sources (Ardrivo PRIVATE
         include/Ardrivo/Client.h
         include/Ardrivo/IPAddress.h
 
+        include/Ardrivo/SD.h
+        src/Ardrivo/SD.cpp
+
         include/Ardrivo/WiFi.h
         src/Ardrivo/WiFi.cpp
 

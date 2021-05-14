@@ -115,6 +115,15 @@ struct BoardData {
         std::optional<std::uint16_t> tx_pin_override; //ro
         explicit UartChannel(const ShmAllocator<void>&);
     };
+    struct DirectStorage {
+        enum class Bus {
+            SPI
+        };
+        Bus bus;
+        std::uint16_t accessor;
+        ShmString root_dir;
+        explicit DirectStorage(const ShmAllocator<void>&);
+    };
     struct FrameBuffer {
         enum struct Direction {
             in,
@@ -143,6 +152,7 @@ struct BoardData {
 
     boost::interprocess::vector<Pin, ShmAllocator<Pin>> pins; // sorted by id
     boost::interprocess::vector<UartChannel, ShmAllocator<UartChannel>> uart_channels;
+    boost::interprocess::vector<DirectStorage, ShmAllocator<DirectStorage>> direct_storages;
     boost::interprocess::vector<FrameBuffer, ShmAllocator<FrameBuffer>> frame_buffers;
 
     BoardData(const ShmAllocator<void>&, const BoardConfig&) noexcept;

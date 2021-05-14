@@ -22,6 +22,7 @@
 #include <cstdint>
 #include <optional>
 #include <vector>
+#include "SMCE/SMCE_fs.hpp"
 
 namespace smce {
 
@@ -57,6 +58,11 @@ struct BoardConfig {
         std::optional<std::uint16_t> tx_pin_override;
     };
 */
+    struct SecureDigitalStorage {
+        std::uint16_t cspin = 0; /// SPI Chip-Select pin; default one opened is 0
+        stdfs::path root_dir; /// Path to root directory
+    };
+
     struct FrameBuffer {
         /// \ref smce::FrameBuffer::Direction
         enum struct Direction {
@@ -71,6 +77,7 @@ struct BoardConfig {
     std::vector<GpioDrivers> gpio_drivers; /// GPIO drivers to apply on existing pins
     std::vector<UartChannel> uart_channels; /// UART channels
 //  std::vector<I2cBus> i2c_buses;
+    std::vector<SecureDigitalStorage> sd_cards;
     std::vector<FrameBuffer> frame_buffers; /// Frame-buffers (cameras & screens)
 };
 

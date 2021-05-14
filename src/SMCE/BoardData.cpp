@@ -27,6 +27,8 @@ namespace smce {
 
 BoardData::UartChannel::UartChannel(const ShmAllocator<void>& shm_valloc) : rx{shm_valloc}, tx{shm_valloc} {}
 
+BoardData::DirectStorage::DirectStorage(const ShmAllocator<void>& shm_valloc) : root_dir{shm_valloc} {}
+
 BoardData::FrameBuffer::FrameBuffer(const ShmAllocator<void>& shm_valloc) : data{shm_valloc} {}
 
 BoardData::BoardData(
@@ -34,6 +36,7 @@ BoardData::BoardData(
         const BoardConfig& c) noexcept
     : pins{shm_valloc},
       uart_channels{shm_valloc},
+      direct_storages{shm_valloc},
       frame_buffers{shm_valloc} {
     auto sorted_pins = c.pins;
     std::sort(sorted_pins.begin(), sorted_pins.end());
@@ -70,6 +73,17 @@ BoardData::BoardData(
         data.tx_pin_override = conf.tx_pin_override;
         data.max_buffered_rx = static_cast<std::uint16_t>(conf.rx_buffer_length);
         data.max_buffered_tx = static_cast<std::uint16_t>(conf.tx_buffer_length);
+    }
+
+    direct_storages.reserve(c.sd_cards.size());
+    for(const auto& conf : c.sd_cards) {
+        auto& data = direct_storages.emplace_back(shm_valloc);
+        data.bus = BoardData::DirectStorage::Bus::SPI;
+        data.accessor = conf.cspin;
+        {
+            auto rt_str = conf.root_dir.generic_string();
+            data.root_dir.assign(std::string_view{rt_str});
+        }
     }
 
     frame_buffers.reserve(c.frame_buffers.size());

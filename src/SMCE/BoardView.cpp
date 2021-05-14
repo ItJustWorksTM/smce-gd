@@ -30,6 +30,31 @@ using microsec_clock = boost::date_time::microsec_clock<boost::posix_time::ptime
 
 namespace smce {
 
+[[nodiscard]] std::string_view BoardView::storage_get_root(Link link, std::uint16_t accessor) noexcept {
+    if(!m_bdat)
+        return {};
+    using Bus = BoardData::DirectStorage::Bus;
+    constexpr std::array<Bus, 3> link2bus{
+        Bus{-1}, // UART
+        Bus::SPI, // SPI
+        Bus{-1}, // I2C
+    };
+    const auto bus = link2bus[static_cast<std::size_t>(link)];
+    if(bus == Bus{-1})
+        return {};
+
+    const auto it =
+        std::find_if(
+            m_bdat->direct_storages.begin(),
+            m_bdat->direct_storages.end(),
+            [=](const BoardData::DirectStorage& ds) -> bool {
+                return ds.bus == bus && ds.accessor == accessor;
+    });
+    if(it == m_bdat->direct_storages.end())
+        return {};
+    return it->root_dir;
+}
+
 [[nodiscard]] bool VirtualAnalogDriver::exists() noexcept {
     return m_bdat && m_idx < m_bdat->pins.size();
 }
