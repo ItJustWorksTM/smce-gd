@@ -21,7 +21,9 @@
 
 #include <cstdint>
 #include <cstring>
+#include <functional>
 #include <string>
+#include <type_traits>
 
 #include "Client.h"
 #include "IPAddress.h"
@@ -31,12 +33,23 @@ class MQTTClient;
 
 using MQTTClientCallbackSimple = void(*)(String& topic, String& payload);
 using MQTTClientCallbackAdvanced = void(*)(MQTTClient* client, const char* topic, const char* bytes, int length);
+using MQTTClientCallbackSimpleFunction = std::function<std::remove_pointer_t<MQTTClientCallbackSimple>>;
+using MQTTClientCallbackAdvancedFunction = std::function<std::remove_pointer_t<MQTTClientCallbackAdvanced>>;
 
 struct SMCE__DLL_RT_API MQTTClientCallbacks {
     MQTTClient* client;
     MQTTClientCallbackSimple simple = nullptr;
     MQTTClientCallbackAdvanced advanced = nullptr;
-    constexpr explicit MQTTClientCallbacks(MQTTClient* client) noexcept : client{client} {}
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
+    MQTTClientCallbackSimpleFunction fsimple = nullptr;
+    MQTTClientCallbackAdvancedFunction fadvanced = nullptr;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
+    explicit MQTTClientCallbacks(MQTTClient* client) noexcept : client{client} {}
 };
 
 class SMCE__DLL_RT_API MQTTClient {
@@ -72,6 +85,8 @@ public:
 
     void onMessage(MQTTClientCallbackSimple cb);
     void onMessageAdvanced(MQTTClientCallbackAdvanced cb);
+    void onMessage(MQTTClientCallbackSimpleFunction cb);
+    void onMessageAdvanced(MQTTClientCallbackAdvancedFunction cb);
 
     //void setClockSource(MQTTClientClockSource cb);
 

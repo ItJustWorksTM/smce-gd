@@ -38,12 +38,18 @@ static int mosquitto_lib_init_res = []() noexcept {
 
 static void mqtt_message_callback(Mosquitto*, void* context, const MosquittoMessage* message){
     const auto& callbacks = *reinterpret_cast<const MQTTClientCallbacks*>(context);
+    // Disclaimer: I do not like this ordering at all, but we must replicate the behaviour of arduino-mqtt
     if(callbacks.advanced)
-        callbacks.advanced(callbacks.client, message->topic, static_cast<const char*>(message->payload), message->payloadlen);
-    if(callbacks.simple) {
+        return (void)callbacks.advanced(callbacks.client, message->topic, static_cast<const char*>(message->payload), message->payloadlen);
+    if(callbacks.fadvanced)
+        return (void)callbacks.fadvanced(callbacks.client, message->topic, static_cast<const char*>(message->payload), message->payloadlen);
+    if(callbacks.simple || callbacks.fsimple) {
         String topic = message->topic;
         String msg = String{String::internal_tag, static_cast<const char*>(message->payload), static_cast<std::size_t>(message->payloadlen)};
-        callbacks.simple(topic, msg);
+        if(callbacks.fsimple)
+            return (void)callbacks.fsimple(topic, msg);
+        if(callbacks.simple)
+            return (void)callbacks.simple(topic, msg);
     }
 }
 
@@ -62,6 +68,12 @@ void MQTTClient::onMessage(MQTTClientCallbackSimple cb){
 }
 void MQTTClient::onMessageAdvanced(MQTTClientCallbackAdvanced cb){
     m_callbacks.advanced = cb;
+}
+void MQTTClient::onMessage(MQTTClientCallbackSimpleFunction cb) {
+    m_callbacks.fsimple = std::move(cb);
+}
+void MQTTClient::onMessageAdvanced(MQTTClientCallbackAdvancedFunction cb) {
+    m_callbacks.fadvanced = std::move(cb);
 }
 
 void MQTTClient::setHost(const char* hostname, std::uint16_t port){
