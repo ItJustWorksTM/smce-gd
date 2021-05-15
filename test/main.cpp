@@ -1,6 +1,7 @@
 #include <array>
 #include <chrono>
 #include <filesystem>
+#include <fstream>
 #include <future>
 #include <iostream>
 #include <thread>
@@ -12,6 +13,7 @@
 #define SMCE_PATH SMCE_TEST_DIR "/smce_root"
 #define SKETCHES_PATH SMCE_TEST_DIR "/sketches/"
 #define PATCHES_PATH SMCE_TEST_DIR "/patches/"
+#define STORAGE_PATH SMCE_TEST_DIR "/storage/"
 
 using namespace std::literals;
 
@@ -91,7 +93,7 @@ template <class Pin, class Value, class Duration>
 void test_pin_delayable(Pin pin, Value expected_value, std::size_t ticks, Duration tick_length) {
     do {
         if(ticks-- == 0)
-            FAIL();
+            FAIL("Timed out pin-wait");
         std::this_thread::sleep_for(tick_length);
     } while(pin.read() != expected_value);
 }
@@ -264,4 +266,57 @@ TEST_CASE("Patch lib", "[BoardRunner]") {
     std::this_thread::sleep_for(1ms);
     test_pin_delayable(pin0, 42, 16384, 1ms);
     REQUIRE(br.stop());
+}
+
+TEST_CASE("SD polyfill", "[SD File]") {
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "sd_fs", {
+        .fqbn = "arduino:avr:nano",
+        .preproc_libs = { smce::SketchConfig::RemoteArduinoLibrary{"SD", ""} }
+    }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << ec.message() << '\n' << tc.build_log().second << std::endl;
+    REQUIRE_FALSE(ec);
+
+
+    smce::Board br{};
+    REQUIRE(br.configure({
+         .pins = {0},
+         .gpio_drivers = {
+             smce::BoardConfig::GpioDrivers{
+                 .pin_id = 0,
+                 .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
+                     .board_read = true,
+                     .board_write = true
+                 }
+             }
+         },
+        .sd_cards = {
+            smce::BoardConfig::SecureDigitalStorage{ .root_dir = STORAGE_PATH }
+        }
+     }));
+
+    if(std::filesystem::exists(STORAGE_PATH))
+        std::filesystem::remove_all(STORAGE_PATH);
+    std::filesystem::create_directory(STORAGE_PATH);
+    REQUIRE(br.attach_sketch(sk));
+    REQUIRE(br.start());
+    auto d0 = br.view().pins[0].digital();
+    test_pin_delayable(d0, true, 16384, 1ms); // wait for the pin to be set
+    REQUIRE(br.stop());
+    std::cerr << br.runtime_log().second << std::endl;
+
+    REQUIRE(std::filesystem::exists(STORAGE_PATH "foo"));
+    REQUIRE(std::filesystem::is_directory(STORAGE_PATH "foo"));
+    REQUIRE(std::filesystem::exists(STORAGE_PATH "bar"));
+    REQUIRE(std::filesystem::is_directory(STORAGE_PATH "bar"));
+    REQUIRE(std::filesystem::exists(STORAGE_PATH "bar/baz"));
+    REQUIRE(std::filesystem::is_regular_file(STORAGE_PATH "bar/baz"));
+    std::ifstream baz{STORAGE_PATH "bar/baz"};
+    REQUIRE(baz.is_open());
+    std::string s;
+    baz >> s;
+    REQUIRE(s == "quxx");
 }
