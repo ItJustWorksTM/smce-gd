@@ -16,6 +16,14 @@ var vehicles: Dictionary = {
 var user_dir: String = OS.get_user_data_dir() setget set_user_dir
 var version: String = "unknown"
 
+var _classes: Array = [
+	AnalogRaycast, BrushedMotor,
+	preload("res://src/attachments/Camera.gd"),
+	preload("res://src/attachments/Gyroscope.gd"),
+	preload("res://src/utilities/sensors/odometer/Odometer.gd"),
+	RayCar, RayWheel, UltraSonic,
+	preload("res://src/attachments/Odometer.gd")]
+
 var classes: Dictionary = {}
 
 func usr_dir_plus(suffix: String) -> String:
@@ -72,20 +80,12 @@ func _scan_named_classes(path: String) -> Dictionary:
 	
 	var named_classes: Dictionary = {}
 	
-	var next: String = dir.get_next()
-	while next != "":
-		if dir.dir_exists(path.plus_file(next)):
-			Util.merge_dict_shallow(named_classes, _scan_named_classes(path.plus_file(next)))
-		
-		var ext: String = next.get_extension()
-		if ext == "gd" || ext == "gdns":
-			var script = load(path.plus_file(next))
-			var instance: Object = script.new()
-			if instance.has_method("extern_class_name"):
-				named_classes[instance.call("extern_class_name")] = script
-			if ! (instance is Reference):
-				instance.free()
-		
-		next = dir.get_next()
+	for script in _classes:
+		var instance: Object = script.new()
+		if instance.has_method("extern_class_name"):
+			named_classes[instance.call("extern_class_name")] = script
+			print(instance.call("extern_class_name"))
+		if ! (instance is Reference):
+			instance.free()
 	
 	return named_classes
