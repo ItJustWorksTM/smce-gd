@@ -70,10 +70,20 @@ smce::BoardConfig::FrameBuffer BoardConfig::FrameBufferConfig::to_native() const
     return {.key = static_cast<size_t>(key), .direction = direction ? Direction::in : Direction::out};
 }
 
+void BoardConfig::SecureDigitalStorage::_register_methods() {
+    register_property("cspin", &SecureDigitalStorage::cspin, 0);
+    register_property("root_dir", &SecureDigitalStorage::root_dir, String{});
+}
+
+smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_native() const {
+    return { .cspin = static_cast<uint16_t>(cspin), .root_dir = std_str(root_dir) };
+}
+
 void BoardConfig::_register_methods() {
     register_property("gpio_drivers", &BoardConfig::gpio_drivers, Array{});
     register_property("uart_channels", &BoardConfig::uart_channels, Array{});
     register_property("frame_buffers", &BoardConfig::frame_buffers, Array{});
+    register_property("sd_cards", &BoardConfig::sd_cards, Array{});
     register_method("type_info", &BoardConfig::type_info);
 }
 
@@ -86,6 +96,7 @@ Dictionary BoardConfig::type_info() {
     ret["gpio_drivers"] = get_res("res://src/bind/GpioDriverConfig.gdns");
     ret["uart_channels"] = get_res("res://src/bind/UartChannelConfig.gdns");
     ret["frame_buffers"] = get_res("res://src/bind/FrameBufferConfig.gdns");
+    ret["sd_cards"] = get_res("res://src/bind/SecureDigitalStorage.gdns");
     return ret;
 }
 
@@ -100,6 +111,7 @@ smce::BoardConfig BoardConfig::to_native() const {
     rep.operator()<GpioDriverConfig>(gpio_drivers, ret.gpio_drivers);
     rep.operator()<UartChannelConfig>(uart_channels, ret.uart_channels);
     rep.operator()<FrameBufferConfig>(frame_buffers, ret.frame_buffers);
+    rep.operator()<SecureDigitalStorage>(sd_cards, ret.sd_cards);
 
     for (const auto& driver : ret.gpio_drivers)
         ret.pins.push_back(driver.pin_id);

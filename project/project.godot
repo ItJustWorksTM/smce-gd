@@ -104,6 +104,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/bind/SMCE.gd"
 }, {
+"base": "Reference",
+"class": "SecureDigitalStorage",
+"language": "NativeScript",
+"path": "res://src/bind/SecureDigitalStorage.gdns"
+}, {
 "base": "Spatial",
 "class": "Shooty",
 "language": "GDScript",
@@ -189,6 +194,7 @@ _global_script_class_icons={
 "RayCar": "",
 "RayWheel": "",
 "SMCE": "",
+"SecureDigitalStorage": "",
 "Shooty": "",
 "ShootyVisualizer": "",
 "SimpleNotification": "",

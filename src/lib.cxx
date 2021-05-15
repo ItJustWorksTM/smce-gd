@@ -40,5 +40,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
 
     register_classes<AnyTask, Board, Toolchain, Sketch, BoardView, UartSlurper, GDResult, FrameBuffer,
                      BoardConfig, BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
-                     BoardConfig::FrameBufferConfig>();
+                     BoardConfig::FrameBufferConfig, BoardConfig::SecureDigitalStorage>();
 }

@@ -41,14 +41,24 @@ func init(sketch: Sketch, toolchain: Toolchain):
 	
 	sketch_path = sketch.get_source()
 	
+	
 	var board_config = BoardConfig.new()
+	var stock_config =  Util.read_json_file("res://share/config/smartcar_shield_board.json")
 	var json_config = Util.read_json_file(sketch_path.get_base_dir().plus_file("board_config.json"))
 	if json_config == null:
-		json_config = Util.read_json_file("res://share/config/smartcar_shield_board.json")
-		print("Using built in board config")
+		json_config = stock_config
+	elif ! json_config.get("from_scratch", false):
+		json_config = Util.merge_dict(stock_config, json_config)
+		print("Using patched board config")
 	else:
-		print("Using custom board config")
+		print("Using board config from scratch")
 	assert(json_config)
+	
+	for i in range(json_config.get("sd_cards", []).size()):
+		var root_dir = json_config["sd_cards"][i].get("root_dir", "")
+		if root_dir.is_rel_path():
+			root_dir = sketch_path.get_base_dir().plus_file(root_dir)
+		json_config["sd_cards"][i]["root_dir"] = root_dir
 	
 	Util.inflate_ref(board_config, json_config)
 	
@@ -282,7 +292,7 @@ func _create_vehicle() -> void:
 		json_config = Util.merge_dict(stock_config, json_config)
 		print("Using patched vehicle config")
 	else:
-		print("Using config from scratch")
+		print("Using vehicle config from scratch")
 	assert(json_config)
 	
 	var vehicle_name = json_config.get("vehicle", "")

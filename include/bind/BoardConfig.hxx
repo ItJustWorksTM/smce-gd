@@ -84,9 +84,24 @@ class BoardConfig : public Reference {
         smce::BoardConfig::FrameBuffer to_native() const;
     };
 
+    class SecureDigitalStorage : public Reference {
+        GODOT_CLASS(SecureDigitalStorage, Reference)
+
+    public:
+        int cspin;
+        String root_dir;
+
+        static void _register_methods();
+
+        void _init() {}
+
+        smce::BoardConfig::SecureDigitalStorage to_native() const;
+    };
+
     Array gpio_drivers;
     Array uart_channels;
     Array frame_buffers;
+    Array sd_cards;
 
     static void _register_methods();
     void _init() {}

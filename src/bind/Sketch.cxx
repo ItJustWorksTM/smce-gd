@@ -39,7 +39,8 @@ void Sketch::init(String src, String home_dir) {
                      {.fqbn = "arduino:sam:arduino_due_x",
                       .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT@2.5.0"},
                                        smce::SketchConfig::RemoteArduinoLibrary{"WiFi@1.2.7"},
-                                       smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X@0.0.2"}},
+                                       smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X@0.0.2"},
+                                       smce::SketchConfig::RemoteArduinoLibrary{"SD@1.2.4"}},
                       .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
                           std::filesystem::path{std_str(home_dir)} / "library_patches" / "smartcar_shield",
                           "Smartcar shield@7.0.1"}}}};
