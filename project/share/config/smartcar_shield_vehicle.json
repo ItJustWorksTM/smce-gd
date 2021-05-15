@@ -16,8 +16,8 @@
          "class": "UltraSonic",
          "name": "Front UltraSonic",
          "props": {
-            "trigger_pin": 7,
-            "echo_pin": 6
+            "trigger_pin": 6,
+            "echo_pin": 7
          }
       },
       "Left": {
