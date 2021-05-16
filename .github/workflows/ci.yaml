@@ -112,6 +112,7 @@ jobs:
           brew install --cask godot
           ln -s /Applications/Godot.app/Contents/MacOS/Godot /usr/local/bin/godot3
           brew install ninja
+          pip install pathlib
           godot3 --version || true
           ninja --version
       - name: Cache Godot export template
