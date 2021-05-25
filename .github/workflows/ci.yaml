@@ -133,7 +133,7 @@ jobs:
           [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           mkdir build
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build/
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DFORCE_STRIP_CODESIGNING=On -S . -B build/
       - name: CMake Build
         run: cmake --build build/
       - name: CPack
@@ -141,7 +141,7 @@ jobs:
           mkdir build/packages
           cd build/
           cpack -B packages
-          cmake -DGODOT_DEBUG=On .
+          cmake -DGODOT_DEBUG=On -DFORCE_STRIP_CODESIGNING=On .
           cpack -B packages
           rm -rd packages/_CPack_Packages
           cd ..

@@ -124,6 +124,14 @@ else ()
         execute_process (COMMAND \"${CMAKE_COMMAND}\" -E tar xf \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
                          WORKING_DIRECTORY \"${PROJECT_BINARY_DIR}/export\")
         execute_process (COMMAND defaults write \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app/Contents/Info.plist\" LSEnvironment -dict PATH \"/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:\")
+    ")
+    if (FORCE_STRIP_CODESIGNING)
+        find_program (CODESIGN_EXECUTABLE codesign REQUIRED)
+        install (CODE "
+            execute_process (COMMAND \"${CODESIGN_EXECUTABLE}\" --remove-signature \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\")
+        ")
+    endif ()
+    install (CODE "
         file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\" USE_SOURCE_PERMISSIONS)
     ")
 endif ()
