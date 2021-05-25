@@ -59,6 +59,8 @@ target_include_directories (Sketch PRIVATE "${SKETCH_DIR}")
 target_link_libraries (Sketch Ardrivo)
 target_compile_definitions (Sketch PUBLIC SMCE__COMPILING_USERCODE=1)
 add_custom_command (TARGET Sketch POST_BUILD COMMAND "${CMAKE_COMMAND}" -E rename "$<TARGET_FILE:Sketch>" "${PROJECT_BINARY_DIR}/Sketch")
+file (GLOB CXX_SOURCES LIST_DIRECTORIES false "${SKETCH_DIR}/*.cpp" "${SKETCH_DIR}/*.cxx" "${SKETCH_DIR}/*.cc" "${SKETCH_DIR}/*.c++")
+target_sources (Sketch PRIVATE ${CXX_SOURCES})
 
 file (GLOB LIBS LIST_DIRECTORIES true "${PROJECT_SOURCE_DIR}/libs/*")
 foreach (LIB ${LIBS})
