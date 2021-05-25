@@ -323,3 +323,47 @@ jobs:
 #         cmake --build ./build --target SMCE_Tests
 #         cd build/test
 #         ctest --output-on-failure
+
+  build-openmandriva:
+    name: libSMCE - OpenMandriva Lx Cooker (${{ matrix.compiler.name }})
+    runs-on: ubuntu-latest
+    container: openmandriva/cooker:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - name: GCC
+            pkg: gcc-c++
+            c: gcc
+            cxx: g++
+          - name: Clang/LLVM
+            pkg: clang
+            c: clang
+            cxx: clang++
+    env:
+      CC: ${{ matrix.compiler.c }}
+      CXX: ${{ matrix.compiler.cxx }}
+      CXXRT_STATIC: False
+      OPENSSL_USE_STATIC_LIBS: False
+    steps:
+      - run: cd ~
+      - uses: actions/checkout@v2
+      - name: Check deps
+        run: |
+          dnf -y install curl git cmake ninja ${{ matrix.compiler.pkg }} glibc-devel lib64boost-static-devel lib64openssl-devel
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
+          ninja --version
+          arduino-cli version
+          arduino-cli core install arduino:avr
+      - name: CMake configure
+        run: |
+          mkdir build
+          cmake -G Ninja -S ./ -B ./build
+      - name: CMake build
+        run: cmake --build ./build
+      - name: Build & Run tests
+        run: |
+          cmake --build ./build --target SMCE_Tests
+          cd build/test
+          ctest --output-on-failure
+
