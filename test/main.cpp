@@ -205,6 +205,16 @@ TEST_CASE("BoardView UART", "[BoardView]") {
     REQUIRE(br.stop());
 }
 
+TEST_CASE("Mixed INO/C++ sources", "[BoardRunner]") {
+    smce::Toolchain tc{SMCE_PATH};
+    REQUIRE(!tc.check_suitable_environment());
+    smce::Sketch sk{SKETCHES_PATH "with_cxx", { .fqbn = "arduino:avr:nano" }};
+    const auto ec = tc.compile(sk);
+    if(ec)
+        std::cerr << tc.build_log().second;
+    REQUIRE_FALSE(ec);
+}
+
 TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
