@@ -182,8 +182,11 @@ jobs:
         run: |
           choco install --no-progress ninja godot
           ninja --version
-          godot --version
-          echo "::set-output name=GODOT_VERSION::$([regex]::Matches($(godot --version), "\d+\.\d+(?:\.\d+)?\.\w+").Value)"
+          $previous_exit_code = $global:LASTEXITCODE
+          $godot_version_output = godot --version
+          $global:LASTEXITCODE = $previous_exit_code
+          echo "Godot version: $godot_version_output"
+          echo "::set-output name=GODOT_VERSION::$([regex]::Matches($godot_version_output, "\d+\.\d+(?:\.\d+)?\.\w+").Value)"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$($env:GODOT_EXPORT_TEMPLATE_VERSION.Replace('.', ''))"
       - name: Cache Godot export template
         uses: actions/cache@v2
