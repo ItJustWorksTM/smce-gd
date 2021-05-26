@@ -1,0 +1,60 @@
+name: Packages Integrity
+on:
+  release:
+    types: [published]
+jobs:
+  check-deb:
+    name: dpkg (Ubuntu)
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Ref info
+        id: ref
+        run: |
+          echo "::set-output name=TAG::${GITHUB_REF##*/}"
+          echo "::set-output name=VERSION::${GITHUB_REF##*/v}"
+      - name: Deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y godot3
+      - name: Download package
+        run: wget -O smce_gd.deb "https://github.com/ItJustWorksTM/smce-gd/releases/download/${{ steps.ref.outputs.TAG }}/smce_gd-${{ steps.ref.outputs.VERSION }}-Linux-x86_64-GNU-GodotDebug.deb"
+      - name: Validate version
+        run: |
+          [[ "$(dpkg-deb -W smce_gd.deb)" == "smce_gd	${{ steps.ref.outputs.VERSION }}" ]]
+      - name: Validate installation
+        run: sudo dpkg -i smce_gd.deb
+      - name: Validate PATH
+        run: file $(which smce_gd)
+      - name: Validate shared libs deps
+        run: |
+          ! ldd $(which smce_gd) | grep '=> not found'
+  check-pkgbuild:
+    name: PKGBUILD (Arch)
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    container: archlinux:base-devel
+    steps:
+      - name: Ref info
+        id: ref
+        run: |
+          echo "::set-output name=TAG::${GITHUB_REF##*/}"
+          echo "::set-output name=VERSION::${GITHUB_REF##*/v}"
+      - name: Deps
+        run: pacman -Sy --noconfirm godot cmake arduino-cli
+      - uses: actions/checkout@v2
+      - name: Build package
+        run: |
+          useradd -g root galaxybrain
+          chown -R galaxybrain .
+          sudo -u galaxybrain makepkg -f
+      - name: Validate installation
+        run: pacman -U --noconfirm "smce_gd-bin-${{ steps.ref.outputs.VERSION }}-1-x86_64.pkg.tar.zst"
+      - name: Validate version
+        run: |
+          [[ "$(pacman -Q smce_gd-bin)" == "smce_gd-bin ${{ steps.ref.outputs.VERSION }}-1" ]]
+      - name: Validate PATH
+        run: file $(which smce_gd)
+      - name: Validate shared libs deps
+        run: |
+          ! ldd $(which smce_gd) | grep '=> not found'
