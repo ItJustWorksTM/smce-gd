@@ -1,5 +1,5 @@
 pkgname=smce_gd-bin
-pkgver=1.3.0
+pkgver=1.3.1
 pkgrel=1
 license=('APACHE')
 pkgdesc="SMCE Frontend"
