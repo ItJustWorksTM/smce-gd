@@ -180,7 +180,7 @@ jobs:
         id: deps
         shell: powershell
         run: |
-          choco install ninja godot
+          choco install --no-progress ninja godot
           ninja --version
           godot --version
           echo "::set-output name=GODOT_VERSION::$([regex]::Matches($(godot --version), "\d+\.\d+(?:\.\d+)?\.\w+").Value)"
