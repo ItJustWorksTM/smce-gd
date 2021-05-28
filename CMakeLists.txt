@@ -27,6 +27,7 @@ include (SetupBoost)
 include (Resources)
 
 add_library (ipcSMCE OBJECT)
+set_property (TARGET ipcSMCE PROPERTY CXX_EXTENSIONS Off)
 set_property (TARGET ipcSMCE PROPERTY POSITION_INDEPENDENT_CODE On)
 target_compile_features (ipcSMCE PUBLIC cxx_std_20)
 target_include_directories (ipcSMCE PUBLIC include)
@@ -41,6 +42,7 @@ target_sources (ipcSMCE PRIVATE
 )
 
 add_library (Ardrivo SHARED)
+set_property (TARGET Ardrivo PROPERTY CXX_EXTENSIONS Off)
 target_compile_features (Ardrivo PUBLIC cxx_std_20)
 target_include_directories (Ardrivo PUBLIC include/Ardrivo)
 target_link_libraries (Ardrivo PUBLIC Threads::Threads ipcSMCE)
@@ -128,6 +130,7 @@ endif ()
 target_link_libraries (Ardrivo PUBLIC libmosquitto_static)
 
 add_library (SMCE)
+set_property (TARGET SMCE PROPERTY CXX_EXTENSIONS Off)
 set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 target_compile_features (SMCE PUBLIC cxx_std_20)
 target_include_directories (SMCE PUBLIC include)
