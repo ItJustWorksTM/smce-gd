@@ -1,5 +1,5 @@
 #
-#  CMakeLists.txt
+#  test/CMakeLists.txt
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +17,17 @@
 
 find_package (Catch2 QUIET)
 if (NOT Catch2_FOUND)
-    FetchContent_Declare (
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG        v2.13.4
-    )
-    FetchContent_GetProperties (Catch2)
-    if (NOT catch2_POPULATED)
-        FetchContent_Populate (Catch2)
-    endif ()
-    add_subdirectory ("${catch2_SOURCE_DIR}" "${catch2_BINARY_DIR}" EXCLUDE_FROM_ALL)
-    list (APPEND CMAKE_MODULE_PATH "${Catch2_SOURCE_DIR}/contrib")
+  FetchContent_Declare (
+      Catch2
+      GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+      GIT_TAG        v2.13.4
+  )
+  FetchContent_GetProperties (Catch2)
+  if (NOT catch2_POPULATED)
+    FetchContent_Populate (Catch2)
+  endif ()
+  add_subdirectory ("${catch2_SOURCE_DIR}" "${catch2_BINARY_DIR}" EXCLUDE_FROM_ALL)
+  list (APPEND CMAKE_MODULE_PATH "${Catch2_SOURCE_DIR}/contrib")
 endif ()
 
 include (CTest)
@@ -38,7 +38,7 @@ target_link_libraries (SMCE_Tests PUBLIC SMCE Catch2::Catch2WithMain)
 catch_discover_tests (SMCE_Tests)
 
 if (MSVC AND MSVC_VERSION EQUAL 1928)
-    target_link_options (SMCE_Tests PRIVATE "/d2:-FuncCache0")
+  target_link_options (SMCE_Tests PRIVATE "/d2:-FuncCache0")
 endif ()
 
 set (SMCE_TEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/test_dir")
