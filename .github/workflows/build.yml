@@ -78,7 +78,10 @@ jobs:
         run: |
           export BOOST_ROOT="$(pwd)/boost_root"
           mkdir build
-          cmake -G Ninja -S ./ -B ./build
+          cmake -G Ninja \
+            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_CXXRT_LINKING=STATIC \
+            -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Build & Run tests
@@ -153,7 +156,11 @@ jobs:
           [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -Wno-unused-command-line-argument"
           [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -Wno-unused-command-line-argument"
           mkdir build
-          cmake -G Ninja -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -S ./ -B ./build
+          cmake -G Ninja \
+            -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl \
+            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_CXXRT_LINKING=STATIC \
+            -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Build & Run tests
@@ -220,7 +227,12 @@ jobs:
       - name: CMake configure
         run: |
           mkdir build
-          cmake -G Ninja -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ./ -B ./build
+          cmake -G Ninja `
+            -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} `
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
+            -DSMCE_LIBRARY_TYPE=STATIC `
+            -DSMCE_CXXRT_LINKING=SHARED `
+            -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       #- name: Build & Run tests
@@ -258,7 +270,6 @@ jobs:
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
-      OPENSSL_USE_STATIC_LIBS: False # OpenSSL static libs are in an AUR for some reason beyond my understanding
     steps:
       - run: cd ~
       - uses: actions/checkout@v2
@@ -275,7 +286,10 @@ jobs:
       - name: CMake configure
         run: |
           mkdir build
-          cmake -G Ninja -S ./ -B ./build
+          cmake -G Ninja \
+            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_OPENSSL_LINKING=SHARED \
+            -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Build & Run tests
@@ -315,7 +329,7 @@ jobs:
 #     - name: CMake configure
 #       run: |
 #         mkdir build
-#         cmake -G Ninja -S ./ -B ./build
+#         cmake -G Ninja -DSMCE_LIBRARY_TYPE=STATIC -DSMCE_CXXRT_LINKING=STATIC -S ./ -B ./build
 #     - name: CMake build
 #       run: cmake --build ./build
 #     - name: Build & Run tests
@@ -343,8 +357,6 @@ jobs:
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
-      CXXRT_STATIC: False
-      OPENSSL_USE_STATIC_LIBS: False
     steps:
       - run: cd ~
       - uses: actions/checkout@v2
@@ -358,7 +370,11 @@ jobs:
       - name: CMake configure
         run: |
           mkdir build
-          cmake -G Ninja -S ./ -B ./build
+          cmake -G Ninja \
+            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_CXXRT_LINKING=SHARED \
+            -DSMCE_OPENSSL_LINKING=SHARED \
+            -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Build & Run tests

@@ -16,7 +16,12 @@
 #
 
 add_library (SMCE_Boost INTERFACE)
-set (Boost_USE_STATIC_LIBS True)
+if ("${SMCE_BOOST_LINKING}" STREQUAL "STATIC")
+  set (Boost_USE_STATIC_LIBS True)
+else ()
+  set (Boost_USE_STATIC_LIBS False)
+endif ()
+
 if (MSVC)
   find_package (Boost 1.74 COMPONENTS atomic filesystem date_time)
 else ()
@@ -27,7 +32,7 @@ if (Boost_FOUND)
   target_include_directories (SMCE_Boost SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
   target_link_directories (SMCE_Boost INTERFACE ${Boost_LIBRARY_DIRS})
 else ()
-  #   set (Boost_DEBUG True)
+# set (Boost_DEBUG True)
   set (BOOST_ENABLE_CMAKE True)
 
   if (EXISTS "${PROJECT_SOURCE_DIR}/ext_deps/boost")
@@ -36,14 +41,28 @@ else ()
     message ("Downloading Boost")
     FetchContent_Declare (Boost
         GIT_REPOSITORY "https://github.com/boostorg/boost"
-        GIT_TAG "boost-1.75.0"
+        GIT_TAG "boost-1.76.0"
     )
     FetchContent_GetProperties (Boost)
     if (NOT boost_POPULATED)
       FetchContent_Populate (Boost)
     endif ()
   endif ()
+
+  set (PREV_BUILD_SHARED_LIBS "${BUILD_SHARED_LIBS}")
+  if ("${SMCE_BOOST_LINKING}" STREQUAL "SHARED")
+    set (BUILD_SHARED_LIBS True)
+  else ()
+    set (BUILD_SHARED_LIBS False)
+  endif ()
+
+  set (PREV_CMAKE_POSITION_INDEPENDENT_CODE "${CMAKE_POSITION_INDEPENDENT_CODE}")
+  set (CMAKE_POSITION_INDEPENDENT_CODE On)
+
   add_subdirectory ("${boost_SOURCE_DIR}" "${boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
+
+  set (CMAKE_POSITION_INDEPENDENT_CODE "${PREV_CMAKE_POSITION_INDEPENDENT_CODE}")
+  set (BUILD_SHARED_LIBS "${PREV_BUILD_SHARED_LIBS}")
 
   target_link_libraries (SMCE_Boost INTERFACE
       Boost::atomic # Dependency of Interprocess
@@ -60,10 +79,6 @@ else ()
       "${boost_SOURCE_DIR}/libs/range/include" # Dependency of Interprocess
       "${boost_SOURCE_DIR}/libs/numeric/conversion/include" # Dependency of Interprocess
   )
-
-  if (NOT WIN32 AND NOT APPLE)
-    set_property (TARGET boost_filesystem PROPERTY POSITION_INDEPENDENT_CODE True)
-  endif ()
 endif ()
 
 add_library (Boost_ipc INTERFACE)
