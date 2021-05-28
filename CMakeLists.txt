@@ -30,10 +30,27 @@ find_package (Threads REQUIRED)
 include (SetupBoost)
 include (Resources)
 
+add_library (ipcSMCE OBJECT)
+set_property (TARGET ipcSMCE PROPERTY POSITION_INDEPENDENT_CODE On)
+target_compile_features (ipcSMCE PUBLIC cxx_std_20)
+target_include_directories (ipcSMCE PUBLIC include)
+target_link_libraries (ipcSMCE PUBLIC SMCE_Boost)
+target_sources (ipcSMCE PRIVATE
+        include/SMCE/internal/BoardData.hpp
+        src/SMCE/BoardData.cpp
+        include/SMCE/BoardView.hpp
+        src/SMCE/BoardView.cpp
+        include/SMCE/internal/SharedBoardData.hpp
+        src/SMCE/SharedBoardData.cpp
+)
+
 add_library (Ardrivo SHARED)
 target_compile_features (Ardrivo PUBLIC cxx_std_20)
-target_include_directories (Ardrivo PUBLIC include include/Ardrivo)
+target_include_directories (Ardrivo PUBLIC include/Ardrivo)
+target_link_libraries (Ardrivo PUBLIC Threads::Threads ipcSMCE)
 target_sources (Ardrivo PRIVATE
+        src/Ardrivo/SMCE_main.cpp
+
         include/Ardrivo/Arduino.h
         src/Ardrivo/Arduino.cpp
         include/Ardrivo/HardwareSerial.h
@@ -61,13 +78,8 @@ target_sources (Ardrivo PRIVATE
 
         include/Ardrivo/MQTT.h
         src/Ardrivo/MQTT.cpp
-
-        src/SMCE/BoardData.cpp
-        src/SMCE/BoardView.cpp
-        src/SMCE/SharedBoardData.cpp
-        src/Ardrivo/SMCE_main.cpp
 )
-target_link_libraries (Ardrivo PUBLIC Threads::Threads SMCE_Boost)
+
 if (NOT WIN32)
    target_compile_options (Ardrivo PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
    set_property (SOURCE src/Ardrivo/MQTT.cpp PROPERTY COMPILE_OPTIONS "-Wno-missing-field-initializers")
@@ -120,35 +132,29 @@ endif ()
 target_link_libraries (Ardrivo PUBLIC libmosquitto_static)
 
 add_library (SMCE)
+set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 target_compile_features (SMCE PUBLIC cxx_std_20)
 target_include_directories (SMCE PUBLIC include)
+target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost ipcSMCE)
 target_sources (SMCE PRIVATE
       include/SMCE/internal/utils.hpp
       include/SMCE/SMCE_fs.hpp
-      include/SMCE/internal/BoardData.hpp
-      src/SMCE/BoardData.cpp
-      include/SMCE/BoardView.hpp
-      src/SMCE/BoardView.cpp
       include/SMCE/BoardConf.hpp
-        include/SMCE/Board.hpp
-        src/SMCE/Board.cpp
+      include/SMCE/Board.hpp
+      src/SMCE/Board.cpp
       include/SMCE/Toolchain.hpp
       src/SMCE/Toolchain.cpp
-      include/SMCE/internal/SharedBoardData.hpp
-      src/SMCE/SharedBoardData.cpp
       include/SMCE/Sketch.hpp
       src/SMCE/Sketch.cpp
       include/SMCE/Uuid.hpp
       src/SMCE/Uuid.cpp
       include/SMCE/SketchConf.hpp
 )
-target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost)
 if (NOT WIN32)
    target_compile_options (SMCE PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
 elseif (MSVC)
    target_compile_options (SMCE PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
 endif ()
-set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 
 setup_smce_resources ()
 add_dependencies (SMCE ArdRtRes)
