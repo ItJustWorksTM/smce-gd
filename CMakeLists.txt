@@ -37,18 +37,24 @@ if (NOT "${SMCE_BOOST_LINKING}" IN_LIST SMCE_LIBRARY_TYPES)
   message (FATAL_ERROR "SMCE_BOOST_LINKING must be SHARED or STATIC")
 endif ()
 
-if (NOT WIN32)
-  set (SMCE_MOSQUITTO_LINKING "AUTO" CACHE STRING "AUTO to use the first available library found, or name one of SHARED, STATIC, or SOURCE to force")
-  if (NOT "${SMCE_MOSQUITTO_LINKING}" IN_LIST SMCE_EXTENDED_LIBRARY_TYPES)
-    message (FATAL_ERROR "SMCE_MOSQUITTO_LINKING must be AUTO, SHARED, STATIC, or SOURCE")
+option (SMCE_ARDRIVO_MQTT "Set to \"Off\" to disable MQTT integration in Ardrivo" On)
+
+if (SMCE_ARDRIVO_MQTT)
+  if (NOT WIN32)
+    set (SMCE_MOSQUITTO_LINKING "AUTO" CACHE STRING "AUTO to use the first available library found, or name one of SHARED, STATIC, or SOURCE to force")
+    if (NOT "${SMCE_MOSQUITTO_LINKING}" IN_LIST SMCE_EXTENDED_LIBRARY_TYPES)
+      message (FATAL_ERROR "SMCE_MOSQUITTO_LINKING must be AUTO, SHARED, STATIC, or SOURCE")
+    endif ()
+  else ()
+    set (SMCE_MOSQUITTO_LINKING "SOURCE" CACHE INTERNAL "" FORCE)
+  endif ()
+
+  set (SMCE_OPENSSL_LINKING "${SMCE_LIBRARY_TYPE}" CACHE STRING "SHARED (the default) to dynamically link against OpenSSL, or STATIC to link statically; ignored when SMCE_MOSQUITTO_LINKING is not SOURCE")
+  if (NOT "${SMCE_OPENSSL_LINKING}" IN_LIST SMCE_LIBRARY_TYPES)
+    message (FATAL_ERROR "SMCE_OPENSSL_LINKING must be SHARED or STATIC")
   endif ()
 else ()
-  set (SMCE_MOSQUITTO_LINKING "SOURCE" CACHE INTERNAL "" FORCE)
-endif ()
-
-set (SMCE_OPENSSL_LINKING "${SMCE_LIBRARY_TYPE}" CACHE STRING "SHARED (the default) to dynamically link against OpenSSL, or STATIC to link statically; ignored when SMCE_MOSQUITTO_LINKING is not SOURCE")
-if (NOT "${SMCE_OPENSSL_LINKING}" IN_LIST SMCE_LIBRARY_TYPES)
-  message (FATAL_ERROR "SMCE_OPENSSL_LINKING must be SHARED or STATIC")
+    message ("User disabled SMCE_ARDRIVO_MQTT")
 endif ()
 
 set (PREV_CMAKE_MSVC_RUNTIME_LIBRARY "${CMAKE_MSVC_RUNTIME_LIBRARY}")
@@ -63,7 +69,9 @@ list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 
 find_package (Threads REQUIRED)
 include (SetupBoost)
-include (SetupMosquitto)
+if (SMCE_ARDRIVO_MQTT)
+  include (SetupMosquitto)
+endif ()
 include (Resources)
 
 add_library (ipcSMCE OBJECT)
@@ -90,7 +98,7 @@ add_library (Ardrivo SHARED)
 set_property (TARGET Ardrivo PROPERTY CXX_EXTENSIONS Off)
 target_compile_features (Ardrivo PUBLIC cxx_std_20)
 target_include_directories (Ardrivo PUBLIC include/Ardrivo)
-target_link_libraries (Ardrivo PUBLIC Threads::Threads ipcSMCE SMCE_mosquitto)
+target_link_libraries (Ardrivo PUBLIC Threads::Threads ipcSMCE)
 target_sources (Ardrivo PRIVATE
     src/Ardrivo/SMCE_main.cpp
 
@@ -118,10 +126,12 @@ target_sources (Ardrivo PRIVATE
 
     include/Ardrivo/WiFi.h
     src/Ardrivo/WiFi.cpp
-
-    include/Ardrivo/MQTT.h
-    src/Ardrivo/MQTT.cpp
 )
+if (SMCE_ARDRIVO_MQTT)
+  target_sources (Ardrivo PRIVATE include/Ardrivo/MQTT.h src/Ardrivo/MQTT.cpp)
+  target_link_libraries(Ardrivo PRIVATE SMCE_mosquitto)
+endif ()
+
 if (NOT MSVC)
   target_compile_options (Ardrivo PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
   set_property (TARGET Ardrivo PROPERTY LINK_FLAGS_RELEASE -s)
@@ -165,6 +175,8 @@ setup_smce_resources ()
 add_dependencies (SMCE ArdRtRes)
 
 add_subdirectory (test EXCLUDE_FROM_ALL)
+
+include (GNUInstallDirs)
 
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include")

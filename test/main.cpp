@@ -215,6 +215,8 @@ TEST_CASE("Mixed INO/C++ sources", "[BoardRunner]") {
     REQUIRE_FALSE(ec);
 }
 
+#if SMCE_ARDRIVO_MQTT
+
 TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
@@ -243,6 +245,8 @@ TEST_CASE("WiFi intended use", "[WiFi]") {
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
 }
+
+#endif // SMCE_ARDRIVO_MQTT
 
 TEST_CASE("Patch lib", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};

@@ -35,6 +35,7 @@ include (Catch)
 
 add_executable (SMCE_Tests main.cpp)
 target_link_libraries (SMCE_Tests PUBLIC SMCE Catch2::Catch2WithMain)
+target_compile_definitions (SMCE_Tests PUBLIC SMCE_ARDRIVO_MQTT=$<BOOL:${SMCE_ARDRIVO_MQTT}>)
 catch_discover_tests (SMCE_Tests)
 
 if (MSVC AND MSVC_VERSION EQUAL 1928)
