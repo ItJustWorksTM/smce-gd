@@ -44,6 +44,8 @@ jobs:
             release: true
           - version: 1.75.0
             release: false
+          - version: 1.76.0
+            release: false
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -200,6 +202,9 @@ jobs:
             release: false
           - version: 1.75.0
             slug: 1_75_0
+            release: false
+          - version: 1.76.0
+            slug: 1_76_0
             release: true
 #   env:
 #     CC: ${{ matrix.compiler.c }}
