@@ -16,56 +16,20 @@
 #
 
 cmake_minimum_required (VERSION 3.16)
+cmake_policy (SET CMP0022 NEW)
 
 project (libSMCE VERSION 1.2.3)
-
-set (SMCE_LIBRARY_TYPES "SHARED" "STATIC")
-set (SMCE_EXTENDED_LIBRARY_TYPES "AUTO" ${SMCE_LIBRARY_TYPES} "SOURCE")
-
-set (SMCE_LIBRARY_TYPE "SHARED" CACHE STRING "SHARED for a shared library, or STATIC for a static library")
-if (NOT "${SMCE_LIBRARY_TYPE}" IN_LIST SMCE_LIBRARY_TYPES)
-  message (FATAL_ERROR "SMCE_LIBRARY_TYPE must be SHARED or STATIC")
-endif ()
-
-set (SMCE_CXXRT_LINKING "SHARED" CACHE STRING "SHARED to dynamically link against the C++ runtime, or STATIC to link statically")
-if (NOT "${SMCE_CXXRT_LINKING}" IN_LIST SMCE_LIBRARY_TYPES)
-  message (FATAL_ERROR "SMCE_CXXRT_LINKING must be SHARED or STATIC")
-endif ()
-
-set (SMCE_BOOST_LINKING "${SMCE_LIBRARY_TYPE}" CACHE STRING "SHARED to dynamically link against Boost, or STATIC to link statically")
-if (NOT "${SMCE_BOOST_LINKING}" IN_LIST SMCE_LIBRARY_TYPES)
-  message (FATAL_ERROR "SMCE_BOOST_LINKING must be SHARED or STATIC")
-endif ()
-
-option (SMCE_ARDRIVO_MQTT "Set to \"Off\" to disable MQTT integration in Ardrivo" On)
-
-if (SMCE_ARDRIVO_MQTT)
-  if (NOT WIN32)
-    set (SMCE_MOSQUITTO_LINKING "AUTO" CACHE STRING "AUTO to use the first available library found, or name one of SHARED, STATIC, or SOURCE to force")
-    if (NOT "${SMCE_MOSQUITTO_LINKING}" IN_LIST SMCE_EXTENDED_LIBRARY_TYPES)
-      message (FATAL_ERROR "SMCE_MOSQUITTO_LINKING must be AUTO, SHARED, STATIC, or SOURCE")
-    endif ()
-  else ()
-    set (SMCE_MOSQUITTO_LINKING "SOURCE" CACHE INTERNAL "" FORCE)
-  endif ()
-
-  set (SMCE_OPENSSL_LINKING "${SMCE_LIBRARY_TYPE}" CACHE STRING "SHARED (the default) to dynamically link against OpenSSL, or STATIC to link statically; ignored when SMCE_MOSQUITTO_LINKING is not SOURCE")
-  if (NOT "${SMCE_OPENSSL_LINKING}" IN_LIST SMCE_LIBRARY_TYPES)
-    message (FATAL_ERROR "SMCE_OPENSSL_LINKING must be SHARED or STATIC")
-  endif ()
-else ()
-    message ("User disabled SMCE_ARDRIVO_MQTT")
-endif ()
+list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
+include (UserConfigVars)
 
 set (PREV_CMAKE_MSVC_RUNTIME_LIBRARY "${CMAKE_MSVC_RUNTIME_LIBRARY}")
-
 set (CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 if ("${SMCE_CXXRT_LINKING}" STREQUAL "SHARED")
   string (APPEND CMAKE_MSVC_RUNTIME_LIBRARY "DLL")
 endif ()
 
-include (FetchContent)
-list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
+# Prime the local target exports file
+export (TARGETS FILE "${PROJECT_BINARY_DIR}/cmake/SMCETargets.cmake")
 
 find_package (Threads REQUIRED)
 include (SetupBoost)
@@ -149,8 +113,17 @@ add_library (SMCE "${SMCE_LIBRARY_TYPE}")
 set_property (TARGET SMCE PROPERTY CXX_EXTENSIONS Off)
 set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 target_compile_features (SMCE PUBLIC cxx_std_20)
-target_include_directories (SMCE PUBLIC include)
-target_link_libraries (SMCE PUBLIC Threads::Threads SMCE_Boost ipcSMCE)
+target_include_directories (SMCE
+    PUBLIC
+      "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+      "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+)
+target_link_libraries (SMCE
+    PUBLIC
+      Threads::Threads
+      $<BUILD_INTERFACE:ipcSMCE>
+      $<BUILD_INTERFACE:SMCE_Boost>
+)
 target_sources (SMCE PRIVATE
     include/SMCE/internal/utils.hpp
     include/SMCE/SMCE_fs.hpp
@@ -178,14 +151,54 @@ add_subdirectory (test EXCLUDE_FROM_ALL)
 
 include (GNUInstallDirs)
 
+install (TARGETS SMCE
+    EXPORT SMCETargets
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/SMCE"
+)
+
+install (EXPORT SMCETargets
+    FILE SMCETargets.cmake
+    NAMESPACE SMCE::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
+)
+
+include (CMakePackageConfigHelpers)
+
+set_property (TARGET SMCE PROPERTY VERSION "${PROJECT_VERSION}")
+set_property (TARGET SMCE PROPERTY SOVERSION "${PROJECT_VERSION_MAJOR}")
+set_property (TARGET SMCE PROPERTY INTERFACE_SMCE_MAJOR_VERSION "${PROJECT_VERSION_MAJOR}")
+set_property (TARGET SMCE APPEND PROPERTY COMPATIBLE_INTERFACE_STRING SMCE_MAJOR_VERSION)
+
+write_basic_package_version_file ("${PROJECT_BINARY_DIR}/SMCEConfigVersion.cmake"
+    VERSION "${PROJECT_VERSION}"
+    COMPATIBILITY AnyNewerVersion
+)
+configure_package_config_file ("${PROJECT_SOURCE_DIR}/Config.cmake.in"
+    "${PROJECT_BINARY_DIR}/SMCEConfig.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
+)
+
+install (FILES
+    "${PROJECT_BINARY_DIR}/SMCEConfig.cmake"
+    "${PROJECT_BINARY_DIR}/SMCEConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
+)
+
+export (TARGETS SMCE ipcSMCE NAMESPACE SMCE:: APPEND
+    FILE "${PROJECT_BINARY_DIR}/cmake/SMCETargets.cmake"
+    EXPORT_LINK_INTERFACE_LIBRARIES
+)
+
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include")
 file (COPY "${PROJECT_SOURCE_DIR}/include/SMCE" DESTINATION "${PROJECT_BINARY_DIR}/packaging/include")
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging/include/SMCE/internal")
 install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION ".")
-install (FILES "$<TARGET_FILE:SMCE>" DESTINATION "lib64/SMCE")
 
-install (FILES "LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "share/SMCE")
+install (FILES "${PROJECT_SOURCE_DIR}/LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/SMCE")
 
 if (CMAKE_CXX_SIMULATE_ID)
   set (SMCE_COMPILER_ID "${CMAKE_CXX_SIMULATE_ID}")
@@ -194,8 +207,9 @@ else ()
 endif ()
 list (APPEND CPACK_GENERATOR STGZ TGZ ZIP)
 set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}-${SMCE_COMPILER_ID}")
+set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${SMCE_PACKAGE_TYPE}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")
 if (MSVC)
-  set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}-${CMAKE_BUILD_TYPE}")
+  string (APPEND CPACK_PACKAGE_FILE_NAME "-${CMAKE_BUILD_TYPE}")
 endif ()
 include (CPack)
 

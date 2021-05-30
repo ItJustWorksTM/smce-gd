@@ -1,0 +1,41 @@
+@PACKAGE_INIT@
+#
+#  Config.cmake.in
+#  Copyright 2021 ItJustWorksTM
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+include ("${CMAKE_CURRENT_LIST_DIR}/SMCETargets.cmake")
+
+set_and_check (SMCE_RESOURCES_ARK "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_DATAROOTDIR@/SMCE/SMCE_Resources.zip")
+
+if (NOT SMCE_PROPERTY_RESOURCES_ARCHIVE_DEFINED)
+  define_property (TARGET PROPERTY RESOURCES_ARCHIVE
+    BRIEF_DOCS "The full path to SMCE_Resources.zip"
+    FULL_DOCS "The full path to SMCE_Resources.zip, which contains the runtime files for SMCE"
+  )
+  set (SMCE_PROPERTY_RESOURCES_ARCHIVE_DEFINED True)
+endif ()
+set_property (TARGET SMCE::SMCE PROPERTY RESOURCES_ARCHIVE "${SMCE_RESOURCES_ARK}")
+
+set (SMCE_LIBRARY_TYPE       "@SMCE_LIBRARY_TYPE@")
+set (SMCE_CXXRT_LINKING      "@SMCE_CXXRT_LINKING@")
+set (SMCE_BOOST_LINKING      "@SMCE_BOOST_LINKING@")
+set (SMCE_ARDRIVO_MQTT       "@SMCE_ARDRIVO_MQTT@")
+if (SMCE_ARDRIVO_MQTT)
+  set (SMCE_MOSQUITTO_LINKING  "@SMCE_MOSQUITTO_LINKING@")
+  set (SMCE_OPENSSL_LINKING    "@SMCE_OPENSSL_LINKING@")
+endif ()
+
+check_required_components (SMCE)

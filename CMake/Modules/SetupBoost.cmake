@@ -91,8 +91,7 @@ add_library (Boost::ipc ALIAS Boost_ipc)
 
 target_link_libraries (SMCE_Boost INTERFACE Boost_ipc)
 
-install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::filesystem>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
-if (MSVC)
-  install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::atomic>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
-  install (CODE "file (INSTALL \"$<TARGET_FILE:Boost::date_time>\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib64/boost\" FOLLOW_SYMLINK_CHAIN)")
-endif ()
+export (TARGETS SMCE_Boost Boost_ipc NAMESPACE SMCE:: APPEND
+    FILE "${PROJECT_BINARY_DIR}/cmake/SMCETargets.cmake"
+    EXPORT_LINK_INTERFACE_LIBRARIES
+)

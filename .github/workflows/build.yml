@@ -81,8 +81,10 @@ jobs:
           export BOOST_ROOT="$(pwd)/boost_root"
           mkdir build
           cmake -G Ninja \
-            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=STATIC \
+            -DSMCE_BOOST_LINKING=STATIC \
+            -DSMCE_OPENSSL_LINKING=STATIC \
             -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
@@ -160,8 +162,10 @@ jobs:
           mkdir build
           cmake -G Ninja \
             -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl \
-            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=STATIC \
+            -DSMCE_BOOST_LINKING=STATIC \
+            -DSMCE_OPENSSL_LINKING=STATIC \
             -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
@@ -235,8 +239,10 @@ jobs:
           cmake -G Ninja `
             -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} `
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
-            -DSMCE_LIBRARY_TYPE=STATIC `
+            -DSMCE_LIBRARY_TYPE=SHARED `
             -DSMCE_CXXRT_LINKING=SHARED `
+            -DSMCE_BOOST_LINKING=STATIC `
+            -DSMCE_OPENSSL_LINKING=STATIC `
             -S ./ -B ./build
       - name: CMake build
         run: cmake --build ./build
@@ -292,7 +298,9 @@ jobs:
         run: |
           mkdir build
           cmake -G Ninja \
-            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_LIBRARY_TYPE=SHARED \
+            -DSMCE_CXXRT_LINKING=SHARED \
+            -DSMCE_BOOST_LINKING=STATIC \
             -DSMCE_OPENSSL_LINKING=SHARED \
             -S ./ -B ./build
       - name: CMake build
@@ -376,8 +384,9 @@ jobs:
         run: |
           mkdir build
           cmake -G Ninja \
-            -DSMCE_LIBRARY_TYPE=STATIC \
+            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=SHARED \
+            -DSMCE_BOOST_LINKING=STATIC \
             -DSMCE_OPENSSL_LINKING=SHARED \
             -S ./ -B ./build
       - name: CMake build

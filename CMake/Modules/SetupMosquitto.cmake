@@ -57,6 +57,7 @@ elseif ("${SMCE_MOSQUITTO_LINKING}" STREQUAL "STATIC")
   target_compile_options (SMCE_mosquitto INTERFACE ${Mosquitto_STATIC_CFLAGS})
   target_link_options (SMCE_mosquitto INTERFACE ${Mosquitto_STATIC_LDFLAGS})
 elseif ("${SMCE_MOSQUITTO_LINKING}" STREQUAL "SOURCE")
+  include (FetchContent)
   FetchContent_Declare (mosquitto
       GIT_REPOSITORY "https://github.com/eclipse/mosquitto"
       GIT_TAG v2.0.10
