@@ -130,6 +130,7 @@ class VirtualUarts {
     friend Iterator;
 
     constexpr VirtualUarts(const VirtualUarts&) noexcept = default;
+    constexpr VirtualUarts& operator=(const VirtualUarts&) noexcept = default;
 
     [[nodiscard]] VirtualUart operator[](std::size_t) noexcept;
     [[nodiscard]] Iterator begin() noexcept;
@@ -199,6 +200,7 @@ class FrameBuffers {
     constexpr explicit FrameBuffers(BoardData* bdat) noexcept : m_bdat{bdat} {}
   public:
     constexpr FrameBuffers(const FrameBuffers&) noexcept = default;
+    constexpr FrameBuffers& operator=(const FrameBuffers&) noexcept = default;
 
     [[nodiscard]] FrameBuffer operator[](std::size_t) noexcept;
 };
