@@ -70,8 +70,6 @@ target_sources (Ardrivo PRIVATE
     src/Ardrivo/Arduino.cpp
     include/Ardrivo/HardwareSerial.h
     src/Ardrivo/HardwareSerial.cpp
-    include/Ardrivo/OV767X.h
-    src/Ardrivo/OV767X.cpp
     include/Ardrivo/Print.h
     src/Ardrivo/Print.cpp
     include/Ardrivo/SMCE.hpp
@@ -94,6 +92,9 @@ target_sources (Ardrivo PRIVATE
 if (SMCE_ARDRIVO_MQTT)
   target_sources (Ardrivo PRIVATE include/Ardrivo/MQTT.h src/Ardrivo/MQTT.cpp)
   target_link_libraries(Ardrivo PRIVATE SMCE_mosquitto)
+endif ()
+if (SMCE_ARDRIVO_OV767X)
+  target_sources (Ardrivo PRIVATE include/Ardrivo/OV767X.h src/Ardrivo/OV767X.cpp)
 endif ()
 
 if (NOT MSVC)

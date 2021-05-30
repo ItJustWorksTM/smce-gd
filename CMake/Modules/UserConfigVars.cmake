@@ -55,3 +55,5 @@ if (SMCE_ARDRIVO_MQTT)
 else ()
   message ("User disabled SMCE_ARDRIVO_MQTT")
 endif ()
+
+option (SMCE_ARDRIVO_OV767X "Set to \"Off\" to disable OV767X integration in Ardrivo" On)
