@@ -1,6 +1,6 @@
 # StdUart
-
-_UART (`Serial`) piped to {`stdout`, `stdin`}_
+_UART (`Serial`) piped to {`stdout`, `stdin`}_  
+_Copyright © ItJustWorks™_
 
 **WARNING**: This program is not installable, nor portable (it is however relocatable). It is only meant to be ran from its build tree.
 
