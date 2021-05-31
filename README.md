@@ -19,7 +19,7 @@ This cross-platform C++ library provides its consumers the ability to compile an
 
 - [CMake](https://www.kitware.com/cmake) >= 3.16
 - C++20 compiler (tested with [GCC](https://gcc.gnu.org) >= 10, [Clang/LLVM](https://clang.llvm.org) >= 10, MSVC >= 19.28, AppleClang)
-- [Boost](https://www.boost.org) >= 1.74 - Not an interface requirement however (you only need Boost to build the library, not when using it precompiled) 
+- [Boost](https://www.boost.org) >= 1.74 - Not an interface requirement however (you only need Boost headers to build the library, not when using it precompiled) 
 - [OpenSSL](https://www.openssl.org) (tested with 1.1.1)
 
 #### Automatically built from source
