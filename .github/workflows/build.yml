@@ -82,7 +82,6 @@ jobs:
           mkdir build
           cmake -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=STATIC \
             -DSMCE_BOOST_LINKING=STATIC \
             -DSMCE_OPENSSL_LINKING=STATIC \
@@ -164,7 +163,6 @@ jobs:
           cmake -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl \
-            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=STATIC \
             -DSMCE_BOOST_LINKING=STATIC \
             -DSMCE_OPENSSL_LINKING=STATIC \
@@ -241,7 +239,6 @@ jobs:
           cmake -G Ninja `
             -DBOOST_ROOT=C:\local\boost_${{ matrix.boost.slug }} `
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
-            -DSMCE_LIBRARY_TYPE=SHARED `
             -DSMCE_CXXRT_LINKING=SHARED `
             -DSMCE_BOOST_LINKING=STATIC `
             -DSMCE_OPENSSL_LINKING=STATIC `
@@ -301,7 +298,6 @@ jobs:
           mkdir build
           cmake -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=SHARED \
             -DSMCE_BOOST_LINKING=STATIC \
             -DSMCE_OPENSSL_LINKING=SHARED \
@@ -345,7 +341,7 @@ jobs:
 #     - name: CMake configure
 #       run: |
 #         mkdir build
-#         cmake -G Ninja -DSMCE_LIBRARY_TYPE=STATIC -DSMCE_CXXRT_LINKING=STATIC -S ./ -B ./build
+#         cmake -G Ninja -DSMCE_CXXRT_LINKING=STATIC -S ./ -B ./build
 #     - name: CMake build
 #       run: cmake --build ./build
 #     - name: Build & Run tests
@@ -388,7 +384,6 @@ jobs:
           mkdir build
           cmake -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=SHARED \
             -DSMCE_BOOST_LINKING=STATIC \
             -DSMCE_OPENSSL_LINKING=SHARED \

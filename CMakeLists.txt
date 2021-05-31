@@ -38,31 +38,12 @@ if (SMCE_ARDRIVO_MQTT)
 endif ()
 include (Resources)
 
-add_library (ipcSMCE OBJECT)
-set_property (TARGET ipcSMCE PROPERTY CXX_EXTENSIONS Off)
-set_property (TARGET ipcSMCE PROPERTY POSITION_INDEPENDENT_CODE On)
-target_compile_features (ipcSMCE PUBLIC cxx_std_20)
-target_include_directories (ipcSMCE PUBLIC include)
-target_link_libraries (ipcSMCE PUBLIC SMCE_Boost)
-target_sources (ipcSMCE PRIVATE
-    include/SMCE/internal/BoardData.hpp
-    src/SMCE/BoardData.cpp
-    include/SMCE/BoardView.hpp
-    src/SMCE/BoardView.cpp
-    include/SMCE/internal/SharedBoardData.hpp
-    src/SMCE/SharedBoardData.cpp
-)
-if (NOT MSVC)
-  target_compile_options (ipcSMCE PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
-else ()
-  target_compile_options (ipcSMCE PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
-endif ()
+include (ipcSMCE)
 
 add_library (Ardrivo SHARED)
 set_property (TARGET Ardrivo PROPERTY CXX_EXTENSIONS Off)
-target_compile_features (Ardrivo PUBLIC cxx_std_20)
-target_include_directories (Ardrivo PUBLIC include/Ardrivo)
-target_link_libraries (Ardrivo PUBLIC Threads::Threads ipcSMCE)
+target_include_directories (Ardrivo PRIVATE include/Ardrivo)
+target_link_libraries (Ardrivo PRIVATE ipcSMCE)
 target_sources (Ardrivo PRIVATE
     src/Ardrivo/SMCE_main.cpp
 
@@ -110,22 +91,11 @@ else ()
   target_compile_options (Ardrivo PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/wd4716" "/WX")
 endif ()
 
-add_library (SMCE "${SMCE_LIBRARY_TYPE}")
-set_property (TARGET SMCE PROPERTY CXX_EXTENSIONS Off)
-set_property (TARGET SMCE PROPERTY POSITION_INDEPENDENT_CODE True)
-target_compile_features (SMCE PUBLIC cxx_std_20)
-target_include_directories (SMCE
-    PUBLIC
-      "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
-      "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
-)
-target_link_libraries (SMCE
-    PUBLIC
-      Threads::Threads
-      $<BUILD_INTERFACE:ipcSMCE>
-      $<BUILD_INTERFACE:SMCE_Boost>
-)
-target_sources (SMCE PRIVATE
+add_library (objSMCE OBJECT)
+set_property (TARGET objSMCE PROPERTY CXX_EXTENSIONS Off)
+set_property (TARGET objSMCE PROPERTY POSITION_INDEPENDENT_CODE True)
+target_link_libraries (objSMCE PUBLIC ipcSMCE)
+target_sources (objSMCE PRIVATE
     include/SMCE/internal/utils.hpp
     include/SMCE/SMCE_fs.hpp
     include/SMCE/BoardConf.hpp
@@ -140,10 +110,33 @@ target_sources (SMCE PRIVATE
     include/SMCE/SketchConf.hpp
 )
 if (NOT MSVC)
-  target_compile_options (SMCE PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
+  target_compile_options (objSMCE PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Werror" "-Wcast-align")
 else ()
-  target_compile_options (SMCE PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
+  target_compile_options (objSMCE PRIVATE "/W4" "/permissive-" "/wd4244" "/wd4459" "/WX")
 endif ()
+
+if (SMCE_BUILD_SHARED)
+  add_library (SMCE SHARED)
+  target_link_libraries (SMCE
+      PRIVATE objSMCE ipcSMCE
+      PUBLIC iSMCE
+  )
+  set_property (TARGET SMCE PROPERTY VERSION "${PROJECT_VERSION}")
+  set_property (TARGET SMCE PROPERTY SOVERSION "${PROJECT_VERSION_MAJOR}")
+  set_property (TARGET SMCE PROPERTY INTERFACE_SMCE_MAJOR_VERSION "${PROJECT_VERSION_MAJOR}")
+  set_property (TARGET SMCE APPEND PROPERTY COMPATIBLE_INTERFACE_STRING SMCE_MAJOR_VERSION)
+endif ()
+
+if (SMCE_BUILD_STATIC)
+  add_library (SMCE_static STATIC)
+  target_link_libraries (SMCE_static
+      PRIVATE objSMCE ipcSMCE
+      PUBLIC iSMCE
+  )
+  set_property (TARGET SMCE_static PROPERTY INTERFACE_SMCE_MAJOR_VERSION "${PROJECT_VERSION_MAJOR}")
+  set_property (TARGET SMCE_static APPEND PROPERTY COMPATIBLE_INTERFACE_STRING SMCE_MAJOR_VERSION)
+endif ()
+
 
 setup_smce_resources ()
 add_dependencies (SMCE ArdRtRes)
@@ -152,7 +145,7 @@ add_subdirectory (test EXCLUDE_FROM_ALL)
 
 include (GNUInstallDirs)
 
-install (TARGETS SMCE
+install (TARGETS SMCE SMCE_static objSMCE ipcSMCE iSMCE
     EXPORT SMCETargets
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
@@ -167,11 +160,6 @@ install (EXPORT SMCETargets
 )
 
 include (CMakePackageConfigHelpers)
-
-set_property (TARGET SMCE PROPERTY VERSION "${PROJECT_VERSION}")
-set_property (TARGET SMCE PROPERTY SOVERSION "${PROJECT_VERSION_MAJOR}")
-set_property (TARGET SMCE PROPERTY INTERFACE_SMCE_MAJOR_VERSION "${PROJECT_VERSION_MAJOR}")
-set_property (TARGET SMCE APPEND PROPERTY COMPATIBLE_INTERFACE_STRING SMCE_MAJOR_VERSION)
 
 write_basic_package_version_file ("${PROJECT_BINARY_DIR}/SMCEConfigVersion.cmake"
     VERSION "${PROJECT_VERSION}"
@@ -188,7 +176,7 @@ install (FILES
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
 )
 
-export (TARGETS SMCE ipcSMCE NAMESPACE SMCE:: APPEND
+export (TARGETS SMCE SMCE_static objSMCE ipcSMCE iSMCE NAMESPACE SMCE:: APPEND
     FILE "${PROJECT_BINARY_DIR}/cmake/SMCETargets.cmake"
     EXPORT_LINK_INTERFACE_LIBRARIES
 )
@@ -208,7 +196,7 @@ else ()
 endif ()
 list (APPEND CPACK_GENERATOR STGZ TGZ ZIP)
 set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}-${SMCE_COMPILER_ID}")
-set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${SMCE_PACKAGE_TYPE}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")
+set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")
 if (MSVC)
   string (APPEND CPACK_PACKAGE_FILE_NAME "-${CMAKE_BUILD_TYPE}")
 endif ()

@@ -34,8 +34,13 @@ endif ()
 include (CTest)
 include (Catch)
 
+set (SMCE_LINK_TARGET SMCE)
+if (NOT SMCE_BUILD_SHARED)
+  string (APPEND SMCE_LINK_TARGET "_static")
+endif ()
+
 add_executable (SMCE_Tests main.cpp)
-target_link_libraries (SMCE_Tests PUBLIC SMCE Catch2::Catch2WithMain)
+target_link_libraries (SMCE_Tests PUBLIC "${SMCE_LINK_TARGET}" Catch2::Catch2WithMain)
 target_compile_definitions (SMCE_Tests PUBLIC SMCE_ARDRIVO_MQTT=$<BOOL:${SMCE_ARDRIVO_MQTT}>)
 catch_discover_tests (SMCE_Tests)
 
@@ -53,3 +58,4 @@ file (COPY sketches DESTINATION "${SMCE_TEST_DIR}")
 file (COPY patches DESTINATION "${SMCE_TEST_DIR}")
 target_compile_definitions (SMCE_Tests PUBLIC "SMCE_TEST_DIR=\"${SMCE_TEST_DIR}\"")
 
+unset (SMCE_LINK_TARGET)
