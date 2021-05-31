@@ -18,7 +18,7 @@
 cmake_minimum_required (VERSION 3.16)
 cmake_policy (SET CMP0022 NEW)
 
-project (libSMCE VERSION 1.2.3)
+project (libSMCE VERSION 1.2.4)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 include (UserConfigVars)
 
