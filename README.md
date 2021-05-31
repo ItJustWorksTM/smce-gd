@@ -8,6 +8,8 @@ Status: _Actively maintained_
 
 This cross-platform C++ library provides its consumers the ability to compile and execute Arduino sketches on a hosted environment, with bindings to its virtual I/O ports to allow the host application to interact with its child sketches.
 
+Check our [Wiki](https://github.com/ItJustWorksTM/libSMCE/wiki) for more information about usage.
+
 #### Supported I/O
 - GPIO (Arduino's `digitalRead`, `analogWrite`, etc)
 - UART (Arduino's `Serial` global)
