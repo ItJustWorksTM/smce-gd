@@ -81,6 +81,7 @@ jobs:
           export BOOST_ROOT="$(pwd)/boost_root"
           mkdir build
           cmake -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
             -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=STATIC \
             -DSMCE_BOOST_LINKING=STATIC \
@@ -161,6 +162,7 @@ jobs:
           [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib -Wno-unused-command-line-argument"
           mkdir build
           cmake -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
             -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl \
             -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=STATIC \
@@ -298,6 +300,7 @@ jobs:
         run: |
           mkdir build
           cmake -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
             -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=SHARED \
             -DSMCE_BOOST_LINKING=STATIC \
@@ -384,6 +387,7 @@ jobs:
         run: |
           mkdir build
           cmake -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
             -DSMCE_LIBRARY_TYPE=SHARED \
             -DSMCE_CXXRT_LINKING=SHARED \
             -DSMCE_BOOST_LINKING=STATIC \
