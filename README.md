@@ -36,9 +36,8 @@ This cross-platform C++ library provides its consumers the ability to compile an
 
 ### Build instructions
 ```shell
-mkdir build
+cmake -S . -B build
 cd build
-cmake ../
 cmake --build .
 ```
 
