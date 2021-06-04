@@ -191,7 +191,7 @@ jobs:
             /usr/local/lib/cmake/Boost
             /usr/local/lib/cmake/boost_*
             /usr/local/Cellar/boost
-          key: ${{ runner.os }}-boost-gcc
+          key: ${{ runner.os }}-boost176-gcc
       - name: Install Boost with GCC
         if: startsWith(matrix.compiler.name, 'GCC') && steps.cache-boost-gcc.outputs.cache-hit != 'true'
         run: |
