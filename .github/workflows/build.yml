@@ -184,7 +184,6 @@ jobs:
           arduino-cli core install arduino:avr
       - name: Cache Boost with GCC
         if: startsWith(matrix.compiler.name, 'GCC')
-        id: cache-boost-gcc
         uses: actions/cache@v2
         with:
           path: |
@@ -193,7 +192,7 @@ jobs:
             /usr/local/Cellar/boost
           key: ${{ runner.os }}-boost176-gcc
       - name: Install Boost with GCC
-        if: startsWith(matrix.compiler.name, 'GCC') && steps.cache-boost-gcc.outputs.cache-hit != 'true'
+        if: startsWith(matrix.compiler.name, 'GCC')
         run: |
           sed -e 's/bootstrap_args = %W\[/bootstrap_args = %W\[\
           --with-toolset=gcc/' -i '' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/boost.rb
