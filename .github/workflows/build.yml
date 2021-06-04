@@ -26,6 +26,53 @@ jobs:
           hub release create $(find . -type f -printf "-a %p ") -m "libSMCE $tag_name" "$tag_name"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  coverage-linux:
+    name: libSMCE (coverage) - Linux
+    runs-on: ubuntu-latest
+    container: ubuntu:hirsute
+    env:
+      DEBIAN_FRONTEND: "noninteractive"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check deps
+        run: |
+          apt-get update
+          apt-get install -y lcov curl wget git cmake ninja-build g++ libboost-all-dev libssl-dev
+          ninja --version
+          cmake --version
+          wget -qO arduino-cli.tgz "https://github.com/arduino/arduino-cli/releases/download/0.18.3/arduino-cli_0.18.3_Linux_64bit.tar.gz"
+          tar xzf arduino-cli.tgz
+          mv arduino-cli /usr/local/bin/
+          rm arduino-cli.tgz
+          arduino-cli version
+          arduino-cli core install arduino:avr
+      - name: CMake configure
+        run: |
+          export BOOST_ROOT="$(pwd)/boost_root"
+          mkdir build
+          cmake -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DSMCE_COVERAGE=On \
+          -DSMCE_BUILD_STATIC=Off \
+          -DSMCE_CXXRT_LINKING=SHARED \
+          -DSMCE_BOOST_LINKING=SHARED \
+          -DSMCE_OPENSSL_LINKING=SHARED \
+          -S ./ -B ./build
+      - name: CMake build
+        run: cmake --build ./build
+      - name: Build & Run tests
+        run: |
+          cmake --build ./build --target SMCE_Tests
+          (cd build/test/; ctest --output-on-failure)
+      - name: Collect coverage information
+        run: |
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' "${HOME}"'/.cache/*' "$(pwd)/test/*" "$(pwd)/build/*" --output-file coverage.info
+          lcov --list coverage.info
+      - name: Upload coverage to Codecov
+        run: |
+          bash -c "$(curl -s https://codecov.io/bash)" -f coverage.info || echo "Codecov did not collect coverage reports"
+
   build-ubuntu:
     name: libSMCE - Ubuntu (${{ matrix.compiler.name }} & Boost ${{ matrix.boost.version }})
     runs-on: ubuntu-latest

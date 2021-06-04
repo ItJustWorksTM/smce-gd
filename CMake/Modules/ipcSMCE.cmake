@@ -20,6 +20,7 @@ include_guard ()
 include (iSMCE)
 
 add_library (ipcSMCE OBJECT)
+configure_coverage (ipcSMCE)
 set_property (TARGET ipcSMCE PROPERTY CXX_EXTENSIONS Off)
 set_property (TARGET ipcSMCE PROPERTY POSITION_INDEPENDENT_CODE On)
 target_link_libraries (ipcSMCE PUBLIC iSMCE)

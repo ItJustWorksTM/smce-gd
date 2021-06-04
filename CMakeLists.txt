@@ -21,6 +21,7 @@ cmake_policy (SET CMP0022 NEW)
 project (libSMCE VERSION 1.2.4)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 include (UserConfigVars)
+include (Coverage)
 
 set (PREV_CMAKE_MSVC_RUNTIME_LIBRARY "${CMAKE_MSVC_RUNTIME_LIBRARY}")
 set (CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -41,6 +42,7 @@ include (Resources)
 include (ipcSMCE)
 
 add_library (Ardrivo SHARED)
+configure_coverage (Ardrivo)
 set_property (TARGET Ardrivo PROPERTY CXX_EXTENSIONS Off)
 target_include_directories (Ardrivo PRIVATE include/Ardrivo)
 target_link_libraries (Ardrivo PRIVATE ipcSMCE)
@@ -92,6 +94,7 @@ else ()
 endif ()
 
 add_library (objSMCE OBJECT)
+configure_coverage (objSMCE)
 set_property (TARGET objSMCE PROPERTY CXX_EXTENSIONS Off)
 set_property (TARGET objSMCE PROPERTY POSITION_INDEPENDENT_CODE True)
 target_link_libraries (objSMCE PUBLIC ipcSMCE)
@@ -117,6 +120,7 @@ endif ()
 
 if (SMCE_BUILD_SHARED)
   add_library (SMCE SHARED)
+  configure_coverage (SMCE)
   target_link_libraries (SMCE
       PRIVATE objSMCE ipcSMCE
       PUBLIC iSMCE
@@ -129,6 +133,7 @@ endif ()
 
 if (SMCE_BUILD_STATIC)
   add_library (SMCE_static STATIC)
+  configure_coverage (SMCE_static)
   target_link_libraries (SMCE_static
       PRIVATE objSMCE ipcSMCE
       PUBLIC iSMCE
