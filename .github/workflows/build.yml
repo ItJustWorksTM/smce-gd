@@ -502,6 +502,14 @@ jobs:
         run: cmake --build ./build
       - name: CPack
         run: (cd build; cpack)
+      - name: Test installation
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ${{ matrix.os.image }}
+          options: -v ${{ github.workspace }}:/host
+          run: |
+            apt-get update -y
+            apt-get install -y /host/build/*.deb
       - name: Upload artifacts
         uses: 'actions/upload-artifact@v2'
         with:
