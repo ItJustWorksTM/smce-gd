@@ -95,8 +95,3 @@ endif ()
 add_library (Boost::ipc ALIAS Boost_ipc)
 
 target_link_libraries (SMCE_Boost INTERFACE Boost_ipc)
-
-export (TARGETS SMCE_Boost Boost_ipc NAMESPACE SMCE:: APPEND
-    FILE "${PROJECT_BINARY_DIR}/cmake/SMCETargets.cmake"
-    EXPORT_LINK_INTERFACE_LIBRARIES
-)

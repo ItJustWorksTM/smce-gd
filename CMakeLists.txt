@@ -148,48 +148,31 @@ add_dependencies (SMCE ArdRtRes)
 
 add_subdirectory (test EXCLUDE_FROM_ALL)
 
-include (GNUInstallDirs)
 
-set (SMCE_EXPORTED_TARGETS SMCE)
+include (InstallFragments)
+
+smce_install_boilerplate_targets ()
+
+set (SMCE_EXPORTED_TARGETS)
+if (SMCE_BUILD_SHARED)
+  list (APPEND SMCE_EXPORTED_TARGETS SMCE)
+  smce_install (TARGETS SMCE)
+endif()
 if (SMCE_BUILD_STATIC)
   list (APPEND SMCE_EXPORTED_TARGETS SMCE_static)
+  smce_install (TARGETS SMCE_static)
 endif ()
 
-install (TARGETS ${SMCE_EXPORTED_TARGETS} objSMCE ipcSMCE iSMCE
-    EXPORT SMCETargets
-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/SMCE"
-)
+smce_export (TARGETS ${SMCE_EXPORTED_TARGETS})
 
+include (GNUInstallDirs)
 install (EXPORT SMCETargets
     FILE SMCETargets.cmake
     NAMESPACE SMCE::
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
 )
 
-include (CMakePackageConfigHelpers)
-
-write_basic_package_version_file ("${PROJECT_BINARY_DIR}/SMCEConfigVersion.cmake"
-    VERSION "${PROJECT_VERSION}"
-    COMPATIBILITY AnyNewerVersion
-)
-configure_package_config_file ("${PROJECT_SOURCE_DIR}/Config.cmake.in"
-    "${PROJECT_BINARY_DIR}/SMCEConfig.cmake"
-    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
-)
-
-install (FILES
-    "${PROJECT_BINARY_DIR}/SMCEConfig.cmake"
-    "${PROJECT_BINARY_DIR}/SMCEConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
-)
-
-export (TARGETS ${SMCE_EXPORTED_TARGETS} objSMCE ipcSMCE iSMCE NAMESPACE SMCE:: APPEND
-    FILE "${PROJECT_BINARY_DIR}/cmake/SMCETargets.cmake"
-    EXPORT_LINK_INTERFACE_LIBRARIES
-)
+smce_install_config ()
 
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include")
