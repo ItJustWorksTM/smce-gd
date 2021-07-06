@@ -151,22 +151,23 @@ add_subdirectory (test EXCLUDE_FROM_ALL)
 
 include (InstallFragments)
 
-smce_install_boilerplate_targets ()
+smce_install_boilerplate_targets (${SMCE_COMPONENT_BOILERPLATE})
 
 set (SMCE_EXPORTED_TARGETS)
 if (SMCE_BUILD_SHARED)
   list (APPEND SMCE_EXPORTED_TARGETS SMCE)
-  smce_install (TARGETS SMCE)
+  smce_install (TARGETS SMCE ${SMCE_COMPONENT_SHARED})
 endif()
 if (SMCE_BUILD_STATIC)
   list (APPEND SMCE_EXPORTED_TARGETS SMCE_static)
-  smce_install (TARGETS SMCE_static)
+  smce_install (TARGETS SMCE_static ${SMCE_COMPONENT_STATIC})
 endif ()
 
 smce_export (TARGETS ${SMCE_EXPORTED_TARGETS})
 
 include (GNUInstallDirs)
 install (EXPORT SMCETargets
+    ${SMCE_COMPONENT_TARGETS}
     FILE SMCETargets.cmake
     NAMESPACE SMCE::
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
@@ -178,9 +179,14 @@ file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include")
 file (COPY "${PROJECT_SOURCE_DIR}/include/SMCE" DESTINATION "${PROJECT_BINARY_DIR}/packaging/include")
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/packaging/include/SMCE/internal")
-install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION ".")
+install (DIRECTORY "${PROJECT_BINARY_DIR}/packaging/include" DESTINATION "." ${SMCE_COMPONENT_HEADERS})
 
-install (FILES "${PROJECT_SOURCE_DIR}/LICENSE" "${SMCE_RESOURCES_ARK}" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/SMCE")
+install (FILES
+    "${PROJECT_SOURCE_DIR}/LICENSE"
+    "${SMCE_RESOURCES_ARK}"
+    DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/SMCE"
+    ${SMCE_COMPONENT_RTDATA}
+)
 
 include (CPackCommon)
 
@@ -190,6 +196,8 @@ endif ()
 
 include ("${PROJECT_SOURCE_DIR}/CMake/PackagingProfiles/${SMCE_CPACK_PROFILE}.cmake")
 
+get_cmake_property (CPACK_COMPONENTS_ALL COMPONENTS)
+list (REMOVE_ITEM CPACK_COMPONENTS_ALL "Unspecified")
 include (CPack)
 
 set (CMAKE_MSVC_RUNTIME_LIBRARY "${PREV_CMAKE_MSVC_RUNTIME_LIBRARY}")

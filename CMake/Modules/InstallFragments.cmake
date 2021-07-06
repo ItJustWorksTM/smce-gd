@@ -103,5 +103,6 @@ macro (smce_install_config)
       "${PROJECT_BINARY_DIR}/SMCEConfig.cmake"
       "${PROJECT_BINARY_DIR}/SMCEConfigVersion.cmake"
       DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/SMCE"
+      ${SMCE_COMPONENT_CONFIG}
   )
 endmacro ()
