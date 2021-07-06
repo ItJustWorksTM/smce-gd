@@ -427,7 +427,6 @@ jobs:
           arduino-cli core install arduino:avr
       - name: CMake configure
         run: |
-          mkdir build
           cmake -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DSMCE_CXXRT_LINKING=SHARED \
