@@ -38,10 +38,13 @@ else ()
   if (EXISTS "${PROJECT_SOURCE_DIR}/ext_deps/boost")
     set (boost_SOURCE_DIR ext_deps/boost)
   else ()
+    include (FetchContent)
     message ("Downloading Boost")
     FetchContent_Declare (Boost
         GIT_REPOSITORY "https://github.com/boostorg/boost"
         GIT_TAG "boost-1.76.0"
+        GIT_SHALLOW On
+        GIT_PROGRESS On
     )
     FetchContent_GetProperties (Boost)
     if (NOT boost_POPULATED)
@@ -59,6 +62,7 @@ else ()
   set (PREV_CMAKE_POSITION_INDEPENDENT_CODE "${CMAKE_POSITION_INDEPENDENT_CODE}")
   set (CMAKE_POSITION_INDEPENDENT_CODE On)
 
+  set (BUILD_TESTING Off)
   add_subdirectory ("${boost_SOURCE_DIR}" "${boost_BINARY_DIR}" EXCLUDE_FROM_ALL)
 
   set (CMAKE_POSITION_INDEPENDENT_CODE "${PREV_CMAKE_POSITION_INDEPENDENT_CODE}")
@@ -67,6 +71,7 @@ else ()
   target_link_libraries (SMCE_Boost INTERFACE
       Boost::atomic # Dependency of Interprocess
       Boost::filesystem # Dependency of Process
+      Boost::type_index # Dependency of Process
       Boost::intrusive # Dependency of Interprocess
       Boost::container # Dependency of Interprocess
       Boost::date_time # Dependency of Interprocess
