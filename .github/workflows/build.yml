@@ -4,7 +4,7 @@ jobs:
   make-release:
     name: Publish release
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [build-ubuntu, build-macos, build-windows]
+    needs: [build-ubuntu, build-macos, build-windows, package-deb]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -433,3 +433,77 @@ jobs:
           cd build/test
           ctest --output-on-failure
 
+  package-deb:
+    name: Package per-distro DEBs (${{ matrix.os.name }} ${{ matrix.os.codename }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - name: Debian
+            codename: Bullseye
+            image: gcc:11-bullseye
+          - name: Debian
+            codename: Buster
+            image: gcc:10-buster
+          - name: Ubuntu
+            codename: Impish
+            image: ubuntu:impish
+          - name: Ubuntu
+            codename: Hirsute
+            image: ubuntu:hirsute
+          - name: Ubuntu
+            codename: Groovy
+            image: ubuntu:groovy
+          - name: Ubuntu
+            codename: Focal
+            image: ubuntu:focal
+    container: ${{ matrix.os.image }}
+    env:
+      DEBIAN_FRONTEND: "noninteractive"
+      CMAKE_VERSION: 3.20.5
+    steps:
+      - name: Setup workdir
+        run: mkdir /tmp/wk && cd /tmp/wk
+      - uses: actions/checkout@v2
+      - name: Fetch deps
+        id: deps
+        run: |
+          apt-get update -y
+          apt-get install -y file dpkg-dev pkg-config wget # CMake's dpkg-shlibdeps support needs 'file'
+          git --version || apt-get install -y git
+          ninja --version || apt-get install -y ninja-build
+          wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.sh
+          chmod +x cmake-$CMAKE_VERSION-linux-x86_64.sh
+          ./cmake-$CMAKE_VERSION-linux-x86_64.sh --skip-license --prefix=/usr/local
+          [ "$(g++ --version | grep -oP '\d+' | head -n1)0" -ge 100 ] || ci/install-highest-gcc.sh # GCC 10 required for C++2a
+          apt-get install -y libssl-dev
+          if [ $(apt info libboost-dev | grep -oP 'Version: \K\d+\.\d+' | sed -e 's/\.//') -lt '174' ]; then
+              echo ::set-output name=BUILD_BOOST::true
+          else
+            apt-get install -y libboost-dev libboost-atomic-dev libboost-filesystem-dev
+            echo ::set-output name=BUILD_BOOST::false
+          fi
+      - name: Cache Boost
+        id: cache-boost
+        if: steps.deps.outputs.BUILD_BOOST == 'true'
+        uses: actions/cache@v2
+        with:
+          path: boost_root
+          key: ${{ matrix.os.name }}${{ matrix.os.codename }}-boost-1.76.0-static
+      - name: Install Boost
+        if: steps.deps.outputs.BUILD_BOOST == 'true' && steps.cache-boost.outputs.cache-hit != 'true'
+        run: |
+          apt-get install -y wget
+          ci/build-static-boost.sh 1.76.0
+      - name: CMake Configure
+        run: BOOST_ROOT="$(pwd)/boost_root" cmake -G Ninja  -DSMCE_BUILD_PROFILE=${{ matrix.os.name }}${{ matrix.os.codename }} -S ./ -B ./build
+      - name: CMake Build
+        run: cmake --build ./build
+      - name: CPack
+        run: (cd build; cpack)
+      - name: Upload artifacts
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: libSMCE-DEB-${{ matrix.os.name }}${{ matrix.os.codename }}
+          path: build/*.deb
