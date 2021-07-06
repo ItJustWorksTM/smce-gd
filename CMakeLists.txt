@@ -21,6 +21,11 @@ cmake_policy (SET CMP0022 NEW)
 project (libSMCE VERSION 1.2.4)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 include (UserConfigVars)
+
+if (DEFINED SMCE_BUILD_PROFILE)
+  include ("${PROJECT_SOURCE_DIR}/CMake/BuildProfiles/${SMCE_BUILD_PROFILE}.cmake")
+endif ()
+
 include (Coverage)
 
 set (PREV_CMAKE_MSVC_RUNTIME_LIBRARY "${CMAKE_MSVC_RUNTIME_LIBRARY}")
