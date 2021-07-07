@@ -26,16 +26,15 @@
 namespace smce {
 extern BoardView board_view;
 extern void maybe_init();
-}
+} // namespace smce
 
 SMCE__DLL_API OV767X Camera;
 
 OV767X::OV767X() noexcept = default;
 OV767X::~OV767X() = default;
 
-void OV767X::setPins([[maybe_unused]] int vsync, [[maybe_unused]] int href, [[maybe_unused]] int pclk, [[maybe_unused]] int xclk, [[maybe_unused]] const int dpins[8]) {
-
-}
+void OV767X::setPins([[maybe_unused]] int vsync, [[maybe_unused]] int href, [[maybe_unused]] int pclk,
+                     [[maybe_unused]] int xclk, [[maybe_unused]] const int dpins[8]) {}
 
 /*
  * VGA = 0,  // 640x480
@@ -54,8 +53,12 @@ constexpr std::array<std::pair<uint16_t, uint16_t>, 5> resolutions{{
 }};
 
 int OV767X::begin(SMCE_OV767_Resolution resolution, SMCE_OV767_Format format, int fps) {
-    const auto error = [=](const char* msg) { return std::cerr << "ERROR: OV767X::begin(" << resolution << ", " << format << ", " << fps << "): " << msg << std::endl, -1; };
-    if(m_begun) {
+    const auto error = [=](const char* msg) {
+        std::cerr << "ERROR: OV767X::begin(" << resolution << ", " << format << ", " << fps << "): " << msg
+                  << std::endl;
+        return -1;
+    };
+    if (m_begun) {
         std::cerr << "OV767X::begin: device already active" << std::endl;
         return -1;
     }
@@ -68,13 +71,13 @@ int OV767X::begin(SMCE_OV767_Resolution resolution, SMCE_OV767_Format format, in
         return error("Unknown format");
     }
 
-    if(resolution >= resolutions.size())
+    if (resolution >= resolutions.size())
         return error("Unknown resolution");
 
     auto fb = smce::board_view.frame_buffers[m_key];
-    if(!fb.exists())
+    if (!fb.exists())
         return error("Framebuffer does not exist");
-    if(fb.direction() != smce::FrameBuffer::Direction::in)
+    if (fb.direction() != smce::FrameBuffer::Direction::in)
         return error("Framebuffer not in input mode");
 
     fb.set_width(resolutions[resolution].first);
@@ -86,7 +89,7 @@ int OV767X::begin(SMCE_OV767_Resolution resolution, SMCE_OV767_Format format, in
 }
 
 void OV767X::end() {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::end: device inactive" << std::endl;
         return;
     }
@@ -97,9 +100,8 @@ void OV767X::end() {
     m_begun = false;
 }
 
-
 int OV767X::width() const {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::width: device inactive" << std::endl;
         return 0;
     }
@@ -107,20 +109,17 @@ int OV767X::width() const {
 }
 
 int OV767X::height() const {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::height: device inactive" << std::endl;
         return 0;
     }
     return smce::board_view.frame_buffers[m_key].get_height();
 }
 
-constexpr std::array<std::pair<int, int>, 2> bits_bytes_pixel_formats {{
-   {24, 3},
-   {12, 2}
-}};
+constexpr std::array<std::pair<int, int>, 2> bits_bytes_pixel_formats{{{24, 3}, {12, 2}}};
 
 int OV767X::bitsPerPixel() const {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::bitsPerPixel: device inactive" << std::endl;
         return 0;
     }
@@ -128,16 +127,15 @@ int OV767X::bitsPerPixel() const {
 }
 
 int OV767X::bytesPerPixel() const {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::bytesPerPixel: device inactive" << std::endl;
         return 0;
     }
     return bits_bytes_pixel_formats[m_format].second;
 }
 
-
 void OV767X::readFrame(void* buffer) {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::readFrame: device inactive" << std::endl;
         return;
     }
@@ -146,12 +144,12 @@ void OV767X::readFrame(void* buffer) {
         &smce::FrameBuffer::read_rgb888,
         &smce::FrameBuffer::read_rgb444,
     };
-    (smce::board_view.frame_buffers[m_key].*format_read[m_format])({static_cast<std::byte*>(buffer), static_cast<std::size_t>(bitsPerPixel() * width() * height() / CHAR_BIT)});
+    (smce::board_view.frame_buffers[m_key].*format_read[m_format])(
+        {static_cast<std::byte*>(buffer), static_cast<std::size_t>(bitsPerPixel() * width() * height() / CHAR_BIT)});
 }
 
-
 void OV767X::horizontalFlip() {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::horizontalFlip: device inactive" << std::endl;
         return;
     }
@@ -159,7 +157,7 @@ void OV767X::horizontalFlip() {
 }
 
 void OV767X::noHorizontalFlip() {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::noHorizontalFlip: device inactive" << std::endl;
         return;
     }
@@ -167,7 +165,7 @@ void OV767X::noHorizontalFlip() {
 }
 
 void OV767X::verticalFlip() {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::verticalFlip: device inactive" << std::endl;
         return;
     }
@@ -175,7 +173,7 @@ void OV767X::verticalFlip() {
 }
 
 void OV767X::noVerticalFlip() {
-    if(!m_begun) {
+    if (!m_begun) {
         std::cerr << "OV767X::noVerticalFlip: device inactive" << std::endl;
         return;
     }

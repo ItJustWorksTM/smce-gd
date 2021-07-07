@@ -29,6 +29,6 @@ namespace smce {
  **/
 namespace stdfs = std::filesystem;
 
-}
+} // namespace smce
 
 #endif // SMCE_SMCE_FWD_HPP

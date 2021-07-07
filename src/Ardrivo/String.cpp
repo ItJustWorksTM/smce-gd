@@ -23,7 +23,7 @@
 #include "WString.h"
 
 #if !defined(__APPLE__) || (defined(__GNUG__) && !defined(__clang__))
-#define bit_width std::bit_width
+#    define bit_width std::bit_width
 #else
 static std::size_t bit_width(unsigned long long value) {
     return std::numeric_limits<unsigned long long>::digits - __builtin_clzll(value);
@@ -45,16 +45,19 @@ String::String(char c) : m_u(1, c) {}
 String::String(InternalTag, const char* ptr, std::size_t len) : m_u{ptr, len} {}
 
 String::String(ConvTag, std::uintmax_t val, SMCE__BIN) {
-    if(val == 0) {
+    if (val == 0) {
         m_u = "0";
         return;
     }
     m_u.resize(bit_width(val));
-    std::for_each(m_u.rbegin(), m_u.rend(), [&](char& c) { c = static_cast<char>((val & 1) + '0'); val >>= 1; });
+    std::for_each(m_u.rbegin(), m_u.rend(), [&](char& c) {
+        c = static_cast<char>((val & 1) + '0');
+        val >>= 1;
+    });
 }
 
 String::String(ConvTag, std::uintmax_t val, SMCE__HEX) {
-    if(val == 0) {
+    if (val == 0) {
         m_u = "0";
         return;
     }
@@ -77,25 +80,25 @@ String::String(ConvTag, std::uintmax_t val, SMCE__HEX) {
     return std::memcmp(m_u.c_str(), s.m_u.c_str(), (std::min)(s.m_u.size(), m_u.size()));
 }
 
-[[nodiscard]] bool String::startsWith(const String& s) const noexcept {
-    return m_u.starts_with(s.m_u);
-}
+[[nodiscard]] bool String::startsWith(const String& s) const noexcept { return m_u.starts_with(s.m_u); }
 
-[[nodiscard]] bool String::endsWith(const String& s) const noexcept {
-    return m_u.ends_with(s.m_u);
-}
+[[nodiscard]] bool String::endsWith(const String& s) const noexcept { return m_u.ends_with(s.m_u); }
 
-void String::getBytes(std::uint8_t* buffer, unsigned length) const noexcept{
+void String::getBytes(std::uint8_t* buffer, unsigned length) const noexcept {
     std::copy(m_u.begin(), (length > m_u.length()) ? m_u.end() : m_u.begin() + length, buffer);
 }
 
 [[nodiscard]] int String::indexOf(const char* c) const noexcept { return static_cast<int>(m_u.find(c)); }
 
-[[nodiscard]] int String::indexOf(const char* c, unsigned index) const noexcept { return static_cast<int>(m_u.find(c, index)); }
+[[nodiscard]] int String::indexOf(const char* c, unsigned index) const noexcept {
+    return static_cast<int>(m_u.find(c, index));
+}
 
 [[nodiscard]] int String::indexOf(const String& str) const noexcept { return static_cast<int>(m_u.find(str.m_u)); }
 
-[[nodiscard]] int String::indexOf(const String& str, unsigned index) const noexcept { return static_cast<int>(m_u.find(str.m_u, index)); }
+[[nodiscard]] int String::indexOf(const String& str, unsigned index) const noexcept {
+    return static_cast<int>(m_u.find(str.m_u, index));
+}
 
 void String::remove(unsigned idx) { m_u.erase(idx); }
 
@@ -134,12 +137,12 @@ void String::toCharArray(char* buffer, unsigned length) noexcept {
     return 0;
 }
 
-void String::toLowerCase() noexcept{ std::transform(m_u.begin(), m_u.end(), m_u.begin(),
-                                                    [] (char c) { return static_cast<char>(std::tolower(+c)); });
+void String::toLowerCase() noexcept {
+    std::transform(m_u.begin(), m_u.end(), m_u.begin(), [](char c) { return static_cast<char>(std::tolower(+c)); });
 }
 
-void String::toUpperCase() noexcept{ std::transform(m_u.begin(), m_u.end(), m_u.begin(),
-                                                    [](char c) { return static_cast<char>(std::toupper(+c)); });
+void String::toUpperCase() noexcept {
+    std::transform(m_u.begin(), m_u.end(), m_u.begin(), [](char c) { return static_cast<char>(std::toupper(+c)); });
 }
 
 void String::trim() {
@@ -151,9 +154,7 @@ void String::trim() {
 
 [[nodiscard]] bool String::equals(const String& s) const noexcept { return m_u == s.m_u; }
 
-[[nodiscard]] bool String::equalsIgnoreCase(const String& s) const noexcept {
-    return boost::iequals(m_u, s.m_u);
-}
+[[nodiscard]] bool String::equalsIgnoreCase(const String& s) const noexcept { return boost::iequals(m_u, s.m_u); }
 
 [[nodiscard]] bool String::operator==(const String& s) const noexcept { return m_u == s.m_u; }
 [[nodiscard]] bool String::operator!=(const String& s) const noexcept { return m_u != s.m_u; }

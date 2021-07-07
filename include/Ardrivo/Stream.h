@@ -24,7 +24,13 @@
 #define NO_IGNORE_CHAR '\x01'
 #define DEFAULT_TIMEOUT 1000
 
-enum LookaheadMode { SKIP_ALL, SKIP_NONE, SKIP_WHITESPACE };
+// clang-format off
+enum LookaheadMode {
+    SKIP_ALL,
+    SKIP_NONE,
+    SKIP_WHITESPACE
+};
+// clang-format on
 
 class SMCE__DLL_RT_API Stream : public Print {
     long _timeout{DEFAULT_TIMEOUT};
@@ -40,7 +46,9 @@ class SMCE__DLL_RT_API Stream : public Print {
     Stream() = default;
 
     [[nodiscard]] bool find(char target) noexcept { return find(&target, 0); }
-    [[nodiscard]] bool find(const char* target, int length) noexcept { return findUntil(target, length, NO_IGNORE_CHAR); }
+    [[nodiscard]] bool find(const char* target, int length) noexcept {
+        return findUntil(target, length, NO_IGNORE_CHAR);
+    }
     [[nodiscard]] bool findUntil(char target, char terminal) noexcept { return findUntil(&target, 0, terminal); }
     [[nodiscard]] bool findUntil(const char* target, int length, char terminal) noexcept;
     size_t readBytes(char* buffer, int length) { return readBytesUntil(NO_IGNORE_CHAR, buffer, length); }

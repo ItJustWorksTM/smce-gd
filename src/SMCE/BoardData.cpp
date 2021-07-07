@@ -16,10 +16,10 @@
  *
  */
 
-#include <SMCE/internal/BoardData.hpp>
+#include "SMCE/internal/BoardData.hpp"
 
 #include <algorithm>
-#include <SMCE/BoardConf.hpp>
+#include "SMCE/BoardConf.hpp"
 
 namespace bip = boost::interprocess;
 
@@ -31,34 +31,29 @@ BoardData::DirectStorage::DirectStorage(const ShmAllocator<void>& shm_valloc) : 
 
 BoardData::FrameBuffer::FrameBuffer(const ShmAllocator<void>& shm_valloc) : data{shm_valloc} {}
 
-BoardData::BoardData(
-        const ShmAllocator<void>& shm_valloc,
-        const BoardConfig& c) noexcept
-    : pins{shm_valloc},
-      uart_channels{shm_valloc},
-      direct_storages{shm_valloc},
-      frame_buffers{shm_valloc} {
+BoardData::BoardData(const ShmAllocator<void>& shm_valloc, const BoardConfig& c) noexcept
+    : pins{shm_valloc}, uart_channels{shm_valloc}, direct_storages{shm_valloc}, frame_buffers{shm_valloc} {
     auto sorted_pins = c.pins;
     std::sort(sorted_pins.begin(), sorted_pins.end());
 
     pins.reserve(sorted_pins.size());
-    for(const auto pin_id : sorted_pins) {
+    for (const auto pin_id : sorted_pins) {
         auto& pin_obj = pins.emplace_back();
         pin_obj.id = pin_id;
     }
 
     for (const auto& gpio_driver : c.gpio_drivers) {
         const auto it = std::find(sorted_pins.begin(), sorted_pins.end(), gpio_driver.pin_id);
-        if(it == sorted_pins.end())
+        if (it == sorted_pins.end())
             continue;
         const auto pin_idx = std::distance(sorted_pins.begin(), it);
         auto& pin = pins[pin_idx];
-        if(gpio_driver.analog_driver) {
+        if (gpio_driver.analog_driver) {
             auto& driver = gpio_driver.analog_driver.value();
             pin.can_analog_read = driver.board_read;
             pin.can_analog_write = driver.board_write;
         }
-        if(gpio_driver.digital_driver) {
+        if (gpio_driver.digital_driver) {
             auto& driver = gpio_driver.digital_driver.value();
             pin.can_digital_read = driver.board_read;
             pin.can_digital_write = driver.board_write;
@@ -66,7 +61,7 @@ BoardData::BoardData(
     }
 
     uart_channels.reserve(c.uart_channels.size());
-    for(const auto& conf : c.uart_channels) {
+    for (const auto& conf : c.uart_channels) {
         auto& data = uart_channels.emplace_back(shm_valloc);
         data.baud_rate = conf.baud_rate;
         data.rx_pin_override = conf.rx_pin_override;
@@ -76,7 +71,7 @@ BoardData::BoardData(
     }
 
     direct_storages.reserve(c.sd_cards.size());
-    for(const auto& conf : c.sd_cards) {
+    for (const auto& conf : c.sd_cards) {
         auto& data = direct_storages.emplace_back(shm_valloc);
         data.bus = BoardData::DirectStorage::Bus::SPI;
         data.accessor = conf.cspin;
@@ -87,11 +82,11 @@ BoardData::BoardData(
     }
 
     frame_buffers.reserve(c.frame_buffers.size());
-    for(const auto& conf : c.frame_buffers) {
+    for (const auto& conf : c.frame_buffers) {
         auto& data = frame_buffers.emplace_back(shm_valloc);
         data.key = conf.key;
         data.direction = BoardData::FrameBuffer::Direction{static_cast<std::uint8_t>(conf.direction)};
     }
 }
 
-}
+} // namespace smce

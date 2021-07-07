@@ -28,13 +28,15 @@ struct WiFiClass : Client {
     inline int connect([[maybe_unused]] IPAddress ip, [[maybe_unused]] std::uint16_t port) override { return 0; }
     int connect([[maybe_unused]] const char* host, [[maybe_unused]] std::uint16_t port) override { return 0; }
     std::size_t write([[maybe_unused]] std::uint8_t) override { return 0; }
-    std::size_t write([[maybe_unused]] const std::uint8_t* buf, [[maybe_unused]] std::size_t size) override { return 0; }
+    std::size_t write([[maybe_unused]] const std::uint8_t* buf, [[maybe_unused]] std::size_t size) override {
+        return 0;
+    }
     int available() override { return 0; }
     int read() override { return -1; }
     int read([[maybe_unused]] std::uint8_t* buf, [[maybe_unused]] std::size_t size) override { return 0; }
     int peek() override { return -1; }
-    void flush() override { }
-    void stop() override { }
+    void flush() override {}
+    void stop() override {}
     std::uint8_t connected() override { return 0; }
     operator bool() override { return false; }
 };

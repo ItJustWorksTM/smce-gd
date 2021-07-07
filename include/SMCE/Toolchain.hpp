@@ -22,12 +22,13 @@
 #include <mutex>
 #include <string>
 #include <system_error>
-#include <SMCE/fwd.hpp>
 #include <SMCE/SMCE_fs.hpp>
 #include <SMCE/Sketch.hpp>
+#include <SMCE/fwd.hpp>
 
 namespace smce {
 
+// clang-format off
 enum struct toolchain_error {
     resdir_absent = 1,
     resdir_file,
@@ -42,6 +43,7 @@ enum struct toolchain_error {
 
     generic = 255
 };
+// clang-format on
 
 /**
  * Compilation environment for sketches
@@ -86,9 +88,9 @@ class Toolchain {
     /**
      * Compile a sketch
      **/
-     std::error_code compile(Sketch& sketch) noexcept;
+    std::error_code compile(Sketch& sketch) noexcept;
 };
 
-}
+} // namespace smce
 
 #endif // SMCE_TOOLCHAIN_HPP

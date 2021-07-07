@@ -22,8 +22,8 @@
 #include <string>
 #include <variant>
 #include <vector>
-#include <SMCE/fwd.hpp>
 #include <SMCE/SMCE_fs.hpp>
+#include <SMCE/fwd.hpp>
 
 namespace smce {
 
@@ -36,15 +36,15 @@ struct SketchConfig {
      * \warning Unused; unsupported at the current time
      **/
     struct FreestandingLibrary {
-        stdfs::path include_dir; /// Include directory for that library
-        stdfs::path archive_path;  /// Path to that library's binary; empty if none
-        std::vector<std::string> compile_defs;  /// Arguments to CMake's target_compile_definitions
+        stdfs::path include_dir;               /// Include directory for that library
+        stdfs::path archive_path;              /// Path to that library's binary; empty if none
+        std::vector<std::string> compile_defs; /// Arguments to CMake's target_compile_definitions
     };
     /**
      * Library to pull from the Arduino library manager
      **/
     struct RemoteArduinoLibrary {
-        std::string name; // Library name as found in the install command
+        std::string name;    // Library name as found in the install command
         std::string version; // Version string; empty if latest
     };
     /**
@@ -54,20 +54,20 @@ struct SketchConfig {
      * file trees will be merged, with the patch taking priority.
      **/
     struct LocalArduinoLibrary {
-        stdfs::path root_dir; // Root directory of the library
+        stdfs::path root_dir;  // Root directory of the library
         std::string patch_for; // Name of the remote library being patched; none if not patching
     };
 
     using Library = std::variant<FreestandingLibrary, RemoteArduinoLibrary, LocalArduinoLibrary>;
 
-    std::string fqbn; /// Fully-qualified board name that the sketch is targeting
-    std::vector<std::string> extra_board_uris; /// Extra board.txt URIs for ArduinoCLI
-    std::vector<Library> preproc_libs; /// Libraries to use during preprocessing
-    std::vector<Library> complink_libs; /// Libraries to use at compile and link time
+    std::string fqbn;                            /// Fully-qualified board name that the sketch is targeting
+    std::vector<std::string> extra_board_uris;   /// Extra board.txt URIs for ArduinoCLI
+    std::vector<Library> preproc_libs;           /// Libraries to use during preprocessing
+    std::vector<Library> complink_libs;          /// Libraries to use at compile and link time
     std::vector<std::string> extra_compile_defs; /// Arguments to CMake's target_compile_definitions
     std::vector<std::string> extra_compile_opts; /// Arguments to CMake's target_compile_options
 };
 
-}
+} // namespace smce
 
 #endif // SMCE_SKETCHCONF_HPP

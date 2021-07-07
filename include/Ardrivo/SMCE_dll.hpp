@@ -20,16 +20,16 @@
 #define SMCE__SMCE_DLL_HPP
 
 #if defined(_MSC_VER)
-#   if defined(SMCE__COMPILING_USERCODE)
-#       define SMCE__DLL_API __declspec(dllexport)
-#       define SMCE__DLL_RT_API __declspec(dllimport)
-#   else
-#       define SMCE__DLL_API
-#       define SMCE__DLL_RT_API __declspec(dllexport)
-#   endif
+#    if defined(SMCE__COMPILING_USERCODE)
+#        define SMCE__DLL_API __declspec(dllexport)
+#        define SMCE__DLL_RT_API __declspec(dllimport)
+#    else
+#        define SMCE__DLL_API
+#        define SMCE__DLL_RT_API __declspec(dllexport)
+#    endif
 #else
-#   define SMCE__DLL_RT_API
-#   define SMCE__DLL_API
+#    define SMCE__DLL_RT_API
+#    define SMCE__DLL_API
 #endif
 
 #endif // SMCE__SMCE_DLL_HPP

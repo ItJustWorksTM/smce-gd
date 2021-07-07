@@ -31,8 +31,8 @@
 
 class MQTTClient;
 
-using MQTTClientCallbackSimple = void(*)(String& topic, String& payload);
-using MQTTClientCallbackAdvanced = void(*)(MQTTClient* client, const char* topic, const char* bytes, int length);
+using MQTTClientCallbackSimple = void (*)(String& topic, String& payload);
+using MQTTClientCallbackAdvanced = void (*)(MQTTClient* client, const char* topic, const char* bytes, int length);
 using MQTTClientCallbackSimpleFunction = std::function<std::remove_pointer_t<MQTTClientCallbackSimple>>;
 using MQTTClientCallbackAdvancedFunction = std::function<std::remove_pointer_t<MQTTClientCallbackAdvanced>>;
 
@@ -41,13 +41,13 @@ struct SMCE__DLL_RT_API MQTTClientCallbacks {
     MQTTClientCallbackSimple simple = nullptr;
     MQTTClientCallbackAdvanced advanced = nullptr;
 #if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4251)
+#    pragma warning(push)
+#    pragma warning(disable : 4251)
 #endif
     MQTTClientCallbackSimpleFunction fsimple = nullptr;
     MQTTClientCallbackAdvancedFunction fadvanced = nullptr;
 #if _MSC_VER
-#pragma warning(pop)
+#    pragma warning(pop)
 #endif
     explicit MQTTClientCallbacks(MQTTClient* client) noexcept : client{client} {}
 };
@@ -58,16 +58,17 @@ class SMCE__DLL_RT_API MQTTClient {
     int m_keepalive = 60;
     int m_timeout = 120;
 #if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4251)
+#    pragma warning(push)
+#    pragma warning(disable : 4251)
 #endif
     std::string m_host_uri = "localhost";
 #if _MSC_VER
-#pragma warning(pop)
+#    pragma warning(pop)
 #endif
     std::uint16_t m_port = 1883;
     MQTTClientCallbacks m_callbacks{this};
-public:
+
+  public:
     explicit MQTTClient(int bufSize = 128);
 
     ~MQTTClient();
@@ -88,7 +89,7 @@ public:
     void onMessage(MQTTClientCallbackSimpleFunction cb);
     void onMessageAdvanced(MQTTClientCallbackAdvancedFunction cb);
 
-    //void setClockSource(MQTTClientClockSource cb);
+    // void setClockSource(MQTTClientClockSource cb);
 
     inline void setHost(const char* hostname) { this->setHost(hostname, 1883); }
     void setHost(const char* hostname, std::uint16_t port);
@@ -108,19 +109,23 @@ public:
         this->setTimeout(_timeout);
     }
 
-    inline bool connect(const char* clientId, bool skip = false) { return this->connect(clientId, nullptr, nullptr, skip); }
+    inline bool connect(const char* clientId, bool skip = false) {
+        return this->connect(clientId, nullptr, nullptr, skip);
+    }
     inline bool connect(const char* clientId, const char* username, bool skip = false) {
         return this->connect(clientId, username, nullptr, skip);
     }
     bool connect(const char* clientID, const char* username, const char* password, bool skip = false);
 
-    inline bool publish(const String &topic) { return this->publish(topic.c_str(), ""); }
-    inline bool publish(const String &topic, const String &payload) { return this->publish(topic.c_str(), payload.c_str()); }
-    inline bool publish(const String &topic, const String &payload, bool retained, int qos) {
+    inline bool publish(const String& topic) { return this->publish(topic.c_str(), ""); }
+    inline bool publish(const String& topic, const String& payload) {
+        return this->publish(topic.c_str(), payload.c_str());
+    }
+    inline bool publish(const String& topic, const String& payload, bool retained, int qos) {
         return this->publish(topic.c_str(), payload.c_str(), retained, qos);
     }
-    inline bool publish(const char* topic, const String &payload) { return this->publish(topic, payload.c_str()); }
-    inline bool publish(const char* topic, const String &payload, bool retained, int qos) {
+    inline bool publish(const char* topic, const String& payload) { return this->publish(topic, payload.c_str()); }
+    inline bool publish(const char* topic, const String& payload, bool retained, int qos) {
         return this->publish(topic, payload.c_str(), retained, qos);
     }
     inline bool publish(const char* topic, const char* payload = "", bool retained = false, int qos = 0) {
@@ -131,10 +136,10 @@ public:
     }
     bool publish(const char* topic, const char* payload, int length, bool retained, int qos);
 
-    inline bool subscribe(const String &topic, int qos = 0) { return this->subscribe(topic.c_str(), qos); }
+    inline bool subscribe(const String& topic, int qos = 0) { return this->subscribe(topic.c_str(), qos); }
     bool subscribe(const char* topic, int qos = 0);
 
-    inline bool unsubscribe(const String &topic) { return this->unsubscribe(topic.c_str()); }
+    inline bool unsubscribe(const String& topic) { return this->unsubscribe(topic.c_str()); }
     bool unsubscribe(const char* topic);
 
     bool loop();

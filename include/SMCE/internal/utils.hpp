@@ -42,7 +42,8 @@ namespace smce {
 template <class... Base>
 struct Visitor : Base... {
     template <class... Ts>
-    constexpr Visitor(Ts&&... ts) noexcept((std::is_nothrow_move_constructible_v<Base> && ...)) : Base{std::forward<Ts>(ts)}... {}
+    constexpr Visitor(Ts&&... ts) noexcept((std::is_nothrow_move_constructible_v<Base> && ...))
+        : Base{std::forward<Ts>(ts)}... {}
     using Base::operator()...;
 };
 template <class... Ts>

@@ -24,16 +24,17 @@
 #include <mutex>
 #include <string_view>
 #include <utility>
-#include <SMCE/fwd.hpp>
-#include <SMCE/SMCE_fs.hpp>
-#include <SMCE/BoardConf.hpp>
-#include <SMCE/BoardView.hpp>
-#include <SMCE/SketchConf.hpp>
+#include "SMCE/BoardConf.hpp"
+#include "SMCE/BoardView.hpp"
+#include "SMCE/SMCE_fs.hpp"
+#include "SMCE/SketchConf.hpp"
+#include "SMCE/fwd.hpp"
 
 namespace smce {
 
 class Board {
   public:
+    // clang-format off
     enum class Status {
         clean,
         configured,
@@ -41,6 +42,7 @@ class Board {
         suspended,
         stopped
     };
+    // clang-format on
 
     using LockedLog = std::pair<std::unique_lock<std::mutex>, std::string&>;
 
@@ -65,7 +67,6 @@ class Board {
     /// Getter for the attached sketch
     [[nodiscard]] const Sketch* get_sketch() const noexcept { return m_sketch_ptr; }
 
-
     /// Tick runner; call in your frontend physics loop
     void tick() noexcept;
 
@@ -77,7 +78,9 @@ class Board {
     bool terminate() noexcept;
     bool stop() noexcept;
 
-    [[nodiscard]] inline LockedLog runtime_log() noexcept { return {std::unique_lock{m_runtime_log_mtx}, m_runtime_log}; }
+    [[nodiscard]] inline LockedLog runtime_log() noexcept {
+        return {std::unique_lock{m_runtime_log_mtx}, m_runtime_log};
+    }
 
   private:
     struct Internal;
@@ -96,6 +99,6 @@ class Board {
     std::unique_ptr<Internal> m_internal;
 };
 
-}
+} // namespace smce
 
 #endif // SMCE_BOARD_HPP

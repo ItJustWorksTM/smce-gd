@@ -17,22 +17,22 @@
  */
 
 #ifndef SMCE_RESOURCES_DIR
-#error "SMCE_RESOURCES_DIR is not set"
+#    error "SMCE_RESOURCES_DIR is not set"
 #endif
 
 #include <atomic>
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
-#include <thread>
 #include <span>
 #include <string_view>
-#include <SMCE/Toolchain.hpp>
-#include <SMCE/Sketch.hpp>
-#include <SMCE/SketchConf.hpp>
+#include <thread>
 #include <SMCE/Board.hpp>
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
+#include <SMCE/Sketch.hpp>
+#include <SMCE/SketchConf.hpp>
+#include <SMCE/Toolchain.hpp>
 
 using namespace std::literals;
 
@@ -41,10 +41,10 @@ void print_help(const char* argv0) {
 }
 
 int main(int argc, char** argv) {
-    if(argc != 3) {
+    if (argc != 3) {
         print_help(argv[0]);
         return EXIT_FAILURE;
-    } else if(argv[1] == "-h"sv || argv[1] == "--help"sv) {
+    } else if (argv[1] == "-h"sv || argv[1] == "--help"sv) {
         print_help(argv[0]);
         return EXIT_SUCCESS;
     }
@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
     }
 
     // Create the sketch, and declare that it requires the WiFi and MQTT Arduino libraries during preprocessing
+    // clang-format off
     smce::Sketch sketch{argv[2], {
           .fqbn = argv[1],
           .preproc_libs = {
@@ -64,6 +65,7 @@ int main(int argc, char** argv) {
               smce::SketchConfig::RemoteArduinoLibrary{"MQTT"}
           }
     }};
+    // // clang-format on
 
     std::cout << "Compiling..." << std::endl;
     // Compile the sketch on the toolchain
@@ -78,13 +80,15 @@ int main(int argc, char** argv) {
 
     smce::Board board; // Create the virtual Arduino board
     board.attach_sketch(sketch);
+    // clang-format off
     board.configure({
         .uart_channels = { {} },
         .sd_cards = { smce::BoardConfig::SecureDigitalStorage{ .root_dir = "." } }
     });
+    // clang-format on
 
     // Power-on the board
-    if(!board.start()) {
+    if (!board.start()) {
         std::cerr << "Error: Board failed to start sketch" << std::endl;
         return EXIT_FAILURE;
     };
@@ -93,13 +97,13 @@ int main(int argc, char** argv) {
     auto uart0 = board_view.uart_channels[0]; // flip-side of Arduino's `Serial'
 
     std::atomic_bool run = true;
-    std::thread outs{[&]{
+    std::thread outs{[&] {
         auto tx = uart0.tx();
         std::string buffer;
-        while(run) {
+        while (run) {
             buffer.resize(tx.max_size());
             const auto len = tx.read(buffer);
-            if(len == 0) {
+            if (len == 0) {
                 std::this_thread::sleep_for(1ms);
                 continue;
             }
@@ -108,17 +112,17 @@ int main(int argc, char** argv) {
         }
     }};
 
-    for(;;) {
+    for (;;) {
         std::cout << "$> ";
         std::string line;
         std::getline(std::cin, line);
-        if(line == "~QUIT")
+        if (line == "~QUIT")
             break;
-        for(std::span<char> to_write = line; !to_write.empty();) {
+        for (std::span<char> to_write = line; !to_write.empty();) {
             const auto written_count = uart0.rx().write(to_write);
             to_write = to_write.subspan(written_count);
         }
-        if(std::cin.eof())
+        if (std::cin.eof())
             break;
         uart0.rx().write((const char[]){'\n'});
     }

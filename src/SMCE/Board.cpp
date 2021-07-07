@@ -20,29 +20,29 @@
 #include <boost/predef.h>
 
 #if BOOST_OS_UNIX || BOOST_OS_MACOS
-#include <csignal>
+#    include <csignal>
 #elif BOOST_OS_WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <boost/process/windows.hpp>
-#include <Windows.h>
-#include <winternl.h>
-#pragma comment(lib, "ntdll.lib")
+#    define WIN32_LEAN_AND_MEAN
+#    include <Windows.h>
+#    include <boost/process/windows.hpp>
+#    include <winternl.h>
+#    pragma comment(lib, "ntdll.lib")
 extern "C" {
 __declspec(dllimport) LONG NTAPI NtResumeProcess(HANDLE ProcessHandle);
 __declspec(dllimport) LONG NTAPI NtSuspendProcess(HANDLE ProcessHandle);
 }
 #else
-#error "Unsupported platform"
+#    error "Unsupported platform"
 #endif
 
 #if BOOST_OS_LINUX
 extern "C" {
-#include <pthread.h>
-#include <unistd.h>
+#    include <pthread.h>
+#    include <unistd.h>
 }
-#include <array>
+#    include <array>
 #else
-#include <type_traits>
+#    include <type_traits>
 #endif
 
 #include <string>
@@ -59,12 +59,14 @@ namespace bip = boost::interprocess;
 
 namespace smce {
 
+// clang-format off
 enum class Board::Command {
     run,      // <==>
     stop,     // ==>
     suspend,  // ==>
     stop_ack, // <==
 };
+// clang-format on
 
 struct Board::Internal {
     Uuid uuid = Uuid::generate();
@@ -75,15 +77,11 @@ struct Board::Internal {
 };
 
 Board::Board(std::function<void(int)> exit_notify) noexcept
-    : m_exit_notify{std::move(exit_notify)}
-    , m_internal{std::make_unique<Internal>()}
-{
+    : m_exit_notify{std::move(exit_notify)}, m_internal{std::make_unique<Internal>()} {
     m_runtime_log.reserve(4096);
 }
 
-Board::~Board() {
-    do_reap();
-}
+Board::~Board() { do_reap(); }
 
 [[nodiscard]] BoardView Board::view() noexcept {
     if (m_status != Status::running && m_status != Status::suspended)
@@ -92,28 +90,27 @@ Board::~Board() {
 }
 
 bool Board::attach_sketch(const Sketch& sketch) noexcept {
-    if(m_status == Status::running || m_status == Status::suspended)
+    if (m_status == Status::running || m_status == Status::suspended)
         return false;
     m_sketch_ptr = &sketch;
     return true;
 }
 
 void Board::tick() noexcept {
-   switch (m_status) {
-   case Status::running:
-   case Status::suspended: {
-       auto& in = *m_internal;
-       if (!in.sketch.running()) {
-           const auto exit_code = m_internal->sketch.exit_code();
-           do_sweep();
-           m_status = Status::stopped;
-           if (m_exit_notify)
-               m_exit_notify(exit_code);
-       }
-   }
-   default:
-       ;
-   }
+    switch (m_status) {
+    case Status::running:
+    case Status::suspended: {
+        auto& in = *m_internal;
+        if (!in.sketch.running()) {
+            const auto exit_code = m_internal->sketch.exit_code();
+            do_sweep();
+            m_status = Status::stopped;
+            if (m_exit_notify)
+                m_exit_notify(exit_code);
+        }
+    }
+    default:;
+    }
 }
 
 bool Board::reset() noexcept {
@@ -142,9 +139,9 @@ bool Board::configure(BoardConfig bconf) noexcept {
 }
 
 bool Board::start() noexcept {
-    if(m_status != Status::configured && m_status != Status::stopped)
+    if (m_status != Status::configured && m_status != Status::stopped)
         return false;
-    if(!m_sketch_ptr || !m_sketch_ptr->is_compiled())
+    if (!m_sketch_ptr || !m_sketch_ptr->is_compiled())
         return false;
 
     do_spawn();
@@ -160,7 +157,7 @@ bool Board::suspend() noexcept {
 #if defined(__unix__)
     ::kill(m_internal->sketch.native_handle(), SIGSTOP);
 #elif defined(_WIN32) || defined(WIN32)
-    NtSuspendProcess(m_internal->sketch.native_handle());
+    ::NtSuspendProcess(m_internal->sketch.native_handle());
 #endif
 
     m_status = Status::suspended;
@@ -174,7 +171,7 @@ bool Board::resume() noexcept {
 #if defined(__unix__)
     ::kill(m_internal->sketch.native_handle(), SIGCONT);
 #elif defined(_WIN32) || defined(WIN32)
-    NtResumeProcess(m_internal->sketch.native_handle());
+    ::NtResumeProcess(m_internal->sketch.native_handle());
 #endif
 
     m_status = Status::running;
@@ -193,7 +190,7 @@ bool Board::terminate() noexcept {
 
 /*
 bool BoardRunner::stop() noexcept {
-    if(m_status != Status::running)
+    if (m_status != Status::running)
         return false;
 
     auto& command = m_internal->command;
@@ -202,7 +199,7 @@ bool BoardRunner::stop() noexcept {
 
     const auto val = command.wait(Command::stop);
     const bool success = val == Command::stop_ack;
-    if(success)
+    if (success)
         m_status = Status::stopped;
 
     return success;
@@ -219,56 +216,57 @@ void Board::do_spawn() noexcept {
     auto hex_uuid = m_internal->uuid.to_hex();
     m_internal->sbdata.configure("SMCE-Runner-" + hex_uuid, *m_conf_opt);
 
-    m_internal->sketch =
-        bp::child(
-            bp::env["SEGNAME"] = "SMCE-Runner-" + hex_uuid,
-            "\""+m_sketch_ptr->m_executable.string()+"\"",
-            bp::std_out > bp::null,
-            bp::std_err > m_internal->sketch_log
+    // clang-format off
+    m_internal->sketch = bp::child{
+        bp::env["SEGNAME"] = "SMCE-Runner-" + hex_uuid,
+        "\"" + m_sketch_ptr->m_executable.string() + "\"",
+        bp::std_out > bp::null,
+        bp::std_err > m_internal->sketch_log
 #if BOOST_OS_WINDOWS
-           ,bp::windows::create_no_window
+        , bp::windows::create_no_window
 #endif
-        );
+    };
+    // clang-format on
 
-    m_internal->sketch_log_grabber = std::thread{[&]{
-      auto& stream = m_internal->sketch_log;
+    m_internal->sketch_log_grabber = std::thread{[&] {
+        auto& stream = m_internal->sketch_log;
 
-      constexpr size_t buf_len = 1024;
+        constexpr size_t buf_len = 1024;
 #if BOOST_OS_LINUX
-      std::array<char, buf_len> buf;
-      for(;;) {
-          const int fd = stream.pipe().native_source();
-          const auto count = ::read(fd, buf.data(), buf_len);
-          if (count == 0) // eof
-              break;
-          if (count == -1) {
-              if(errno == EINTR)
-                  continue;
-              else
-                  break;
-          }
-          [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
-          const auto existing = m_runtime_log.size();
-          m_runtime_log.resize(existing + count);
-          std::memcpy(m_runtime_log.data() + existing, buf.data(), count);
-      }
+        std::array<char, buf_len> buf;
+        for (;;) {
+            const int fd = stream.pipe().native_source();
+            const auto count = ::read(fd, buf.data(), buf_len);
+            if (count == 0) // eof
+                break;
+            if (count == -1) {
+                if (errno == EINTR)
+                    continue;
+                else
+                    break;
+            }
+            [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
+            const auto existing = m_runtime_log.size();
+            m_runtime_log.resize(existing + count);
+            std::memcpy(m_runtime_log.data() + existing, buf.data(), count);
+        }
 #else
-      std::string buf;
-      buf.reserve(buf_len);
-      while(stream.good()) {
-          const int head = stream.get();
-          if (head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
-              break;
-          buf.resize(stream.rdbuf()->in_avail());
-          const auto count = stream.readsome(buf.data(), buf.size());
-          [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
-          const auto existing = m_runtime_log.size();
-          m_runtime_log.resize(existing + count + 1);
-          m_runtime_log[existing] = static_cast<char>(head);
-          std::memcpy(m_runtime_log.data() + existing + 1, buf.data(), count);
-      }
+        std::string buf;
+        buf.reserve(buf_len);
+        while (stream.good()) {
+            const int head = stream.get();
+            if (head == std::remove_cvref_t<decltype(stream)>::traits_type::eof())
+                break;
+            buf.resize(stream.rdbuf()->in_avail());
+            const auto count = stream.readsome(buf.data(), buf.size());
+            [[maybe_unused]] std::lock_guard lk{m_runtime_log_mtx};
+            const auto existing = m_runtime_log.size();
+            m_runtime_log.resize(existing + count + 1);
+            m_runtime_log[existing] = static_cast<char>(head);
+            std::memcpy(m_runtime_log.data() + existing + 1, buf.data(), count);
+        }
 #endif
-      stream.pipe().close();
+        stream.pipe().close();
     }};
 }
 
@@ -280,7 +278,7 @@ void Board::do_sweep() noexcept {
     [[maybe_unused]] std::error_code ignored;
     in.sketch.wait(ignored);
     in.sketch = bp::child{}; // clear pid
-    if(in.sketch_log_grabber.joinable())
+    if (in.sketch_log_grabber.joinable())
         in.sketch_log_grabber.join();
 }
 
@@ -288,7 +286,7 @@ void Board::do_sweep() noexcept {
  * Reap a sketch and clean it up
  **/
 void Board::do_reap() noexcept {
-    if(!m_internal)
+    if (!m_internal)
         return;
     auto& in = *m_internal;
 
@@ -296,7 +294,7 @@ void Board::do_reap() noexcept {
     in.sketch.terminate(ignored);
     in.sketch.wait(ignored);
     in.sketch = bp::child{}; // clear pid
-    if(in.sketch_log_grabber.joinable()) {
+    if (in.sketch_log_grabber.joinable()) {
 #if BOOST_OS_LINUX
         ::pthread_cancel(in.sketch_log_grabber.native_handle());
         in.sketch_log.pipe().close();
@@ -305,4 +303,4 @@ void Board::do_reap() noexcept {
     }
 }
 
-}
+} // namespace smce

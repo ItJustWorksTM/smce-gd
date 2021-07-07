@@ -16,7 +16,6 @@
  *
  */
 
-
 #ifndef LIBSMCE_ARDRIVO_SD_H
 #define LIBSMCE_ARDRIVO_SD_H
 
@@ -25,23 +24,24 @@
 #include "SMCE_dll.hpp"
 #include "Stream.h"
 
+// clang-format off
 enum SMCE_FileOpenMode : std::uint8_t {
     FILE_READ = 1 << 0,
     FILE_WRITE = 1 << 1,
 };
-
+// clang-format on
 
 class SMCE__DLL_RT_API File : public Stream {
     friend class SDClass;
 
     struct Opaque;
 #if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4251)
+#    pragma warning(push)
+#    pragma warning(disable : 4251)
 #endif
     std::unique_ptr<Opaque> m_u;
 #if _MSC_VER
-#pragma warning(pop)
+#    pragma warning(pop)
 #endif
   public:
     File() noexcept = default;
@@ -52,7 +52,7 @@ class SMCE__DLL_RT_API File : public Stream {
     const char* name();
     unsigned long position(); // file cursor
     bool seek(unsigned long); // file cursor
-    unsigned long size(); // full size
+    unsigned long size();     // full size
     bool isDirectory();
     File openNextFile(SMCE_FileOpenMode mode = FILE_READ);
     void rewindDirectory();
@@ -76,6 +76,7 @@ class SMCE__DLL_RT_API SDClass {
     std::uint16_t m_cspin;
 
     SDClass() noexcept = default;
+
   public:
     bool begin(std::uint16_t cspin = 0);
     bool exists(const char* path);

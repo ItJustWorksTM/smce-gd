@@ -21,14 +21,15 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <cstdint>
 #include <cstdlib>
-#include <cmath>
 #include "SMCE_dll.hpp"
 
 #define PROGMEM
 #define F(str) str
 
+// clang-format off
 enum {
     LOW,
     HIGH,
@@ -39,6 +40,7 @@ enum {
     OUTPUT,
     INPUT_PULLUP = INPUT
 };
+// clang-format on
 
 using boolean = bool;
 using byte = std::uint8_t;
@@ -66,10 +68,13 @@ using std::abs;
 inline long map(long x, long in_min, long in_max, long out_min, long out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-using std::min;
 using std::max;
+using std::min;
 using std::pow;
-template <class T> T sq(T x) { return x * x; }
+template <class T>
+T sq(T x) {
+    return x * x;
+}
 using std::sqrt;
 
 //** Trigonometry **//
@@ -104,12 +109,12 @@ inline void randomSeed(unsigned long s) { std::srand(s); }
 #define bitSet(x, n) ((x) | bitn(n))
 #define bitWrite(x, n, b) ((x) ^ ((-(v) ^ (x)) & (1 << (n))))
 #define highByte(x) lowByte((x) >> 8)
-#define lowByte(x) ((x) & 0xFF)
+#define lowByte(x) (((x)) & 0xFF)
 
 void setup(); /// User-defined sketch setup
-void loop(); /// User-defined sketch loop
+void loop();  /// User-defined sketch loop
 
-#include "WString.h"
 #include "HardwareSerial.h"
+#include "WString.h"
 
 #endif // ARDUINO_H

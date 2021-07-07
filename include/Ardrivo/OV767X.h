@@ -22,6 +22,7 @@
 #include <cstddef>
 #include "SMCE_dll.hpp"
 
+// clang-format off
 enum SMCE_OV767_Format {
     RGB888,
     RGB444,
@@ -34,6 +35,7 @@ enum SMCE_OV767_Resolution {
     QCIF,
     QQVGA,
 };
+// clang-format on
 
 class SMCE__DLL_RT_API OV767X {
     std::size_t m_key = 0;

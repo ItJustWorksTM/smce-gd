@@ -35,6 +35,6 @@ class Uuid {
     static Uuid generate() noexcept;
 };
 
-}
+} // namespace smce
 
 #endif // SMCE_UUID_HPP

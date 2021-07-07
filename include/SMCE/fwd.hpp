@@ -31,6 +31,6 @@ class Uuid;
 
 /// \internal
 struct BoardData;
-}
+} // namespace smce
 
 #endif // SMCE_FWD_HPP

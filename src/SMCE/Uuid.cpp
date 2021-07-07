@@ -32,14 +32,14 @@ template <class T = std::mt19937_64, std::size_t N = T::state_size * sizeof(type
 T ProperlySeededRandomEngine() noexcept {
     std::random_device source;
     auto make_iter = [&](std::size_t n) {
-      return boost::make_transform_iterator(
-          boost::counting_iterator<std::size_t>(n), [&](std::size_t){ return source(); });
+        return boost::make_transform_iterator(boost::counting_iterator<std::size_t>(n),
+                                              [&](std::size_t) { return source(); });
     };
     std::seed_seq seeds(make_iter(0), make_iter((N - 1) / sizeof(source()) + 1));
     return T{seeds};
 }
 
-}
+} // namespace
 
 namespace smce {
 
@@ -64,4 +64,4 @@ Uuid Uuid::generate() noexcept {
     return ret;
 }
 
-}
+} // namespace smce

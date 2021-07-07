@@ -20,7 +20,7 @@
 #define SMCE_SHAREDBOARDDATA_HPP
 
 #include <boost/interprocess/managed_shared_memory.hpp>
-#include <SMCE/internal/BoardData.hpp>
+#include "SMCE/internal/BoardData.hpp"
 
 namespace smce {
 
@@ -30,6 +30,7 @@ class SharedBoardData {
     std::string m_name;
     BoardData* m_bd = nullptr;
     bool m_master = false;
+
   public:
     SharedBoardData() = default;
     ~SharedBoardData();
@@ -40,6 +41,6 @@ class SharedBoardData {
     BoardData* get_board_data() noexcept { return m_bd; }
 };
 
-}
+} // namespace smce
 
 #endif // SMCE_SHAREDBOARDDATA_HPP

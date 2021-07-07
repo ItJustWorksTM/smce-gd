@@ -5,10 +5,10 @@
 #include <future>
 #include <iostream>
 #include <thread>
-#include <SMCE/Board.hpp>
-#include <SMCE/Sketch.hpp>
-#include <SMCE/Toolchain.hpp>
 #include <catch2/catch.hpp>
+#include "SMCE/Board.hpp"
+#include "SMCE/Sketch.hpp"
+#include "SMCE/Toolchain.hpp"
 
 #define SMCE_PATH SMCE_TEST_DIR "/smce_root"
 #define SKETCHES_PATH SMCE_TEST_DIR "/sketches/"
@@ -35,9 +35,9 @@ TEST_CASE("ExecutionContext valid", "[ExecutionContext]") {
 TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
-    smce::Sketch sk{SKETCHES_PATH "noop", { .fqbn = "arduino:avr:nano" }};
+    smce::Sketch sk{SKETCHES_PATH "noop", {.fqbn = "arduino:avr:nano"}};
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
     REQUIRE(sk.is_compiled());
@@ -69,13 +69,13 @@ TEST_CASE("BoardRunner contracts", "[BoardRunner]") {
 TEST_CASE("BoardRunner exit_notify", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
-    smce::Sketch sk{SKETCHES_PATH "uncaught", { .fqbn = "arduino:avr:nano" }};
+    smce::Sketch sk{SKETCHES_PATH "uncaught", {.fqbn = "arduino:avr:nano"}};
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
     std::promise<int> ex;
-    smce::Board br{[&](int ec){ ex.set_value(ec); }};
+    smce::Board br{[&](int ec) { ex.set_value(ec); }};
     REQUIRE(br.configure({}));
     REQUIRE(br.attach_sketch(sk));
     REQUIRE(br.start());
@@ -92,50 +92,50 @@ TEST_CASE("BoardRunner exit_notify", "[BoardRunner]") {
 template <class Pin, class Value, class Duration>
 void test_pin_delayable(Pin pin, Value expected_value, std::size_t ticks, Duration tick_length) {
     do {
-        if(ticks-- == 0)
+        if (ticks-- == 0)
             FAIL("Timed out pin-wait");
         std::this_thread::sleep_for(tick_length);
-    } while(pin.read() != expected_value);
+    } while (pin.read() != expected_value);
 }
 
 TEST_CASE("BoardView GPIO", "[BoardView]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
-    smce::Sketch sk{SKETCHES_PATH "pins", { .fqbn = "arduino:avr:nano" }};
+    smce::Sketch sk{SKETCHES_PATH "pins", {.fqbn = "arduino:avr:nano"}};
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
     smce::Board br{};
-    REQUIRE(br.configure(
-      {
+    // clang-format off
+    REQUIRE(br.configure({
         .pins = {0, 2},
         .gpio_drivers = {
-          smce::BoardConfig::GpioDrivers {
-            .pin_id = 0,
-            .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
-                .board_read = true,
-                .board_write = false
+            smce::BoardConfig::GpioDrivers {
+                .pin_id = 0,
+                .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
+                    .board_read = true,
+                    .board_write = false
+                },
+                .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{
+                    .board_read = true,
+                    .board_write = false
+                }
             },
-            .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{
-              .board_read = true,
-              .board_write = false
-            }
-          },
-          smce::BoardConfig::GpioDrivers {
-              .pin_id = 2,
-              .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
-                  .board_read = false,
-                  .board_write = true
-              },
-              .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{
-                  .board_read = false,
-                  .board_write = true
-              }
-          },
+            smce::BoardConfig::GpioDrivers {
+                .pin_id = 2,
+                .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
+                    .board_read = false,
+                    .board_write = true
+                },
+                .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{
+                    .board_read = false,
+                    .board_write = true
+                }
+            },
         }
-      }
-    ));
+    }));
+    // clang-format on
     REQUIRE(br.attach_sketch(sk));
     REQUIRE(br.start());
     auto bv = br.view();
@@ -158,15 +158,13 @@ TEST_CASE("BoardView GPIO", "[BoardView]") {
 TEST_CASE("BoardView UART", "[BoardView]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
-    smce::Sketch sk{SKETCHES_PATH "uart", { .fqbn = "arduino:avr:nano" }};
+    smce::Sketch sk{SKETCHES_PATH "uart", {.fqbn = "arduino:avr:nano"}};
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
     smce::Board br{};
-    REQUIRE(br.configure({
-       .uart_channels = {{}}
-    }));
+    REQUIRE(br.configure({.uart_channels = {{}}}));
     REQUIRE(br.attach_sketch(sk));
     REQUIRE(br.start());
     auto bv = br.view();
@@ -186,20 +184,20 @@ TEST_CASE("BoardView UART", "[BoardView]") {
     uart0.rx().write(out);
     int ticks = 16'000;
     do {
-        if(ticks-- == 0)
+        if (ticks-- == 0)
             FAIL();
         std::this_thread::sleep_for(1ms);
-    } while(uart0.tx().read(in) != in.size());
+    } while (uart0.tx().read(in) != in.size());
     REQUIRE(in == out);
 
     std::reverse(out.begin(), out.end());
     uart0.rx().write(out);
     ticks = 16'000;
     do {
-        if(ticks-- == 0)
+        if (ticks-- == 0)
             FAIL();
         std::this_thread::sleep_for(1ms);
-    } while(uart0.tx().read(in) != in.size());
+    } while (uart0.tx().read(in) != in.size());
     REQUIRE(in == out);
 
     REQUIRE(br.stop());
@@ -208,9 +206,9 @@ TEST_CASE("BoardView UART", "[BoardView]") {
 TEST_CASE("Mixed INO/C++ sources", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
-    smce::Sketch sk{SKETCHES_PATH "with_cxx", { .fqbn = "arduino:avr:nano" }};
+    smce::Sketch sk{SKETCHES_PATH "with_cxx", {.fqbn = "arduino:avr:nano"}};
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
 }
@@ -220,12 +218,14 @@ TEST_CASE("Mixed INO/C++ sources", "[BoardRunner]") {
 TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
+    // clang-format off
     smce::Sketch sk{SKETCHES_PATH "remote_pp", {
-       .fqbn = "arduino:avr:nano",
-       .preproc_libs = { smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""} }
+        .fqbn = "arduino:avr:nano",
+        .preproc_libs = { smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""} }
     }};
+    // clang-format on
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
 }
@@ -233,15 +233,17 @@ TEST_CASE("BoardRunner remote preproc lib", "[BoardRunner]") {
 TEST_CASE("WiFi intended use", "[WiFi]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
+    // clang-format off
     smce::Sketch sk{SKETCHES_PATH "wifi", {
         .fqbn = "arduino:avr:nano",
         .preproc_libs = {
-           smce::SketchConfig::RemoteArduinoLibrary{"WiFi", ""},
-           smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}
+            smce::SketchConfig::RemoteArduinoLibrary{"WiFi", ""},
+            smce::SketchConfig::RemoteArduinoLibrary{"MQTT", ""}
         }
     }};
+    // clang-format on
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
 }
@@ -251,15 +253,18 @@ TEST_CASE("WiFi intended use", "[WiFi]") {
 TEST_CASE("Patch lib", "[BoardRunner]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
+    // clang-format off
     smce::Sketch sk{SKETCHES_PATH "patch", {
         .fqbn = "arduino:avr:nano",
         .complink_libs = { smce::SketchConfig::LocalArduinoLibrary{PATCHES_PATH "ESP32_analogRewrite", "ESP32 AnalogWrite"} }
     }};
+    // clang-format on
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << tc.build_log().second;
     REQUIRE_FALSE(ec);
     smce::Board br{};
+    // clang-format off
     REQUIRE(br.configure({
         .pins = {0},
         .gpio_drivers = {
@@ -272,6 +277,7 @@ TEST_CASE("Patch lib", "[BoardRunner]") {
             }
         }
     }));
+    // clang-format on
     REQUIRE(br.attach_sketch(sk));
     REQUIRE(br.start());
     auto bv = br.view();
@@ -285,34 +291,37 @@ TEST_CASE("Patch lib", "[BoardRunner]") {
 TEST_CASE("SD polyfill", "[SD File]") {
     smce::Toolchain tc{SMCE_PATH};
     REQUIRE(!tc.check_suitable_environment());
+    // clang-format off
     smce::Sketch sk{SKETCHES_PATH "sd_fs", {
         .fqbn = "arduino:avr:nano",
         .preproc_libs = { smce::SketchConfig::RemoteArduinoLibrary{"SD", ""} }
     }};
+    // clang-format on
     const auto ec = tc.compile(sk);
-    if(ec)
+    if (ec)
         std::cerr << ec.message() << '\n' << tc.build_log().second << std::endl;
     REQUIRE_FALSE(ec);
 
-
     smce::Board br{};
+    // clang-format off
     REQUIRE(br.configure({
-         .pins = {0},
-         .gpio_drivers = {
-             smce::BoardConfig::GpioDrivers{
-                 .pin_id = 0,
-                 .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
-                     .board_read = true,
-                     .board_write = true
-                 }
-             }
-         },
+        .pins = {0},
+        .gpio_drivers = {
+            smce::BoardConfig::GpioDrivers{
+                .pin_id = 0,
+                .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{
+                    .board_read = true,
+                    .board_write = true
+                }
+            }
+        },
         .sd_cards = {
             smce::BoardConfig::SecureDigitalStorage{ .root_dir = STORAGE_PATH }
         }
-     }));
+    }));
+    // clang-format on
 
-    if(std::filesystem::exists(STORAGE_PATH))
+    if (std::filesystem::exists(STORAGE_PATH))
         std::filesystem::remove_all(STORAGE_PATH);
     std::filesystem::create_directory(STORAGE_PATH);
     REQUIRE(br.attach_sketch(sk));

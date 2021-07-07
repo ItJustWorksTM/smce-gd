@@ -40,12 +40,12 @@ class SMCE__DLL_RT_API String {
     constexpr static ConvTag conv_tag{};
 
 #if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4251)
+#    pragma warning(push)
+#    pragma warning(disable : 4251)
 #endif
     std::string m_u;
 #if _MSC_VER
-#pragma warning(pop)
+#    pragma warning(pop)
 #endif
 
     String(std::string u);
@@ -53,7 +53,7 @@ class SMCE__DLL_RT_API String {
     String(ConvTag, std::uintmax_t val, SMCE__BIN);
     String(ConvTag, std::uintmax_t val, SMCE__HEX);
 
-public:
+  public:
 #if !SMCE__COMPILING_USERCODE
     constexpr static InternalTag internal_tag{};
 #endif
@@ -72,7 +72,7 @@ public:
     explicit String(char c);
 
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
-    explicit String(T val) : m_u{std::to_string(val)} { }
+    explicit String(T val) : m_u{std::to_string(val)} {}
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
     String(T val, SMCE__BIN) : String{conv_tag, SMCE__bit_cast<typename std::make_unsigned<T>::type>(val), BIN} {}
     template <class T, class = typename std::enable_if<std::is_integral<T>::value>::type>
@@ -81,7 +81,7 @@ public:
     String(T val, SMCE__HEX) : String{conv_tag, SMCE__bit_cast<typename std::make_unsigned<T>::type>(val), HEX} {}
 
     template <class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-    explicit String(T val, [[maybe_unused]] int precision = -1) : m_u{std::to_string(val)}  {}
+    explicit String(T val, [[maybe_unused]] int precision = -1) : m_u{std::to_string(val)} {}
 
     [[nodiscard]] const char* c_str() const noexcept;
     [[nodiscard]] std::size_t length() const noexcept;

@@ -23,11 +23,11 @@
 #include <boost/predef.h>
 #include <boost/process.hpp>
 #if BOOST_OS_WINDOWS
-#include <boost/process/windows.hpp>
+#    include <boost/process/windows.hpp>
 #endif
-#include <SMCE/internal/utils.hpp>
 #include <SMCE/Sketch.hpp>
 #include <SMCE/SketchConf.hpp>
+#include <SMCE/internal/utils.hpp>
 
 using namespace std::literals;
 
@@ -36,27 +36,33 @@ namespace bp = boost::process;
 namespace std {
 template <>
 struct is_error_code_enum<smce::toolchain_error> : std::bool_constant<true> {};
-} // std
+} // namespace std
 
 namespace smce {
 namespace detail {
 
 struct toolchain_error_category : public std::error_category {
-public:
-    const char* name() const noexcept override {
-        return "smce.toolchain";
-    }
+  public:
+    const char* name() const noexcept override { return "smce.toolchain"; }
 
     std::string message(int ev) const override {
-        switch(static_cast<toolchain_error>(ev)) {
-        case toolchain_error::resdir_absent: return "Resource directory does not exist";
-        case toolchain_error::resdir_empty: return "Resource directory empty";
-        case toolchain_error::resdir_file: return "Resource directory is a file";
-        case toolchain_error::cmake_not_found: return "CMake not found in PATH";
-        case toolchain_error::sketch_invalid: return "Sketch path is invalid";
-        case toolchain_error::configure_failed: return "CMake configure failed";
-        case toolchain_error::build_failed: return "CMake build failed";
-        default: return "smce.toolchain error";
+        switch (static_cast<toolchain_error>(ev)) {
+        case toolchain_error::resdir_absent:
+            return "Resource directory does not exist";
+        case toolchain_error::resdir_empty:
+            return "Resource directory empty";
+        case toolchain_error::resdir_file:
+            return "Resource directory is a file";
+        case toolchain_error::cmake_not_found:
+            return "CMake not found in PATH";
+        case toolchain_error::sketch_invalid:
+            return "Sketch path is invalid";
+        case toolchain_error::configure_failed:
+            return "CMake configure failed";
+        case toolchain_error::build_failed:
+            return "CMake build failed";
+        default:
+            return "smce.toolchain error";
         }
     }
 
@@ -78,12 +84,11 @@ const std::error_category& get_exec_ctx_error_category() noexcept {
     return cat;
 }
 
-} // detail
+} // namespace detail
 
-inline std::error_code make_error_code(toolchain_error ev){
-    return std::error_code{
-        static_cast<std::underlying_type<toolchain_error>::type>(ev),
-        detail::get_exec_ctx_error_category()};
+inline std::error_code make_error_code(toolchain_error ev) {
+    return std::error_code{static_cast<std::underlying_type<toolchain_error>::type>(ev),
+                           detail::get_exec_ctx_error_category()};
 }
 
 struct ProcessedLibs {
@@ -95,46 +100,54 @@ struct ProcessedLibs {
 ProcessedLibs process_libraries(const SketchConfig& skonf) noexcept {
     ProcessedLibs ret;
     for (const auto& lib : skonf.preproc_libs) {
+        // clang-format off
         std::visit(Visitor{
-            [&](const SketchConfig::RemoteArduinoLibrary& lib){
-              ret.pp_remote_arg += lib.name;
-              if(!lib.version.empty())
-                  ret.pp_remote_arg += '@' + lib.version;
-              ret.pp_remote_arg += ';';
+            [&](const SketchConfig::RemoteArduinoLibrary& lib) {
+                ret.pp_remote_arg += lib.name;
+                if (!lib.version.empty())
+                    ret.pp_remote_arg += '@' + lib.version;
+                ret.pp_remote_arg += ';';
             },
             [](const auto&) {}
-        }, lib);
+       }, lib);
+        // clang-format on
     }
 
     for (const auto& lib : skonf.complink_libs) {
+        // clang-format off
         std::visit(Visitor{
-            [&](const SketchConfig::RemoteArduinoLibrary& lib){
-              ret.cl_remote_arg += lib.name;
-              if(!lib.version.empty())
-                  ret.cl_remote_arg += '@' + lib.version;
-              ret.cl_remote_arg += ';';
+            [&](const SketchConfig::RemoteArduinoLibrary& lib) {
+                ret.cl_remote_arg += lib.name;
+                if (!lib.version.empty())
+                    ret.cl_remote_arg += '@' + lib.version;
+                ret.cl_remote_arg += ';';
             },
-            [&](const SketchConfig::LocalArduinoLibrary& lib){
-              if(lib.patch_for.empty()) {
-                  ret.cl_local_arg += lib.root_dir.string();
-                  ret.cl_local_arg += ';';
-                  return;
-              }
-              ret.cl_remote_arg += lib.patch_for;
-              ret.cl_remote_arg += ' ';
-              ret.cl_patch_arg += lib.root_dir.string();
-              ret.cl_patch_arg += '|';
-              ret.cl_patch_arg += lib.patch_for;
-              ret.cl_patch_arg += ';';
+            [&](const SketchConfig::LocalArduinoLibrary& lib) {
+                if (lib.patch_for.empty()) {
+                    ret.cl_local_arg += lib.root_dir.string();
+                    ret.cl_local_arg += ';';
+                    return;
+                }
+                ret.cl_remote_arg += lib.patch_for;
+                ret.cl_remote_arg += ' ';
+                ret.cl_patch_arg += lib.root_dir.string();
+                ret.cl_patch_arg += '|';
+                ret.cl_patch_arg += lib.patch_for;
+                ret.cl_patch_arg += ';';
             },
             [](const SketchConfig::FreestandingLibrary&) {}
         }, lib);
+        // clang-format on
     }
 
-    if(ret.pp_remote_arg.back() == ';') ret.pp_remote_arg.pop_back();
-    if(ret.cl_remote_arg.back() == ';') ret.cl_remote_arg.pop_back();
-    if(ret.cl_local_arg.back() == ';') ret.cl_local_arg.pop_back();
-    if(ret.cl_patch_arg.back() == ';') ret.cl_patch_arg.pop_back();
+    if (ret.pp_remote_arg.back() == ';')
+        ret.pp_remote_arg.pop_back();
+    if (ret.cl_remote_arg.back() == ';')
+        ret.cl_remote_arg.pop_back();
+    if (ret.cl_local_arg.back() == ';')
+        ret.cl_local_arg.pop_back();
+    if (ret.cl_patch_arg.back() == ';')
+        ret.cl_patch_arg.pop_back();
 
     return ret;
 }
@@ -146,14 +159,16 @@ Toolchain::Toolchain(stdfs::path resources_dir) noexcept : m_res_dir{std::move(r
 std::error_code Toolchain::do_configure(Sketch& sketch) noexcept {
 #if !BOOST_OS_WINDOWS
     const char* const generator_override = std::getenv("CMAKE_GENERATOR");
-    const char* const generator = generator_override ? generator_override : (!bp::search_path("ninja").empty() ? "Ninja" : "");
+    const char* const generator =
+        generator_override ? generator_override : (!bp::search_path("ninja").empty() ? "Ninja" : "");
 #endif
 
     ProcessedLibs libs = process_libraries(sketch.m_conf);
 
     namespace bp = boost::process;
     bp::ipstream cmake_conf_out;
-    auto cmake_config = bp::child(
+    // clang-format off
+    auto cmake_config = bp::child{
         m_cmake_path,
 #if !BOOST_OS_WINDOWS
         bp::env["CMAKE_GENERATOR"] = generator,
@@ -169,9 +184,10 @@ std::error_code Toolchain::do_configure(Sketch& sketch) noexcept {
         m_res_dir.string() + "/RtResources/SMCE/share/Scripts/ConfigureSketch.cmake",
         (bp::std_out & bp::std_err) > cmake_conf_out
 #if BOOST_OS_WINDOWS
-       ,bp::windows::create_no_window
+       , bp::windows::create_no_window
 #endif
-    );
+    };
+    // clang-format on
 
     {
         std::string line;
@@ -205,6 +221,7 @@ std::error_code Toolchain::do_configure(Sketch& sketch) noexcept {
 
 std::error_code Toolchain::do_build(Sketch& sketch) noexcept {
     bp::ipstream cmake_build_out;
+    // clang-format off
     auto cmake_build = bp::child{
 #if BOOST_OS_WINDOWS
         bp::env["MSBUILDDISABLENODEREUSE"] = "1", // MSBuild "feature" which uses your child processes as potential deamons, forever
@@ -214,9 +231,10 @@ std::error_code Toolchain::do_build(Sketch& sketch) noexcept {
         "--config", "Release",
         (bp::std_out & bp::std_err) > cmake_build_out
 #if BOOST_OS_WINDOWS
-       ,bp::windows::create_no_window
+       , bp::windows::create_no_window
 #endif
     };
+    // clang-format on
 
     for (std::string line; std::getline(cmake_build_out, line);) {
         [[maybe_unused]] std::lock_guard lk{m_build_log_mtx};
@@ -224,90 +242,93 @@ std::error_code Toolchain::do_build(Sketch& sketch) noexcept {
     }
 
     cmake_build.join();
-    if(cmake_build.native_exit_code() != 0)
+    if (cmake_build.native_exit_code() != 0)
         return toolchain_error::build_failed;
 
     std::error_code ec;
     const bool binary_exists = stdfs::exists(sketch.m_executable, ec);
-    if(ec)
+    if (ec)
         return ec;
-    if(!binary_exists)
+    if (!binary_exists)
         return toolchain_error::build_failed;
     return {};
 }
 
 [[nodiscard]] std::error_code Toolchain::check_suitable_environment() noexcept {
-    if(std::error_code ec; !stdfs::exists(m_res_dir, ec))
+    if (std::error_code ec; !stdfs::exists(m_res_dir, ec))
         return toolchain_error::resdir_absent;
-    else if(ec)
+    else if (ec)
         return ec;
 
-    if(std::error_code ec; !stdfs::is_directory(m_res_dir, ec))
+    if (std::error_code ec; !stdfs::is_directory(m_res_dir, ec))
         return toolchain_error::resdir_file;
-    else if(ec)
+    else if (ec)
         return ec;
 
-    if(std::error_code ec; stdfs::is_empty(m_res_dir, ec))
+    if (std::error_code ec; stdfs::is_empty(m_res_dir, ec))
         return toolchain_error::resdir_empty;
-    else if(ec)
+    else if (ec)
         return ec;
 
-    if(m_cmake_path != "cmake") {
-        if(std::error_code ec; stdfs::is_empty(m_cmake_path, ec))
+    if (m_cmake_path != "cmake") {
+        if (std::error_code ec; stdfs::is_empty(m_cmake_path, ec))
             return toolchain_error::cmake_not_found;
-        else if(ec)
+        else if (ec)
             return ec;
     } else {
         m_cmake_path = bp::search_path(m_cmake_path).string();
-        if(m_cmake_path.empty())
+        if (m_cmake_path.empty())
             return toolchain_error::cmake_not_found;
     }
     bp::ipstream cmake_out;
+    // clang-format off
     bp::child cmake_child{
         m_cmake_path,
         "--version",
         bp::std_out > cmake_out
 #if BOOST_OS_WINDOWS
-       ,bp::windows::create_no_window
+        , bp::windows::create_no_window
 #endif
     };
+    // clang-format on
+
     std::string line;
     while (cmake_child.running() && std::getline(cmake_out, line) && !line.empty()) {
-        if(!line.starts_with("cmake")) {
+        if (!line.starts_with("cmake")) {
             cmake_child.join();
             return toolchain_error::cmake_unknown_output;
         }
         break;
     }
     cmake_child.join();
-    if(cmake_child.native_exit_code() != 0)
+    if (cmake_child.native_exit_code() != 0)
         return toolchain_error::cmake_failing;
+
     return {};
 }
-
 
 std::error_code Toolchain::compile(Sketch& sketch) noexcept {
     sketch.m_built = false;
     std::error_code ec;
 
     const bool source_exists = stdfs::exists(sketch.m_source, ec);
-    if(ec)
+    if (ec)
         return ec;
-    if(!source_exists)
+    if (!source_exists)
         return toolchain_error::sketch_invalid;
 
-    if(sketch.m_conf.fqbn.empty())
+    if (sketch.m_conf.fqbn.empty())
         return toolchain_error::sketch_invalid;
 
     ec = do_configure(sketch);
-    if(ec)
+    if (ec)
         return ec;
     ec = do_build(sketch);
-    if(ec)
+    if (ec)
         return ec;
 
     sketch.m_built = true;
     return {};
 }
 
-}
+} // namespace smce

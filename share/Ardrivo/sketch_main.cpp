@@ -21,6 +21,4 @@
 extern void setup();
 extern void loop();
 
-int main(int argc, char** argv) {
-    return SMCE__main(argc, argv, setup, loop);
-}
+int main(int argc, char** argv) { return SMCE__main(argc, argv, setup, loop); }

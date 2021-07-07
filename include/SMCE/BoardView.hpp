@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <span>
 #include <string_view>
-#include <SMCE/fwd.hpp>
+#include "SMCE/fwd.hpp"
 
 namespace smce {
 
@@ -34,6 +34,7 @@ class VirtualAnalogDriver {
     BoardData* m_bdat;
     std::size_t m_idx;
     constexpr VirtualAnalogDriver(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_idx{idx} {}
+
   public:
     /// Object validity check
     [[nodiscard]] bool exists() noexcept;
@@ -48,6 +49,7 @@ class VirtualDigitalDriver {
     BoardData* m_bdat;
     std::size_t m_idx;
     constexpr VirtualDigitalDriver(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_idx{idx} {}
+
   public:
     /// Object validity check
     [[nodiscard]] bool exists() noexcept;
@@ -62,8 +64,14 @@ class VirtualPin {
     BoardData* m_bdat;
     std::size_t m_idx;
     constexpr VirtualPin(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_idx{idx} {}
+
   public:
-    enum class DataDirection { in, out };
+    // clang-format off
+    enum class DataDirection {
+        in,
+        out
+    };
+    // clang-format on
     /// Object validity check
     [[nodiscard]] bool exists() noexcept;
     [[nodiscard]] bool locked() noexcept;
@@ -78,22 +86,27 @@ class VirtualPins {
     friend BoardView;
     BoardData* m_bdat;
     explicit VirtualPins(BoardData* bdat) : m_bdat{bdat} {}
+
   public:
-//  struct Iterator;
+    // struct Iterator;
 
     [[nodiscard]] VirtualPin operator[](std::size_t idx) noexcept;
-//  [[nodiscard]] Iterator begin() noexcept;
-//  [[nodiscard]] Iterator end() noexcept;
-//  [[nodiscard]] std::size_t size() noexcept;
+    // [[nodiscard]] Iterator begin() noexcept;
+    // [[nodiscard]] Iterator end() noexcept;
+    // [[nodiscard]] std::size_t size() noexcept;
 };
 
 class VirtualUartBuffer {
     friend class VirtualUart;
+    // clang-format off
     enum class Direction { rx, tx };
+    // clang-format on
     BoardData* m_bdat;
     std::size_t m_index;
     Direction m_dir;
-    constexpr VirtualUartBuffer(BoardData* bdat, std::size_t idx, Direction dir) : m_bdat{bdat}, m_index{idx}, m_dir{dir} {}
+    constexpr VirtualUartBuffer(BoardData* bdat, std::size_t idx, Direction dir)
+        : m_bdat{bdat}, m_index{idx}, m_dir{dir} {}
+
   public:
     /// Object validity check
     [[nodiscard]] bool exists() noexcept;
@@ -109,6 +122,7 @@ class VirtualUart {
     BoardData* m_bdat;
     std::size_t m_index;
     constexpr VirtualUart(BoardData* bdat, std::size_t idx) : m_bdat{bdat}, m_index{idx} {}
+
   public:
     /// Object validity check
     [[nodiscard]] bool exists() noexcept;
@@ -122,9 +136,8 @@ class VirtualUarts {
     friend BoardView;
     BoardData* m_bdat;
     constexpr VirtualUarts() noexcept = default;
-    constexpr explicit VirtualUarts(BoardData* bdat)
-        : m_bdat{bdat}
-    {}
+    constexpr explicit VirtualUarts(BoardData* bdat) : m_bdat{bdat} {}
+
   public:
     class Iterator;
     friend Iterator;
@@ -148,12 +161,15 @@ class FrameBuffer {
     std::size_t m_idx;
 
     constexpr FrameBuffer(BoardData* bdat, std::size_t idx) noexcept : m_bdat{bdat}, m_idx{idx} {}
+
   public:
+    // clang-format off
     /// Data direction
     enum struct Direction {
         in, /// host-to-board (camera)
         out, /// board-to-host (screen)
     };
+    // clang-format on
 
     /// Object validity check
     [[nodiscard]] bool exists() noexcept;
@@ -198,6 +214,7 @@ class FrameBuffers {
     BoardData* m_bdat;
     constexpr FrameBuffers() noexcept = default;
     constexpr explicit FrameBuffers(BoardData* bdat) noexcept : m_bdat{bdat} {}
+
   public:
     constexpr FrameBuffers(const FrameBuffers&) noexcept = default;
     constexpr FrameBuffers& operator=(const FrameBuffers&) noexcept = default;
@@ -211,23 +228,24 @@ class FrameBuffers {
  **/
 class BoardView {
     BoardData* m_bdat{};
+
   public:
+    // clang-format off
     enum class Link {
         UART,
         SPI,
         I2C,
     };
+    // clang-format on
 
-    VirtualPins pins{m_bdat}; /// GPIO pins
+    VirtualPins pins{m_bdat};           /// GPIO pins
     VirtualUarts uart_channels{m_bdat}; /// UART channels
-//  VirtualI2cs i2c_buses;
-//  VirtualOpaqueDevices opaque_devices;
+    // VirtualI2cs i2c_buses;
+    // VirtualOpaqueDevices opaque_devices;
     FrameBuffers frame_buffers{m_bdat}; /// Camera/Screen frame-buffers
 
     constexpr BoardView() noexcept = default;
-    explicit BoardView(BoardData& bdat)
-        : m_bdat{&bdat}
-    {}
+    explicit BoardView(BoardData& bdat) : m_bdat{&bdat} {}
 
     /// Object validity check
     [[nodiscard]] bool valid() noexcept { return m_bdat; }
@@ -242,12 +260,20 @@ class VirtualUarts::Iterator {
     std::size_t m_index = 0;
     constexpr Iterator() noexcept = default;
     constexpr explicit Iterator(const VirtualUarts& vu, std::size_t idx = 0) noexcept : m_vu{vu}, m_index{idx} {}
+
   public:
     [[nodiscard]] VirtualUart operator*() noexcept;
-    constexpr Iterator& operator++() noexcept { ++m_index; return *this; }
-    inline Iterator operator++(int) noexcept { const auto ret = *this; ++m_index; return ret; }
+    constexpr Iterator& operator++() noexcept {
+        ++m_index;
+        return *this;
+    }
+    inline Iterator operator++(int) noexcept {
+        const auto ret = *this;
+        ++m_index;
+        return ret;
+    }
 };
 
-}
+} // namespace smce
 
 #endif // SMCE_BOARDVIEW_HPP

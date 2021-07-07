@@ -46,25 +46,37 @@ class SMCE__DLL_RT_API Print {
     virtual int availableForWrite();
 
     template <std::size_t N>
-    std::size_t print(const char (&lit)[N]) { return write(lit, N); }
+    std::size_t print(const char (&lit)[N]) {
+        return write(lit, N);
+    }
     std::size_t print(const String& s);
     std::size_t print(const char* czstr);
     std::size_t print(char c);
     template <class Int, class Base = SMCE__DEC, class = typename std::enable_if<std::is_integral<Int>::value>::type>
-    inline std::size_t print(Int val, Base = DEC) { return print(String{val, Base{}}); }
+    inline std::size_t print(Int val, Base = DEC) {
+        return print(String{val, Base{}});
+    }
     template <class Fp, class = typename std::enable_if<std::is_floating_point<Fp>::value>::type>
-    inline std::size_t print(Fp val, int prec = 2) { return print(String{val, prec}); }
+    inline std::size_t print(Fp val, int prec = 2) {
+        return print(String{val, prec});
+    }
     // std::size_t print(const struct Printable&); // FIXME: implement base Printable
 
     template <std::size_t N>
-    std::size_t println(const char (&lit)[N]) { return write(lit, N) + println(); }
+    std::size_t println(const char (&lit)[N]) {
+        return write(lit, N) + println();
+    }
     std::size_t println(const String& s);
     std::size_t println(const char* czstr);
     std::size_t println(char c);
     template <class Int, class Base = SMCE__DEC, class = typename std::enable_if<std::is_integral<Int>::value>::type>
-    std::size_t println(Int val, Base = DEC) { return print(val, Base{}) + println(); }
+    std::size_t println(Int val, Base = DEC) {
+        return print(val, Base{}) + println();
+    }
     template <class Fp, class = typename std::enable_if<std::is_floating_point<Fp>::value>::type>
-    inline std::size_t println(Fp val, int prec = 2) { return print(val, prec) + println(); }
+    inline std::size_t println(Fp val, int prec = 2) {
+        return print(val, prec) + println();
+    }
     // inline std::size_t println(const Printable& p) { return print(p) + println(); }
     std::size_t println();
 

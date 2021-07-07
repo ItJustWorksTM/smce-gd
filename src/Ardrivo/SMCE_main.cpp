@@ -18,9 +18,9 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <SMCE.hpp>
-#include <SMCE/BoardView.hpp>
-#include <SMCE/internal/SharedBoardData.hpp>
+#include "SMCE/BoardView.hpp"
+#include "SMCE/internal/SharedBoardData.hpp"
+#include "SMCE.hpp"
 
 namespace smce {
 
@@ -37,7 +37,7 @@ void maybe_init() {
     board_view = smce::BoardView{*sbd.get_board_data()};
 }
 
-}
+} // namespace smce
 
 int SMCE__main([[maybe_unused]] int argc, [[maybe_unused]] char** argv, SetupSig* setup, LoopSig* loop) noexcept try {
     smce::maybe_init();

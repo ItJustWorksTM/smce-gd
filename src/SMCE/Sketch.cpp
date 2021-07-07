@@ -27,4 +27,4 @@ Sketch::~Sketch() {
     }
 }
 
-}
+} // namespace smce

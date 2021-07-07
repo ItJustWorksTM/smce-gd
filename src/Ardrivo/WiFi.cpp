@@ -19,5 +19,4 @@
 #include "SMCE_dll.hpp"
 #include "WiFi.h"
 
-SMCE__DLL_API
-WiFiClass WiFi;
+SMCE__DLL_API WiFiClass WiFi;

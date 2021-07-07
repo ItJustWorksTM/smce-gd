@@ -25,22 +25,19 @@ using ShmVoidAllocator = bip::allocator<void, ShmSegMan>;
 
 namespace smce {
 
-SharedBoardData::~SharedBoardData() {
-    reset();
-}
+SharedBoardData::~SharedBoardData() { reset(); }
 
 bool SharedBoardData::configure(std::string_view seg_name, const BoardConfig& bconf) {
     reset();
     m_master = true;
     m_name = seg_name;
-    m_shm = bip::managed_shared_memory(bip::create_only, m_name.c_str(), 2*1024*1024);
-    m_bd = m_shm.construct<BoardData>("BoardData")
-        (ShmVoidAllocator{m_shm.get_segment_manager()}, bconf);
+    m_shm = bip::managed_shared_memory{bip::create_only, m_name.c_str(), 2 * 1024 * 1024};
+    m_bd = m_shm.construct<BoardData>("BoardData")(ShmVoidAllocator{m_shm.get_segment_manager()}, bconf);
     return true;
 }
 
 bool SharedBoardData::open_as_child(const char* seg_name) {
-    if(m_bd || m_master)
+    if (m_bd || m_master)
         return false;
     m_name = seg_name;
     m_shm = bip::managed_shared_memory(bip::open_only, seg_name);
@@ -49,13 +46,13 @@ bool SharedBoardData::open_as_child(const char* seg_name) {
 }
 
 void SharedBoardData::reset() {
-    if(m_bd) {
+    if (m_bd) {
         if (auto [ptr, off] = m_shm.find<BoardData>("BoardData"); ptr)
             m_shm.destroy<BoardData>("BoardData");
     }
-    if(m_master)
+    if (m_master)
         bip::shared_memory_object::remove(m_name.c_str());
     m_master = false;
 }
 
-}
+} // namespace smce
