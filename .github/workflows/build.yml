@@ -515,3 +515,71 @@ jobs:
         with:
           name: libSMCE-DEB-${{ matrix.os.name }}${{ matrix.os.codename }}
           path: build/*.deb
+  package-rpm:
+    name: Package per-distro RPMs (${{ matrix.os.name }} ${{ matrix.os.codename }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - name: Fedora
+            codename: 33
+            image: fedora:33
+            pkg_mgr: dnf
+            profile: Fedora33
+          - name: Fedora
+            codename: 34
+            image: fedora:34
+            pkg_mgr: dnf
+            profile: FedoraHost
+          - name: Fedora
+            codename: Rawhide
+            image: fedora:rawhide
+            pkg_mgr: dnf
+            profile: FedoraHost
+          - name: openSUSE
+            codename: Tumbleweed
+            image: opensuse/tumbleweed
+            pkg_mgr: zypper --no-gpg-checks
+            profile: FedoraHost
+          - name: OpenMandriva
+            codename: Lx4.2
+            image: openmandriva/4.2
+            pkg_mgr: dnf
+            profile: FedoraHost
+    container: ${{ matrix.os.image }}
+    steps:
+       - name: Setup workdir
+         run: mkdir /tmp/wk && cd /tmp/wk
+       - name: Fetch deps
+         run: |
+           [[ '${{ matrix.os.name }}' == 'Fedora' ]] && ${{ matrix.os.pkg_mgr }} install -y tar git cmake rpmdevtools rpmlint ninja-build gcc-c++ boost-devel openssl-devel || true
+           [[ '${{ matrix.os.name }}' == 'openSUSE' ]] && ${{ matrix.os.pkg_mgr }} install -y tar git cmake rpmdevtools rpm-build rpmlint ninja gcc-c++ boost-devel libopenssl-devel || true
+           [[ '${{ matrix.os.name }}' == 'OpenMandriva' ]] && ${{ matrix.os.pkg_mgr }} install -y tar git cmake rpmdevtools rpm-build rpmlint ninja gcc-c++ glibc-devel lib64boost-devel lib64openssl-devel || true
+       - uses: actions/checkout@v2
+       - name: CMake Configure
+         run: cmake -G Ninja -DSMCE_BUILD_PROFILE=${{ matrix.os.profile }} -S ./ -B ./build
+       - name: CMake Build
+         run: cmake --build ./build
+       - name: CPack
+         run: cmake --build ./build --target package
+       - name: rpmlint
+         run: rpmlint ./build/*.rpm || true
+       - name: Test installation
+         uses: addnab/docker-run-action@v3
+         with:
+           image: ${{ matrix.os.image }}
+           options: -v ${{ github.workspace }}:/host
+           run: |
+             ${{ matrix.os.pkg_mgr }} install -y /host/build/*.rpm
+             ${{ matrix.os.pkg_mgr }} install -y cmake gcc-c++
+             [[ '${{ matrix.os.name }}' == 'OpenMandriva' ]] && ${{ matrix.os.pkg_mgr }} install -y make glibc-devel || true
+             cd /host/extra/samples/stduart
+             CC=gcc CXX=g++ cmake -S . -B build
+             cmake --build ./build
+             ./build/stduart --help
+       - name: Upload artifacts
+         uses: 'actions/upload-artifact@v2'
+         with:
+           name: libSMCE-RPM-${{ matrix.os.name }}${{ matrix.os.codename }}
+           path: build/*.rpm
