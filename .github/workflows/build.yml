@@ -4,7 +4,7 @@ jobs:
   make-release:
     name: Publish release
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [build-ubuntu, build-macos, build-windows, package-deb]
+    needs: [build-ubuntu, build-macos, build-windows, package-deb, package-rpm]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
