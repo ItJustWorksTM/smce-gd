@@ -26,5 +26,6 @@ endif ()
 set (CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}-${SMCE_COMPILER_ID}")
 
 set (CPACK_PACKAGE_CONTACT "ItJustWorksTM <itjustworkstm@aerostun.dev>")
+set (CMAKE_PROJECT_DESCRIPTION "A library to run your Arduino code on a desktop OS")
 set (CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/ItJustWorksTM/libSMCE")
 set (CPACK_PACKAGE_DESCRIPTION "This cross-platform C++ library provides its consumers the ability\nto compile and execute Arduino sketches on a hosted environment, with bindings\nto its virtual I/O ports to allow the host application to interact with its\nchild sketches.")
