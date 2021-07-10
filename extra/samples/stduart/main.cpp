@@ -41,12 +41,12 @@ void print_help(const char* argv0) {
 }
 
 int main(int argc, char** argv) {
-    if (argc != 3) {
-        print_help(argv[0]);
-        return EXIT_FAILURE;
-    } else if (argv[1] == "-h"sv || argv[1] == "--help"sv) {
+    if (argc == 2 && (argv[1] == "-h"sv || argv[1] == "--help"sv)) {
         print_help(argv[0]);
         return EXIT_SUCCESS;
+    } else if (argc != 3) {
+        print_help(argv[0]);
+        return EXIT_FAILURE;
     }
 
     // Create the toolchain
