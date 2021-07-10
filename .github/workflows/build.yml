@@ -412,7 +412,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check deps
         run: |
-          dnf -y install curl git cmake ninja ${{ matrix.compiler.pkg }} glibc-devel lib64boost-static-devel lib64openssl-devel
+          dnf -y install curl git cmake ninja ${{ matrix.compiler.pkg }} glibc-devel lib64boost-devel lib64openssl-devel
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
           ninja --version
           arduino-cli version
@@ -422,7 +422,7 @@ jobs:
           cmake -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DSMCE_CXXRT_LINKING=SHARED \
-            -DSMCE_BOOST_LINKING=STATIC \
+            -DSMCE_BOOST_LINKING=SHARED \
             -DSMCE_OPENSSL_LINKING=SHARED \
             -S ./ -B ./build
       - name: CMake build
