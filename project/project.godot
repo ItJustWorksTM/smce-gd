@@ -129,11 +129,6 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/Sketch.gdns"
 }, {
-"base": "Reference",
-"class": "SketchConfig",
-"language": "GDScript",
-"path": "res://SketchConfig.gd"
-}, {
 "base": "Node",
 "class": "SketchManager",
 "language": "GDScript",
@@ -199,7 +194,6 @@ _global_script_class_icons={
 "ShootyVisualizer": "",
 "SimpleNotification": "",
 "Sketch": "",
-"SketchConfig": "",
 "SketchManager": "",
 "SmceHud": "",
 "TempTween": "",
