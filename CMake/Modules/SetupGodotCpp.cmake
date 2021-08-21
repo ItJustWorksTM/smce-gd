@@ -65,15 +65,6 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
 
     add_dependencies (godot-cpp godotcpp-generated)
 
-    if (SMCE_CI)
-        if (NOT GDCPP_USER_ROOT)
-            set (GDCPP_USER_ROOT "${CMAKE_SOURCE_DIR}/godot-cpp")
-        endif ()
-        file (MAKE_DIRECTORY "${GDCPP_USER_ROOT}/lib")
-        file (COPY "${GDCPP_ROOT}/include" DESTINATION "${GDCPP_USER_ROOT}")
-        add_custom_command (TARGET godot-cpp POST_BUILD
-                COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-cpp>" "${GDCPP_USER_ROOT}/lib")
-    endif ()
 else ()
     add_library (godot-cpp IMPORTED STATIC)
     set_property (TARGET godot-cpp IMPORTED_LOCATION "${GDCPP_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}godot-cpp${CMAKE_STATIC_LIBRARY_SUFFIX}")
