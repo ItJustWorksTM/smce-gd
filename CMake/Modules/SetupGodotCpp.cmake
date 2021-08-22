@@ -42,7 +42,8 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
             set (FIRST ",")
         endforeach ()
         message ("GDCPP_NEEDED_CLASSES_FMTD: ${GDCPP_NEEDED_CLASSES_FMTD}")
-        execute_process (COMMAND "python" "-c" "import binding_generator_ext; binding_generator_ext.generate_bindings(\"godot-headers/api.json\", [${GDCPP_NEEDED_CLASSES_FMTD}], False)"
+        find_package (Python3 REQUIRED COMPONENTS Interpreter)
+        execute_process (COMMAND "${Python3_EXECUTABLE}" "-c" "import binding_generator_ext; binding_generator_ext.generate_bindings(\"godot-headers/api.json\", [${GDCPP_NEEDED_CLASSES_FMTD}], False)"
                 WORKING_DIRECTORY ${GDCPP_ROOT}
                 RESULT_VARIABLE GENERATION_RESULT
                 OUTPUT_VARIABLE GENERATION_OUTPUT)
