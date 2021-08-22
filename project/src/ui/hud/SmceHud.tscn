@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://src/ui/hud/SketchControlManager.gd" type="Script" id=1]
+[ext_resource path="res://src/ui/hud/SmceHud.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/notification_display/NotificationDisplay.gd" type="Script" id=3]
 [ext_resource path="res://media/fonts/Open_Sans/OpenSans-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://src/ui/hud/SettingPane.tscn" type="PackedScene" id=5]
@@ -64,7 +64,7 @@ VScrollBar/styles/grabber_pressed = SubResource( 9 )
 VScrollBar/styles/scroll = SubResource( 10 )
 VScrollBar/styles/scroll_focus = SubResource( 11 )
 
-[node name="SketchControlManager" type="Control"]
+[node name="SmceHud" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2

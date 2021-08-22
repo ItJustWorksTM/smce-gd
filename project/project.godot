@@ -19,22 +19,22 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/AnyTask.gdns"
 }, {
-"base": "ButtonGroup",
+"base": "Reference",
 "class": "BButtonGroup",
 "language": "GDScript",
-"path": "res://src/utilities/toggleable_bgroup/BButonGroup.gd"
+"path": "res://src/utilities/toggleable_bgroup/BButtonGroup.gd"
 }, {
 "base": "Node",
 "class": "Board",
 "language": "NativeScript",
 "path": "res://src/bind/Board.gdns"
 }, {
-"base": "Reference",
+"base": "",
 "class": "BoardConfig",
 "language": "NativeScript",
 "path": "res://src/bind/BoardConfig.gdns"
 }, {
-"base": "Node",
+"base": "",
 "class": "BoardView",
 "language": "NativeScript",
 "path": "res://src/bind/BoardView.gdns"
@@ -97,7 +97,7 @@ _global_script_classes=[ {
 "base": "RayCast",
 "class": "RayWheel",
 "language": "GDScript",
-"path": "res://src/utilities/raycast_spring/RayCastSpring.gd"
+"path": "res://src/utilities/ray_wheel/RayWheel.gd"
 }, {
 "base": "Reference",
 "class": "SMCE",
@@ -122,7 +122,7 @@ _global_script_classes=[ {
 "base": "Button",
 "class": "SimpleNotification",
 "language": "GDScript",
-"path": "res://src/ui/simple_notification/SimpleNotiifcation.gd"
+"path": "res://src/ui/simple_notification/SimpleNotification.gd"
 }, {
 "base": "Reference",
 "class": "Sketch",
@@ -137,7 +137,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "SmceHud",
 "language": "GDScript",
-"path": "res://src/ui/hud/SketchControlManager.gd"
+"path": "res://src/ui/hud/SmceHud.gd"
 }, {
 "base": "Tween",
 "class": "TempTween",
@@ -154,7 +154,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/UartChannelConfig.gdns"
 }, {
-"base": "Node",
+"base": "",
 "class": "UartSlurper",
 "language": "NativeScript",
 "path": "res://src/bind/UartSlurper.gdns"
@@ -329,6 +329,7 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
+quality/filters/anisotropic_filter_level=2
 quality/directional_shadow/size=2048
 quality/shadow_atlas/size=2048
 quality/shadow_atlas/quadrant_3_subdiv=3
@@ -337,7 +338,6 @@ quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/reflections/irradiance_max_size=32
 quality/shading/force_blinn_over_ggx=true
-quality/filters/anisotropic_filter_level=2
 quality/subsurface_scattering/quality=0
 quality/reflections/atlas_size=0
 quality/reflections/atlas_subdiv=16

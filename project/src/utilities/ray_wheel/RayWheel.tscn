@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://src/utilities/raycast_spring/RayCastSpring.gd" type="Script" id=1]
+[ext_resource path="res://src/utilities/ray_wheel/RayWheel.gd" type="Script" id=1]
 
 [node name="RayCast" type="RayCast"]
 cast_to = Vector3( 0, -0.6, 0 )

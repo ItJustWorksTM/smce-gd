@@ -1,5 +1,5 @@
 #
-#  Playground.gd
+#  BButtonGroup.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,21 @@
 #  limitations under the License.
 #
 
-extends Spatial
+class_name BButtonGroup
+extends ButtonGroup
 
-func init_cam_pos() -> Transform:
-	return $CamPosition.global_transform
+var _last_pressed: Button = null
+
+
+func _init():
+	for button in get_buttons():
+		if ! button.is_connected("toggled", self, "_on_button_toggle"):
+			button.connect("toggled", self, "_on_button_toggle", [button])
+
+
+func _on_button_toggle(toggle: bool, button: Button):
+	if button == _last_pressed:
+		button.pressed = false
+		_last_pressed = null
+	else:
+		_last_pressed = button
