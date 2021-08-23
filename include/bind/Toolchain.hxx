@@ -21,11 +21,11 @@
 
 #include <optional>
 #include "SMCE/Toolchain.hpp"
-#include "core/Godot.hpp"
-#include "gen/Node.hpp"
 #include "bind/Sketch.hxx"
-#include "gd/GDResult.hxx"
+#include "core/Godot.hpp"
 #include "gd/AnyTask.hxx"
+#include "gd/GDResult.hxx"
+#include "gen/Node.hpp"
 
 namespace godot {
 

@@ -76,7 +76,7 @@ void BoardConfig::SecureDigitalStorage::_register_methods() {
 }
 
 smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_native() const {
-    return { .cspin = static_cast<uint16_t>(cspin), .root_dir = std_str(root_dir) };
+    return {.cspin = static_cast<uint16_t>(cspin), .root_dir = std_str(root_dir)};
 }
 
 void BoardConfig::_register_methods() {
@@ -87,12 +87,15 @@ void BoardConfig::_register_methods() {
     register_method("type_info", &BoardConfig::type_info);
 }
 
-
 Dictionary BoardConfig::type_info() {
     auto ret = Dictionary{};
     auto res_loader = ResourceLoader::get_singleton();
 
-    auto get_res = [&](auto path) { auto ret = Ref(res_loader->load(path)); ret->unreference(); return ret; };
+    auto get_res = [&](auto path) {
+        auto ret = Ref(res_loader->load(path));
+        ret->unreference();
+        return ret;
+    };
     ret["gpio_drivers"] = get_res("res://src/bind/GpioDriverConfig.gdns");
     ret["uart_channels"] = get_res("res://src/bind/UartChannelConfig.gdns");
     ret["frame_buffers"] = get_res("res://src/bind/FrameBufferConfig.gdns");

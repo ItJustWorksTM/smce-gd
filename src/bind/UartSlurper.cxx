@@ -43,7 +43,7 @@ void UartSlurper::_physics_process(float) {
                 read_buf.begin(), read_buf.begin() + available,
                 [](const auto& letter) { return letter == '\0' || letter == '\r'; }, '\t');
             read_buf[available] = '\0';
-            emit_signal("uart", 0,  String(static_cast<const char*>(read_buf.data())));
+            emit_signal("uart", 0, String(static_cast<const char*>(read_buf.data())));
         }
 
         ++i;
@@ -76,7 +76,6 @@ Ref<GDResult> UartSlurper::write(int channel, String msg) {
 
     if (!view.uart_channels[channel].rx().exists())
         return GDResult::err("Uart channel does not exist");
-
 
     const auto str = msg.ascii();
     std::copy_n(str.get_data(), str.length(), std::back_inserter(bufs[channel].write_buf));

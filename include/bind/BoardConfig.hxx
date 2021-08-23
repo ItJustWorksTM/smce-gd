@@ -87,7 +87,7 @@ class BoardConfig : public Reference {
     class SecureDigitalStorage : public Reference {
         GODOT_CLASS(SecureDigitalStorage, Reference)
 
-    public:
+      public:
         int cspin;
         String root_dir;
 

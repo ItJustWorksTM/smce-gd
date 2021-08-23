@@ -22,16 +22,16 @@
 #include <functional>
 #include <optional>
 #include <type_traits>
-#include <SMCE/BoardConf.hpp>
 #include <SMCE/Board.hpp>
+#include <SMCE/BoardConf.hpp>
 #include <SMCE/SketchConf.hpp>
 #include <core/Godot.hpp>
 #include <gen/Node.hpp>
 #include <gen/Reference.hpp>
 #include "bind/BoardConfig.hxx"
 #include "bind/BoardView.hxx"
-#include "bind/UartSlurper.hxx"
 #include "bind/Sketch.hxx"
+#include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
 #include "gd/GDResult.hxx"
 #include "gd/util.hxx"
@@ -48,10 +48,7 @@ class Board : public Node {
 
     Ref<Sketch> sketch;
 
-    template<class ...Status>
-    bool is_status(Status ...x) {
-        return ((board.status() == x) ||  ...);
-    }
+    template <class... Status> bool is_status(Status... x) { return ((board.status() == x) || ...); }
 
     void set_view();
 

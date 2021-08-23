@@ -163,7 +163,8 @@ void Board::_physics_process() {
         set_physics_process(false);
 
     if (!str.empty()) {
-        std::replace_if(str.begin(), str.end(), [](const auto& c) { return c == '\r'; }, '\t');
+        std::replace_if(
+            str.begin(), str.end(), [](const auto& c) { return c == '\r'; }, '\t');
         emit_signal("log", String{str.data()});
         std::cout << str;
         str.clear();

@@ -19,11 +19,11 @@
 #ifndef GODOT_SMCE_ANYTASK_HXX
 #define GODOT_SMCE_ANYTASK_HXX
 
+#include <cstddef>
 #include <functional>
 #include <future>
 #include <core/Godot.hpp>
 #include <gen/Reference.hpp>
-#include <cstddef>
 #include "gd/util.hxx"
 
 namespace godot {

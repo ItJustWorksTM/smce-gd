@@ -44,21 +44,13 @@ void BoardView::set_view(smce::BoardView v) {
     }
 }
 
-int BoardView::read_analog_pin(int pin) {
-    return view.pins[pin].analog().read();
-}
+int BoardView::read_analog_pin(int pin) { return view.pins[pin].analog().read(); }
 
-bool BoardView::read_digital_pin(int pin) {
-    return view.pins[pin].digital().read();
-}
+bool BoardView::read_digital_pin(int pin) { return view.pins[pin].digital().read(); }
 
-void BoardView::write_analog_pin(int pin, int value) {
-    view.pins[pin].analog().write(value);
-}
+void BoardView::write_analog_pin(int pin, int value) { view.pins[pin].analog().write(value); }
 
-void BoardView::write_digital_pin(int pin, bool value) {
-    view.pins[pin].digital().write(value);
-}
+void BoardView::write_digital_pin(int pin, bool value) { view.pins[pin].digital().write(value); }
 
 Ref<FrameBuffer> BoardView::framebuffers(int id) {
     auto ret = make_ref<FrameBuffer>();
