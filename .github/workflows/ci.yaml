@@ -54,6 +54,9 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3-server --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
+          wget -O libsmce.sh https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Linux-x86_64-GNU.sh
+          chmod +x libsmce.sh
+          sudo ./libsmce.sh --prefix=/usr --skip-license --exclude-subdir
       - name: Cache Godot export template
         uses: actions/cache@v2
         id: cache-godot
@@ -99,14 +102,17 @@ jobs:
             slug: gcc
             c: gcc-10
             cxx: g++-10
+            smce_artifact: GNU
           - name: Clang/LLVM 11
             slug: clang
             c: clang-11
             cxx: clang++-11
+            smce_artifact: AppleClang
           - name: AppleClang 12
             slug: appleclang
             c: clang
             cxx: clang++
+            smce_artifact: AppleClang
     env:
       CC: ${{ matrix.compiler.c }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -123,6 +129,9 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3 --version | egrep -o '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
+          wget -O libsmce.sh https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Darwin-x86_64-${{ matrix.compiler.smce_artifact }}.sh
+          chmod +x libsmce.sh
+          sudo ./libsmce.sh --prefix=/usr/local --skip-license --exclude-subdir
       - name: Cache Godot export template
         uses: actions/cache@v2
         id: cache-godot
@@ -171,7 +180,8 @@ jobs:
 #         - name: Clang/LLVM
 #           c: clang-cl
 #           cxx: clang++-cl
-#   env:
+    env:
+      SMCE_ROOT: C:\smce
 #     CC: ${{ matrix.compiler.c }}
 #     CXX: ${{ matrix.compiler.cxx }}
     steps:
@@ -180,7 +190,7 @@ jobs:
         id: deps
         shell: powershell
         run: |
-          choco install --no-progress ninja godot
+          choco install --no-progress ninja godot wget
           ninja --version
           $previous_exit_code = $global:LASTEXITCODE
           $godot_version_output = godot --version
@@ -188,6 +198,9 @@ jobs:
           echo "Godot version: $godot_version_output"
           echo "::set-output name=GODOT_VERSION::$([regex]::Matches($godot_version_output, "\d+\.\d+(?:\.\d+)?\.\w+").Value)"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$($env:GODOT_EXPORT_TEMPLATE_VERSION.Replace('.', ''))"
+          wget -O libsmce.zip https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Windows-AMD64-MSVC-Release.zip
+          7z x libsmce.zip -oC:\
+          ren C:\libSMCE-1.3.0-Windows-AMD64-MSVC-Release C:\smce
       - name: Cache Godot export template
         uses: actions/cache@v2
         id: cache-godot
