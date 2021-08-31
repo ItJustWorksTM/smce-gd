@@ -45,7 +45,6 @@ set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ${CMAKE_IPO_SUPPORTED})
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 
 include (FetchContent)
-include (fmt)
 list (APPEND GDCPP_NEEDED_CLASSES Reference Node Resource _ResourceLoader)
 include (SetupGodotCpp)
 
@@ -61,7 +60,7 @@ target_sources (godot-smce PRIVATE
         src/bind/FrameBuffer.cxx)
 
 target_include_directories (godot-smce PUBLIC include)
-target_link_libraries (godot-smce PUBLIC godot-cpp ${SMCE_TARGET} fmt::fmt)
+target_link_libraries (godot-smce PUBLIC godot-cpp ${SMCE_TARGET})
 
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)
@@ -81,6 +80,8 @@ add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "./RtResources"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
+
+include(GNUInstallDirs)
 
 if (NOT GODOT_DEBUG)
     set (GODOT_BUILD_TYPE "GodotRelease")
