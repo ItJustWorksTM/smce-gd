@@ -193,8 +193,7 @@ else ()
     ")
 endif ()
 
-file (WRITE "${PROJECT_BINARY_DIR}/export/version.txt" "${PROJECT_VERSION}${GODOT_DEBUG_ARG}")
-install (FILES "${PROJECT_BINARY_DIR}/export/version.txt" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
+file (WRITE "${PROJECT_SOURCE_DIR}/project/share/version.txt" "${PROJECT_VERSION}${GODOT_DEBUG_ARG}")
 
 if (APPLE)
     set (CPACK_GENERATOR DragNDrop)
