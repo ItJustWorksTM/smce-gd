@@ -38,6 +38,11 @@ if (SMCE_LINK_STATIC)
     message(STATUS "libSMCE statically linked")
 endif ()
 
+if (APPLE)
+    set(CMAKE_BUILD_RPATH "@loader_path/../Frameworks;${CMAKE_BUILD_RPATH}")
+    set(CMAKE_INSTALL_RPATH "@loader_path/../Frameworks;${CMAKE_INSTALL_RPATH}")
+endif()
+
 include (CheckIPOSupported)
 check_ipo_supported (RESULT CMAKE_IPO_SUPPORTED LANGUAGES CXX)
 set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ${CMAKE_IPO_SUPPORTED})
@@ -145,7 +150,6 @@ if (NOT SMCE_LINK_STATIC)
 endif()
 
 if (NOT APPLE)
-
 
     install (CODE "
         execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\" WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")

@@ -160,6 +160,7 @@ jobs:
           cpack -B packages
           cmake -DGODOT_DEBUG=On -DFORCE_STRIP_CODESIGNING=On .
           cpack -B packages
+          otool -L -l export/SMCE-Godot.app/Contents/Frameworks/libgodot-smce.so
           rm -rd packages/_CPack_Packages
           cd ..
       - name: Upload artifacts
