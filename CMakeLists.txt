@@ -24,15 +24,32 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+find_package(Threads REQUIRED)
+find_package(SMCE 1.3.0 REQUIRED)
+
+option (SMCE_LINK_STATIC "Link to libSMCE statically" Off)
+
+set (SMCE_TARGET SMCE::SMCE)
+if (SMCE_LINK_STATIC)
+    if (NOT TARGET SMCE::SMCE_static)
+        message (FATAL_ERROR "Static link requested but libSMCE static library not installed")
+    endif ()
+    set (SMCE_TARGET SMCE::SMCE_static)
+    message(STATUS "libSMCE statically linked")
+endif ()
+
+if (APPLE)
+    set(CMAKE_BUILD_RPATH "@loader_path/../Frameworks;${CMAKE_BUILD_RPATH}")
+    set(CMAKE_INSTALL_RPATH "@loader_path/../Frameworks;${CMAKE_INSTALL_RPATH}")
+endif()
+
 include (CheckIPOSupported)
 check_ipo_supported (RESULT CMAKE_IPO_SUPPORTED LANGUAGES CXX)
 set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ${CMAKE_IPO_SUPPORTED})
 
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
-set (SMCE_AUTODOWNLOAD True)
+
 include (FetchContent)
-include (fmt)
-include (SetupSMCE)
 list (APPEND GDCPP_NEEDED_CLASSES Reference Node Resource _ResourceLoader)
 include (SetupGodotCpp)
 
@@ -48,7 +65,8 @@ target_sources (godot-smce PRIVATE
         src/bind/FrameBuffer.cxx)
 
 target_include_directories (godot-smce PUBLIC include)
-target_link_libraries (godot-smce PUBLIC godot-cpp SMCE fmt::fmt)
+target_link_libraries (godot-smce PUBLIC godot-cpp ${SMCE_TARGET})
+
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)
     if (NOT APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -56,15 +74,19 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     endif ()
 endif ()
 
+get_target_property (SMCE_RT_RES SMCE::SMCE RESOURCES_ARCHIVE)
+
 find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 godot REQUIRED)
 file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
-        COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_ROOT}/share/SMCE/SMCE_Resources.zip"
+        COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_RT_RES}"
         COMMAND "${CMAKE_COMMAND}" -E copy_directory "./RtResources" "${PROJECT_SOURCE_DIR}/project/share/RtResources"
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "./RtResources"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
+
+include(GNUInstallDirs)
 
 if (NOT GODOT_DEBUG)
     set (GODOT_BUILD_TYPE "GodotRelease")
@@ -110,7 +132,25 @@ else ()
 endif ()
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/export")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/export")
+
+if (NOT SMCE_LINK_STATIC)
+
+    if (UNIX AND NOT APPLE)
+        set(SMCE_DYLIB_VER_SUFFIX ".1")
+    elseif (APPLE)
+        set(SMCE_DYLIB_VER_PRESUFFIX ".1")
+    endif()
+
+    set(SMCE_DYNLIB_FILE "${CMAKE_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}SMCE${SMCE_DYLIB_VER_PRESUFFIX}${CMAKE_SHARED_LIBRARY_SUFFIX}${SMCE_DYLIB_VER_SUFFIX}")
+    add_custom_command(TARGET godot-smce POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:SMCE::SMCE>" "${SMCE_DYNLIB_FILE}"
+            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+            )
+
+endif()
+
 if (NOT APPLE)
+
     install (CODE "
         execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\" WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")
         if (NOT EXISTS \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\")
@@ -120,9 +160,14 @@ if (NOT APPLE)
     install (PROGRAMS "${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
     set_property (INSTALL "${CMAKE_INSTALL_LIBDIR}/smce/smce_gd${CMAKE_EXECUTABLE_SUFFIX}" PROPERTY CPACK_START_MENU_SHORTCUTS "SMCE Godot")
     install (FILES "${PROJECT_BINARY_DIR}/export/$<TARGET_FILE_NAME:godot-smce>" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
+
     if (NOT WIN32)
         install (FILES "${PROJECT_SOURCE_DIR}/smce_gd.desktop" DESTINATION "share/applications")
     endif ()
+
+    if (NOT SMCE_LINK_STATIC)
+        install(FILES "${SMCE_DYNLIB_FILE}" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
+    endif()
 else ()
     install (CODE "
         execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
@@ -134,6 +179,9 @@ else ()
                          WORKING_DIRECTORY \"${PROJECT_BINARY_DIR}/export\")
         execute_process (COMMAND defaults write \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app/Contents/Info.plist\" LSEnvironment -dict PATH \"/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:\")
     ")
+    if (NOT SMCE_LINK_STATIC)
+        install(FILES "${SMCE_DYNLIB_FILE}" DESTINATION "${PROJECT_BINARY_DIR}/export/SMCE-Godot.app/Contents/Frameworks")
+    endif()
     if (FORCE_STRIP_CODESIGNING)
         find_program (CODESIGN_EXECUTABLE codesign REQUIRED)
         install (CODE "
@@ -144,8 +192,8 @@ else ()
         file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\" USE_SOURCE_PERMISSIONS)
     ")
 endif ()
-file (WRITE "${PROJECT_BINARY_DIR}/export/version.txt" "${PROJECT_VERSION}${GODOT_DEBUG_ARG}")
-install (FILES "${PROJECT_BINARY_DIR}/export/version.txt" DESTINATION "${CMAKE_INSTALL_LIBDIR}/smce")
+
+file (WRITE "${PROJECT_SOURCE_DIR}/project/share/version.txt" "${PROJECT_VERSION}${GODOT_DEBUG_ARG}")
 
 if (APPLE)
     set (CPACK_GENERATOR DragNDrop)

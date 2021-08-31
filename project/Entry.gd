@@ -38,7 +38,7 @@ func _ready():
 	var file = File.new()
 	var version = "unknown"
 	var exec_path = OS.get_executable_path()
-	if file.open(exec_path.get_base_dir() + "/version.txt", File.READ) == OK:
+	if file.open("res://share/version.txt", File.READ) == OK:
 		version = file.get_as_text()
 		file.close()
 
