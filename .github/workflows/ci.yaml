@@ -233,9 +233,10 @@ jobs:
         run: |
           mkdir ./build/packages
           cd build
-          cpack -B packages
-          cmake -DGODOT_DEBUG=On .
-          cpack -B packages
+          cmake -DCPACK_PACKAGE_DIRECTORY="packages" .
+          cmake --build . --target package
+          cmake -DGODOT_DEBUG=On -DCPACK_PACKAGE_DIRECTORY="packages" .
+          cmake --build . --target package
           rm -R packages/_CPack_Packages
           cd ..
       - name: Upload artifacts
