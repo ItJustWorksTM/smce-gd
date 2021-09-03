@@ -10,10 +10,12 @@ Initially created to emulate cars supporting the [smartcar_shield](https://githu
 
 ### Dependencies
 
-* _[Godot](https://godotengine.org)_ (for gdscript)
-* _[libSMCE](https://github.com/ItJustWorksTM/libSMCE)_ (prebuilts automatically downloaded)
+* _[Godot](https://godotengine.org)_
+* *_[libSMCE](https://github.com/ItJustWorksTM/libSMCE)_ ([version]([./CMakeLists.txt#L28](https://github.com/ItJustWorksTM/smce-gd/blob/master/CMakeLists.txt#L28)))
 * _[godot-cpp](https://github.com/godotengine/godot-cpp)_ (automatically built from source; *_SConstruct_ is **not** used, but _Python3_ is still required)
 * C++20-compatible compiler + _[CMake](https://cmake.org)_
+
+\* To install libSMCE head to it's [releases](https://github.com/ItJustWorksTM/libSMCE/releases) page and extract/install one of the artifacts, then set the env var `SMCE_ROOT` pointed to the root of the extracted directory.
 
 ### Building
 ```shell
@@ -22,7 +24,8 @@ cmake -B build
 cmake --build build --target godot-smce
 ```
 
-Packaging is done using _CPack_.
+Packaging is done using _CPack_.  
+_note: we bundle the shared lib of SMCE on export_
 
 ### Running
 
