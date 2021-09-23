@@ -76,7 +76,6 @@ endif ()
 
 get_target_property (SMCE_RT_RES SMCE::SMCE RESOURCES_ARCHIVE)
 
-find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 godot REQUIRED)
 file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
@@ -149,10 +148,11 @@ if (NOT SMCE_LINK_STATIC)
 
 endif()
 
+install (CODE "find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 godot REQUIRED)")
 if (NOT APPLE)
 
     install (CODE "
-        execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\" WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")
+        execute_process (COMMAND \"\${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\" WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")
         if (NOT EXISTS \"${PROJECT_BINARY_DIR}/export/smce_gd${CMAKE_EXECUTABLE_SUFFIX}\")
             message (FATAL_ERROR \"Godot export failure\")
         endif ()
@@ -170,7 +170,7 @@ if (NOT APPLE)
     endif()
 else ()
     install (CODE "
-        execute_process (COMMAND \"${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
+        execute_process (COMMAND \"\${GODOT_EXECUTABLE}\" --no-window --export${GODOT_DEBUG_ARG} \"${GODOT_PLATFORM}\" \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\"
                          WORKING_DIRECTORY \"${CMAKE_SOURCE_DIR}/project\")
         if (NOT EXISTS \"${PROJECT_BINARY_DIR}/export/SMCE-Godot\")
             message (FATAL_ERROR \"Godot export failure\")
