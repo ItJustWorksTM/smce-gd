@@ -2,6 +2,8 @@ name: CI
 on: [ push, pull_request ]
 env:
   GODOT_EXPORT_TEMPLATE_VERSION: 3.3.2
+  LIBSMCE_TAG: v1.4.0
+  LIBSMCE_VERSION: 1.4
 jobs:
   make-release:
     name: Publish release
@@ -54,7 +56,7 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3-server --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
-          wget -O libsmce.sh https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Linux-x86_64-GNU.sh
+          wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Linux-x86_64-GNU.sh"
           chmod +x libsmce.sh
           sudo ./libsmce.sh --prefix=/usr --skip-license --exclude-subdir
       - name: Cache Godot export template
@@ -129,7 +131,7 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3 --version | egrep -o '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
-          wget -O libsmce.sh https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Darwin-x86_64-${{ matrix.compiler.smce_artifact }}.sh
+          wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Darwin-x86_64-${{ matrix.compiler.smce_artifact }}.sh"
           chmod +x libsmce.sh
           sudo ./libsmce.sh --prefix=/usr/local --skip-license --exclude-subdir
       - name: Cache Godot export template
@@ -199,9 +201,9 @@ jobs:
           echo "Godot version: $godot_version_output"
           echo "::set-output name=GODOT_VERSION::$([regex]::Matches($godot_version_output, "\d+\.\d+(?:\.\d+)?\.\w+").Value)"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$($env:GODOT_EXPORT_TEMPLATE_VERSION.Replace('.', ''))"
-          wget -O libsmce.zip https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Windows-AMD64-MSVC-Release.zip
+          wget -O libsmce.zip https://github.com/ItJustWorksTM/libSMCE/releases/download/$($env:LIBSMCE_TAG)/libSMCE-$($env:LIBSMCE_VERSION)-Windows-AMD64-MSVC-Release.zip
           7z x libsmce.zip -oC:\
-          ren C:\libSMCE-1.3.0-Windows-AMD64-MSVC-Release C:\smce
+          ren C:\libSMCE-$($env:LIBSMCE_VERSION)-Windows-AMD64-MSVC-Release C:\smce
       - name: Cache Godot export template
         uses: actions/cache@v2
         id: cache-godot
