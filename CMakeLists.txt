@@ -25,7 +25,7 @@ set (CMAKE_CXX_EXTENSIONS OFF)
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_package(Threads REQUIRED)
-find_package(SMCE 1.3.0 REQUIRED)
+find_package(SMCE 1.4 REQUIRED)
 
 option (SMCE_LINK_STATIC "Link to libSMCE statically" Off)
 
