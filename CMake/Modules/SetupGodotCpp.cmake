@@ -20,7 +20,7 @@ if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
 
     FetchContent_Declare (fc-godot-cpp
             GIT_REPOSITORY https://github.com/godotengine/godot-cpp.git
-            GIT_TAG        master
+            GIT_TAG        3.x
     )
 
     FetchContent_GetProperties (fc-godot-cpp)
