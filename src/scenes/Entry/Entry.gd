@@ -20,11 +20,9 @@ extends Node
 
 var _version_file := "res://assets/version.txt"
 func get_version() -> String:
-	var version = "Unknown"
-	var file = File.new()
-	if file.open(_version_file, File.READ) == OK:
-		version = file.get_as_text()
-		file.close()
+	var version = Fs.read_file_as_string(_version_file)
+	if version == "":
+		version = "Unknown"
 	return version
 
 func _ready():

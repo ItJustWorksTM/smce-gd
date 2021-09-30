@@ -79,3 +79,15 @@ static func read_file_as_string(path: String) -> String:
 		content = file.get_as_text()
 	file.close()
 	return content
+
+static func list_files(path: String) -> Array:
+	var ret := []
+	var dir = Directory.new()
+	if dir.open(path) != OK:
+		return ret
+	dir.list_dir_begin(true)
+	var file_name = dir.get_next()
+	while file_name != "":
+		ret.push_back(path.plus_file(file_name))
+		file_name = dir.get_next()
+	return ret
