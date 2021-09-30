@@ -1,0 +1,210 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/scenes/SketchStatusControl/SketchStatusControl.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/types/VisibilityButton.gd" type="Script" id=2]
+[ext_resource path="res://src/scenes/SketchPane/SketchPane.gd" type="Script" id=3]
+
+[node name="SketchStatusControl" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -720.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 297.0
+margin_bottom = 593.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SketchStatusControl" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_right = 290.0
+
+[node name="BoardControl" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 46.0
+margin_right = 290.0
+margin_bottom = 84.0
+
+[node name="Margin" type="MarginContainer" parent="VBoxContainer/BoardControl"]
+margin_right = 290.0
+margin_bottom = 14.0
+custom_constants/margin_right = 4
+custom_constants/margin_left = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/BoardControl/Margin"]
+margin_left = 4.0
+margin_right = 286.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Board"
+align = 1
+valign = 1
+
+[node name="Margin2" type="MarginContainer" parent="VBoxContainer/BoardControl"]
+margin_top = 18.0
+margin_right = 290.0
+margin_bottom = 38.0
+custom_constants/margin_right = 4
+custom_constants/margin_left = 4
+
+[node name="Hbox" type="HBoxContainer" parent="VBoxContainer/BoardControl/Margin2"]
+margin_left = 4.0
+margin_right = 286.0
+margin_bottom = 20.0
+
+[node name="Button" type="Button" parent="VBoxContainer/BoardControl/Margin2/Hbox"]
+margin_right = 139.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Start"
+
+[node name="Button2" type="Button" parent="VBoxContainer/BoardControl/Margin2/Hbox"]
+margin_left = 143.0
+margin_right = 282.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Suspend"
+
+[node name="VehicleControl" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 88.0
+margin_right = 290.0
+margin_bottom = 126.0
+
+[node name="Margin" type="MarginContainer" parent="VBoxContainer/VehicleControl"]
+margin_right = 290.0
+margin_bottom = 14.0
+custom_constants/margin_right = 4
+custom_constants/margin_left = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/VehicleControl/Margin"]
+margin_left = 4.0
+margin_right = 286.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Vehicle"
+align = 1
+valign = 1
+
+[node name="Margin2" type="MarginContainer" parent="VBoxContainer/VehicleControl"]
+margin_top = 18.0
+margin_right = 290.0
+margin_bottom = 38.0
+custom_constants/margin_right = 4
+custom_constants/margin_left = 4
+
+[node name="HBox" type="HBoxContainer" parent="VBoxContainer/VehicleControl/Margin2"]
+margin_left = 4.0
+margin_right = 286.0
+margin_bottom = 20.0
+
+[node name="ResetPosButton" type="Button" parent="VBoxContainer/VehicleControl/Margin2/HBox"]
+margin_right = 139.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Reset Pos"
+
+[node name="ToggleFollowButton" type="Button" parent="VBoxContainer/VehicleControl/Margin2/HBox"]
+margin_left = 143.0
+margin_right = 282.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Follow"
+
+[node name="AttachmentDisplay" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 130.0
+margin_right = 290.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="VBoxContainer/AttachmentDisplay"]
+margin_right = 290.0
+margin_bottom = 14.0
+
+[node name="Label" type="Label" parent="VBoxContainer/AttachmentDisplay/Margin"]
+margin_right = 290.0
+margin_bottom = 14.0
+text = "Attachments"
+align = 1
+valign = 1
+
+[node name="Scroll" type="ScrollContainer" parent="VBoxContainer/AttachmentDisplay"]
+margin_top = 18.0
+margin_right = 290.0
+margin_bottom = 408.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="VBox" type="VBoxContainer" parent="VBoxContainer/AttachmentDisplay/Scroll"]
+margin_right = 290.0
+margin_bottom = 390.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VisibilityButton" type="Button" parent="VBoxContainer/AttachmentDisplay/Scroll/VBox"]
+margin_right = 290.0
+margin_bottom = 20.0
+toggle_mode = true
+text = "Hello"
+align = 0
+script = ExtResource( 2 )
+node_path = NodePath("../Label")
+
+[node name="Label" type="Label" parent="VBoxContainer/AttachmentDisplay/Scroll/VBox"]
+visible = false
+margin_top = 24.0
+margin_right = 317.0
+margin_bottom = 38.0
+text = "hello world"
+
+[node name="VisibilityButton2" type="Button" parent="VBoxContainer/AttachmentDisplay/Scroll/VBox"]
+margin_top = 24.0
+margin_right = 290.0
+margin_bottom = 44.0
+toggle_mode = true
+text = "Hello"
+align = 0
+script = ExtResource( 2 )
+node_path = NodePath("../Label2")
+
+[node name="Label2" type="Label" parent="VBoxContainer/AttachmentDisplay/Scroll/VBox"]
+visible = false
+margin_top = 48.0
+margin_right = 317.0
+margin_bottom = 62.0
+text = "hello world"
+
+[node name="SketchLogButton" type="Button" parent="VBoxContainer/AttachmentDisplay"]
+margin_top = 412.0
+margin_right = 290.0
+margin_bottom = 432.0
+toggle_mode = true
+text = "Log"
+align = 0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+node_path = NodePath("../../../../VBoxContainer/AttachmentDisplay/VisibilityButton2/Label2")
+
+[node name="SerialUartButton" type="Button" parent="VBoxContainer/AttachmentDisplay"]
+margin_top = 436.0
+margin_right = 290.0
+margin_bottom = 456.0
+toggle_mode = true
+text = "Serial"
+align = 0
+script = ExtResource( 2 )
+node_path = NodePath("../../../../VBoxContainer/AttachmentDisplay/Label2")

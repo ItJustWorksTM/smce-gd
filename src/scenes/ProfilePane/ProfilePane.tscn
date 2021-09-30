@@ -1,0 +1,97 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/scenes/ProfilePane/ProfilePane.gd" type="Script" id=1]
+
+[node name="ProfilePane" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -720.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 297.0
+margin_bottom = 593.0
+
+[node name="Margin" type="MarginContainer" parent="VBox"]
+margin_right = 290.0
+margin_bottom = 24.0
+
+[node name="NameEdit" type="LineEdit" parent="VBox/Margin"]
+margin_right = 290.0
+margin_bottom = 24.0
+align = 1
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="ContextButton" type="Button" parent="VBox/Margin"]
+margin_right = 21.0
+margin_bottom = 24.0
+size_flags_horizontal = 0
+text = "="
+
+[node name="HBox" type="HBoxContainer" parent="VBox"]
+margin_top = 28.0
+margin_right = 290.0
+margin_bottom = 48.0
+
+[node name="SwitchButton" type="Button" parent="VBox/HBox"]
+margin_right = 94.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "switch"
+
+[node name="ReloadButton" type="Button" parent="VBox/HBox"]
+margin_left = 98.0
+margin_right = 192.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "reload"
+
+[node name="SaveButton" type="Button" parent="VBox/HBox"]
+margin_left = 196.0
+margin_right = 290.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "save"
+
+[node name="HBox2" type="HBoxContainer" parent="VBox"]
+margin_top = 52.0
+margin_right = 290.0
+margin_bottom = 72.0
+
+[node name="Label" type="Label" parent="VBox/HBox2"]
+margin_right = 50.0
+margin_bottom = 20.0
+size_flags_vertical = 3
+text = "World:"
+valign = 1
+
+[node name="WorldOptions" type="OptionButton" parent="VBox/HBox2"]
+margin_left = 54.0
+margin_right = 290.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Sketches" type="Label" parent="VBox"]
+margin_top = 76.0
+margin_right = 290.0
+margin_bottom = 90.0
+
+[node name="Version" type="Label" parent="."]
+margin_left = 7.0
+margin_top = 579.0
+margin_right = 297.0
+margin_bottom = 593.0
+size_flags_vertical = 8
+text = "aaaaa"
+align = 1
+valign = 1

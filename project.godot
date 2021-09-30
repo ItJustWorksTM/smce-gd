@@ -1,0 +1,360 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "Async",
+"language": "GDScript",
+"path": "res://src/types/sync/Async.gd"
+}, {
+"base": "Reference",
+"class": "BindMap",
+"language": "GDScript",
+"path": "res://src/types/view_model/BindMap.gd"
+}, {
+"base": "",
+"class": "Board",
+"language": "NativeScript",
+"path": "res://src/types/bind/board/Board.gdns"
+}, {
+"base": "",
+"class": "BoardConfig",
+"language": "NativeScript",
+"path": "res://src/types/bind/board/BoardConfig.gdns"
+}, {
+"base": "",
+"class": "BoardView",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/BoardView.gdns"
+}, {
+"base": "Camera",
+"class": "ControllableCamera",
+"language": "GDScript",
+"path": "res://src/types/ControllableCamera.gd"
+}, {
+"base": "Node",
+"class": "Entry",
+"language": "GDScript",
+"path": "res://src/scenes/Entry/Entry.gd"
+}, {
+"base": "Control",
+"class": "EntryFailGui",
+"language": "GDScript",
+"path": "res://src/scenes/Entry/EntryFailGui/EntryFailGui.gd"
+}, {
+"base": "ViewModelBase",
+"class": "EnvInfo",
+"language": "GDScript",
+"path": "res://src/models/EnvInfo.gd"
+}, {
+"base": "Reference",
+"class": "FileRefLink",
+"language": "GDScript",
+"path": "res://src/types/FileRefLink.gd"
+}, {
+"base": "",
+"class": "FrameBufferConfig",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/FrameBufferConfig.gdns"
+}, {
+"base": "Reference",
+"class": "Fs",
+"language": "GDScript",
+"path": "res://src/util/Fs.gd"
+}, {
+"base": "",
+"class": "Future",
+"language": "NativeScript",
+"path": "res://src/types/sync/Future.gdns"
+}, {
+"base": "",
+"class": "GpioDriverConfig",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/GpioDriverConfig.gdns"
+}, {
+"base": "",
+"class": "GpioPin",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/GpioPin.gdns"
+}, {
+"base": "Control",
+"class": "Hud",
+"language": "GDScript",
+"path": "res://src/scenes/Hud/Hud.gd"
+}, {
+"base": "",
+"class": "LogReader",
+"language": "NativeScript",
+"path": "res://src/types/LogReader.gdns"
+}, {
+"base": "Node",
+"class": "Main",
+"language": "GDScript",
+"path": "res://src/types/Main.gd"
+}, {
+"base": "Reference",
+"class": "ManagedSketch",
+"language": "GDScript",
+"path": "res://src/types/ManagedSketch.gd"
+}, {
+"base": "Reference",
+"class": "Observable",
+"language": "GDScript",
+"path": "res://src/types/view_model/Observable.gd"
+}, {
+"base": "Reference",
+"class": "Observable2",
+"language": "GDScript",
+"path": "res://src/types/view_model/Observable2.gd"
+}, {
+"base": "Reference",
+"class": "ObserversObserver",
+"language": "GDScript",
+"path": "res://src/types/view_model/ObserversObserver.gd"
+}, {
+"base": "Reference",
+"class": "Profile",
+"language": "GDScript",
+"path": "res://src/types/Profile.gd"
+}, {
+"base": "PanelContainer",
+"class": "ProfilePane",
+"language": "GDScript",
+"path": "res://src/scenes/ProfilePane/ProfilePane.gd"
+}, {
+"base": "Control",
+"class": "ProfileSelect",
+"language": "GDScript",
+"path": "res://src/scenes/ProfileSelect/ProfileSelect.gd"
+}, {
+"base": "Control",
+"class": "ProfileSelectButton",
+"language": "GDScript",
+"path": "res://src/scenes/ProfileSelect/ProfileSelectButton.gd"
+}, {
+"base": "",
+"class": "Promise",
+"language": "NativeScript",
+"path": "res://src/types/sync/Promise.gdns"
+}, {
+"base": "",
+"class": "Receiver",
+"language": "NativeScript",
+"path": "res://src/types/sync/Receiver.gdns"
+}, {
+"base": "Reference",
+"class": "Reflect",
+"language": "GDScript",
+"path": "res://src/util/Reflect.gd"
+}, {
+"base": "",
+"class": "Result",
+"language": "NativeScript",
+"path": "res://src/types/Result.gdns"
+}, {
+"base": "Reference",
+"class": "SMCE",
+"language": "GDScript",
+"path": "res://src/types/bind/sketch/SMCE.gd"
+}, {
+"base": "",
+"class": "SecureDigitalStorage",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/SecureDigitalStorage.gdns"
+}, {
+"base": "",
+"class": "Sender",
+"language": "NativeScript",
+"path": "res://src/types/sync/Sender.gdns"
+}, {
+"base": "",
+"class": "Sketch",
+"language": "NativeScript",
+"path": "res://src/types/bind/sketch/Sketch.gdns"
+}, {
+"base": "Reference",
+"class": "SketchDescriptor",
+"language": "GDScript",
+"path": "res://src/types/SketchDescriptor.gd"
+}, {
+"base": "PanelContainer",
+"class": "SketchPane",
+"language": "GDScript",
+"path": "res://src/scenes/SketchPane/SketchPane.gd"
+}, {
+"base": "PanelContainer",
+"class": "SketchStatusControl",
+"language": "GDScript",
+"path": "res://src/scenes/SketchStatusControl/SketchStatusControl.gd"
+}, {
+"base": "",
+"class": "Toolchain",
+"language": "NativeScript",
+"path": "res://src/types/bind/sketch/Toolchain.gdns"
+}, {
+"base": "",
+"class": "UartChannel",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/UartChannel.gdns"
+}, {
+"base": "",
+"class": "UartChannelConfig",
+"language": "NativeScript",
+"path": "res://src/types/bind/board_view/UartChannelConfig.gdns"
+}, {
+"base": "Spatial",
+"class": "Universe",
+"language": "GDScript",
+"path": "res://src/types/Universe.gd"
+}, {
+"base": "Spatial",
+"class": "UniverseWorld",
+"language": "GDScript",
+"path": "res://src/types/UniverseWorld.gd"
+}, {
+"base": "PanelContainer",
+"class": "VerticalSketchList",
+"language": "GDScript",
+"path": "res://src/scenes/VerticalSketchList/VerticalSketchList.gd"
+}, {
+"base": "Reference",
+"class": "ViewModelBase",
+"language": "GDScript",
+"path": "res://src/types/view_model/ViewModelBase.gd"
+}, {
+"base": "Reference",
+"class": "ViewModelExt",
+"language": "GDScript",
+"path": "res://src/types/view_model/ViewModelExt.gd"
+}, {
+"base": "Button",
+"class": "VisibilityButton",
+"language": "GDScript",
+"path": "res://src/types/VisibilityButton.gd"
+} ]
+_global_script_class_icons={
+"Async": "",
+"BindMap": "",
+"Board": "",
+"BoardConfig": "",
+"BoardView": "",
+"ControllableCamera": "",
+"Entry": "",
+"EntryFailGui": "",
+"EnvInfo": "",
+"FileRefLink": "",
+"FrameBufferConfig": "",
+"Fs": "",
+"Future": "",
+"GpioDriverConfig": "",
+"GpioPin": "",
+"Hud": "",
+"LogReader": "",
+"Main": "",
+"ManagedSketch": "",
+"Observable": "",
+"Observable2": "",
+"ObserversObserver": "",
+"Profile": "",
+"ProfilePane": "",
+"ProfileSelect": "",
+"ProfileSelectButton": "",
+"Promise": "",
+"Receiver": "",
+"Reflect": "",
+"Result": "",
+"SMCE": "",
+"SecureDigitalStorage": "",
+"Sender": "",
+"Sketch": "",
+"SketchDescriptor": "",
+"SketchPane": "",
+"SketchStatusControl": "",
+"Toolchain": "",
+"UartChannel": "",
+"UartChannelConfig": "",
+"Universe": "",
+"UniverseWorld": "",
+"VerticalSketchList": "",
+"ViewModelBase": "",
+"ViewModelExt": "",
+"VisibilityButton": ""
+}
+
+[application]
+
+config/name="smce-gd"
+run/main_scene="res://src/scenes/Entry/Entry.tscn"
+config/icon="res://assets/branding/icon.png"
+
+[gui]
+
+theme/custom_font="res://assets/fonts/OpenSans/variants/regular_16px.tres"
+
+[input]
+
+mouse_left={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+mouse_right={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+mouse_scroll_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":4,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+mouse_scroll_down={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+camera_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
+ ]
+}
+camera_left={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+ ]
+}
+camera_right={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+ ]
+}
+camera_down={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"unicode":0,"echo":false,"script":null)
+ ]
+}
+camera_backward={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
+ ]
+}
+camera_forward={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

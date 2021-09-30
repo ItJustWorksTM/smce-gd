@@ -1,0 +1,19 @@
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+reloadable=true
+
+[entry]
+
+OSX.64="res://assets/native/lib/libsmce-gd.so"
+Windows.64="res://assets/native/lib/smce-gd.dll"
+X11.64="res://assets/native/lib/libsmce-gd.so"
+Server.x86_64="res://assets/native/lib/libsmce-gd.so"
+
+[dependencies]
+
+OSX.64=[  ]
+Windows.64=[  ]
+X11.64=[  ]
