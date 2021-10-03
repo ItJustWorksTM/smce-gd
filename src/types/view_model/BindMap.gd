@@ -36,6 +36,7 @@ class BindMapExt:
 var _vm
 func _init(vm):
 	_vm = vm
+	vm.unreference()
 
 func _get(property):
 	if _vm._func_map.has(property) || _vm.has_method(property):
