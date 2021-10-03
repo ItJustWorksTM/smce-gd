@@ -125,12 +125,7 @@ func init_model(profile, worlds): # <Profile>, <Array<String>>
 func _ready():
 	# Debug
 	if true:
-		var profile = Profile.new("A", [1,2,3,4], "C")
-		var a = Observable2.new(profile, "name").get_value()
-		var b = Observable2.new(profile, "sketches").get_value()
-		var c = Observable2.new(profile, "environment").get_value()
-		var z = profile.obsv().name
-		Observable.new(profile).obsv().name
+
 		
 		init_model(Observable.new(Profile.new("A", [1,2,3,4], "C")), Observable.new(["nice", "twice"]))
 

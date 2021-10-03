@@ -26,29 +26,6 @@ func get_version() -> String:
 	return version
 
 func _ready():
-	var tc = Toolchain.new()
-	print(tc.init("/home/ruthgerd/Sources/smce-gd2/.smcegd_home/smce_resources"))
-	assert(tc.is_initialized())
-	
-	var sketch = Sketch.new()
-	
-	print(sketch.init(
-			"/home/ruthgerd/Sources/.tracking/smartcar-shield/examples/BareMinimum",
-			"/home/ruthgerd/Sources/smce-gd2/.smcegd_home/library_patches"))
-	
-	var reader = tc.log_reader()
-	var future = Async.run(tc, "compile", [sketch])
-	
-	while !future.poll_ready():
-		yield(get_tree().create_timer(0.5), "timeout")
-		
-		var read = reader.read()
-		if read != null:
-			print(read)
-	
-	print("We're done compiling, ", future.get())
-	return
-	
 	
 	var title := "SMCE-gd: %s" % get_version()
 	var exec_path := "Executable: %s" % OS.get_executable_path()

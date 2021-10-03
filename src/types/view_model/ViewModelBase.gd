@@ -20,9 +20,19 @@ class_name ViewModelBase
 var _bind := BindMap.new(self)
 var _func_map := {}
 
+# TODO: implement _get_property_list
+
 func _get(property: String):
+	var ret = get_nullable(property)
+	
+	if ret == null && _func_map.has(property):
+		push_warning("sugar caveat: Calculated property `%s` exists but was null!" % property)
+	return ret
+
+func get_nullable(property: String):
 	if _func_map.has(property):
-		return callv(property, _func_map[property].get_value())
+		var ret = callv(property, _func_map[property].get_value())
+		return ret
 	return null
 
 func bind() -> BindMap: return _bind
@@ -30,6 +40,7 @@ func bind() -> BindMap: return _bind
 func conn(target: Object, sig: String, method: String, binds: Array = [], flags: int = 0):
 	if target.connect(sig, self, method, binds, flags) != OK:
 		push_error("Failed to connect to signal '%s'" % sig)
+		assert(false)
 
 func bind_change(property, object, method, binds: Array = []):
 	var suffix := "_prop" if binds.empty() && Reflect.has_property(object, method) else ""

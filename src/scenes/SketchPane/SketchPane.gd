@@ -21,8 +21,10 @@ extends PanelContainer
 const SCENE_FILE := "res://src/scenes/SketchPane/SketchPane.tscn"
 static func instance():	return load(SCENE_FILE).instance()
 
+onready var sketch_status_control: SketchStatusControl = $VBoxContainer/SketchStatusControl
+
 class ViewModel:
-	extends ViewModelBase
+	extends ViewModelExt.WithNode
 
 	signal reset_vehicle_position
 	signal follow_vehicle
@@ -34,17 +36,12 @@ class ViewModel:
 
 	signal compile_sketch
 
-	func _init():
-		pass
+	func _init(n).(n):
+		conn(node.sketch_status_control, "compile_sketch", "compile_sketch")
 	
 	func compile_sketch(): emit_signal("compile_sketch")
 
 var model: ViewModel
 
 func init_model():
-	model = ViewModel.new()
-
-	var __= sketch_status_control.model.connect("compile_sketch", model, "compile_sketch")
-
-
-onready var sketch_status_control: SketchStatusControl = $VBoxContainer/SketchStatusControl
+	model = ViewModel.new(self)

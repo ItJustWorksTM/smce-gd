@@ -1,15 +1,23 @@
 extends SceneTree
 
 func _init():
-	var exit_code = yield(run_tests(), "completed")
+	var args := Array(OS.get_cmdline_args())
+	args.pop_front()
+	args.pop_front()
+	
+	var specific_test = null
+	if !args.empty():
+		specific_test = args.front()
+	
+	var exit_code = yield(run_tests(specific_test), "completed")
 	if exit_code == null:
 		exit_code = 1
 	quit(exit_code)
 
-func run_tests():
+func run_tests(specific_test):
 	yield(self, "idle_frame")
 	
-	var tests = discover_tests()
+	var tests = discover_tests(specific_test)
 	
 	print("running tests")
 	print()
@@ -22,15 +30,15 @@ func run_tests():
 			
 			var time_start = OS.get_ticks_msec()
 			var res = test.object.call(method)
-			var time_end = OS.get_ticks_msec()
 			
 			if res is GDScriptFunctionState:
 				res = yield(res, "completed")
 			
-			var elapsed = time_end - time_start
+			var elapsed = OS.get_ticks_msec() - time_start
+			
 			print(res, " ~ (Took %dms)" % elapsed if elapsed > 0 else "")
 			
-			if res.is_err():
+			if res != null && res.is_err():
 				exit_code = 1
 			
 			print()
@@ -49,7 +57,7 @@ class Test:
 		self.object = obj
 		self.methods = methods
 
-func discover_tests() -> Array:
+func discover_tests(specific_test) -> Array:
 	var scripts = Fs.list_files("res://tests")
 	
 	var ret := []
@@ -69,7 +77,7 @@ func discover_tests() -> Array:
 		var tests := []
 		
 		for method in methods:
-			if method["name"].begins_with("test_"):
+			if method["name"].begins_with("test_") && (specific_test == method["name"] || specific_test == null):
 				tests.push_back(method["name"])
 		
 		if !tests.empty():
