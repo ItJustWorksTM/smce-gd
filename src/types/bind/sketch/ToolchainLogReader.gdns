@@ -3,7 +3,7 @@
 [ext_resource path="res://assets/native/native.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "LogReader"
-class_name = "LogReader"
+resource_name = "ToolchainLogReader"
+class_name = "ToolchainLogReader"
 library = ExtResource( 1 )
-script_class_name = "LogReader"
+script_class_name = "ToolchainLogReader"

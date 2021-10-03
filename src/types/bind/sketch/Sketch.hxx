@@ -28,6 +28,7 @@ namespace godot {
 
 class Toolchain;
 
+// TODO: properly emit build_changed signal
 class Sketch : public Reference {
     GODOT_CLASS(Sketch, Reference)
 

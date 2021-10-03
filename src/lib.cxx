@@ -39,8 +39,8 @@ template <class... T> void register_classes() { (register_class<T>(), ...); };
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
 
-    register_classes<Board, Toolchain, Sketch, BoardView, UartChannel, Result, FrameBuffer, BoardConfig,
-                     BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
-                     BoardConfig::FrameBufferConfig, BoardConfig::SecureDigitalStorage, GpioPin, Sender,
-                     Receiver, LogReader, Future, Promise>();
+    register_classes<Board, BoardLogReader, Toolchain, ToolchainLogReader, Sketch, BoardView, UartChannel,
+                     Result, FrameBuffer, BoardConfig, BoardConfig::GpioDriverConfig,
+                     BoardConfig::UartChannelConfig, BoardConfig::FrameBufferConfig,
+                     BoardConfig::SecureDigitalStorage, GpioPin, Sender, Receiver, Future, Promise>();
 }

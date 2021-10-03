@@ -30,7 +30,7 @@ Ref<Result> Toolchain::init(String resource_dir) {
     if (res->is_err())
         tc.reset();
 
-    reader = make_ref<LogReader>();
+    reader = make_ref<ToolchainLogReader>();
     reader->tc = tc;
 
     return res;
@@ -50,9 +50,9 @@ Ref<Result> Toolchain::compile(Ref<Sketch> sketch) {
     return Result::from(tc->compile(sketch->native()));
 }
 
-void LogReader::_register_methods() { register_method("read", &LogReader::read); }
+void ToolchainLogReader::_register_methods() { register_method("read", &ToolchainLogReader::read); }
 
-Variant LogReader::read() {
+Variant ToolchainLogReader::read() {
     if (auto [_, str] = tc->build_log(); !str.empty()) {
         auto ret = String{str.c_str()};
         str.clear();

@@ -21,6 +21,7 @@
 
 #include <filesystem>
 #include <functional>
+#include <memory>
 #include <optional>
 #include <type_traits>
 #include <SMCE/Board.hpp>
@@ -38,24 +39,34 @@ namespace godot {
 
 namespace stdfs = std::filesystem;
 
+class BoardLogReader : public Reference {
+    GODOT_CLASS(BoardLogReader, Reference);
+
+  public:
+    std::shared_ptr<smce::Board> board;
+
+    static void _register_methods();
+    void _init() {}
+
+    Variant read();
+};
+
 class Board : public Reference {
     GODOT_CLASS(Board, Reference)
 
-    smce::Board board;
+    std::shared_ptr<smce::Board> board;
 
     Ref<Sketch> m_sketch;
 
-    template <class... Status> bool is_status(Status... x) { return ((board.status() == x) || ...); }
+    template <class... Status> bool is_status(Status... x) { return ((board->status() == x) || ...); }
 
     Ref<BoardView> m_view;
 
-    String log;
+    Ref<BoardLogReader> m_log_reader;
 
     bool stopped = false;
     int exit_code = 0;
     Ref<Result> exit_code_res = Result::ok();
-
-    void emit_status_changed() { emit_signal("status_changed", get_status()); }
 
   public:
     Board();
@@ -73,13 +84,11 @@ class Board : public Reference {
 
     bool is_active() { return is_status(smce::Board::Status::running, smce::Board::Status::suspended); }
 
-    String get_log() { return log; }
+    Ref<BoardLogReader> log_reader() { return m_log_reader; }
 
     Ref<Result> poll();
 
     int get_status();
-
-    void _on_sketch_locked(bool);
 
     smce::Board& native();
 };
