@@ -111,6 +111,7 @@ Ref<Result> Board::poll() {
     if (!is_active())
         return exit_code_res;
 
+    // Should cause side effects if sketch has crashed
     board->tick();
 
     if (is_active()) {

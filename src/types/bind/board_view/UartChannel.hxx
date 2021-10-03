@@ -19,33 +19,33 @@
 #ifndef GODOT_SMCE_UARTSLURPER_HXX
 #define GODOT_SMCE_UARTSLURPER_HXX
 
-#include "BoardView.hxx"
-#include <core/Godot.hpp>
 #include <vector>
+#include <core/Godot.hpp>
+#include "BoardView.hxx"
 
 namespace godot {
 
 class UartChannel : public Reference {
-  GODOT_CLASS(UartChannel, Reference)
+    GODOT_CLASS(UartChannel, Reference)
 
-  smce::VirtualUart m_uart = smce::BoardView{}.uart_channels[0];
+    smce::VirtualUart m_uart = smce::BoardView{}.uart_channels[0];
 
-  String gread_buf;
-  std::vector<char> read_buf{};
-  std::vector<char> write_buf{};
+    String gread_buf;
+    std::vector<char> read_buf{};
+    std::vector<char> write_buf{};
 
-public:
-  static void _register_methods();
+  public:
+    static void _register_methods();
 
-  void _init() {}
+    void _init() {}
 
-  static Ref<UartChannel> FromNative(smce::VirtualUart vu);
+    static Ref<UartChannel> FromNative(smce::VirtualUart vu);
 
-  void poll();
+    void poll();
 
-  void write(String buf);
+    void write(String buf);
 
-  String read();
+    String read();
 };
 
 } // namespace godot

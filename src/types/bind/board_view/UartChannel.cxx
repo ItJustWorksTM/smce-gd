@@ -16,61 +16,58 @@
  *
  */
 
-#include "UartChannel.hxx"
 #include <algorithm>
 #include <array>
+#include "UartChannel.hxx"
 
 using namespace godot;
 
 void UartChannel::_register_methods() {
-  register_method("write", &UartChannel::write);
-  register_method("read", &UartChannel::read);
+    register_method("write", &UartChannel::write);
+    register_method("read", &UartChannel::read);
 }
 
 Ref<UartChannel> UartChannel::FromNative(smce::VirtualUart vu) {
-  auto ret = make_ref<UartChannel>();
-  ret->m_uart = vu;
-  const auto max_write = vu.rx().max_size();
-  ret->write_buf.reserve(max_write > 1024 ? max_write : 1024);
-  ret->read_buf = std::vector<char>(vu.tx().max_size() + 1);
-  return ret;
+    auto ret = make_ref<UartChannel>();
+    ret->m_uart = vu;
+    const auto max_write = vu.rx().max_size();
+    ret->write_buf.reserve(max_write > 1024 ? max_write : 1024);
+    ret->read_buf = std::vector<char>(vu.tx().max_size() + 1);
+    return ret;
 }
 
 void UartChannel::poll() {
-  if (!write_buf.empty()) {
-    const auto written = m_uart.rx().write(write_buf);
-    write_buf.erase(write_buf.begin(), write_buf.begin() + written);
-  }
-
-  size_t available;
-  do {
-    auto test = std::array<char, 16>{};
-    available = m_uart.tx().read(test);
-    if (available > 0) {
-      std::replace_if(
-          test.begin(), test.begin() + static_cast<ptrdiff_t>(available),
-          [](const auto &letter) { return letter == '\0' || letter == '\r'; },
-          '\t');
-      test[available] = '\0';
-
-      gread_buf += static_cast<const char *>(read_buf.data());
+    if (!write_buf.empty()) {
+        const auto written = m_uart.rx().write(write_buf);
+        write_buf.erase(write_buf.begin(), write_buf.begin() + written);
     }
-  } while (available != 0);
+
+    size_t available;
+    do {
+        auto test = std::array<char, 16>{};
+        available = m_uart.tx().read(test);
+        if (available > 0) {
+            std::replace_if(
+                test.begin(), test.begin() + static_cast<ptrdiff_t>(available),
+                [](const auto& letter) { return letter == '\0' || letter == '\r'; }, '\t');
+            test[available] = '\0';
+
+            gread_buf += static_cast<const char*>(read_buf.data());
+        }
+    } while (available != 0);
 }
 
 void UartChannel::write(String buf) {
-  const auto ascii_buf = buf.ascii();
+    const auto ascii_buf = buf.ascii();
+    std::copy_n(ascii_buf.get_data(), ascii_buf.length(), std::back_inserter(write_buf));
 
-  std::copy_n(ascii_buf.get_data(), ascii_buf.length(),
-              std::back_inserter(write_buf));
-
-  poll();
+    poll();
 }
 
 String UartChannel::read() {
-  poll();
+    poll();
 
-  auto ret = gread_buf;
-  gread_buf = "";
-  return ret;
+    auto ret = gread_buf;
+    gread_buf = "";
+    return ret;
 }

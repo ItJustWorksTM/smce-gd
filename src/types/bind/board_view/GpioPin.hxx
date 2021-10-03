@@ -16,24 +16,24 @@
  *
  */
 
-#include "core/Godot.hpp"
 #include <SMCE/BoardView.hpp>
+#include "core/Godot.hpp"
 
 namespace godot {
 class GpioPin : public Reference {
-  GODOT_CLASS(GpioPin, Reference)
+    GODOT_CLASS(GpioPin, Reference)
 
-  smce::VirtualPin vpin = smce::BoardView{}.pins[0];
+    smce::VirtualPin vpin = smce::BoardView{}.pins[0];
 
-public:
-  void _init() {}
-  static void _register_methods();
-  static Ref<GpioPin> FromNative(smce::VirtualPin pin);
+  public:
+    void _init() {}
+    static void _register_methods();
+    static Ref<GpioPin> FromNative(smce::VirtualPin pin);
 
-  int analog_read();
-  void analog_write(int value);
+    int analog_read();
+    void analog_write(int value);
 
-  bool digital_read();
-  void digital_write(bool value);
+    bool digital_read();
+    void digital_write(bool value);
 };
 } // namespace godot
