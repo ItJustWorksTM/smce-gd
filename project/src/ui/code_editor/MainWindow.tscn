@@ -5,26 +5,25 @@
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 500.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextEdit" type="TextEdit" parent="."]
-margin_left = 144.141
-margin_top = 220.448
-margin_right = 644.141
-margin_bottom = 555.448
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.12549, 0.12549, 0.12549, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Close" type="Button" parent="."]
-margin_left = 617.0
-margin_top = 193.0
-margin_right = 643.0
-margin_bottom = 219.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -40.0
+margin_top = 10.0
+margin_right = -10.0
 text = "X"
 __meta__ = {
 "_edit_use_anchors_": false
