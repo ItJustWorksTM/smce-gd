@@ -12,13 +12,20 @@ Initially created to emulate cars supporting the [smartcar_shield](https://githu
 
 ### Prerequisites
 
-1. [Setup](https://github.com/ItJustWorksTM/smce-gd/wiki) (follow the setup for your OS)
-2. [Releases](https://github.com/ItJustWorksTM/libSMCE/releases) (extract/install the artifact for your OS, Windows users
-should download the Release version)
-3. Set the env var `SMCE_ROOT` pointed to the root of the extracted directory.
-4. Restart the computer to make sure the env var gets applied.
+1. **Setup** (follow the setup for: [Windows](https://github.com/ItJustWorksTM/smce-gd/wiki/Windows-setup) / [MacOS](https://github.com/ItJustWorksTM/smce-gd/wiki/MacOS-setup) / [Debian-based GNU/Linux](https://github.com/ItJustWorksTM/smce-gd/wiki/Debian-based-Linux-setup))
+2. [libSMCE Releases](https://github.com/ItJustWorksTM/libSMCE/releases) (extract/install the artifact for your OS, Windows users should download the *Release* version)
+3. Set the env var `SMCE_ROOT` pointed to the root of the extracted *libSMCE directory*
+4. Restart the computer to make sure the env var gets applied
 
-### Building
+### Building on Windows
+
+```shell
+mkdir build
+cmake -B build
+cmake --build build --target godot-smce
+```
+
+### Building on MacOS
 
 ```shell
 mkdir build
