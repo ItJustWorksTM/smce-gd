@@ -9,7 +9,7 @@ build/
 
 .import
 assets/native/lib
-assets/smce_resource
+assets/smce_resources
 assets/version.txt
 godot.log
 *.png~
