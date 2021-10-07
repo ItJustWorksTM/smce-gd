@@ -47,7 +47,7 @@ func _ready() -> void:
 func _setup_cams() -> void:
 	cam_ctl.locked_cam = $Camera/LockedCam
 	cam_ctl.free_cam = $Camera/FreeCam
-	cam_ctl.interp_cam = $Camera/InterpolatedCamera
+	cam_ctl.interp_cam = $Camera/InterpCam
 
 
 func load_world(scene: PackedScene) -> bool:
