@@ -19,31 +19,40 @@
 #ifndef GODOT_SMCE_EXTENSIONS_HXX
 #define GODOT_SMCE_EXTENSIONS_HXX
 
-#include <core/Godot.hpp>
 #include <string>
 #include <tuple>
+#include <vector>
+#include <core/Godot.hpp>
 
 template <class T> auto make_ref() -> godot::Ref<T> {
-  static_assert(std::is_base_of_v<godot::Reference, T>);
-  return godot::Ref<T>(T::_new());
+    static_assert(std::is_base_of_v<godot::Reference, T>);
+    return godot::Ref<T>(T::_new());
 }
 
 template <class T, class... S> constexpr auto register_signals(S... name) {
-  (register_signal<T>(name, godot::Dictionary{}), ...);
+    (register_signal<T>(name, godot::Dictionary{}), ...);
 };
 
-template <class... T>
-constexpr auto register_fns(std::pair<const char *, T>... func) {
-  (register_method(func.first, func.second), ...);
+template <class... T> constexpr auto register_fns(std::pair<const char*, T>... func) {
+    (register_method(func.first, func.second), ...);
 };
 
 template <class... T> constexpr auto register_props(T... prop) {
-  (register_property(std::get<0>(prop), std::get<1>(prop), std::get<2>(prop)),
-   ...);
+    (register_property(std::get<0>(prop), std::get<1>(prop), std::get<2>(prop)), ...);
 };
 
-inline std::string std_str(const godot::String &str) {
-  return {str.alloc_c_string(), static_cast<size_t>(str.length())};
+inline std::string std_str(const godot::String& str) {
+    return {str.alloc_c_string(), static_cast<size_t>(str.length())};
+}
+
+inline std::vector<std::string> std_str_vec(const godot::Array& arr) {
+    auto ret = std::vector<std::string>(arr.size());
+
+    for (size_t i = 0; i < arr.size(); ++i) {
+        ret.push_back(std::move(std_str(static_cast<godot::String>(arr[i]))));
+    }
+
+    return ret;
 }
 
 #endif // GODOT_SMCE_EXTENSIONS_HXX

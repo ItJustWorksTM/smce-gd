@@ -17,7 +17,7 @@
 
 cmake_minimum_required (VERSION 3.17)
 
-project (smce-gd VERSION 1.3.1 LANGUAGES CXX)
+project (smce-gd VERSION 1.4.0 LANGUAGES CXX)
 
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -45,6 +45,7 @@ target_sources (smce-gd PRIVATE
         src/types/bind/board/BoardConfig.cxx
         src/types/bind/sketch/Toolchain.cxx
         src/types/bind/sketch/Sketch.cxx
+        src/types/bind/sketch/SketchConfig.cxx
         src/types/bind/board_view/BoardView.cxx
         src/types/bind/board_view/UartChannel.cxx
         src/types/bind/board_view/GpioPin.cxx

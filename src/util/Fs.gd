@@ -91,3 +91,6 @@ static func list_files(path: String) -> Array:
 		ret.push_back(path.plus_file(file_name))
 		file_name = dir.get_next()
 	return ret
+
+static func parent_path(path: String):
+	return path.get_base_dir()

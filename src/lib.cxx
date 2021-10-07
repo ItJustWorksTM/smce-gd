@@ -22,6 +22,7 @@
 #include "types/bind/board/BoardConfig.hxx"
 #include "types/bind/board_view/UartChannel.hxx"
 #include "types/bind/sketch/Sketch.hxx"
+#include "types/bind/sketch/SketchConfig.hxx"
 #include "types/bind/sketch/Toolchain.hxx"
 #include "types/sync/Channel.hxx"
 #include "types/sync/Future.hxx"
@@ -39,8 +40,9 @@ template <class... T> void register_classes() { (register_class<T>(), ...); };
 extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
 
-    register_classes<Board, BoardLogReader, Toolchain, ToolchainLogReader, Sketch, BoardView, UartChannel,
-                     Result, FrameBuffer, BoardConfig, BoardConfig::GpioDriverConfig,
-                     BoardConfig::UartChannelConfig, BoardConfig::FrameBufferConfig,
-                     BoardConfig::SecureDigitalStorage, GpioPin, Sender, Receiver, Future, Promise>();
+    register_classes<Board, BoardLogReader, Toolchain, ToolchainLogReader, Sketch, SketchConfig,
+                     SketchConfig::PluginManifest, BoardView, UartChannel, Result, FrameBuffer, BoardConfig,
+                     BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
+                     BoardConfig::FrameBufferConfig, BoardConfig::SecureDigitalStorage, GpioPin, Sender,
+                     Receiver, Future, Promise>();
 }

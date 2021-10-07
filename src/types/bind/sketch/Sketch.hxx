@@ -23,6 +23,7 @@
 #include "core/Godot.hpp"
 #include "gen/Reference.hpp"
 #include "types/Result.hxx"
+#include "SketchConfig.hxx"
 
 namespace godot {
 
@@ -44,12 +45,10 @@ class Sketch : public Reference {
 
     smce::Sketch& native() { return sketch; }
 
-    // TODO: support SketchConfig
-    // TOOD: remove home_dir§
-    void init(String src, String home_dir);
+    void init(String src, Ref<SketchConfig> config);
 
     void set_path(String src);
-    void set_config(String home_dir);
+    void set_config(Ref<SketchConfig> config);
 
     String get_source();
     bool is_compiled();

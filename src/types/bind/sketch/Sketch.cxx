@@ -33,24 +33,15 @@ void Sketch::_register_methods() {
 #undef STR
 #undef U
 
-void Sketch::init(String src, String home_dir) {
+void Sketch::init(String src, Ref<SketchConfig> config) {
     set_path(src);
-    set_config(home_dir);
+    set_config(config);
 }
 
 void Sketch::set_path(String src) { sketch = smce::Sketch{std_str(src), conf}; }
 
-void Sketch::set_config(String home_dir) {
-
-    conf = {.fqbn = "arduino:sam:arduino_due_x",
-            .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT@2.5.0"},
-                             smce::SketchConfig::RemoteArduinoLibrary{"WiFi@1.2.7"},
-                             smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X@0.0.2"},
-                             smce::SketchConfig::RemoteArduinoLibrary{"SD@1.2.4"}},
-            .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
-                std::filesystem::path{std_str(home_dir)} / "smartcar_shield", "Smartcar shield@7.0.1"}}};
-
-    sketch = smce::Sketch{sketch.get_source(), conf};
+void Sketch::set_config(Ref<SketchConfig> config) {
+    sketch = smce::Sketch{sketch.get_source(), config->to_native()};
 }
 
 String Sketch::get_source() { return sketch.get_source().c_str(); }
