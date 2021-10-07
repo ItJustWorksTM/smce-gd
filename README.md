@@ -11,7 +11,7 @@ Initially created to emulate cars supporting the [smartcar_shield](https://githu
 ### Dependencies
 
 * _[Godot](https://godotengine.org)_
-* *_[libSMCE](https://github.com/ItJustWorksTM/libSMCE)_ ([version]([./CMakeLists.txt#L28](https://github.com/ItJustWorksTM/smce-gd/blob/master/CMakeLists.txt#L28)))
+* *_[libSMCE](https://github.com/ItJustWorksTM/libSMCE)_ ([version](https://github.com/ItJustWorksTM/smce-gd/blob/master/CMakeLists.txt#L28))
 * _[godot-cpp](https://github.com/godotengine/godot-cpp)_ (automatically built from source; *_SConstruct_ is **not** used, but _Python3_ is still required)
 * C++20-compatible compiler + _[CMake](https://cmake.org)_
 
