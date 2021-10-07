@@ -22,8 +22,15 @@ Initially created to emulate cars supporting the [smartcar_shield](https://githu
 ```shell
 mkdir build
 cmake -B build
-cmake --build build --target godot-smce
+cmake --build build --config Release
 ```
+
+### Post-building steps on Windows
+
+1. Copy the file `SMCE.dll` from *\build* to *\project\gdnative\lib*
+2. Open the terminal and write `godot` to launch the godot editor
+   1. Press "Import" and chose the file `project.godot` in *\project*
+   2. Launch the project (this needs to be done at least once for the program to work when writing `godot --path project/`)
 
 ### Building on MacOS
 
