@@ -36,6 +36,7 @@ script = ExtResource( 5 )
 near = 0.01
 far = 400.0
 script = ExtResource( 8 )
+speed = 10.0
 
 [node name="HUD" type="Node" parent="."]
 
