@@ -63,7 +63,8 @@ class BoardDeviceMutex : public Reference {
 class DynamicBoardDevice : public Reference {
     GODOT_CLASS(DynamicBoardDevice, Reference);
 
-    using PropType = std::variant<smce_rt::AtomicU8, smce_rt::AtomicU32, Ref<BoardDeviceMutex>>;
+    using PropType =
+        std::variant<smce_rt::AtomicU8, smce_rt::AtomicU16, smce_rt::AtomicU32, Ref<BoardDeviceMutex>>;
     std::map<String, PropType> properties;
 
     Ref<BoardDeviceSpec> m_info;
@@ -80,6 +81,8 @@ class DynamicBoardDevice : public Reference {
     bool _set(String property, Variant value);
 
     Ref<BoardDeviceSpec> info();
+
+    // TODO: implement _get_property_list
 };
 
 } // namespace godot

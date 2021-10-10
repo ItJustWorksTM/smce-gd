@@ -100,8 +100,6 @@ Ref<Result> Board::init(Ref<BoardConfig> board_config) {
         gbv->board_devices[key] = devices;
     }
 
-    // TODO: board devices??
-
     m_view = gbv;
     return Result::ok();
 }
@@ -164,8 +162,9 @@ Ref<Result> Board::stop() {
 
     poll();
 
-    if (is_active())
+    if (is_active()) {
         board->terminate();
+    }
 
     m_view->valid = false;
     m_view->emit_signal("invalidated");
