@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <core/Godot.hpp>
+#include "types/bind/board/BoardConfig.hxx"
 #include "BoardView.hxx"
 
 namespace godot {
@@ -34,18 +35,22 @@ class UartChannel : public Reference {
     std::vector<char> read_buf{};
     std::vector<char> write_buf{};
 
+    Ref<BoardConfig::UartChannelConfig> m_info;
+
   public:
     static void _register_methods();
 
     void _init() {}
 
-    static Ref<UartChannel> FromNative(smce::VirtualUart vu);
+    static Ref<UartChannel> from_native(Ref<BoardConfig::UartChannelConfig> info, smce::VirtualUart vu);
 
     void poll();
 
     void write(String buf);
 
     String read();
+
+    Ref<BoardConfig::UartChannelConfig> info();
 };
 
 } // namespace godot

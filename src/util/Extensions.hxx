@@ -55,4 +55,12 @@ inline std::vector<std::string> std_str_vec(const godot::Array& arr) {
     return ret;
 }
 
+template <class... Base> struct Visitor : Base... {
+    template <class... Ts>
+    constexpr Visitor(Ts&&... ts) noexcept((std::is_nothrow_move_constructible_v<Base> && ...))
+        : Base{std::forward<Ts>(ts)}... {}
+    using Base::operator()...;
+};
+template <class... Ts> Visitor(Ts...) -> Visitor<std::remove_cvref_t<Ts>...>;
+
 #endif // GODOT_SMCE_EXTENSIONS_HXX

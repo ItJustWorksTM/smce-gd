@@ -21,9 +21,10 @@
 
 using namespace godot;
 
-Ref<FrameBuffer> FrameBuffer::FromNative(smce::FrameBuffer fb) {
+Ref<FrameBuffer> FrameBuffer::from_native(Ref<BoardConfig::FrameBufferConfig> info, smce::FrameBuffer fb) {
     auto ret = make_ref<FrameBuffer>();
     ret->frame_buf = fb;
+    ret->m_info = info;
     return ret;
 }
 
@@ -35,6 +36,7 @@ void FrameBuffer::_register_methods() {
     register_method("get_height", &FrameBuffer::get_height);
     register_method("get_freq", &FrameBuffer::get_freq);
     register_method("write_rgb888", &FrameBuffer::write_rgb888);
+    register_method("info", &FrameBuffer::info);
 }
 
 bool FrameBuffer::exists() { return frame_buf.exists(); }
@@ -53,3 +55,5 @@ bool FrameBuffer::write_rgb888(PoolByteArray bytes) {
 
     return frame_buf.write_rgb888(byte_span);
 }
+
+Ref<BoardConfig::FrameBufferConfig> FrameBuffer::info() { return m_info; }

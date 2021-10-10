@@ -25,15 +25,20 @@ class GpioPin : public Reference {
 
     smce::VirtualPin vpin = smce::BoardView{}.pins[0];
 
+    Ref<BoardConfig::GpioDriverConfig> m_info;
+
   public:
     void _init() {}
     static void _register_methods();
-    static Ref<GpioPin> FromNative(smce::VirtualPin pin);
+
+    static Ref<GpioPin> from_native(Ref<BoardConfig::GpioDriverConfig> info, smce::VirtualPin pin);
 
     int analog_read();
     void analog_write(int value);
 
     bool digital_read();
     void digital_write(bool value);
+
+    Ref<BoardConfig::GpioDriverConfig> info();
 };
 } // namespace godot

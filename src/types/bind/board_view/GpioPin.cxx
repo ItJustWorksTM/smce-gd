@@ -16,6 +16,7 @@
  *
  */
 
+#include "types/bind/board/BoardConfig.hxx"
 #include "util/Extensions.hxx"
 #include "GpioPin.hxx"
 
@@ -26,10 +27,13 @@ void GpioPin::_register_methods() {
     register_method("analog_write", &GpioPin::analog_write);
     register_method("digital_read", &GpioPin::digital_read);
     register_method("digital_write", &GpioPin::digital_write);
+    register_method("info", &GpioPin::info);
 }
-Ref<GpioPin> GpioPin::FromNative(smce::VirtualPin pin) {
+
+Ref<GpioPin> GpioPin::from_native(Ref<BoardConfig::GpioDriverConfig> info, smce::VirtualPin pin) {
     auto ret = make_ref<GpioPin>();
     ret->vpin = pin;
+    ret->m_info = info;
     return ret;
 }
 
@@ -38,3 +42,5 @@ void GpioPin::analog_write(int value) { vpin.analog().write(static_cast<uint16_t
 
 bool GpioPin::digital_read() { return vpin.digital().read(); }
 void GpioPin::digital_write(bool value) { return vpin.digital().write(value); }
+
+Ref<BoardConfig::GpioDriverConfig> GpioPin::info() { return m_info; }

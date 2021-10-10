@@ -32,17 +32,21 @@ check_ipo_supported (RESULT CMAKE_IPO_SUPPORTED LANGUAGES CXX)
 set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ${CMAKE_IPO_SUPPORTED})
 
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
+
 set (SMCE_AUTODOWNLOAD True)
 include (FetchContent)
 
 list (APPEND GDCPP_NEEDED_CLASSES Reference)
 include (SetupGodotCpp)
 
+
+
 add_library (smce-gd MODULE)
 target_sources (smce-gd PRIVATE
         src/lib.cxx
         src/types/bind/board/Board.cxx
         src/types/bind/board/BoardConfig.cxx
+        src/types/bind/board/BoardDeviceSpec.cxx
         src/types/bind/sketch/Toolchain.cxx
         src/types/bind/sketch/Sketch.cxx
         src/types/bind/sketch/SketchConfig.cxx
@@ -50,6 +54,7 @@ target_sources (smce-gd PRIVATE
         src/types/bind/board_view/UartChannel.cxx
         src/types/bind/board_view/GpioPin.cxx
         src/types/bind/board_view/FrameBuffer.cxx
+        src/types/bind/board_view/DynamicBoardDevice.cxx
         src/types/sync/Channel.cxx
         src/types/sync/Future.cxx)
 

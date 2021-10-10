@@ -23,6 +23,7 @@
 #include <core/Godot.hpp>
 #include <core/PoolArrays.hpp>
 #include <gen/Reference.hpp>
+#include "types/bind/board/BoardConfig.hxx"
 #include "util/Extensions.hxx"
 
 namespace godot {
@@ -35,8 +36,10 @@ class FrameBuffer : public Reference {
 
     smce::FrameBuffer frame_buf = smce::BoardView{}.frame_buffers[0];
 
+    Ref<BoardConfig::FrameBufferConfig> m_info;
+
   public:
-    static Ref<FrameBuffer> FromNative(smce::FrameBuffer fb);
+    static Ref<FrameBuffer> from_native(Ref<BoardConfig::FrameBufferConfig> info, smce::FrameBuffer fb);
 
     static void _register_methods();
     void _init() {}
@@ -48,6 +51,8 @@ class FrameBuffer : public Reference {
     int get_height() noexcept;
     int get_freq() noexcept;
     bool write_rgb888(PoolByteArray img);
+
+    Ref<BoardConfig::FrameBufferConfig> info();
 };
 }; // namespace godot
 

@@ -19,8 +19,8 @@
 #include "SketchConfig.hxx"
 
 #include <tuple>
+#include "types/bind/board/BoardDeviceSpec.hxx"
 #include "util/Extensions.hxx"
-
 using namespace godot;
 
 #define STR(s) #s
@@ -56,8 +56,17 @@ smce::SketchConfig SketchConfig::to_native() {
 
                 return r;
             }(),
-        // TODO:
-        .genbind_devices = {}};
+        .genbind_devices =
+            [&] {
+                auto r = std::vector<std::reference_wrapper<const smce::BoardDeviceSpecification>>{};
+
+                for (size_t i = 0; i < genbind_devices.size(); ++i) {
+                    auto& t = static_cast<Ref<BoardDeviceSpec>>(genbind_devices[i])->to_native();
+                    r.push_back(std::cref(t));
+                }
+
+                return r;
+            }()};
 }
 
 void SketchConfig::PluginManifest::_register_methods() {

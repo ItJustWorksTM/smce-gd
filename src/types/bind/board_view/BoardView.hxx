@@ -38,9 +38,10 @@ class BoardView : public Reference {
     smce::BoardView view;
     bool valid = false;
 
-    Array pins;
-    Array uart_channels;
+    Dictionary pins;
+    Dictionary uart_channels;
     Dictionary frame_buffers;
+    Dictionary /* <String, Array<DynamicBoardDevice>> */ board_devices;
 
   public:
     static void _register_methods();

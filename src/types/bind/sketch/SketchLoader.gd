@@ -25,7 +25,7 @@ var _sketch_config
 func _init(sketch_config):
 	_sketch_config = sketch_config
 
-func skload(path: String, unique: bool = false): # -> Sketch
+func skload(path: String): # -> Sketch
 	path = Fs.parent_path(path)
 	if ! Fs.dir_exists(path):
 		return null

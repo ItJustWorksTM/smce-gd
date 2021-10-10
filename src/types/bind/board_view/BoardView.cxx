@@ -26,11 +26,13 @@ void BoardView::_init() {}
 void BoardView::_register_methods() {
     register_signals<BoardView>("invalidated");
     register_property<BoardView>("pins", &BoardView::set_noop, &BoardView::get_valid<&BoardView::pins>,
-                                 Array{});
+                                 Dictionary{});
     register_property<BoardView>("uart_channels", &BoardView::set_noop,
-                                 &BoardView::get_valid<&BoardView::uart_channels>, Array{});
+                                 &BoardView::get_valid<&BoardView::uart_channels>, Dictionary{});
     register_property<BoardView>("frame_buffers", &BoardView::set_noop,
                                  &BoardView::get_valid<&BoardView::frame_buffers>, Dictionary{});
+    register_property<BoardView>("board_devices", &BoardView::set_noop,
+                                 &BoardView::get_valid<&BoardView::board_devices>, Dictionary{});
     register_method("is_valid", &BoardView::is_valid);
 }
 

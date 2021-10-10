@@ -77,7 +77,8 @@ class Board : public Reference {
 
     static void _register_methods();
 
-    Ref<Result> start(Ref<BoardConfig> board_config, Ref<Sketch> sketch);
+    Ref<Result> init(Ref<BoardConfig> board_config);
+    Ref<Result> start(Ref<Sketch> sketch);
     Ref<Result> suspend();
     Ref<Result> resume();
     Ref<Result> stop();

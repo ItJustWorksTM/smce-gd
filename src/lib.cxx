@@ -20,6 +20,8 @@
 #include "types/Result.hxx"
 #include "types/bind/board/Board.hxx"
 #include "types/bind/board/BoardConfig.hxx"
+#include "types/bind/board/BoardDeviceSpec.hxx"
+#include "types/bind/board_view/DynamicBoardDevice.hxx"
 #include "types/bind/board_view/UartChannel.hxx"
 #include "types/bind/sketch/Sketch.hxx"
 #include "types/bind/sketch/SketchConfig.hxx"
@@ -41,8 +43,9 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
     Godot::nativescript_init(handle);
 
     register_classes<Board, BoardLogReader, Toolchain, ToolchainLogReader, Sketch, SketchConfig,
-                     SketchConfig::PluginManifest, BoardView, UartChannel, Result, FrameBuffer, BoardConfig,
-                     BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
-                     BoardConfig::FrameBufferConfig, BoardConfig::SecureDigitalStorage, GpioPin, Sender,
+                     SketchConfig::PluginManifest, DynamicBoardDevice, BoardDeviceMutex, BoardDeviceSpec,
+                     BoardView, UartChannel, Result, FrameBuffer, BoardConfig, BoardConfig::GpioDriverConfig,
+                     BoardConfig::UartChannelConfig, BoardConfig::FrameBufferConfig,
+                     BoardConfig::BoardDeviceConfig, BoardConfig::SecureDigitalStorage, GpioPin, Sender,
                      Receiver, Future, Promise>();
 }

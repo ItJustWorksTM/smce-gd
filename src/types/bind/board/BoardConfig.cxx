@@ -17,6 +17,7 @@
  */
 
 #include "BoardConfig.hxx"
+#include "BoardDeviceSpec.hxx"
 
 using namespace godot;
 
@@ -78,11 +79,21 @@ smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_na
     return {.cspin = static_cast<uint16_t>(cspin), .root_dir = std_str(root_dir)};
 }
 
+void BoardConfig::BoardDeviceConfig::_register_methods() {
+    register_property("spec", &BoardConfig::BoardDeviceConfig::spec, {});
+    register_property("amount", &BoardConfig::BoardDeviceConfig::amount, {});
+}
+
+smce::BoardConfig::BoardDevice BoardConfig::BoardDeviceConfig::to_native() {
+    return {.spec = std::cref(spec->to_native()), .count = amount};
+}
+
 void BoardConfig::_register_methods() {
     register_property("gpio_drivers", &BoardConfig::gpio_drivers, Array{});
     register_property("uart_channels", &BoardConfig::uart_channels, Array{});
     register_property("frame_buffers", &BoardConfig::frame_buffers, Array{});
     register_property("sd_cards", &BoardConfig::sd_cards, Array{});
+    register_property("board_devices", &BoardConfig::board_devices, Array{});
 }
 
 smce::BoardConfig BoardConfig::to_native() const {
@@ -97,6 +108,7 @@ smce::BoardConfig BoardConfig::to_native() const {
     rep.operator()<UartChannelConfig>(uart_channels, ret.uart_channels);
     rep.operator()<FrameBufferConfig>(frame_buffers, ret.frame_buffers);
     rep.operator()<SecureDigitalStorage>(sd_cards, ret.sd_cards);
+    rep.operator()<BoardDeviceConfig>(board_devices, ret.board_devices);
 
     for (const auto& driver : ret.gpio_drivers)
         ret.pins.push_back(driver.pin_id);

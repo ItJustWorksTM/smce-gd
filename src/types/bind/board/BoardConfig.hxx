@@ -24,6 +24,7 @@
 #include <SMCE/BoardConf.hpp>
 #include <SMCE/BoardView.hpp>
 #include <core/Godot.hpp>
+#include "types/bind/board/BoardDeviceSpec.hxx"
 #include "util/Extensions.hxx"
 
 namespace godot {
@@ -96,10 +97,25 @@ class BoardConfig : public Reference {
         smce::BoardConfig::SecureDigitalStorage to_native() const;
     };
 
+    class BoardDeviceConfig : public Reference {
+        GODOT_CLASS(BoardDeviceConfig, Reference);
+
+      public:
+        Ref<BoardDeviceSpec> spec;
+        size_t amount;
+
+        static void _register_methods();
+
+        void _init() {}
+
+        smce::BoardConfig::BoardDevice to_native();
+    };
+
     Array gpio_drivers;
     Array uart_channels;
     Array frame_buffers;
     Array sd_cards;
+    Array board_devices;
 
     static void _register_methods();
     void _init() {}

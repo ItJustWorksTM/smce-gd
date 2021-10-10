@@ -17,6 +17,7 @@
  */
 
 #include "types/bind/board_view/BoardView.hxx"
+#include "types/bind/board_view/DynamicBoardDevice.hxx"
 #include "types/bind/board_view/UartChannel.hxx"
 #include "Board.hxx"
 
@@ -27,8 +28,8 @@ using namespace godot;
     std::pair { STR(f), &Board::f }
 
 void Board::_register_methods() {
-    register_fns(U(start), U(suspend), U(resume), U(stop), U(get_status), U(get_view), U(poll), U(log_reader),
-                 U(is_active));
+    register_fns(U(init), U(start), U(suspend), U(resume), U(stop), U(get_status), U(get_view), U(poll),
+                 U(log_reader), U(is_active));
 }
 
 #undef STR
@@ -50,17 +51,13 @@ void Board::_init() {
 
 smce::Board& Board::native() { return *board; }
 
-Ref<Result> Board::start(Ref<BoardConfig> board_config, Ref<Sketch> sketch) {
+Ref<Result> Board::init(Ref<BoardConfig> board_config) {
     if (!is_status(smce::Board::Status::clean))
         return Result::err("Board already in use");
-    if (!sketch->is_compiled())
-        return Result::err("Sketch is not compiled");
     if (!board->configure(board_config->to_native()))
         return Result::err("Failed to configure board");
-    if (!board->attach_sketch(sketch->native()))
-        return Result::err("Failed to attach sketch");
-    if (!board->start())
-        return Result::err("Failed to start internal runner");
+    if (!board->prepare())
+        return Result::err("Failed to prepare board");
 
     auto bv = board->view();
     auto gbv = make_ref<BoardView>();
@@ -69,19 +66,56 @@ Ref<Result> Board::start(Ref<BoardConfig> board_config, Ref<Sketch> sketch) {
     gbv->view = bv;
 
     for (int i = 0; i < board_config->gpio_drivers.size(); ++i) {
-        gbv->pins.append(GpioPin::FromNative(bv.pins[i]));
+        auto info = static_cast<Ref<BoardConfig::GpioDriverConfig>>(board_config->gpio_drivers[i]);
+        gbv->pins[info->pin] = GpioPin::from_native(info, bv.pins[i]);
     }
 
     for (int i = 0; i < board_config->uart_channels.size(); ++i) {
-        gbv->uart_channels.append(UartChannel::FromNative(bv.uart_channels[i]));
+        auto info = static_cast<Ref<BoardConfig::UartChannelConfig>>(board_config->uart_channels[i]);
+        gbv->uart_channels[i] = UartChannel::from_native(info, bv.uart_channels[i]);
     }
 
     for (int i = 0; i < board_config->frame_buffers.size(); ++i) {
-        gbv->frame_buffers[((Ref<BoardConfig::FrameBufferConfig>)board_config->frame_buffers[i])->key] =
-            FrameBuffer::FromNative(bv.frame_buffers[i]);
+        auto info = static_cast<Ref<BoardConfig::FrameBufferConfig>>(board_config->frame_buffers[i]);
+        gbv->frame_buffers[info->key] = FrameBuffer::from_native(info, bv.frame_buffers[i]);
     }
 
+    for (int i = 0; i < board_config->board_devices.size(); ++i) {
+        auto info = static_cast<Ref<BoardConfig::BoardDeviceConfig>>(board_config->board_devices[i]);
+        if (info.is_null()) {
+            continue;
+        }
+
+        auto key = String{info->spec->to_native().name.data()};
+
+        if (gbv->board_devices.has(key))
+            continue;
+
+        auto devices = Array{};
+
+        for (size_t i = 0; i < info->amount; ++i) {
+            devices.push_back(DynamicBoardDevice::create(info->spec, bv));
+        }
+
+        gbv->board_devices[key] = devices;
+    }
+
+    // TODO: board devices??
+
     m_view = gbv;
+    return Result::ok();
+}
+
+Ref<Result> Board::start(Ref<Sketch> sketch) {
+    if (!sketch->is_compiled())
+        return Result::err("Sketch is not compiled");
+    if (!board->attach_sketch(sketch->native()))
+        return Result::err("Failed to attach sketch");
+    if (!board->start())
+        return Result::err("Failed to start internal runner");
+
+    // TODO: check if sketch board devices match the board config
+
     m_sketch = sketch;
 
     return Result::ok();

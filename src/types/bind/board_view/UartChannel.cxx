@@ -25,14 +25,16 @@ using namespace godot;
 void UartChannel::_register_methods() {
     register_method("write", &UartChannel::write);
     register_method("read", &UartChannel::read);
+    register_method("info", &UartChannel::info);
 }
 
-Ref<UartChannel> UartChannel::FromNative(smce::VirtualUart vu) {
+Ref<UartChannel> UartChannel::from_native(Ref<BoardConfig::UartChannelConfig> info, smce::VirtualUart vu) {
     auto ret = make_ref<UartChannel>();
     ret->m_uart = vu;
     const auto max_write = vu.rx().max_size();
     ret->write_buf.reserve(max_write > 1024 ? max_write : 1024);
     ret->read_buf = std::vector<char>(vu.tx().max_size() + 1);
+    ret->m_info = info;
     return ret;
 }
 
@@ -71,3 +73,5 @@ String UartChannel::read() {
     gread_buf = "";
     return ret;
 }
+
+Ref<BoardConfig::UartChannelConfig> UartChannel::info() { return m_info; }
