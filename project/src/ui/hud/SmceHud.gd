@@ -39,7 +39,7 @@ var button_group: BButtonGroup = BButtonGroup.new()
 var buttons: Array = []
 var paths: Dictionary = {}
 
-var cam_ctl: CamCtl = null
+var cam_ctl: ControllableCamera = null
 var profile = null
 var sketch_manager: SketchManager = null
 var master_manager = null
