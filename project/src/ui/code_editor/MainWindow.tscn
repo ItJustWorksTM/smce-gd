@@ -28,3 +28,30 @@ text = "X"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="DropDown" type="MenuButton" parent="."]
+margin_left = 145.0
+margin_top = 193.587
+margin_right = 227.0
+margin_bottom = 219.587
+text = "File"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialog" type="FileDialog" parent="."]
+anchor_left = 0.00215611
+anchor_right = 0.00215611
+margin_left = 107.635
+margin_top = 220.315
+margin_right = 677.635
+margin_bottom = 539.315
+window_title = "Öppna en Fil"
+resizable = true
+mode = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
