@@ -19,7 +19,6 @@ extends VBoxContainer
 
 var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
 var collapsable_t = preload("res://src/ui/collapsable/collapsable.tscn")
-var code_main_window_t = preload("res://src/ui/code_editor/MainWindow.tscn")
 
 signal notification_created
 signal grab_focus
@@ -27,7 +26,6 @@ signal grab_focus
 var _toolchain: Toolchain = null
 var _board = null
 
-onready var edit_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Edit
 
 onready var compile_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Compile
 onready var compile_log_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/CompileLog
@@ -111,8 +109,6 @@ func _ready():
 		_board.connect(sig, self, "_on_board_" + sig)
 	
 	_board.connect("log", self, "_on_board_log")
-
-	edit_btn.connect("pressed", self, "_on_edit")
 	
 	compile_btn.connect("pressed", self, "_on_compile")
 	compile_log_btn.connect("pressed", self, "_show_compile_log")
@@ -235,16 +231,6 @@ func set_cam_ctl(ctl: CamCtl) -> void:
 
 func _on_board_log(part: String):
 	sketch_log.text += part
-
-
-func _on_edit() -> void:
-	get_focus_owner().release_focus()
-	
-	#_set_vis(false)
-
-	var code_editor = code_main_window_t.instance()
-	get_tree().root.add_child(code_editor)
-	
 
 
 func _on_compile() -> void:

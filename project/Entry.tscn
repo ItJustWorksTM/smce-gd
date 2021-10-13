@@ -63,6 +63,9 @@ margin_bottom = -0.240051
 focus_mode = 2
 custom_styles/focus = SubResource( 1 )
 selection_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Button" type="Button" parent="."]
 anchor_left = 0.5
