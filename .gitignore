@@ -14,3 +14,16 @@ project/share/RtResources
 project/share/version.txt
 godot.log
 *.png~
+.import/
+export.cfg
+
+# Mono-specific ignores
+.mono/
+data_*/
+
+# Build related directories
+build
+# Translations
+*.translation
+
+
