@@ -37,6 +37,16 @@ var fps = 0
 var vflip: bool = false
 var hflip: bool = false
 
+signal cam_locked
+signal cam_freed
+
+var locked_cam: Spatial = null
+var free_cam: Spatial = null
+var interp_cam: Camera = null
+
+var locked = null
+
+
 func set_view(_view: Node) -> void:
 	if ! _view:
 		return
@@ -119,12 +129,43 @@ func _physics_process(delta):
 	if ! DebugCanvas.disabled:
 		DebugCanvas.add_draw(camera.global_transform.origin, camera.global_transform.origin + camera.global_transform.basis.xform(Vector3.FORWARD), Color.yellow)
 
-
 func visualize() -> Control:
 	var visualizer = NodeVisualizer.new()
 	visualizer.display_node(self, "visualize_content")
 	return visualizer
 
-
 func visualize_content() -> String:
 	return "   Resolution: %dx%d\n   FPS: %d\n   V Flip: %s\n   H Flip: %s" % [resolution.x, resolution.y, fps, vflip, hflip]
+
+func lock_cam(node: Spatial) -> void:
+	if ! is_instance_valid(node) || ! node.is_inside_tree():
+		return
+	interp_cam.set_target(locked_cam)
+	locked_cam.set_target(node)
+	free_cam.set_disabled(true)
+	emit_signal("cam_locked", node)
+	locked = node
+	if ! node.is_connected("tree_exiting", self, "_on_free"):
+		node.connect("tree_exiting", self, "_on_free", [node])
+
+
+func free_cam() -> void:
+	interp_cam.set_target(free_cam)
+	free_cam.set_disabled(false)
+	free_cam.transform = locked_cam.transform
+	emit_signal("cam_freed")
+	if is_instance_valid(locked):
+		locked.disconnect("tree_exiting", self, "_on_free")
+	locked = null
+
+
+func set_cam_position(transform: Transform = Transform()) -> void:
+	free_cam()
+	locked_cam.global_transform = transform
+	free_cam.global_transform = transform
+	interp_cam.global_transform = transform
+
+
+func _on_free(node) -> void:
+	if node == locked:
+		free_cam()
