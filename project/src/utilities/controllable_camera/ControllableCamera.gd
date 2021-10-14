@@ -36,14 +36,18 @@ var _zoom = 9
 
 var target: Spatial = null setget set_target, get_target
 func set_target(trgt: Spatial) -> void:	
+
 	if is_instance_valid(target):
 		target.queue_free()
 		target = null
 		set_process(false)
-	
+
 	if is_instance_valid(trgt):
 		target = Spatial.new()
 		trgt.add_child(target)
+		#global_transform.origin = trgt.global_transform.origin + trgt.global_transform.basis.xform((Vector3.UP) * _zoom)
+		#global_transform.origin = global_transform.origin.rotated(Vector3.UP, PI)
+		#look_at(trgt.global_transform.origin, Vector3.UP)
 		set_process(true)
 	
 	_update_pos()

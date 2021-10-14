@@ -50,7 +50,7 @@ onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
 
 var sketch_path: String = ""
 
-var cam_ctl: CamCtl = null setget set_cam_ctl
+var cam_ctl: Camera = null setget set_cam_ctl
 
 var vehicle = null
 
@@ -220,7 +220,7 @@ func _on_board_stopped(exit_code: int) -> void:
 	vehicle.queue_free()
 
 
-func set_cam_ctl(ctl: CamCtl) -> void:
+func set_cam_ctl(ctl: Camera) -> void:
 	if ! ctl:
 		return
 	cam_ctl = ctl
