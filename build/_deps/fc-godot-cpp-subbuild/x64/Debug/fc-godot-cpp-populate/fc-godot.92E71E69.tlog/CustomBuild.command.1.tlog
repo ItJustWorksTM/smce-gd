@@ -1,0 +1,162 @@
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-MKDIR.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-DOWNLOAD.RULE
+setlocal
+cd C:\Users\seliy\source\repos\smce-gd\build\_deps
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp/fc-godot-cpp-populate-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-UPDATE.RULE
+setlocal
+cd C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-src
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp/fc-godot-cpp-populate-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-PATCH.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-CONFIGURE.RULE
+setlocal
+cd C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-BUILD.RULE
+setlocal
+cd C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-INSTALL.RULE
+setlocal
+cd C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\41DD51E6CF1E21664300B9FB3284E112\FC-GODOT-CPP-POPULATE-TEST.RULE
+setlocal
+cd C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-test
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\A4CE1F371ADEDED80F92374D90294B13\FC-GODOT-CPP-POPULATE-COMPLETE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/Debug
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/Debug/fc-godot-cpp-populate-complete
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\E38E1B55A4E2DE36A7C6D854D197FAC3\FC-GODOT-CPP-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild -BC:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

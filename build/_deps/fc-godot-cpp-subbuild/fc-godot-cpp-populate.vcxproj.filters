@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\3348ea695ff5fb4b12b00110ce03f17b\fc-godot-cpp-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\61a27885decf87a0f325095f7227c3c0\fc-godot-cpp-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\c4691bd8f2200cd9e2f3967314b38a0d\fc-godot-cpp-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\fc-godot-cpp-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{45EB7C8F-6CDC-3F8E-AB05-E1B07311EB52}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

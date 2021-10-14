@@ -1,0 +1,10 @@
+# CPack properties
+if("${CPACK_BUILD_CONFIG}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
+  set_property(INSTALL "lib/smce/smce_gd.exe" PROPERTY "CPACK_START_MENU_SHORTCUTS" "SMCE Godot")
+elseif("${CPACK_BUILD_CONFIG}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
+  set_property(INSTALL "lib/smce/smce_gd.exe" PROPERTY "CPACK_START_MENU_SHORTCUTS" "SMCE Godot")
+elseif("${CPACK_BUILD_CONFIG}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
+  set_property(INSTALL "lib/smce/smce_gd.exe" PROPERTY "CPACK_START_MENU_SHORTCUTS" "SMCE Godot")
+elseif("${CPACK_BUILD_CONFIG}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
+  set_property(INSTALL "lib/smce/smce_gd.exe" PROPERTY "CPACK_START_MENU_SHORTCUTS" "SMCE Godot")
+endif()

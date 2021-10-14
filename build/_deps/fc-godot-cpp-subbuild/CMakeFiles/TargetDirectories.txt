@@ -1,0 +1,3 @@
+C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/fc-godot-cpp-populate.dir
+C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/ZERO_CHECK.dir

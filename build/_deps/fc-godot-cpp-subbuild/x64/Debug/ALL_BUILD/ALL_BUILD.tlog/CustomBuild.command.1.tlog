@@ -1,0 +1,10 @@
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild -BC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild --check-stamp-file C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

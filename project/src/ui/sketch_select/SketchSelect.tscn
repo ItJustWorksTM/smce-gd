@@ -38,8 +38,8 @@ bg_color = Color( 0, 0, 0, 0 )
 [sub_resource type="StyleBoxEmpty" id=10]
 
 [node name="Control" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 768.0
+margin_bottom = 464.0
 rect_pivot_offset = Vector2( 640, 320 )
 script = ExtResource( 5 )
 __meta__ = {
@@ -52,9 +52,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -640.0
-margin_top = -360.0
+margin_top = -363.364
 margin_right = 640.0
-margin_bottom = 360.0
+margin_bottom = 356.636
 rect_pivot_offset = Vector2( 640, 320 )
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -227,3 +227,96 @@ custom_styles/normal = SubResource( 10 )
 custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
 scroll_following = true
 selection_enabled = true
+
+[node name="SaveDialog" type="FileDialog" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach"]
+visible = true
+margin_right = 768.0
+margin_bottom = 464.0
+rect_min_size = Vector2( 150, 52.5 )
+access = 2
+current_dir = "/smce-gd-master"
+current_file = "project"
+current_path = "/smce-gd-master/project"
+
+[node name="Texteditor" type="MarginContainer" parent="LogPopout/Panel"]
+visible = false
+margin_right = 768.0
+margin_bottom = 464.0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="LogPopout/Panel/Texteditor"]
+margin_right = 768.0
+margin_bottom = 464.0
+
+[node name="TextAttach" type="MarginContainer" parent="LogPopout/Panel/Texteditor/VBoxContainer"]
+margin_right = 768.0
+margin_bottom = 464.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach"]
+margin_right = 768.0
+margin_bottom = 464.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 9 )
+custom_styles/normal = SubResource( 10 )
+custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
+scroll_following = true
+selection_enabled = true
+
+[node name="FileDialog2" type="FileDialog" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach"]
+margin_right = 768.0
+margin_bottom = 464.0
+rect_min_size = Vector2( 150, 52.5 )
+window_title = "Open a File"
+mode = 0
+access = 2
+current_dir = "/smce-gd-master/project"
+current_file = "project"
+current_path = "/smce-gd-master/project/project"
+
+[node name="WindowDialog" type="WindowDialog" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach"]
+margin_right = 768.0
+margin_bottom = 464.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 6.1631
+margin_top = 40.3058
+margin_right = 519.163
+margin_bottom = 441.306
+
+[node name="Open" type="Button" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 6.91692
+margin_top = 8.24492
+margin_right = 128.917
+margin_bottom = 37.2449
+text = "Upload Sketch"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Save" type="Button" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 134.163
+margin_top = 7.67323
+margin_right = 256.163
+margin_bottom = 35.6732
+text = "Save as File"
+
+[node name="preview" type="Button" parent="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 264.451
+margin_top = 7.87755
+margin_right = 388.451
+margin_bottom = 35.8775
+text = "Preview"
+
+[connection signal="file_selected" from="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/SaveDialog" to="." method="_on_SaveDialog_file_selected"]
+[connection signal="file_selected" from="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/FileDialog2" to="." method="_on_FileDialog2_file_selected"]
+[connection signal="files_selected" from="LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/FileDialog2" to="." method="_on_FileDialog2_files_selected"]

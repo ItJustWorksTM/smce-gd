@@ -1,0 +1,10 @@
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\C4691BD8F2200CD9E2F3967314B38A0D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild -BC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

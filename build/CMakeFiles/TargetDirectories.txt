@@ -1,0 +1,7 @@
+C:/smce-gd-master/build/CMakeFiles/godotcpp-generated.dir
+C:/smce-gd-master/build/CMakeFiles/godot-cpp.dir
+C:/smce-gd-master/build/CMakeFiles/godot-smce.dir
+C:/smce-gd-master/build/CMakeFiles/PACKAGE.dir
+C:/smce-gd-master/build/CMakeFiles/INSTALL.dir
+C:/smce-gd-master/build/CMakeFiles/ALL_BUILD.dir
+C:/smce-gd-master/build/CMakeFiles/ZERO_CHECK.dir

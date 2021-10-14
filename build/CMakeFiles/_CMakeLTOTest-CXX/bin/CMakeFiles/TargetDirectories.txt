@@ -1,0 +1,4 @@
+C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/foo.dir
+C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/boo.dir
+C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/ALL_BUILD.dir
+C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/ZERO_CHECK.dir

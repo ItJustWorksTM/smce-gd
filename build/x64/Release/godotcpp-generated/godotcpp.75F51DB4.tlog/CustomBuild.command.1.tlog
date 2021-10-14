@@ -1,0 +1,18 @@
+^C:\SMCE-GD-MASTER\BUILD\CMAKEFILES\6418F130433F14BB5EE8A628E7C39C8D\GODOTCPP-GENERATED.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master -BC:/smce-gd-master/build --check-stamp-file C:/smce-gd-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
