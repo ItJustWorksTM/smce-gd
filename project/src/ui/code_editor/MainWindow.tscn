@@ -21,19 +21,20 @@ __meta__ = {
 [node name="Close" type="Button" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -40.0
-margin_top = 10.0
-margin_right = -10.0
+margin_left = -50.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = 30.0
 text = "X"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DropDown" type="MenuButton" parent="."]
-margin_left = 145.0
-margin_top = 193.587
-margin_right = 227.0
-margin_bottom = 219.587
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 100.0
+margin_bottom = 31.0
 text = "File"
 flat = false
 __meta__ = {
@@ -47,9 +48,23 @@ margin_left = 107.635
 margin_top = 220.315
 margin_right = 677.635
 margin_bottom = 539.315
-window_title = "Öppna en Fil"
+window_title = "Open a File"
 resizable = true
 mode = 0
+access = 2
+current_dir = "/SCHOOL/MPSOF-1/Year2/LP1/SoftEv/GITKRAKEN/group-10-smce-gd/project"
+current_path = "/SCHOOL/MPSOF-1/Year2/LP1/SoftEv/GITKRAKEN/group-10-smce-gd/project/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEditor" type="TextEdit" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
