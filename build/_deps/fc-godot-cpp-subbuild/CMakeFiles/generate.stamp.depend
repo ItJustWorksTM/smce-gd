@@ -10,6 +10,6 @@ C:/Program Files/CMake/share/cmake-3.21/Modules/ExternalProject.cmake
 C:/Program Files/CMake/share/cmake-3.21/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-3.21/Modules/Platform/WindowsPaths.cmake
 C:/Program Files/CMake/share/cmake-3.21/Modules/RepositoryInfo.txt.in
-C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/3.21.2/CMakeSystem.cmake
-C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/CMakeLists.txt
-C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp/fc-godot-cpp-populate-cfgcmd.txt.in
+C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/3.21.2/CMakeSystem.cmake
+C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeLists.txt
+C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp/fc-godot-cpp-populate-cfgcmd.txt.in

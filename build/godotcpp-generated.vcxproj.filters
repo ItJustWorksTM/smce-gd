@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\smce-gd-master\build\CMakeFiles\6418f130433f14bb5ee8a628e7c39c8d\godotcpp-generated.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\smce-gd-master\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\smce-gd-master\build\CMakeFiles\godotcpp-generated" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{41FC9049-0A81-3636-9DAB-728497519801}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

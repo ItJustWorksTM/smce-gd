@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild
+# Install script for directory: C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

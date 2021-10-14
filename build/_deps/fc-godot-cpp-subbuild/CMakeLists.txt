@@ -21,8 +21,8 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 include(ExternalProject)
 ExternalProject_Add(fc-godot-cpp-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/godotengine/godot-cpp.git" "GIT_TAG" "master"
-                    SOURCE_DIR          "C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-src"
-                    BINARY_DIR          "C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-build"
+                    SOURCE_DIR          "C:/smce-gd-master/build/_deps/fc-godot-cpp-src"
+                    BINARY_DIR          "C:/smce-gd-master/build/_deps/fc-godot-cpp-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-subbuild\x64\Debug\ZERO_CHECK</FullPath>
+      <FullPath>C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\x64\Debug\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-subbuild\x64\Debug\fc-godot-cpp-populate</FullPath>
+      <FullPath>C:\smce-gd-master\build\_deps\fc-godot-cpp-subbuild\x64\Debug\fc-godot-cpp-populate</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

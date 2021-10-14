@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Basis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\CameraMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Color.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Dictionary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\GodotGlobal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\NodePath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\PoolArrays.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Quat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\RID.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Rect2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\TagDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Transform2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Variant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Vector2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Vector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ArrayMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\CanvasItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Control.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\InputEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\InputEventKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\InputEventWithModifiers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\MainLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\MultiMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\MultiplayerAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\NetworkedMultiplayerPeer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PackedScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PacketPeer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Physics2DDirectSpaceState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Physics2DShapeQueryParameters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PhysicsDirectSpaceState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PhysicsShapeQueryParameters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Reference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ResourceInteractiveLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ResourceLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SceneState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SceneTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SceneTreeTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Sky.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Spatial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SpatialGizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\StyleBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Theme.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\TriangleMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Viewport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ViewportTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\World2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\__init_method_bindings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\__register_types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\AABB.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Array.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Basis.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\CameraMatrix.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Color.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\CoreTypes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Defs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Dictionary.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Godot.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\GodotGlobal.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\GodotProfiling.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Math.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\NodePath.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Plane.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\PoolArrays.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Quat.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\RID.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Rect2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Ref.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\String.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\TagDB.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Transform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Transform2D.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Variant.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Vector2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Vector3.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Wrapped.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ArrayMesh.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Camera.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\CanvasItem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Control.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Environment.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Font.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Image.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\InputEvent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\InputEventKey.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\InputEventWithModifiers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\MainLoop.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Material.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Mesh.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\MultiMesh.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\MultiplayerAPI.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\NetworkedMultiplayerPeer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Node.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Object.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PackedScene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PacketPeer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Physics2DDirectSpaceState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Physics2DShapeQueryParameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PhysicsDirectSpaceState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PhysicsShapeQueryParameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Reference.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Resource.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ResourceInteractiveLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ResourceLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SceneState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SceneTree.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SceneTreeTimer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Shape.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Sky.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Spatial.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SpatialGizmo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\StyleBox.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Theme.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\TriangleMesh.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Viewport.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ViewportTexture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\World.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\World2D.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\__icalls.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\smce-gd-master\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{304CDD94-F1F7-365A-8955-95A620CCA330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{79BF4D8D-7287-3F42-8ACF-E65745EF3DB8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -22,6 +22,7 @@ __meta__ = {
 visible = true
 margin_right = 1280.0
 margin_bottom = 720.0
+rect_min_size = Vector2( 150, 52.5 )
 rect_pivot_offset = Vector2( 640, 360 )
 theme = ExtResource( 1 )
 window_title = ""
@@ -30,8 +31,10 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.ino", "*.pde" )
-current_dir = "/Users/seliy/source/repos/smce-gd/project"
-current_path = "/Users/seliy/source/repos/smce-gd/project/"
+current_dir = "/smce-gd-master/project"
+current_path = "/smce-gd-master/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]

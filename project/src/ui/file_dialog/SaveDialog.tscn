@@ -1,0 +1,15 @@
+[gd_scene format=2]
+
+[node name="SaveDialog" type="FileDialog"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1274.0
+margin_bottom = 690.0
+rect_min_size = Vector2( 150, 52.5 )
+access = 2
+current_dir = "/smce-gd-master"
+current_file = "project"
+current_path = "/smce-gd-master/project"
+__meta__ = {
+"_edit_use_anchors_": false
+}

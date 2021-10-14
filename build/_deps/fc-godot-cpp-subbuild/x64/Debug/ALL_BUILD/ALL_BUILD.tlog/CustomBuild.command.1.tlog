@@ -1,6 +1,6 @@
-^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKELISTS.TXT
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild -BC:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild -BC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild --check-stamp-file C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

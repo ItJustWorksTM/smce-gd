@@ -22,7 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{ABE69F1B-2BB9-356B-82D6-71785EF36471}</ProjectGuid>
+    <ProjectGuid>{3333FB99-2DED-31ED-9335-DD4F697A9829}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
@@ -63,22 +63,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">boo.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">boo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">boo.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">boo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\MinSizeRel\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">boo.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">boo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\RelWithDebInfo\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">boo.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">boo</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
@@ -116,8 +116,8 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Debug/boo.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Debug/boo.pdb</ProgramDataBaseFile>
+      <ImportLibrary>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Debug/boo.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Debug/boo.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -156,8 +156,8 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Release/boo.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Release/boo.pdb</ProgramDataBaseFile>
+      <ImportLibrary>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Release/boo.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Release/boo.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -196,8 +196,8 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/MinSizeRel/boo.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/MinSizeRel/boo.pdb</ProgramDataBaseFile>
+      <ImportLibrary>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/MinSizeRel/boo.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/MinSizeRel/boo.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -235,8 +235,8 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/RelWithDebInfo/boo.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/RelWithDebInfo/boo.pdb</ProgramDataBaseFile>
+      <ImportLibrary>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/RelWithDebInfo/boo.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/RelWithDebInfo/boo.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -244,11 +244,11 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\src\CMakeLists.txt">
+    <CustomBuild Include="C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\src\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -256,12 +256,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -269,12 +269,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -282,12 +282,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -295,23 +295,23 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\src\main.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\ZERO_CHECK.vcxproj">
-      <Project>{32BDAA4B-11FB-3FD1-9BB0-F7D1B5EAAD1B}</Project>
+    <ProjectReference Include="C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\ZERO_CHECK.vcxproj">
+      <Project>{E189D335-AA04-3F13-8662-8D4FC7F544AD}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\seliy\source\repos\smce-gd\build\CMakeFiles\_CMakeLTOTest-CXX\bin\foo.vcxproj">
-      <Project>{2D13F6B6-5448-35B4-BDB3-40B61708CF96}</Project>
+    <ProjectReference Include="C:\smce-gd-master\build\CMakeFiles\_CMakeLTOTest-CXX\bin\foo.vcxproj">
+      <Project>{AB4F4336-2948-3A20-B46D-31B4EA111F9D}</Project>
       <Name>foo</Name>
     </ProjectReference>
   </ItemGroup>

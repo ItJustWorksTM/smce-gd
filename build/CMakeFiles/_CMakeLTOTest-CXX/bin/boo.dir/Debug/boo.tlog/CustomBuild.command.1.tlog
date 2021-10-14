@@ -1,6 +1,6 @@
-^C:\USERS\SELIY\SOURCE\REPOS\SMCE-GD\BUILD\CMAKEFILES\_CMAKELTOTEST-CXX\SRC\CMAKELISTS.TXT
+^C:\SMCE-GD-MASTER\BUILD\CMAKEFILES\_CMAKELTOTEST-CXX\SRC\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/Users/seliy/source/repos/smce-gd/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/src -BC:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin --check-stamp-file C:/smce-gd-master/build/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

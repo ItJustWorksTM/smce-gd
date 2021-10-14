@@ -1,0 +1,162 @@
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-MKDIR.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-DOWNLOAD.RULE
+setlocal
+cd C:\smce-gd-master\build\_deps
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp/fc-godot-cpp-populate-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-UPDATE.RULE
+setlocal
+cd C:\smce-gd-master\build\_deps\fc-godot-cpp-src
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -P C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/tmp/fc-godot-cpp-populate-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-PATCH.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-CONFIGURE.RULE
+setlocal
+cd C:\smce-gd-master\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-BUILD.RULE
+setlocal
+cd C:\smce-gd-master\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-INSTALL.RULE
+setlocal
+cd C:\smce-gd-master\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\3348EA695FF5FB4B12B00110CE03F17B\FC-GODOT-CPP-POPULATE-TEST.RULE
+setlocal
+cd C:\smce-gd-master\build\_deps\fc-godot-cpp-build
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-test
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\61A27885DECF87A0F325095F7227C3C0\FC-GODOT-CPP-POPULATE-COMPLETE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/Debug
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/Debug/fc-godot-cpp-populate-complete
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/fc-godot-cpp-populate-prefix/src/fc-godot-cpp-populate-stamp/Debug/fc-godot-cpp-populate-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKEFILES\C4691BD8F2200CD9E2F3967314B38A0D\FC-GODOT-CPP-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\SMCE-GD-MASTER\BUILD\_DEPS\FC-GODOT-CPP-SUBBUILD\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild -BC:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild --check-stamp-file C:/smce-gd-master/build/_deps/fc-godot-cpp-subbuild/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

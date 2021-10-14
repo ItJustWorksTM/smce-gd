@@ -1,0 +1,428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8170DFD6-9989-3512-9304-4805439ED658}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>godot-cpp</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\smce-gd-master\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">godot-cpp.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">godot-cpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\smce-gd-master\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">godot-cpp.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">godot-cpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\smce-gd-master\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">godot-cpp.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">godot-cpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\smce-gd-master\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">godot-cpp.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">godot-cpp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen;C:\smce-gd-master\build\_deps\fc-godot-cpp-src\godot-headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\smce-gd-master\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/smce-gd-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master -BC:/smce-gd-master/build --check-stamp-file C:/smce-gd-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\CMakeLists-CXX.txt.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\foo.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\main.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFile.cxx.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ROCMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.21\Templates\CPackConfig.cmake.in;C:\smce-gd-master\CMake\Modules\SetupGodotCpp.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;C:\smce-gd-master\build\gdcpp-sources.cmake;C:\smce\lib\cmake\SMCE\SMCEConfig.cmake;C:\smce\lib\cmake\SMCE\SMCEConfigVersion.cmake;C:\smce\lib\cmake\SMCE\SMCETargets-release.cmake;C:\smce\lib\cmake\SMCE\SMCETargets.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\smce-gd-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/smce-gd-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master -BC:/smce-gd-master/build --check-stamp-file C:/smce-gd-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\CMakeLists-CXX.txt.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\foo.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\main.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFile.cxx.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ROCMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.21\Templates\CPackConfig.cmake.in;C:\smce-gd-master\CMake\Modules\SetupGodotCpp.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;C:\smce-gd-master\build\gdcpp-sources.cmake;C:\smce\lib\cmake\SMCE\SMCEConfig.cmake;C:\smce\lib\cmake\SMCE\SMCEConfigVersion.cmake;C:\smce\lib\cmake\SMCE\SMCETargets-release.cmake;C:\smce\lib\cmake\SMCE\SMCETargets.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\smce-gd-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/smce-gd-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master -BC:/smce-gd-master/build --check-stamp-file C:/smce-gd-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\CMakeLists-CXX.txt.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\foo.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\main.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFile.cxx.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ROCMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.21\Templates\CPackConfig.cmake.in;C:\smce-gd-master\CMake\Modules\SetupGodotCpp.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;C:\smce-gd-master\build\gdcpp-sources.cmake;C:\smce\lib\cmake\SMCE\SMCEConfig.cmake;C:\smce\lib\cmake\SMCE\SMCEConfigVersion.cmake;C:\smce\lib\cmake\SMCE\SMCETargets-release.cmake;C:\smce\lib\cmake\SMCE\SMCETargets.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\smce-gd-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/smce-gd-master/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/smce-gd-master -BC:/smce-gd-master/build --check-stamp-file C:/smce-gd-master/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\CMakeLists-CXX.txt.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\foo.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIPOSupported\main.cpp;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFile.cxx.in;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\ROCMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.21\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.21\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.21\Templates\CPackConfig.cmake.in;C:\smce-gd-master\CMake\Modules\SetupGodotCpp.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeCXXCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeRCCompiler.cmake;C:\smce-gd-master\build\CMakeFiles\3.21.2\CMakeSystem.cmake;C:\smce-gd-master\build\gdcpp-sources.cmake;C:\smce\lib\cmake\SMCE\SMCEConfig.cmake;C:\smce\lib\cmake\SMCE\SMCEConfigVersion.cmake;C:\smce\lib\cmake\SMCE\SMCETargets-release.cmake;C:\smce\lib\cmake\SMCE\SMCETargets.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\smce-gd-master\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\AABB.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Array.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Basis.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\CameraMatrix.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Color.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Dictionary.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\GodotGlobal.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\NodePath.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Plane.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\PoolArrays.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Quat.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\RID.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Rect2.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\String.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\TagDB.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Transform.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Transform2D.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Variant.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Vector2.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\core\Vector3.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ArrayMesh.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Camera.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\CanvasItem.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Control.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Environment.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Font.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Image.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\InputEvent.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\InputEventKey.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\InputEventWithModifiers.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\MainLoop.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Material.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Mesh.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\MultiMesh.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\MultiplayerAPI.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\NetworkedMultiplayerPeer.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Node.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Object.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PackedScene.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PacketPeer.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Physics2DDirectSpaceState.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Physics2DShapeQueryParameters.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PhysicsDirectSpaceState.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\PhysicsShapeQueryParameters.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Reference.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Resource.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ResourceInteractiveLoader.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ResourceLoader.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SceneState.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SceneTree.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SceneTreeTimer.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Shader.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Shape.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Sky.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Spatial.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\SpatialGizmo.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\StyleBox.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Texture.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Theme.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\TriangleMesh.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\Viewport.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\ViewportTexture.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\World.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\World2D.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\__init_method_bindings.cpp" />
+    <ClCompile Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\src\gen\__register_types.cpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\AABB.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Array.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Basis.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\CameraMatrix.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Color.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\CoreTypes.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Defs.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Dictionary.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Godot.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\GodotGlobal.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\GodotProfiling.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Math.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\NodePath.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Plane.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\PoolArrays.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Quat.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\RID.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Rect2.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Ref.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\String.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\TagDB.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Transform.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Transform2D.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Variant.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Vector2.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Vector3.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\core\Wrapped.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ArrayMesh.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Camera.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\CanvasItem.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Control.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Environment.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Font.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Image.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\InputEvent.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\InputEventKey.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\InputEventWithModifiers.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\MainLoop.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Material.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Mesh.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\MultiMesh.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\MultiplayerAPI.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\NetworkedMultiplayerPeer.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Node.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Object.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PackedScene.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PacketPeer.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Physics2DDirectSpaceState.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Physics2DShapeQueryParameters.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PhysicsDirectSpaceState.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\PhysicsShapeQueryParameters.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Reference.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Resource.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ResourceInteractiveLoader.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ResourceLoader.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SceneState.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SceneTree.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SceneTreeTimer.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Shader.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Shape.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Sky.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Spatial.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\SpatialGizmo.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\StyleBox.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Texture.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Theme.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\TriangleMesh.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\Viewport.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\ViewportTexture.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\World.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\World2D.hpp" />
+    <ClInclude Include="C:\smce-gd-master\build\_deps\fc-godot-cpp-src\include\gen\__icalls.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\smce-gd-master\build\ZERO_CHECK.vcxproj">
+      <Project>{F8A3270A-5DE8-3AB0-B0B8-146A70E10475}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\smce-gd-master\build\godotcpp-generated.vcxproj">
+      <Project>{75F51DB4-D081-3558-B8A1-C4A22A2C216F}</Project>
+      <Name>godotcpp-generated</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

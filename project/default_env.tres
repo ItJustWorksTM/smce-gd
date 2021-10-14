@@ -9,4 +9,3 @@ sky_curve = 0.13
 background_mode = 2
 background_sky = SubResource( 1 )
 auto_exposure_scale = 0.3
-dof_blur_near_enabled = true

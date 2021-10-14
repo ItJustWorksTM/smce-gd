@@ -1,44 +1,40 @@
 [gd_scene format=2]
 
 [node name="WindowDialog" type="WindowDialog"]
-visible = true
-margin_left = 2.91931
-margin_top = 19.7842
-margin_right = 1319.92
-margin_bottom = 740.784
+margin_left = 3.36743
+margin_top = 36.7553
+margin_right = 1269.37
+margin_bottom = 702.755
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextEdit" type="TextEdit" parent="."]
-margin_left = 40.0
-margin_top = 84.0
-margin_right = 611.0
-margin_bottom = 461.0
+margin_left = 6.1631
+margin_top = 40.3058
+margin_right = 519.163
+margin_bottom = 441.306
+
+[node name="Open" type="Button" parent="."]
+margin_left = 6.91692
+margin_top = 8.24492
+margin_right = 128.917
+margin_bottom = 37.2449
+text = "Upload Sketch"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Save" type="Button" parent="."]
-margin_left = 173.113
-margin_top = 33.8284
-margin_right = 249.113
-margin_bottom = 59.8284
+margin_left = 134.163
+margin_top = 7.67323
+margin_right = 256.163
+margin_bottom = 35.6732
 text = "Save as File"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Open" type="Button" parent="."]
-margin_left = 49.0
-margin_top = 34.0
-margin_right = 125.0
-margin_bottom = 61.0
-text = "Upload Sketch"
-
-[node name="Edit" type="Button" parent="."]
-margin_left = 281.0
-margin_top = 35.0
-margin_right = 355.0
-margin_bottom = 61.0
+[node name="preview" type="Button" parent="."]
+margin_left = 264.451
+margin_top = 7.87755
+margin_right = 388.451
+margin_bottom = 35.8775
 text = "Preview"
-__meta__ = {
-"_edit_use_anchors_": false
-}
