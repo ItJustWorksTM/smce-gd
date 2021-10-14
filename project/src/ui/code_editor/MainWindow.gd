@@ -3,10 +3,15 @@ extends Control
 onready var close_btn: Button = $Close
 onready var dropdown_btn: MenuButton = $DropDown
 onready var fileDialog: FileDialog = $FileDialog
+onready var textEditor: TextEdit = $TextEditor
+onready var _path: String = ""
+
+onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	close_btn.connect("pressed", self, "_on_close")
 	_init_dropdown()
+	_init_TextEditor()
 
 # Initializes the dropdown menu button
 func _init_dropdown():
@@ -14,6 +19,14 @@ func _init_dropdown():
 	dropdown_btn.get_popup().add_item("Open File")
 	dropdown_btn.get_popup().add_item("Save File")
 	dropdown_btn.get_popup().add_item("Close")
+
+#Initializes the texteditor settings
+func _init_TextEditor():
+	textEditor.caret_blink = true
+	textEditor.show_line_numbers = true
+	#Minimap view
+	#textEditor.minimap_draw = true
+	#textEditor.minimap_width = 150
 	
 
 func _on_close() -> void:
@@ -32,12 +45,18 @@ func _on_item_pressed(id):
 
 # Function to collect the path of a selected file and send it to the editor
 func _on_FileDialog_file_selected(path):
-	print(path) # Path to file that should be opened in the editor
-				# Add functionallity here to open the file in the editor
+	#Save global path for quick save
+	_path = path
+	#Load text from file
+	var content = fileLoader.loadFile(path)
+	#Paste text into texteditor
+	textEditor.text = (content)
+
 
 # Function save a file
 func _save_file():
-	print("Save File Pressed") # Add functionallity here to call the editor save function
+	#save text into texteditor
+	fileLoader.saveFile(_path,textEditor.text)
 	
 
 
