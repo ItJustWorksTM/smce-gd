@@ -1,4 +1,4 @@
-#
+
 #  SketchSelect.gd
 #  Copyright 2021 ItJustWorksTM
 #

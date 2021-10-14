@@ -2,40 +2,43 @@
 
 [node name="WindowDialog" type="WindowDialog"]
 visible = true
-margin_left = -16.0
-margin_top = -8.0
-margin_right = 1000.0
-margin_bottom = 768.0
+margin_left = 2.91931
+margin_top = 19.7842
+margin_right = 1319.92
+margin_bottom = 740.784
 
 [node name="TextEdit" type="TextEdit" parent="."]
-margin_left = 80.0
-margin_top = 128.0
-margin_right = 560.0
-margin_bottom = 440.0
+margin_left = 40.0
+margin_top = 84.0
+margin_right = 611.0
+margin_bottom = 461.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Save" type="Button" parent="."]
-margin_left = 160.0
-margin_top = 8.0
-margin_right = 236.0
-margin_bottom = 48.0
-text = "Save File"
+margin_left = 173.113
+margin_top = 33.8284
+margin_right = 249.113
+margin_bottom = 59.8284
+text = "Save as File"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Open" type="Button" parent="."]
-margin_left = 32.0
-margin_top = 8.0
-margin_right = 108.0
-margin_bottom = 48.0
-text = "Open File"
+margin_left = 49.0
+margin_top = 34.0
+margin_right = 125.0
+margin_bottom = 61.0
+text = "Upload Sketch"
 
 [node name="Edit" type="Button" parent="."]
-margin_left = 344.0
-margin_top = 16.0
-margin_right = 435.0
-margin_bottom = 64.0
-text = "OPen to Edit"
+margin_left = 281.0
+margin_top = 35.0
+margin_right = 355.0
+margin_bottom = 61.0
+text = "Preview"
+__meta__ = {
+"_edit_use_anchors_": false
+}
