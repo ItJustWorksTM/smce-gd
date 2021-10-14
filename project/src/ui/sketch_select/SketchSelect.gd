@@ -22,13 +22,19 @@ signal exited
 
 onready var itemlist = $LogPopout/Panel/Control/VBoxContainer/ItemList
 onready var new_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/NewSketch
+onready var open_btn = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog/Open
+onready var save = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog/Save
 onready var select_btn = $LogPopout/Panel/Control/HBoxContainer/SelectButton
 onready var filepicker_window = $LogPopout/Panel/Filepicker
 onready var select_window = $LogPopout/Panel/Control
 onready var filepicker = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/FilePicker
+onready var editor = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog
+onready var editdialog = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/EditDialog
+onready var savedialog = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/SavePicker/SaveDialog
 onready var empty = $LogPopout/Panel/Control/EmptyLabel
 onready var close_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/CloseButton
 onready var error_label = $LogPopout/Panel/Control/HBoxContainer/ErrorLabel
+onready var textedit = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog/TextEdit
 
 var _sketch_manager: SketchManager = null
 var _selected_sketch = null
@@ -61,8 +67,12 @@ func _ready():
 	itemlist.connect("item_activated", self, "_on_sketch_selected")
 	
 	close_btn.connect("pressed", self, "_close")
-	new_btn.connect("pressed", self, "_show_filepicker")
+	#new_btn.connect("pressed", self, "_show_filepicker")
+	new_btn.connect("pressed", self, "_show_editor")
 	select_btn.connect("pressed", self, "_select_sketch")
+	open_btn.connect("Pressed",self,"_on_Open_pressed")
+	editdialog.connect("Pressed",self,"_on_Edit_pressed")
+	save.connect("pressed", self, "_on_Save_pressed")
 	
 	update_list()
 
@@ -71,17 +81,32 @@ func _enter_tree() -> void:
 	_open()
 
 
-func _show_filepicker() -> void:
+func _show_editor() -> void:
 	var tween: Tween = TempTween.new()
 	add_child(tween)
-	filepicker._wrapped.popup()
-	filepicker_window.visible = true
-	tween.interpolate_property(filepicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
+	editor.popup()
+	filepicker_window.visible = false
+	tween.interpolate_property(editor, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
 	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
 	
 	tween.start()
 	yield(tween, "tween_all_completed")
 	select_window.visible = false
+	
+	
+	
+func _on_Open_pressed() -> void:
+	var tween: Tween = TempTween.new()
+	add_child(tween)
+	editor.visible = false
+	filepicker._wrapped.popup()
+	filepicker_window.visible = true
+	tween.interpolate_property(filepicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
+	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
+	tween.start()
+	yield(tween, "tween_all_completed")
+	select_window.visible = false
+	filepicker_window.visible = true
 
 
 func _hide_filepicker() -> void:
@@ -166,3 +191,41 @@ func _on_file_selected(file: String):
 func _on_sketch_selected(_index: int) -> void:
 	_select_sketch()
 
+
+func _on_Edit_pressed():
+	var tween: Tween = TempTween.new()
+	add_child(tween)
+	editor.visible = false
+	editdialog.popup()
+	tween.interpolate_property(editdialog, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
+	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
+	tween.start()
+	yield(tween, "tween_all_completed")
+	select_window.visible = false
+	
+
+
+func _on_EditDialog_file_selected(path):
+	editor.visible = true
+	var f = File.new()
+	f.open(path,1)
+	textedit.text = f.get_as_text()
+
+
+
+func _on_Save_pressed():
+	var tween: Tween = TempTween.new()
+	add_child(tween)
+	editor.visible = false
+	savedialog.popup()
+	tween.interpolate_property(editdialog, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
+	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
+	# Replace with function body.
+	tween.start()
+	yield(tween, "tween_all_completed")
+	select_window.visible = false
+
+func _on_SaveDialog_file_selected(path):
+	var f = File.new() # Replace with function body.
+	f.open(path,2)
+	f.store_string(textedit.text)

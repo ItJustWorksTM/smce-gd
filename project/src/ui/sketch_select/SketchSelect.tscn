@@ -210,6 +210,15 @@ margin_bottom = 464.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="EditDialog" type="FileDialog" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach"]
+margin_right = 768.0
+margin_bottom = 464.0
+window_title = "Open a File"
+mode = 0
+access = 2
+current_dir = "/Users/seliy/source/repos/smce-gd/project"
+current_path = "/Users/seliy/source/repos/smce-gd/project/"
+
 [node name="FilePicker" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -227,3 +236,64 @@ custom_styles/normal = SubResource( 10 )
 custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
 scroll_following = true
 selection_enabled = true
+
+[node name="SavePicker" type="PanelContainer" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach"]
+margin_right = 768.0
+margin_bottom = 464.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveDialog" type="FileDialog" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/SavePicker"]
+visible = true
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 761.0
+margin_bottom = 457.0
+access = 2
+current_dir = "/Users/seliy/source/repos/smce-gd/project"
+current_path = "/Users/seliy/source/repos/smce-gd/project/"
+
+[node name="WindowDialog" type="WindowDialog" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach"]
+visible = true
+margin_right = 768.0
+margin_bottom = 464.0
+
+[node name="TextEdit" type="TextEdit" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 80.0
+margin_top = 128.0
+margin_right = 560.0
+margin_bottom = 440.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Save" type="Button" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 160.0
+margin_top = 8.0
+margin_right = 236.0
+margin_bottom = 48.0
+text = "Save File"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Open" type="Button" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 32.0
+margin_top = 8.0
+margin_right = 108.0
+margin_bottom = 48.0
+text = "Open File"
+
+[node name="Edit" type="Button" parent="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog"]
+margin_left = 344.0
+margin_top = 16.0
+margin_right = 435.0
+margin_bottom = 64.0
+text = "OPen to Edit"
+
+[connection signal="file_selected" from="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/EditDialog" to="." method="_on_EditDialog_file_selected"]
+[connection signal="file_selected" from="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/SavePicker/SaveDialog" to="." method="_on_SaveDialog_file_selected"]
+[connection signal="pressed" from="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog/Save" to="." method="_on_Save_pressed"]
+[connection signal="pressed" from="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog/Open" to="." method="_on_Open_pressed"]
+[connection signal="pressed" from="LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/WindowDialog/Edit" to="." method="_on_Edit_pressed"]

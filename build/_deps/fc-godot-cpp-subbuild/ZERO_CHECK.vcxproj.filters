@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\seliy\source\repos\smce-gd\build\_deps\fc-godot-cpp-subbuild\CMakeFiles\e38e1b55a4e2de36a7c6d854d197fac3\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{07B0719C-8098-3767-9678-CB1150DB3593}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

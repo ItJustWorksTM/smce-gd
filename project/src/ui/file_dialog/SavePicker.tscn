@@ -1,0 +1,18 @@
+[gd_scene format=2]
+
+[node name="SavePicker" type="PanelContainer"]
+margin_right = 1304.0
+margin_bottom = 720.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveDialog" type="FileDialog" parent="."]
+visible = true
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1297.0
+margin_bottom = 713.0
+access = 2
+current_dir = "/Users/seliy/source/repos/smce-gd/project"
+current_path = "/Users/seliy/source/repos/smce-gd/project/"

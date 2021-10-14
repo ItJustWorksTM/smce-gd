@@ -1,0 +1,41 @@
+[gd_scene format=2]
+
+[node name="WindowDialog" type="WindowDialog"]
+visible = true
+margin_left = -16.0
+margin_top = -8.0
+margin_right = 1000.0
+margin_bottom = 768.0
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_left = 80.0
+margin_top = 128.0
+margin_right = 560.0
+margin_bottom = 440.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Save" type="Button" parent="."]
+margin_left = 160.0
+margin_top = 8.0
+margin_right = 236.0
+margin_bottom = 48.0
+text = "Save File"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Open" type="Button" parent="."]
+margin_left = 32.0
+margin_top = 8.0
+margin_right = 108.0
+margin_bottom = 48.0
+text = "Open File"
+
+[node name="Edit" type="Button" parent="."]
+margin_left = 344.0
+margin_top = 16.0
+margin_right = 435.0
+margin_bottom = 64.0
+text = "OPen to Edit"
