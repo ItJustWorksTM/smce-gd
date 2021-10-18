@@ -29,8 +29,13 @@ func _init_TextEditor():
 	#textEditor.minimap_width = 150
 	
 
+# Function that hides the editor when its closed with a dedicated button
 func _on_close() -> void:
-	queue_free()
+	set_visible(false)
+	
+# Function that displays the hidden editor	
+func enableEditor() -> void:
+	set_visible(true)
 
 # Function to handle dropdown menu button options
 # Options to open and save file
