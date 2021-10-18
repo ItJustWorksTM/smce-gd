@@ -38,6 +38,8 @@ onready var profile_screen_toggle = $ProfileScreentoggle
 
 var button_group: BButtonGroup = BButtonGroup.new()
 
+var code_editor = code_main_window_t.instance()
+var code_editor_initialized = 0
 
 var buttons: Array = []
 var paths: Dictionary = {}
@@ -93,8 +95,11 @@ func _set_vis(visible, node = null) -> void:
 
 func _on_edit_btn() -> void:
 	get_focus_owner().release_focus()
-	var code_editor = code_main_window_t.instance()
-	get_tree().root.add_child(code_editor)
+	if (code_editor_initialized==0):
+		get_tree().root.add_child(code_editor)
+		code_editor_initialized = 1
+	
+	code_editor.enableEditor()
 
 func _on_sketch_btn() -> void:
 	get_focus_owner().release_focus()
