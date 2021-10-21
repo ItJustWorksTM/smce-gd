@@ -61,6 +61,9 @@ class BoardDeviceSpec : public Reference {
     const smce::BoardDeviceSpecification& to_native();
 
     String _to_string() { return String{to_full_string().data()}; }
+
+    // Name HAS to be unique
+    bool eq(Ref<BoardDeviceSpec> rhs) { return rhs->name == name; }
 };
 } // namespace godot
 

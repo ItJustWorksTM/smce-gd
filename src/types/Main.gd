@@ -22,15 +22,56 @@ var universe := Universe.new()
 var camera := ControllableCamera.new()
 
 func _init(_env: EnvInfo):
-	pass
+    pass
 
 func _ready():
-	add_child(universe)
-	add_child(camera)
-	camera.current = true
-	
-	assert(universe.set_world_to("Test/Test"))
-	camera.set_target_transform(universe.active_world_node.get_camera_starting_pos_hint())
 
-func queue_compile():
-	pass
+    prepare_board()
+
+    return
+
+    add_child(universe)
+    add_child(camera)
+    camera.current = true
+    
+
+    var res = universe.set_world_to("Test/Test")
+    
+    assert(res)
+
+    camera.set_target_transform(universe.active_world_node.get_camera_starting_pos_hint())
+
+class Attachment:
+    
+
+    func required_hardware() -> Array:
+        var pin := GpioDriverConfig.new()
+        pin.pin = 123
+        pin.read = false
+        
+        var spec = BoardDeviceSpec.new() \
+                        .with_name("Attachment") \
+                        .with_atomic_u32("id") \
+                        .with_atomic_u32("value")
+        
+        return [pin, BoardDeviceConfig.new().with_spec(spec)]
+
+func prepare_board():
+
+    var needed := []
+    for props in [{}, {}]:
+        var attachment = Attachment.new()
+        # inflate attachment with config?
+
+        for hw in attachment.required_hardware():
+            var dupe = false
+            for a in needed:
+                if Reflect.value_compare(a, hw):
+                    dupe = true
+                    push_error("dupe detected %d" % needed.size())
+                    break
+            if !dupe:
+                needed.push_back(hw)
+    print(needed)
+    
+    pass

@@ -53,6 +53,8 @@ Ref<Result> Toolchain::compile(Ref<Sketch> sketch) {
 void ToolchainLogReader::_register_methods() { register_method("read", &ToolchainLogReader::read); }
 
 Variant ToolchainLogReader::read() {
+    if (!tc)
+        return Variant{};
     if (auto [_, str] = tc->build_log(); !str.empty()) {
         auto ret = String{str.c_str()};
         str.clear();

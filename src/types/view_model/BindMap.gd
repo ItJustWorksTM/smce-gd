@@ -18,28 +18,28 @@
 class_name BindMap
 
 class BindMapExt:
-	var _vm
-	
-	var _property
-	func _init(vm, property):
-		_vm = vm
-		_property = property
-	
-	func to(object, method, binds = []):
-		_vm._vm.bind_change(_property, object, method, binds)
-		return _vm
-	
-	func dep(arr):
-		_vm._vm.bind_dependent(_property, arr)
-		return _vm
+    var _vm
+    
+    var _property
+    func _init(vm, property):
+        _vm = vm
+        _property = property
+    
+    func to(object, method, binds = []):
+        _vm._vm.bind_change(_property, object, method, binds)
+        return _vm
+    
+    func dep(arr):
+        _vm._vm.bind_dependent(_property, arr)
+        return _vm
 
 var _vm
 func _init(vm):
-	_vm = vm
-	vm.unreference()
+    _vm = vm
+    vm.unreference()
 
 func _get(property):
-	if _vm._func_map.has(property) || _vm.has_method(property):
-		return BindMapExt.new(self, property)
-	return null
+    if _vm._func_map.has(property) || _vm.has_method(property):
+        return BindMapExt.new(self, property)
+    return null
 

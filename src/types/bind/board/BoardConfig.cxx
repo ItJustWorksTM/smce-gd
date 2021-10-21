@@ -25,18 +25,17 @@ using namespace godot;
 
 void BoardConfig::GpioDriverConfig::_register_methods() {
 #define P(f, d) std::tuple{STR(f), &GpioDriverConfig::f, d}
-    register_props(P(pin, 0), P(analog, false), P(analog_read, true), P(analog_write, true),
-                   P(digital, false), P(digital_read, true), P(digital_write, true));
+    register_props(P(pin, 0), P(read, true), P(write, true));
+    register_method("eq", &GpioDriverConfig::eq);
 #undef P
 }
 
 smce::BoardConfig::GpioDrivers BoardConfig::GpioDriverConfig::to_native() const {
-    auto ret = smce::BoardConfig::GpioDrivers{.pin_id = static_cast<uint16_t>(pin)};
-    if (analog)
-        ret.analog_driver = {analog_read, analog_write};
-    if (digital)
-        ret.digital_driver = {digital_read, digital_write};
-    return ret;
+    return smce::BoardConfig::GpioDrivers{
+        .pin_id = static_cast<uint16_t>(pin),
+        .digital_driver = smce::BoardConfig::GpioDrivers::DigitalDriver{read, write},
+        .analog_driver = smce::BoardConfig::GpioDrivers::AnalogDriver{read, write},
+    };
 }
 
 void BoardConfig::UartChannelConfig::_register_methods() {
@@ -63,6 +62,7 @@ smce::BoardConfig::UartChannel BoardConfig::UartChannelConfig::to_native() const
 void BoardConfig::FrameBufferConfig::_register_methods() {
     register_property("key", &FrameBufferConfig::key, 0);
     register_property("direction", &FrameBufferConfig::direction, true);
+    register_method("eq", &FrameBufferConfig::eq);
 }
 
 smce::BoardConfig::FrameBuffer BoardConfig::FrameBufferConfig::to_native() const {
@@ -73,6 +73,7 @@ smce::BoardConfig::FrameBuffer BoardConfig::FrameBufferConfig::to_native() const
 void BoardConfig::SecureDigitalStorage::_register_methods() {
     register_property("cspin", &SecureDigitalStorage::cspin, 0);
     register_property("root_dir", &SecureDigitalStorage::root_dir, String{});
+    register_method("eq", &SecureDigitalStorage::eq);
 }
 
 smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_native() const {
@@ -80,6 +81,7 @@ smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_na
 }
 
 void BoardConfig::BoardDeviceConfig::_register_methods() {
+    register_method("with_spec", &BoardDeviceConfig::with_spec);
     register_property("spec", &BoardConfig::BoardDeviceConfig::spec, {});
     register_property("amount", &BoardConfig::BoardDeviceConfig::amount, {});
 }

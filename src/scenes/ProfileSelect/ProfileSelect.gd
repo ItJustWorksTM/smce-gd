@@ -19,22 +19,22 @@ class_name ProfileSelect
 extends Control
 
 const SCENE_FILE := "res://src/scenes/ProfileSelect/ProfileSelect.tscn"
-static func instance():	return load(SCENE_FILE).instance()
+static func instance():    return load(SCENE_FILE).instance()
 
 class ViewModel:
-	extends ViewModelBase
-	
-	signal profile_selected(profile)
-	
-	func profiles(profiles: Array): return profiles
-	
-	func _init(profiles: Observable):
-		set_depend("profiles", [profiles])
-	
-	func select_new_profile(): emit_signal("profile_selected", Profile.new("Profile"))
-	
-	func select_profile(index: int): emit_signal("profile_selected", get_prop("profiles")[index])
-	
+    extends ViewModelBase
+    
+    signal profile_selected(profile)
+    
+    func profiles(profiles: Array): return profiles
+    
+    func _init(profiles: Observable):
+        set_depend("profiles", [profiles])
+    
+    func select_new_profile(): emit_signal("profile_selected", Profile.new("Profile"))
+    
+    func select_profile(index: int): emit_signal("profile_selected", get_prop("profiles")[index])
+    
 
 onready var profile_buttons_container: Control = $VBox/HScroll/Margin/HBox
 
@@ -42,31 +42,31 @@ var model: ViewModel
 
 
 func init_model(profiles): # Array<Profile>
-	model = ViewModel.new(Observable.from(profiles))
-	model.bind_func("profiles", self, "_list_profiles")
+    model = ViewModel.new(Observable.from(profiles))
+    model.bind_func("profiles", self, "_list_profiles")
 
 
 func _ready():
-	# Debug
-	if true:
-		var profiles: Observable = Observable.from([Profile.new("Profile1"), Profile.new("Profile2")])
-		init_model(profiles)
-		
-		while true:
-			yield(get_tree().create_timer(3.0), "timeout")
-			profiles.value.append(Profile.new("Profile3"))
-			profiles.emit_change()
+    # Debug
+    if true:
+        var profiles: Observable = Observable.from([Profile.new("Profile1"), Profile.new("Profile2")])
+        init_model(profiles)
+        
+        while true:
+            yield(get_tree().create_timer(3.0), "timeout")
+            profiles.value.append(Profile.new("Profile3"))
+            profiles.emit_change()
 
 
 var labels := []
 func _list_profiles(profiles: Array):
-	for node in labels:
-		node.queue_free()
-	labels.clear()
-	for profile in profiles:
-		var label: ProfileSelectButton = ProfileSelectButton.instance()
-		profile_buttons_container.add_child(label)
-		label.init_model(profile)
-		label.rect_min_size.x = 296
-		labels.append(label)
-		
+    for node in labels:
+        node.queue_free()
+    labels.clear()
+    for profile in profiles:
+        var label: ProfileSelectButton = ProfileSelectButton.instance()
+        profile_buttons_container.add_child(label)
+        label.init_model(profile)
+        label.rect_min_size.x = 296
+        labels.append(label)
+        

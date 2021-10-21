@@ -19,23 +19,23 @@ class_name ProfileSelectButton
 extends Control
 
 const SCENE_FILE := "res://src/scenes/ProfileSelect/ProfileSelectButton.tscn"
-static func instance():	return load(SCENE_FILE).instance()
+static func instance():    return load(SCENE_FILE).instance()
 
 class ViewModel:
-	extends ViewModelBase
-	
-	signal pressed
-	
-	func profile_name(profile: Profile): return profile.name
-	func profile_info(profile: Profile):
-		return "[color=%s]World: %s[/color]\nSketches: %d" % ["white" if true else "red", profile.environment, profile.sketches.size()]
-	
-	func _init(profile: Observable):
-		set_depend("profile_info", [profile])
-		set_depend("profile_name", [profile])
-		
-	
-	func pressed(): emit_signal("pressed")
+    extends ViewModelBase
+    
+    signal pressed
+    
+    func profile_name(profile: Profile): return profile.name
+    func profile_info(profile: Profile):
+        return "[color=%s]World: %s[/color]\nSketches: %d" % ["white" if true else "red", profile.environment, profile.sketches.size()]
+    
+    func _init(profile: Observable):
+        set_depend("profile_info", [profile])
+        set_depend("profile_name", [profile])
+        
+    
+    func pressed(): emit_signal("pressed")
 
 onready var profile_name_label: Label = $MarginContainer/VBoxContainer/ProfileNameLabel
 onready var profile_info_label: RichTextLabel = $MarginContainer/VBoxContainer/ProfileInfoLabel
@@ -44,7 +44,7 @@ var model: ViewModel
 
 
 func init_model(profile): # <Profile>
-	model = ViewModel.new(Observable.from(profile))
-	model.bind_prop("profile_name", profile_name_label, "text")
-	model.bind_prop("profile_info", profile_info_label, "bbcode_text")
+    model = ViewModel.new(Observable.from(profile))
+    model.bind_prop("profile_name", profile_name_label, "text")
+    model.bind_prop("profile_info", profile_info_label, "bbcode_text")
 

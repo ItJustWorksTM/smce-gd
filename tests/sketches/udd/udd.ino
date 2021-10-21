@@ -6,4 +6,6 @@ void setup() {
     oop.read();
     oop.write(123);
 }
-void loop() {}
+void loop() {
+	Serial.println("invalid!");
+}

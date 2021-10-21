@@ -18,79 +18,79 @@
 class_name Fs
 
 static func cpdir(source: String, destination: String) -> bool:
-	return _cpdir(source, destination)
-	
+    return _cpdir(source, destination)
+    
 static func _cpdir(path: String, to: String, base = null) -> bool:
-	if ! base:
-		base = path
+    if ! base:
+        base = path
 
-	var dir = Directory.new()
-	var err = dir.open(path)
-	if err != OK:
-		print("Path: ", path, " Error ", err)
-		return false
+    var dir = Directory.new()
+    var err = dir.open(path)
+    if err != OK:
+        print("Path: ", path, " Error ", err)
+        return false
 
-	dir.list_dir_begin(true)
-	var file_name = dir.get_next()
-	while file_name != "":
-		var abspath = dir.get_current_dir() + "/" + file_name
-		var relativ = abspath.substr(base.length())
-		if dir.current_is_dir():
-			if ! mkdir(to + relativ, true):
-				return false
-			if ! _cpdir(abspath, to, base):
-				return false
-		else:
-			dir.copy(abspath, to + relativ)
-		file_name = dir.get_next()
-	return true
+    dir.list_dir_begin(true)
+    var file_name = dir.get_next()
+    while file_name != "":
+        var abspath = dir.get_current_dir() + "/" + file_name
+        var relativ = abspath.substr(base.length())
+        if dir.current_is_dir():
+            if ! mkdir(to + relativ, true):
+                return false
+            if ! _cpdir(abspath, to, base):
+                return false
+        else:
+            dir.copy(abspath, to + relativ)
+        file_name = dir.get_next()
+    return true
 
 static func mkdir(path: String, recursive: bool = false) -> bool:
-	var dir: Directory = Directory.new()
-	if dir.dir_exists(path):
-		return true
-	if (dir.make_dir_recursive(path) if recursive else dir.make_dir(path)) != OK:
-		return false
-	
-	return true
+    var dir: Directory = Directory.new()
+    if dir.dir_exists(path):
+        return true
+    if (dir.make_dir_recursive(path) if recursive else dir.make_dir(path)) != OK:
+        return false
+    
+    return true
 
 static func write_file(path: String, content: String) -> bool:
-	var file := File.new()
-	if file.open(path, File.WRITE) != 0:
-		return false
-	file.store_string(content)
-	file.close()
-	return true
+    var file := File.new()
+    if file.open(path, File.WRITE) != 0:
+        return false
+    file.store_string(content)
+    file.close()
+    return true
 
 static func dir_exists(path: String) -> bool: return Directory.new().dir_exists(path)
 
 static func file_exists(path: String) -> bool: return Directory.new().file_exists(path)
 
 static func get_current_working_dir() -> String: 
-	var test := Directory.new()
-	assert(test.open(".") == 0)
-	return test.get_current_dir()
+    var test := Directory.new()
+    assert(test.open(".") == 0)
+    return test.get_current_dir()
 
 static func read_file_as_string(path: String) -> String:
-	var file: File = File.new()
-	var result = file.open(path, File.READ)
-	var content = ""
-	if result == 0:
-		content = file.get_as_text()
-	file.close()
-	return content
+    var file: File = File.new()
+    var result = file.open(path, File.READ)
+    var content = ""
+    if result == 0:
+        content = file.get_as_text()
+    file.close()
+    return content
 
 static func list_files(path: String) -> Array:
-	var ret := []
-	var dir = Directory.new()
-	if dir.open(path) != OK:
-		return ret
-	dir.list_dir_begin(true)
-	var file_name = dir.get_next()
-	while file_name != "":
-		ret.push_back(path.plus_file(file_name))
-		file_name = dir.get_next()
-	return ret
+    var ret := []
+    var dir = Directory.new()
+    if dir.open(path) != OK:
+        return ret
+    dir.list_dir_begin(true)
+    var file_name = dir.get_next()
+    while file_name != "":
+        ret.push_back(path.plus_file(file_name))
+        file_name = dir.get_next()
+    return ret
 
 static func parent_path(path: String):
-	return path.get_base_dir()
+    return path.get_base_dir()

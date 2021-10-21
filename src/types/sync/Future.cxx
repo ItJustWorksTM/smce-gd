@@ -33,14 +33,24 @@ void Promise::_init() {
 
 void Promise::set_value(Variant value) {
     promise.set_value(value);
-    future->call_deferred("emit_signal", "complete");
+    future->call_deferred("emit_signal", "completed");
 }
 
 void Future::_register_methods() {
     register_method("wait", &Future::wait);
     register_method("poll_ready", &Future::poll_ready);
     register_method("get", &Future::get);
-    register_signal<Future>("complete");
+    register_method("yield", &Future::yield);
+
+    register_signal<Future>("completed");
 }
 
 bool Future::poll_ready() { return future.wait_for(std::chrono::seconds(0)) == std::future_status::ready; }
+
+Ref<Future> Future::yield() {
+    // re-emit signal for yield to resolve
+    if (poll_ready()) {
+        call_deferred("emit_signal", "completed");
+    }
+    return this;
+}

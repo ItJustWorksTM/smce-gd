@@ -19,29 +19,29 @@ class_name SketchPane
 extends PanelContainer
 
 const SCENE_FILE := "res://src/scenes/SketchPane/SketchPane.tscn"
-static func instance():	return load(SCENE_FILE).instance()
+static func instance():    return load(SCENE_FILE).instance()
 
 onready var sketch_status_control: SketchStatusControl = $VBoxContainer/SketchStatusControl
 
 class ViewModel:
-	extends ViewModelExt.WithNode
+    extends ViewModelExt.WithNode
 
-	signal reset_vehicle_position
-	signal follow_vehicle
-	
-	signal start_board
-	signal stop_board
-	signal suspend_board
-	signal resume_board
+    signal reset_vehicle_position
+    signal follow_vehicle
+    
+    signal start_board
+    signal stop_board
+    signal suspend_board
+    signal resume_board
 
-	signal compile_sketch
+    signal compile_sketch
 
-	func _init(n).(n):
-		conn(node.sketch_status_control, "compile_sketch", "compile_sketch")
-	
-	func compile_sketch(): emit_signal("compile_sketch")
+    func _init(n).(n):
+        conn(node.sketch_status_control, "compile_sketch", "compile_sketch")
+    
+    func compile_sketch(): emit_signal("compile_sketch")
 
 var model: ViewModel
 
 func init_model():
-	model = ViewModel.new(self)
+    model = ViewModel.new(self)

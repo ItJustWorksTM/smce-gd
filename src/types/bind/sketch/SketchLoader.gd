@@ -23,23 +23,24 @@ var _cache := {}
 var _sketch_config
 
 func _init(sketch_config):
-	_sketch_config = sketch_config
+    _sketch_config = sketch_config
 
 func skload(path: String): # -> Sketch
-	path = Fs.parent_path(path)
-	if ! Fs.dir_exists(path):
-		return null
-	
-	if ! _cache.has(path) || !is_instance_valid(_cache[path]):
-		
-		var sk = Sketch.new()
-		assert(sk != null)
-		
-		sk.init(path, _sketch_config)
-		_cache[path] = sk
-		
-		sk.unreference()
-		
-		return sk
-	
-	return _cache[path]
+    # TODO: check if path is a file
+    path = Fs.parent_path(path)
+    if ! Fs.dir_exists(path):
+        return null
+    
+    if ! _cache.has(path) || !is_instance_valid(_cache[path]):
+        
+        var sk = Sketch.new()
+        assert(sk != null)
+        
+        sk.init(path, _sketch_config)
+        _cache[path] = sk
+        
+        sk.unreference()
+        
+        return sk
+    
+    return _cache[path]

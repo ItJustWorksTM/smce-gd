@@ -19,33 +19,33 @@ class_name SketchStatusControl
 extends PanelContainer
 
 const SCENE_FILE := "res://src/scenes/SketchStatusControl/SketchStatusControl.tscn"
-static func instance():	return load(SCENE_FILE).instance()
+static func instance():    return load(SCENE_FILE).instance()
 
 class ViewModel:
-	extends ViewModelBase
+    extends ViewModelBase
 
-	signal compile_sketch
-	signal open_log
+    signal compile_sketch
+    signal open_log
 
-	func sketch_name(): return "Nothing.ino"
-	func sketch_status(): "Compiled"
+    func sketch_name(): return "Nothing.ino"
+    func sketch_status(): "Compiled"
 
-	func _init():
-		pass
-	
-	func compile_sketch(): emit_signal("compile_sketch")
-	func open_log(): emit_signal("open_log")
+    func _init():
+        pass
+    
+    func compile_sketch(): emit_signal("compile_sketch")
+    func open_log(): emit_signal("open_log")
 
 var model: ViewModel
 
 func init_model():
-	model = ViewModel.new()
+    model = ViewModel.new()
 
-	model.bind_prop("sketch_status", sketch_status_label, "text")
-	model.bind_prop("sketch_name", sketch_name_label, "text")
+    model.bind_prop("sketch_status", sketch_status_label, "text")
+    model.bind_prop("sketch_name", sketch_name_label, "text")
 
-	var __= compile_button.connect("pressed", model, "compile_sketch")
-	__= log_button.connect("pressed", model, "open_log")
+    var __= compile_button.connect("pressed", model, "compile_sketch")
+    __= log_button.connect("pressed", model, "open_log")
 
 onready var sketch_name_label: Label = $VBox/SketchName
 onready var sketch_status_label: Label = $VBox/SketchStatus

@@ -37,6 +37,9 @@ class Sketch : public Reference {
 
     smce::Sketch sketch{"", {}};
 
+    String m_path;
+    Ref<SketchConfig> m_conf;
+
     smce::SketchConfig conf{};
 
   public:
@@ -48,9 +51,11 @@ class Sketch : public Reference {
     void init(String src, Ref<SketchConfig> config);
 
     void set_path(String src);
-    void set_config(Ref<SketchConfig> config);
+    String get_path();
 
-    String get_source();
+    void set_config(Ref<SketchConfig> config);
+    Ref<SketchConfig> get_config();
+
     bool is_compiled();
 };
 

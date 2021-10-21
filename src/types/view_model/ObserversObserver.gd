@@ -16,21 +16,21 @@
 #
 
 class_name ObserversObserver
-	
+    
 signal changed(value)
 
 var _deps: Array = []
 
 func get_value() -> Array:
-	var ret := []
-	for dep in _deps:
-		ret.append(dep.get_value())
-	return ret
+    var ret := []
+    for dep in _deps:
+        ret.append(dep.get_value())
+    return ret
 
 func _init(deps):
-	for dep in deps:
-		var obsv: Observable = Observable.from(dep)
-		_deps.append(obsv)
-		obsv.bind_change(self, "_on_change", [], CONNECT_REFERENCE_COUNTED)
+    for dep in deps:
+        var obsv: Observable = Observable.from(dep)
+        _deps.append(obsv)
+        obsv.bind_change(self, "_on_change", [], CONNECT_REFERENCE_COUNTED)
 
 func _on_change(__): emit_signal("changed", get_value())

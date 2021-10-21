@@ -18,10 +18,10 @@
 class_name ViewModelExt
 
 class WithNode:
-	extends ViewModelBase
-	var node: Node
+    extends ViewModelBase
+    var node: Node
 
-	func _init(_owner: Node): node = _owner
+    func _init(_owner: Node): node = _owner
 
-	func get_node(path: NodePath): return node.get_node(path)
+    func get_node(path: NodePath): return node.get_node(path)
 

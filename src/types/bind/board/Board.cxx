@@ -1,5 +1,5 @@
 /*
- *  board->cxx
+ *  Board.cxx
  *  Copyright 2021 ItJustWorksTM
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");

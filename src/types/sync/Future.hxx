@@ -34,6 +34,8 @@ class Future : public Reference {
     void wait() { future.wait(); }
     bool poll_ready();
 
+    Ref<Future> yield();
+
     Variant get() { return future.get(); }
 };
 

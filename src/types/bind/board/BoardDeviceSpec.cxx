@@ -27,6 +27,7 @@ void BoardDeviceSpec::_register_methods() {
     register_method("with_name", &BoardDeviceSpec::with_name);
     register_method("with_atomic_u32", &BoardDeviceSpec::with_atomic_u32);
     register_method("_to_string", &BoardDeviceSpec::_to_string);
+    register_method("eq", &BoardDeviceSpec::eq);
     register_property("name", &BoardDeviceSpec::name, String{});
     register_property("version", &BoardDeviceSpec::name, String{});
     register_property("a8_fields", &BoardDeviceSpec::a8_fields, Array{});

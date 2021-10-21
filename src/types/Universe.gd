@@ -27,35 +27,35 @@ var active_world: String
 var active_world_node
 
 func current_world() -> UniverseWorld:
-	return null
+    return null
 
 # Change the world
 func set_world_to(name: String) -> bool:
-	if !world_map.has(name):
-		return false
-	destroy_current_world()
-	
-	active_world = name
-	active_world_node = world_map[name].instance()
-	
-	add_child(active_world_node)
-	emit_signal("active_world_changed", active_world_node)
-	return true
-	
+    if !world_map.has(name):
+        return false
+    destroy_current_world()
+    
+    active_world = name
+    active_world_node = world_map[name].instance()
+    
+    add_child(active_world_node)
+    emit_signal("active_world_changed", active_world_node)
+    return true
+    
 
 # Will free the current world if one is loaded
 func destroy_current_world():
-	if active_world != "":
-		active_world = ""
-		active_world_node.queue_free()
-		active_world_node = null
+    if active_world != "":
+        active_world = ""
+        active_world_node.queue_free()
+        active_world_node = null
 
 # Add a world to the universe, packedscene needs to be a UniverseWorld (or interface identical)
 func add_world(name: String, scene: PackedScene):
-	assert(scene != null && scene.can_instance())
-#		assert(scene.get_state().get_node_type(0) == "Spatial")
-	world_map[name] = scene
-	emit_signal("world_list_changed")
+    assert(scene != null && scene.can_instance())
+#        assert(scene.get_state().get_node_type(0) == "Spatial")
+    world_map[name] = scene
+    emit_signal("world_list_changed")
 
 func remove_world(name: String) -> bool: return world_map.erase(name)
 

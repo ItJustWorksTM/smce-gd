@@ -38,16 +38,14 @@ class BoardConfig : public Reference {
 
       public:
         int pin = 0;
-        bool analog = false;
-        bool analog_read = true;
-        bool analog_write = true;
-        bool digital = false;
-        bool digital_read = true;
-        bool digital_write = true;
+        bool read = true;
+        bool write = true;
 
         static void _register_methods();
 
         void _init() {}
+
+        bool eq(Ref<GpioDriverConfig> rhs) { return rhs->pin == pin; }
 
         smce::BoardConfig::GpioDrivers to_native() const;
     };
@@ -80,6 +78,8 @@ class BoardConfig : public Reference {
 
         void _init() {}
 
+        bool eq(Ref<FrameBufferConfig> rhs) { return rhs->key == key; }
+
         smce::BoardConfig::FrameBuffer to_native() const;
     };
 
@@ -94,6 +94,8 @@ class BoardConfig : public Reference {
 
         void _init() {}
 
+        bool eq(Ref<SecureDigitalStorage> rhs) { return rhs->cspin == cspin; }
+
         smce::BoardConfig::SecureDigitalStorage to_native() const;
     };
 
@@ -107,6 +109,11 @@ class BoardConfig : public Reference {
         static void _register_methods();
 
         void _init() {}
+
+        Ref<BoardDeviceConfig> with_spec(Ref<BoardDeviceSpec> s) {
+            spec = s;
+            return this;
+        };
 
         smce::BoardConfig::BoardDevice to_native();
     };

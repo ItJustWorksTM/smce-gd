@@ -23,11 +23,11 @@ var _object
 var _property
 
 func _init(object: Object, property: String):
-	_object = object
-	_property = property
-	_object.connect(property + "_changed", self, "_on_change")
+    _object = object
+    _property = property
+    _object.connect(property + "_changed", self, "_on_change")
 
 func get_value():
-	return _object.get(_property)
+    return _object.get(_property)
 
 func _on_change(val): emit_signal("value_changed", val)

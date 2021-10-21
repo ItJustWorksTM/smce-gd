@@ -22,13 +22,13 @@ var toolchain: Toolchain = Toolchain.new()
 var sketch: Sketch = Sketch.new()
 
 func init(sketch_source: String, patches_dir: String, smce_resource_dir: String) -> Result:
-	var tc_res = toolchain.init(smce_resource_dir)
-	if tc_res.is_err():
-		return tc_res
-	
-	sketch.init(sketch_source, patches_dir)
-	
-	return Result.new().set_ok(null)
+    var tc_res = toolchain.init(smce_resource_dir)
+    if tc_res.is_err():
+        return tc_res
+    
+    sketch.init(sketch_source, patches_dir)
+    
+    return Result.new().set_ok(null)
 
 func compile():
-	return toolchain.compile(sketch)
+    return toolchain.compile(sketch)

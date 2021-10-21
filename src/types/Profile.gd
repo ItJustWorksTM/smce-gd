@@ -26,8 +26,8 @@ var sketches: Array
 var environment: String
 
 func _init(_name = "", _sketches = [], _environment = ""):
-	name = _name
-	sketches = _sketches
-	environment = _environment
+    name = _name
+    sketches = _sketches
+    environment = _environment
 
 func clone(): return get_script().new(name, sketches, environment)
