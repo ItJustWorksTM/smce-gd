@@ -16,6 +16,7 @@
  *
  */
 
+#include <iostream>
 #include "bind/Toolchain.hxx"
 
 using namespace godot;
