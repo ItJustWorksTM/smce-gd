@@ -28,7 +28,7 @@ void BoardView::_register_methods() {
     register_property<BoardView>("pins", &BoardView::set_noop, &BoardView::get_valid<&BoardView::pins>,
                                  Dictionary{});
     register_property<BoardView>("uart_channels", &BoardView::set_noop,
-                                 &BoardView::get_valid<&BoardView::uart_channels>, Dictionary{});
+                                 &BoardView::get_valid<&BoardView::uart_channels>, Array{});
     register_property<BoardView>("frame_buffers", &BoardView::set_noop,
                                  &BoardView::get_valid<&BoardView::frame_buffers>, Dictionary{});
     register_property<BoardView>("board_devices", &BoardView::set_noop,

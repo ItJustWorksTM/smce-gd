@@ -26,7 +26,9 @@ func _init(_env: EnvInfo):
 
 func _ready():
 
-    prepare_board()
+    var nice = BoardLogic.new(null, null)
+
+    nice.setup()
 
     return
 
@@ -41,37 +43,56 @@ func _ready():
 
     camera.set_target_transform(universe.active_world_node.get_camera_starting_pos_hint())
 
-class Attachment:
+
+# class Attachment:
+#     class Controller:
+#         var pin: GpioPin
+#         var device
     
-
-    func required_hardware() -> Array:
-        var pin := GpioDriverConfig.new()
-        pin.pin = 123
-        pin.read = false
+#     static func make_controller(builder: BoardBuilder, props: Dictionary):
+#         var pin := GpioDriverConfig.new()
+#         pin.pin = props["pin"]
         
-        var spec = BoardDeviceSpec.new() \
-                        .with_name("Attachment") \
-                        .with_atomic_u32("id") \
-                        .with_atomic_u32("value")
+#         var spec = BoardDeviceSpec.new() \
+#                         .with_name("Attachment") \
+#                         .with_atomic_u32("id") \
+#                         .with_atomic_u32("value")
         
-        return [pin, BoardDeviceConfig.new().with_spec(spec)]
+#         var requested = [pin, BoardDeviceConfig.new().with_spec(spec)]
 
-func prepare_board():
+#         var hardware = yield(builder.request(requested), "completed")
 
-    var needed := []
-    for props in [{}, {}]:
-        var attachment = Attachment.new()
-        # inflate attachment with config?
+#         if hardware == null:
+#             return null
 
-        for hw in attachment.required_hardware():
-            var dupe = false
-            for a in needed:
-                if Reflect.value_compare(a, hw):
-                    dupe = true
-                    push_error("dupe detected %d" % needed.size())
-                    break
-            if !dupe:
-                needed.push_back(hw)
-    print(needed)
+#         var controller = Controller.new()
+#         controller.pin = hardware[0]
+#         controller.device = hardware[1]
+#         controller.device.id = props["id"]
+
+#         return controller
+
+#     var _ctl: Controller
+
+#     func set_controller(ctl): _ctl = ctl
+
+#     func _init(ctl: Controller):
+#         _ctl = ctl
+
+# func prepare_board():
+
+#     var idk = BoardBuilder.new()
+
+#     for props in [{ "pin": 123, "id": 99 }, { "pin": 124, "id": 1 }]:
+#         var _attachment = Attachment.make_controller(idk, props)
+#         # do some yield magic and construct the attachment
     
-    pass
+#     var board = idk.consume()
+#     assert(board.is_ok(), board)
+
+
+#     board = board.get_value()
+    
+#     # yield(Yield.yield(), "completed")
+    
+#     pass

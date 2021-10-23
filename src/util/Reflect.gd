@@ -38,7 +38,6 @@ static func has_property(object: Object, property: String) -> bool:
 # Method that will compare objects by value, meaning it will reflect properties
 # until it finds fundamental types to compare.
 static func value_compare(rhs, lhs) -> bool:
-    print(rhs, lhs)
     if rhs is Array and lhs is Array:
         if rhs.size() != lhs.size(): return false
         var i = 0
@@ -56,7 +55,6 @@ static func value_compare(rhs, lhs) -> bool:
         elif rhs.has_method("eq"):
             return rhs.eq(lhs)
         else:
-            print("recursing")
             return value_compare(inst2dict2(rhs), inst2dict2(lhs))
     elif typeof(rhs) == typeof(lhs):
         return rhs == lhs
@@ -127,3 +125,4 @@ static func dict2inst2_recursive(value):
         else:
             return ret
     return value
+

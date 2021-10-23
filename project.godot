@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/types/bind/board/Board.gdns"
 }, {
+"base": "Reference",
+"class": "BoardBuilder",
+"language": "GDScript",
+"path": "res://src/types/bind/board/BoardBuilder.gd"
+}, {
 "base": "",
 "class": "BoardConfig",
 "language": "NativeScript",
@@ -39,6 +44,16 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/types/bind/board/BoardDeviceSpec.gdns"
 }, {
+"base": "BoardLogicBase",
+"class": "BoardLogic",
+"language": "GDScript",
+"path": "res://src/types/board_logic/BoardLogic.gd"
+}, {
+"base": "Node",
+"class": "BoardLogicBase",
+"language": "GDScript",
+"path": "res://src/types/board_logic/BoardLogicBase.gd"
+}, {
 "base": "",
 "class": "BoardView",
 "language": "NativeScript",
@@ -50,7 +65,7 @@ _global_script_classes=[ {
 "path": "res://src/types/ControllableCamera.gd"
 }, {
 "base": "",
-"class": "DynamicBoardConfig",
+"class": "DynamicBoardDevice",
 "language": "NativeScript",
 "path": "res://src/types/bind/board_view/DynamicBoardConfig.gdns"
 }, {
@@ -108,11 +123,6 @@ _global_script_classes=[ {
 "class": "Main",
 "language": "GDScript",
 "path": "res://src/types/Main.gd"
-}, {
-"base": "Reference",
-"class": "ManagedSketch",
-"language": "GDScript",
-"path": "res://src/types/ManagedSketch.gd"
 }, {
 "base": "Reference",
 "class": "Observable",
@@ -194,6 +204,11 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/types/bind/sketch/Sketch.gdns"
 }, {
+"base": "Reference",
+"class": "SketchBuilder",
+"language": "GDScript",
+"path": "res://src/types/board_logic/SketchBuilder.gd"
+}, {
 "base": "",
 "class": "SketchConfig",
 "language": "NativeScript",
@@ -268,17 +283,25 @@ _global_script_classes=[ {
 "class": "VisibilityButton",
 "language": "GDScript",
 "path": "res://src/types/VisibilityButton.gd"
+}, {
+"base": "Reference",
+"class": "Yield",
+"language": "GDScript",
+"path": "res://src/types/sync/Yield.gd"
 } ]
 _global_script_class_icons={
 "Async": "",
 "BindMap": "",
 "Board": "",
+"BoardBuilder": "",
 "BoardConfig": "",
 "BoardDeviceConfig": "",
 "BoardDeviceSpec": "",
+"BoardLogic": "",
+"BoardLogicBase": "",
 "BoardView": "",
 "ControllableCamera": "",
-"DynamicBoardConfig": "",
+"DynamicBoardDevice": "",
 "Entry": "",
 "EntryFailGui": "",
 "EnvInfo": "",
@@ -290,7 +313,6 @@ _global_script_class_icons={
 "GpioPin": "",
 "Hud": "",
 "Main": "",
-"ManagedSketch": "",
 "Observable": "",
 "Observable2": "",
 "ObserversObserver": "",
@@ -307,6 +329,7 @@ _global_script_class_icons={
 "SecureDigitalStorage": "",
 "Sender": "",
 "Sketch": "",
+"SketchBuilder": "",
 "SketchConfig": "",
 "SketchDescriptor": "",
 "SketchLoader": "",
@@ -321,7 +344,8 @@ _global_script_class_icons={
 "VerticalSketchList": "",
 "ViewModelBase": "",
 "ViewModelExt": "",
-"VisibilityButton": ""
+"VisibilityButton": "",
+"Yield": ""
 }
 
 [application]

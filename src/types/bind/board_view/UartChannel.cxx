@@ -46,13 +46,12 @@ void UartChannel::poll() {
 
     size_t available;
     do {
-        auto test = std::array<char, 16>{};
-        available = m_uart.tx().read(test);
+        available = m_uart.tx().read(read_buf);
         if (available > 0) {
             std::replace_if(
-                test.begin(), test.begin() + static_cast<ptrdiff_t>(available),
+                read_buf.begin(), read_buf.begin() + static_cast<ptrdiff_t>(available),
                 [](const auto& letter) { return letter == '\0' || letter == '\r'; }, '\t');
-            test[available] = '\0';
+            read_buf[available] = '\0';
 
             gread_buf += static_cast<const char*>(read_buf.data());
         }

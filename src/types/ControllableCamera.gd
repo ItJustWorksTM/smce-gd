@@ -93,4 +93,4 @@ func _process(_delta):
 
 func _notification(what):
     if what == NOTIFICATION_PREDELETE:
-        target.queue_free()
+        target.free()

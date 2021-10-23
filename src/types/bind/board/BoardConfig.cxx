@@ -83,7 +83,7 @@ smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_na
 void BoardConfig::BoardDeviceConfig::_register_methods() {
     register_method("with_spec", &BoardDeviceConfig::with_spec);
     register_property("spec", &BoardConfig::BoardDeviceConfig::spec, {});
-    register_property("amount", &BoardConfig::BoardDeviceConfig::amount, {});
+    register_property("amount", &BoardConfig::BoardDeviceConfig::amount, size_t{1});
 }
 
 smce::BoardConfig::BoardDevice BoardConfig::BoardDeviceConfig::to_native() {

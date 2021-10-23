@@ -39,7 +39,7 @@ class BoardView : public Reference {
     bool valid = false;
 
     Dictionary pins;
-    Dictionary uart_channels;
+    Array uart_channels;
     Dictionary frame_buffers;
     Dictionary /* <String, Array<DynamicBoardDevice>> */ board_devices;
 

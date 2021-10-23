@@ -72,7 +72,7 @@ Ref<Result> Board::init(Ref<BoardConfig> board_config) {
 
     for (int i = 0; i < board_config->uart_channels.size(); ++i) {
         auto info = static_cast<Ref<BoardConfig::UartChannelConfig>>(board_config->uart_channels[i]);
-        gbv->uart_channels[i] = UartChannel::from_native(info, bv.uart_channels[i]);
+        gbv->uart_channels.append(UartChannel::from_native(info, bv.uart_channels[i]));
     }
 
     for (int i = 0; i < board_config->frame_buffers.size(); ++i) {
@@ -93,7 +93,7 @@ Ref<Result> Board::init(Ref<BoardConfig> board_config) {
 
         auto devices = Array{};
 
-        for (size_t i = 0; i < info->amount; ++i) {
+        for (size_t i = 0; i < info->amount + 1; ++i) {
             devices.push_back(DynamicBoardDevice::create(info->spec, bv));
         }
 

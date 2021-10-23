@@ -50,7 +50,6 @@ smce::SketchConfig SketchConfig::to_native() {
                 auto r = std::vector<smce::PluginManifest>{};
 
                 for (size_t i = 0; i < plugins.size(); ++i) {
-                    // likely to crash
                     r.push_back(static_cast<Ref<SketchConfig::PluginManifest>>(plugins[i])->to_native());
                 }
 

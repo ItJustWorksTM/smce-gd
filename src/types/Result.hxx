@@ -28,13 +28,14 @@ class Result : public Reference {
     GODOT_CLASS(Result, Reference) // NOLINT(performance-unnecessary-value-param)
 
     bool is_error = false;
-    Variant value = Variant(Variant::NIL);
+    Variant value = Variant{};
 
   public:
     static void _register_methods() {
         register_method("get_value", &Result::get_value);
         register_method("_to_string", &Result::_to_string);
         register_method("set_err", &Result::set_err);
+        register_method("err_from", &Result::err_from);
         register_method("set_ok", &Result::set_ok);
         register_method("is_err", &Result::is_err);
         register_method("is_ok", &Result::is_ok);
@@ -44,6 +45,9 @@ class Result : public Reference {
     Ref<Result> set_err(Variant err_value) { return set(false, err_value); }
     Ref<Result> set_ok(Variant ok_value) { return set(true, ok_value); }
     Ref<Result> set_if_err(bool is_ok, Variant ok_value) { return is_ok ? this : set(true, ok_value); }
+    Ref<Result> err_from(Ref<Result> res, Variant ok_value) {
+        return res->is_err() ? set(false, res->value) : set(true, ok_value);
+    }
 
     Ref<Result> set(bool is_ok, Variant val) {
         value = val;

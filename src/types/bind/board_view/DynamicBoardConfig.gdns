@@ -3,7 +3,7 @@
 [ext_resource path="res://assets/native/native.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "DynamicBoardConfig"
-class_name = "DynamicBoardConfig"
+resource_name = "DynamicBoardDevice"
+class_name = "DynamicBoardDevice"
 library = ExtResource( 1 )
-script_class_name = "DynamicBoardConfig"
+script_class_name = "DynamicBoardDevice"

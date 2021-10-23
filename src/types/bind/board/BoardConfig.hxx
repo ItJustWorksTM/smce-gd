@@ -104,7 +104,7 @@ class BoardConfig : public Reference {
 
       public:
         Ref<BoardDeviceSpec> spec;
-        size_t amount;
+        size_t amount = 1;
 
         static void _register_methods();
 
