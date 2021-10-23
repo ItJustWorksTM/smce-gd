@@ -88,13 +88,22 @@ func request(arr):
     
     return ret
 
-func consume():
+func create(sketch):
+    if !sketch.is_compiled():
+        assert(false, "sketch needs to be compiled such that we can derive needed devices")
+        return null
+
+    for device in sketch.config.genbind_devices:
+        self.request([BoardDeviceConfig.new().with_spec(device)])
+
     var board = Board.new()
     var init_res = board.init(_requ)
 
     emit_signal("_consume", board.get_view())
-
-    print(init_res)
     
+    if init_res.is_err():
+        assert(false, init_res)
+        return null
+
     return Result.new().err_from(init_res, board)
 

@@ -20,30 +20,38 @@ extends Node
 
 var universe := Universe.new()
 var camera := ControllableCamera.new()
+var sketch_builder: SketchBuilder
+var sketch_loader: SketchLoader
 
 func _init(_env: EnvInfo):
-    var sketch = Sketch.new()
-    sketch.path = "/home/ruthgerd/Sources/smce-gd2/tests/sketches/noop/noop.ino"
+    sketch_builder = SketchBuilder.new(_env.smce_resources_dir)
+    sketch_loader = SketchLoader.new(SketchConfig.new())
 
-    var sketch_builder = SketchBuilder.new(_env.smce_resources_dir)
+    var sketch = sketch_loader.skload("/home/ruthgerd/Sources/smce-gd2/tests/sketches/noop/noop.ino")
 
     var token = sketch_builder.queue_build(sketch)
 
-    print(yield(token.future().yield(), "completed"))
+    var future = token.future()
 
-    print(token.read_log())
+    print(yield(future.yield(), "completed"))
 
-    var nice = BoardLogicBase.new(sketch)
+    if future.get().is_err():
+        print(future.read_log())
+        return
 
     var builder = BoardBuilder.new()
 
     builder.request([])
     
-    var success = nice.setup(builder)
+    var maybe_board = builder.create(sketch)
 
-    print(success)
+    assert(maybe_board.is_ok(), maybe_board)
 
-    nice.start()
+    var board = maybe_board.get_value()
+
+    board.start()
+
+    print("started")
 
 func _ready():
 

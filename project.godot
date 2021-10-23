@@ -44,11 +44,6 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/types/bind/board/BoardDeviceSpec.gdns"
 }, {
-"base": "Node",
-"class": "BoardLogicBase",
-"language": "GDScript",
-"path": "res://src/types/board_logic/BoardLogicBase.gd"
-}, {
 "base": "",
 "class": "BoardView",
 "language": "NativeScript",
@@ -202,7 +197,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "SketchBuilder",
 "language": "GDScript",
-"path": "res://src/types/board_logic/SketchBuilder.gd"
+"path": "res://src/types/bind/sketch/SketchBuilder.gd"
 }, {
 "base": "",
 "class": "SketchConfig",
@@ -292,7 +287,6 @@ _global_script_class_icons={
 "BoardConfig": "",
 "BoardDeviceConfig": "",
 "BoardDeviceSpec": "",
-"BoardLogicBase": "",
 "BoardView": "",
 "ControllableCamera": "",
 "DynamicBoardDevice": "",
