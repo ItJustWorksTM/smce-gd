@@ -22,15 +22,30 @@ var universe := Universe.new()
 var camera := ControllableCamera.new()
 
 func _init(_env: EnvInfo):
-    pass
+    var sketch = Sketch.new()
+    sketch.path = "/home/ruthgerd/Sources/smce-gd2/tests/sketches/noop/noop.ino"
+
+    var sketch_builder = SketchBuilder.new(_env.smce_resources_dir)
+
+    var token = sketch_builder.queue_build(sketch)
+
+    print(yield(token.future().yield(), "completed"))
+
+    print(token.read_log())
+
+    var nice = BoardLogicBase.new(sketch)
+
+    var builder = BoardBuilder.new()
+
+    builder.request([])
+    
+    var success = nice.setup(builder)
+
+    print(success)
+
+    nice.start()
 
 func _ready():
-
-    var nice = BoardLogic.new(null, null)
-
-    nice.setup()
-
-    return
 
     add_child(universe)
     add_child(camera)

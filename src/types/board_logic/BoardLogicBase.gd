@@ -19,28 +19,18 @@ class_name BoardLogicBase
 extends Node
 
 var _sketch: Sketch
-var _sketch_builder: SketchBuilder
 
 var _board: Board
 
-var _compile_token: SketchBuilder.Token
-
-func _init(sketch_builder, sketch: Sketch):
+func _init(sketch: Sketch):
     _sketch = sketch
-    _sketch_builder = sketch_builder   
 
-func setup():
+func setup(board_builder: BoardBuilder = BoardBuilder.new()):
     if !_sketch.is_compiled():
         assert(false, "sketch needs to be compiled such that we can derive needed devices")
         return false
     
-    var board_builder = BoardBuilder.new()
-
     var hook_state = _setup_hook(board_builder)
-
-    # Make sure that we at least match the sketches' devices
-    for device in _sketch.config.genbind_devices:
-        board_builder.request([BoardDeviceConfig.new().with_spec(device)])
 
     var res = board_builder.consume()
 
@@ -54,14 +44,6 @@ func setup():
 
     return true
 
-func compile():
-    if _compile_token != null:
-        return
-    
-    _compile_token = _sketch_builder.queue_build(_sketch)
-
-    _compile_started_hook(_compile_token)
-
 func start():
     return _board.start(_sketch) if !_board.is_active() else _board.resume() 
 
@@ -74,16 +56,12 @@ func stop():
         _terminate_hook(res.get_value())
     return res
 
-func _setup_hook(_builder):
+func _setup_hook(builder):
+    for device in _sketch.config.genbind_devices:
+        builder.request([BoardDeviceConfig.new().with_spec(device)])
     yield()
 
 func _terminate_hook(_code):
-    pass
-
-func _compile_started_hook(_token):
-    pass
-
-func _compile_finished_hook(_res):
     pass
 
 func _process(__):
@@ -94,9 +72,4 @@ func _process(__):
         
         _terminate_hook(res.get_value())
     
-    if _compile_token != null && _compile_token.future().poll_ready():
-        
-        _compile_finished_hook(_compile_token.future().get())
-
-        _compile_token = null
 

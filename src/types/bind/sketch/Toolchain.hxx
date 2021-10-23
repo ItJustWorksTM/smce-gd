@@ -47,6 +47,8 @@ class Toolchain : public Reference {
 
     Ref<ToolchainLogReader> reader;
 
+    String m_resource_dir;
+
   public:
     static void _register_methods();
 
@@ -59,6 +61,8 @@ class Toolchain : public Reference {
     bool is_initialized() { return (bool)tc; }
 
     Ref<Result> compile(Ref<Sketch> sketch);
+
+    String _to_string();
 };
 
 } // namespace godot

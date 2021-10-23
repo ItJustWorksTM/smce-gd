@@ -57,7 +57,7 @@ class SketchConfig : public Reference {
 
     // TODO: delete once smce also drops legacy support
     Array /* String */ legacy_preproc_libs;
-    String fqbn;
+    String fqbn = "deprecated";
 
     Array /* Ref<PluginManifest> */ plugins;
 

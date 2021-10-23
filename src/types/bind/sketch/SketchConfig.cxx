@@ -27,8 +27,8 @@ using namespace godot;
 
 void SketchConfig::_register_methods() {
 #define P(f, d) std::tuple{STR(f), &SketchConfig::f, d}
-    register_props(P(extra_board_uris, Array{}), P(legacy_preproc_libs, Array{}), P(fqbn, String{}),
-                   P(plugins, Array{}), P(genbind_devices, Array{}));
+    register_props(P(extra_board_uris, Array{}), P(legacy_preproc_libs, Array{}),
+                   P(fqbn, String{"deprecated"}), P(plugins, Array{}), P(genbind_devices, Array{}));
 #undef P
 }
 

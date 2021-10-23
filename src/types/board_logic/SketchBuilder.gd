@@ -51,9 +51,11 @@ var ongoing = {}
 func _init(resource_dir: String):
     _resource_dir = resource_dir
 
-func queue_build(sketch: Sketch) -> Token:
+func queue_build(sketch) -> Token:
     if !ongoing.has(sketch):
-        var tc = Toolchain.new().init(_resource_dir)
+        var tc = Toolchain.new()
+        var res = tc.init(_resource_dir)
+        assert(res.is_ok(), res)
         var reader = tc.log_reader()
         var future = Async.run(tc, "compile", [sketch])
         ongoing[sketch] = [future, SharedLog.new(reader)]

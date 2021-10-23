@@ -19,19 +19,21 @@ class_name Async
 
 class _Async:
     var thread: Thread
-    var lambda: FuncRef
+    var _obj: Object
+    var _method: String
     var promise
 
     func _init(obj, method, args):
         var __ = reference()
         thread = Thread.new()
-        lambda = funcref(obj, method)
+        _obj = obj
+        _method = method
         promise = Promise.new()
         var res = thread.start(self, "_run", args)
         assert(res == OK)
 
     func _run(args):
-        promise.set_value(lambda.call_funcv(args))
+        promise.set_value(_obj.callv(_method,args))
         call_deferred("_delete")
 
     func _delete():

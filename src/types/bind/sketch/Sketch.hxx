@@ -38,7 +38,7 @@ class Sketch : public Reference {
     smce::Sketch sketch{"", {}};
 
     String m_path;
-    Ref<SketchConfig> m_conf;
+    Ref<SketchConfig> m_conf = make_ref<SketchConfig>();
 
     smce::SketchConfig conf{};
 
@@ -57,6 +57,8 @@ class Sketch : public Reference {
     Ref<SketchConfig> get_config();
 
     bool is_compiled();
+
+    String _to_string();
 };
 
 } // namespace godot

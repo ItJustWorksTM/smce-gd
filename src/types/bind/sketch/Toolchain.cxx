@@ -16,6 +16,7 @@
  *
  */
 
+#include <filesystem>
 #include "Toolchain.hxx"
 
 using namespace godot;
@@ -24,7 +25,8 @@ Ref<Result> Toolchain::init(String resource_dir) {
     if (is_initialized())
         return Result::err("Already initialized");
 
-    tc = std::make_shared<smce::Toolchain>(std_str(resource_dir));
+    // TODO: properly absolute-ize path, this could throw I think
+    tc = std::make_shared<smce::Toolchain>(std::filesystem::absolute(std_str(resource_dir)));
     const auto res = Result::from(tc->check_suitable_environment());
 
     if (res->is_err())
@@ -32,6 +34,8 @@ Ref<Result> Toolchain::init(String resource_dir) {
 
     reader = make_ref<ToolchainLogReader>();
     reader->tc = tc;
+
+    m_resource_dir = resource_dir;
 
     return res;
 }
@@ -41,6 +45,7 @@ void Toolchain::_register_methods() {
     register_method("is_initialized", &Toolchain::is_initialized);
     register_method("init", &Toolchain::init);
     register_method("log_reader", &Toolchain::log_reader);
+    register_method("_to_string", &Toolchain::_to_string);
 }
 
 Ref<Result> Toolchain::compile(Ref<Sketch> sketch) {
@@ -62,4 +67,8 @@ Variant ToolchainLogReader::read() {
         return ret;
     }
     return Variant{};
+}
+
+String Toolchain::_to_string() {
+    return String{"Toolchain {"} + " resource_dir: \"" + m_resource_dir + "\" }";
 }
