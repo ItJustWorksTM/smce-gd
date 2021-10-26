@@ -27,6 +27,7 @@ onready var lpane = $LeftPane
 onready var left_panel = $Panel/VBoxContainer/ScrollContainer/VBoxContainer
 onready var attach = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/Control
 onready var new_sketch_btn = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/ToolButton
+onready var help_btn = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/HelpToolButton
 onready var notification_display = $Notifications
 
 onready var profile_control = $ProfileControl
@@ -58,6 +59,7 @@ func _ready() -> void:
 	set_disabled()
 	button_group._init()
 	new_sketch_btn.connect("pressed", self, "_on_sketch_btn")
+	help_btn.connect("pressed", self, "_on_help_btn")
 	profile_control.connect("toggled", self, "_toggle_profile_control", [false])
 	profile_control_toggle.connect("pressed", self, "_toggle_profile_control", [true])
 	profile_screen_toggle.connect("button_down", self, "_toggle_profile_control", [false])
@@ -111,6 +113,31 @@ func _on_sketch_btn() -> void:
 	slot[1].grab_focus()
 	slot[1].pressed = true
 	
+	_add_pane(pane, slot)
+	
+func _on_help_btn() -> void:
+	get_focus_owner().release_focus()
+
+	_set_vis(false)
+
+	var sketch_select = sketch_select_t.instance()
+	sketch_select.init(sketch_manager)
+	get_tree().root.add_child(sketch_select)
+
+	var sketch = yield(sketch_select, "exited")
+
+	if ! is_instance_valid(sketch):
+		return
+
+	var pane = _create_sketch_pane(sketch)
+
+	if pane == null:
+		return
+
+	var slot = _new_slot()
+	slot[1].grab_focus()
+	slot[1].pressed = true
+
 	_add_pane(pane, slot)
 
 

@@ -153,6 +153,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HelpToolButton" type="ToolButton" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 48.0
+margin_right = 48.0
+margin_bottom = 77.0
+mouse_default_cursor_shape = 2
+text = "Help"
+
 [node name="ProfileScreentoggle" type="ToolButton" parent="."]
 visible = false
 anchor_right = 1.0
