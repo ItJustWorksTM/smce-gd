@@ -27,6 +27,8 @@ var error: String = ""
 
 
 func _ready():
+	_fetch_github_wiki()
+	
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
 		print("Custom user directory set")
@@ -103,3 +105,32 @@ func _error(message: String) -> void:
 
 func _on_clipboard_copy() -> void:
 	OS.clipboard = error
+	
+# Fetch smce-gd GitHub wiki into project/media/wiki
+func _fetch_github_wiki() -> void:
+	var output = []
+	var wikiUrl = 'https://github.com/ItJustWorksTM/smce-gd.wiki.git'
+	# OS.execute( 'rmdir', ['"./media/wiki"', '/s', '/q'], true, output)
+	# for line in output:
+	# 	print(line)
+	_clean_folder('./media/wiki')
+	OS.execute( 'git', ['clone', wikiUrl, './media/wiki'], false)
+	
+func _clean_folder(path):
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				if file_name != '.' and file_name != '..':
+					print("Cleaning directory: " + dir.get_current_dir() + '/' + file_name)
+					_clean_folder(dir.get_current_dir() + '/' + file_name)
+					dir.remove(file_name)
+			else:
+				OS.execute( 'icacls', [(path + '/' + file_name), '/grant', 'Users:F'], true)
+				print("Removing file: " + file_name)
+				print(dir.remove(file_name))
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path: " + path)
