@@ -26,10 +26,10 @@ func _on_save() -> void:
 	filepicker_window.visible = true
 	tween.interpolate_property(filepicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
 	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
-	
 	tween.start()
 	yield(tween, "tween_all_completed")
 	select_window.visible = false
+	
 	
 func _on_close() -> void:
 	texteditor.clear()
@@ -52,5 +52,8 @@ func _on_close() -> void:
 	#if node:
 	#	_text_edit.add_child(node)
 	#	text_field = node
-
-	
+func _on_FilePicker_file_picked(path):
+	var f = File.new() # Replace with function body.
+	f.open(path,2)
+	f.store_string(texteditor.text)
+	select_window.visible=false

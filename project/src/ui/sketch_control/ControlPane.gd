@@ -309,9 +309,11 @@ func _show_preview_log() -> void:
 	var f =File.new()
 	##var f1= File.new()
 	f.open(path1,1)
-	##f1.open(path1,2)
 	window1.texteditor.text= f.get_as_text()
-	##f1.store_string(window1.texteditor.text)
+#	var f1 = File.new() # Replace with function body.
+#	f.open(path1,2)
+#	f.store_string(window1.texteditor.text)
+#	##f1.store_string(window1.texteditor.text)
 	
 	
 

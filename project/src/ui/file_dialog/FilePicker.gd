@@ -20,6 +20,7 @@ extends Control
 signal file_picked
 onready var _wrapped: FileDialog = $FileDialog
 
+
 enum dialog_type { SAVE, OPEN }
 export (dialog_type) var mode = dialog_type.OPEN
 
@@ -53,3 +54,9 @@ func _process(_delta: float) -> void:
 
 func connect(sig_name: String, object: Object, func_name: String, bind: Array = [], idx: int = 0) -> int:
 	return _wrapped.connect(sig_name, object, func_name, bind, idx)
+
+
+#func _on_FileDialog_file_selected(path):
+#	var f1 = File.new() # Replace with function body.
+#	f1.open(path,2)
+#	f1.store_string(window1.texteditor.text)

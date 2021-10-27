@@ -113,3 +113,4 @@ selection_enabled = true
 
 [connection signal="ready" from="Panel/MarginContainer/VBoxContainer/Control/TextEdit" to="." method="_on_textedit_ready"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/Control/Save" to="." method="_on_Save_pressed"]
+[connection signal="file_picked" from="Panel/Filepicker/VBoxContainer/TextAttach/FilePicker" to="." method="_on_FilePicker_file_picked"]
