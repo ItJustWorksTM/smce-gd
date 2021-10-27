@@ -106,31 +106,22 @@ func _error(message: String) -> void:
 func _on_clipboard_copy() -> void:
 	OS.clipboard = error
 	
+	
 # Fetch smce-gd GitHub wiki into project/media/wiki
 func _fetch_github_wiki() -> void:
-	var output = []
-	var wikiUrl = 'https://github.com/ItJustWorksTM/smce-gd.wiki.git'
-	# OS.execute( 'rmdir', ['"./media/wiki"', '/s', '/q'], true, output)
-	# for line in output:
-	# 	print(line)
-	_clean_folder('./media/wiki')
-	OS.execute( 'git', ['clone', wikiUrl, './media/wiki'], false)
+	_create_wiki_folder('./media')
+	var wiki_pages = ['Home', 'Arch-based-Linux-setup', 'Compiling-a-sketch', 'Configuration', 'Debian-based-Linux-setup', 'MacOS-setup', 'Modding', 'Vehicle-Capabilities', 'Windows-setup']
+	var base_url = 'https://raw.githubusercontent.com/wiki/ItJustWorksTM/smce-gd/'
+	for page in wiki_pages:
+		var output_name = './media/wiki/' + page + '.md'
+		var download_link = base_url + page + '.md'
+		OS.execute('curl', ['-o', output_name, download_link], false)
 	
-func _clean_folder(path):
+	
+func _create_wiki_folder(path):
 	var dir = Directory.new()
 	if dir.open(path) == OK:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if dir.current_is_dir():
-				if file_name != '.' and file_name != '..':
-					print("Cleaning directory: " + dir.get_current_dir() + '/' + file_name)
-					_clean_folder(dir.get_current_dir() + '/' + file_name)
-					dir.remove(file_name)
-			else:
-				OS.execute( 'icacls', [(path + '/' + file_name), '/grant', 'Users:F'], true)
-				print("Removing file: " + file_name)
-				print(dir.remove(file_name))
-			file_name = dir.get_next()
+		if !dir.dir_exists('wiki'):
+			dir.make_dir('wiki')
 	else:
-		print("An error occurred when trying to access the path: " + path)
+		print("An error occurred trying to create wiki folder: " + path)
