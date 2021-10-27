@@ -4,8 +4,6 @@
 [ext_resource path="res://src/ui/profile_selector/ProfileSelector.gd" type="Script" id=3]
 [ext_resource path="res://media/fonts/Open_Sans/OpenSans-Light.ttf" type="DynamicFontData" id=4]
 
-
-
 [sub_resource type="DynamicFont" id=1]
 size = 36
 use_mipmaps = true

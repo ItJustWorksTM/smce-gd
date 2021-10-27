@@ -42,9 +42,9 @@ margin_right = 1272.0
 
 [node name="TextEdit" type="TextEdit" parent="Panel/MarginContainer/VBoxContainer/Control"]
 margin_left = -7.0
-margin_top = 35.0
+margin_top = 38.5636
 margin_right = 1281.0
-margin_bottom = 708.0
+margin_bottom = 711.564
 __meta__ = {
 "_edit_use_anchors_": false
 }
