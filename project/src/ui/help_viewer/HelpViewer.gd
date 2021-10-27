@@ -21,10 +21,25 @@ signal help_selected
 signal exited
 
 onready var close_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/CloseButton
+onready var center_label = $LogPopout/Panel/Control/EmptyLabel
+onready var item_list = $LogPopout/Panel/Control/VBoxContainer/ItemList
 
-# No functionality at the moment
+const WIKI_PATH = "./media/wiki/"
+var wiki_pages = []
+
+
+class WikiPage:
+	var title: String
+	var content: String
+
+
 func init() -> bool:
 	print("Loading help viewer...")
+	
+	wiki_pages = _get_wiki_from_storage(WIKI_PATH)
+	for page in wiki_pages:
+		print("Title: " + page.title)
+		# print("Content: " + page.content)
 	
 	return true
 
@@ -32,9 +47,41 @@ func init() -> bool:
 func _ready():
 	close_btn.connect("pressed", self, "_close")
 	
+	if wiki_pages.size() > 0:
+		center_label.set_text("") # TODO: Should remove the entire node?
+	for page in wiki_pages:
+		item_list.add_item(page.title)
+	
 	print("HelpViewer loaded!")
-	
-	
+
+
+func _get_wiki_from_storage(path) -> Array:
+	var pages = []
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if !dir.current_is_dir():
+				print('Reading wiki page: ' + file_name)
+				var page = WikiPage.new()
+				page.title = file_name
+				page.content = _read_file(file_name)
+				pages.append(page)
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path: " + path)
+	return pages
+
+
+func _read_file(file_name):
+	var file = File.new()
+	file.open(WIKI_PATH + file_name, File.READ)
+	var content = file.get_as_text()
+	file.close()
+	return content
+
+
 func _gui_input(event: InputEvent):
 	if event.is_action_pressed("mouse_left"):
 		_close()
