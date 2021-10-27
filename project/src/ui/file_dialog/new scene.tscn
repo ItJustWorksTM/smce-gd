@@ -1,0 +1,43 @@
+[gd_scene format=2]
+
+[node name="MarginContainer" type="MarginContainer"]
+margin_right = 749.0
+margin_bottom = 490.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_right = 749.0
+margin_bottom = 490.0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 742.0
+margin_bottom = 483.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+margin_right = 735.0
+margin_bottom = 476.0
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_right = 735.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/MarginContainer/VBoxContainer/Control"]
+margin_top = 38.0
+margin_right = 732.0
+margin_bottom = 478.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/Control"]
+margin_right = 125.0
+margin_bottom = 26.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

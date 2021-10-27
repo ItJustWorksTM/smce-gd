@@ -22,23 +22,15 @@ signal exited
 
 onready var itemlist = $LogPopout/Panel/Control/VBoxContainer/ItemList
 onready var new_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/NewSketch
-onready var open_btn = $LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog/Open
-onready var save_btn = $LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog/Save
 onready var select_btn = $LogPopout/Panel/Control/HBoxContainer/SelectButton
 onready var filepicker_window = $LogPopout/Panel/Filepicker
-onready var texteditor_window = $LogPopout/Panel/Texteditor
 onready var select_window = $LogPopout/Panel/Control
 onready var filepicker = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/FilePicker
-onready var savefilepicker = $LogPopout/Panel/Filepicker/VBoxContainer/TextAttach/SaveDialog
 onready var empty = $LogPopout/Panel/Control/EmptyLabel
 onready var close_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/CloseButton
 onready var error_label = $LogPopout/Panel/Control/HBoxContainer/ErrorLabel
-onready var texteditor = $LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog
-onready var textedit = $LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog/TextEdit
-onready var preview =$LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/WindowDialog/preview
-onready var filedialogpre =$LogPopout/Panel/Texteditor/VBoxContainer/TextAttach/FileDialog2
-var _sketch_manager: SketchManager = null
 
+var _sketch_manager: SketchManager = null
 var _selected_sketch = null
 
 
@@ -70,62 +62,27 @@ func _ready():
 	
 	close_btn.connect("pressed", self, "_close")
 	new_btn.connect("pressed", self, "_show_filepicker")
-	open_btn.connect("pressed", self, "_show_filepicker1")
 	select_btn.connect("pressed", self, "_select_sketch")
-	save_btn.connect("pressed", self, "_show_filepicker2")
-	preview.connect("pressed", self, "_on_preview_pressed")
+	
 	update_list()
-	itemlist.clear() ##added now 
+
 
 func _enter_tree() -> void:
 	_open()
 
 
-func _show_filepicker() -> void: #Add new
-	var tween: Tween = TempTween.new()
-	add_child(tween)
-	texteditor.popup()
-	filepicker_window.visible =false
-	#select_window.visible = true #new chnage 3
-	tween.interpolate_property(texteditor, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
-	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
-	tween.start()
-	yield(tween, "tween_all_completed")
-	select_window.visible = false
-	
-func _show_filepicker1() -> void:
-	texteditor.hide()
-	#texteditor.visible =false
+func _show_filepicker() -> void:
 	var tween: Tween = TempTween.new()
 	add_child(tween)
 	filepicker._wrapped.popup()
 	filepicker_window.visible = true
 	tween.interpolate_property(filepicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
 	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
+	
 	tween.start()
 	yield(tween, "tween_all_completed")
 	select_window.visible = false
 
-func _show_filepicker2() -> void:
-	texteditor.hide()
-	#texteditor.visible =true #new change
-	var tween: Tween = TempTween.new()
-	add_child(tween)
-	savefilepicker.popup()
-	#filepicker_window.visible = false
-	tween.interpolate_property(savefilepicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
-	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
-	tween.start()
-	yield(tween, "tween_all_completed")
-	select_window.visible = false
-	
-	_hide_filepicker()
-	
-func _on_SaveDialog_file_selected(path):
-	var f =File.new()
-	f.open(path,2)
-	f.store_string(textedit.text)
-	
 
 func _hide_filepicker() -> void:
 	var tween: Tween = TempTween.new()
@@ -138,7 +95,6 @@ func _hide_filepicker() -> void:
 	yield(tween, "tween_all_completed")
 	
 	filepicker_window.visible = false
-
 
 
 func update_list():
@@ -195,8 +151,6 @@ func _on_item_selected(index):
 	select_btn.disabled = index < 0
 
 
-
-
 func _on_file_selected(file: String):
 	error_label.text = " "
 	
@@ -212,31 +166,3 @@ func _on_file_selected(file: String):
 func _on_sketch_selected(_index: int) -> void:
 	_select_sketch()
 
-
-
-	
-func _on_FileDialog_file_selected(path):
-	var f = File.new()
-	f.open(path,1)
-	textedit.text = f.get_as_text()
-
-
-
-func _on_preview_pressed():
-	texteditor.hide()
-	var tween: Tween = TempTween.new()
-	add_child(tween)
-	filedialogpre.popup()
-	tween.interpolate_property(filedialogpre, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
-	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
-	tween.start()
-	yield(tween, "tween_all_completed")
-	select_window.visible = false
-	
-
-
-func _on_FileDialog2_file_selected(path):
-	texteditor.popup()
-	var f = File.new()
-	f.open(path,1)
-	textedit.text = f.get_as_text()

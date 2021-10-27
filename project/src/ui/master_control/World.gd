@@ -22,7 +22,7 @@ var world: Spatial = null
 
 var debug_car: Spatial = null
 
-onready var cam_ctl: Camera = $Camera
+onready var cam_ctl: CamCtl = $Camera
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_car_spawn"):
@@ -47,7 +47,7 @@ func _ready() -> void:
 func _setup_cams() -> void:
 	cam_ctl.locked_cam = $Camera/LockedCam
 	cam_ctl.free_cam = $Camera/FreeCam
-	cam_ctl.interp_cam = $Camera/InterpolatedCam
+	cam_ctl.interp_cam = $Camera/InterpolatedCamera
 
 
 func load_world(scene: PackedScene) -> bool:

@@ -19,16 +19,18 @@ extends VBoxContainer
 
 var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
 var collapsable_t = preload("res://src/ui/collapsable/collapsable.tscn")
-
 signal notification_created
 signal grab_focus
+signal sketch_selected
 
 var _toolchain: Toolchain = null
+var _sketch: Sketch =null ##added now
 var _board = null
 
 onready var compile_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Compile
 onready var compile_log_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/CompileLog
 onready var sketch_status: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchStatus
+onready var preview_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Preview
 
 onready var close_btn: ToolButton = $MarginContainer/CloseButton
 onready var file_path_header: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchPath
@@ -48,11 +50,14 @@ onready var serial_collapsable = $Serial
 onready var uart = $Serial/UartPanel/Uart
 onready var sketch_log = $Log/SketchLog/VBoxContainer/LogBox
 
-var sketch_path: String = ""
 
-var cam_ctl: Camera = null setget set_cam_ctl
+var sketch_path: String = ""
+var path1: String = ""
+var cam_ctl: CamCtl = null setget set_cam_ctl
 
 var vehicle = null
+
+
 
 func init(sketch: Sketch, toolchain: Toolchain):
 	
@@ -111,6 +116,7 @@ func _ready():
 	
 	compile_btn.connect("pressed", self, "_on_compile")
 	compile_log_btn.connect("pressed", self, "_show_compile_log")
+	preview_btn.connect("pressed", self, "_show_preview_log")
 	
 	close_btn.connect("pressed", self, "_on_close")
 	pause_btn.connect("pressed", self, "_on_pause")
@@ -220,7 +226,7 @@ func _on_board_stopped(exit_code: int) -> void:
 	vehicle.queue_free()
 
 
-func set_cam_ctl(ctl: Camera) -> void:
+func set_cam_ctl(ctl: CamCtl) -> void:
 	if ! ctl:
 		return
 	cam_ctl = ctl
@@ -289,7 +295,25 @@ func _show_compile_log() -> void:
 	compile_log_text_field.scroll_following = true
 	window.set_text_field(compile_log_text_field)
 	compile_log_text_field.text = _toolchain.get_log()
+	
+var preview_log_text_field = null	
+##var _preview =preview
 
+
+func _show_preview_log() -> void:
+	var window1 = preload("res://src/ui/sketch_control/preview.tscn").instance()
+	get_tree().root.add_child(window1)
+	preview_log_text_field = TextEdit.new()
+	path1 =sketch_path.get_basename()+".ino"
+	print(path1)
+	var f =File.new()
+	##var f1= File.new()
+	f.open(path1,1)
+	##f1.open(path1,2)
+	window1.texteditor.text= f.get_as_text()
+	##f1.store_string(window1.texteditor.text)
+	
+	
 
 func _on_toolchain_log(text) -> void:
 	if is_instance_valid(compile_log_text_field):

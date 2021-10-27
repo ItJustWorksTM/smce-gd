@@ -67,4 +67,3 @@ func make_sketch(path: String):
 	emit_signal("sketch_added")
 	
 	return GDResult.new()
-
