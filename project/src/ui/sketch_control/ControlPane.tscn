@@ -174,10 +174,10 @@ margin_right = 1272.0
 margin_bottom = 32.0
 
 [node name="Preview" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Control"]
-margin_left = -151.008
-margin_top = 1.47559
-margin_right = -119.008
-margin_bottom = 33.4756
+margin_left = -163.0
+margin_top = 1.0
+margin_right = -121.0
+margin_bottom = 33.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
 icon = ExtResource( 7 )

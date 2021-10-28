@@ -32,7 +32,6 @@ func _on_save() -> void:
 	
 	
 func _on_close() -> void:
-	texteditor.clear()
 	emit_signal("exited")
 	
 	var tween = Tween.new()
