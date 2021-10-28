@@ -1,5 +1,5 @@
 #
-#  ControllableCamera.gd
+#  CamController.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,73 +15,58 @@
 #  limitations under the License.
 #
 
+class_name ControllableCamera
+extends Camera
 
-extends Spatial
+signal cam_locked
+signal cam_freed
 
-var rot_x = 0
-var rot_y = 0
-var lookaround_speed = 0.01
-var basis: Basis
+const LockedCam = preload("LockedCam.gd")
+const FreeCam = preload("FreeCam.gd")
 
-export(int, 5, 100, 1) var scroll_limit_low = 5
-export(int, 5, 100, 1) var scroll_limit_high = 20
+var cam: CameraControllerBase = null
+var locked = null
 
-export(int, 0, 90) var y_angle_limit = 20 setget set_y_angle_limit
-var _y_angle_limit = 0
-func set_y_angle_limit(limit: float) -> void:
-	_y_angle_limit = range_lerp(limit, 0, 90, 0, PI/2)
-	y_angle_limit = y_angle_limit
-	_update_pos()
-
-var _zoom = 9
-
-var target: Spatial = null setget set_target, get_target
-func set_target(trgt: Spatial) -> void:	
-	if is_instance_valid(target):
-		target = null
-		set_process(false)
-	
-	if is_instance_valid(trgt):
-		target = trgt
-		set_process(true)
-	
-	_update_pos()
-
-
-func get_target():
-	return target if is_instance_valid(target) else null
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if FocusOwner.has_focus():
-		return
-	
-	_zoom += 0.5 * int(event.is_action("scroll_down")) - int(event.is_action("scroll_up"))
-	_zoom = clamp(_zoom, scroll_limit_low, scroll_limit_high)
-	
-	if event is InputEventMouseMotion and Input.is_action_pressed("mouse_left"):
-
-		rot_x -= event.relative.x * lookaround_speed
-		rot_y -= event.relative.y * lookaround_speed
-		_update_pos()
-
-
-func _update_pos():
-	rot_y = clamp(rot_y, _y_angle_limit, PI - _y_angle_limit)
-	if is_instance_valid(target):
-		basis = Basis(Quat(Vector3(rot_y, rot_x, 0)))
+export var offset = Vector3.ZERO
+export var interp_speed: int = 10
 
 func _ready():
-	set_y_angle_limit(y_angle_limit)
-	_update_pos()
+	free_cam()
 
-
-func _process(delta: float) -> void:
-	if ! is_instance_valid(target):
-		set_process(false)
+func lock_cam(node: Spatial) -> void:
+	if ! is_instance_valid(node) || ! node.is_inside_tree():
 		return
-	global_transform.origin = target.global_transform.origin + (target.global_transform.basis * basis).xform((Vector3.UP) * _zoom)
-	look_at(target.global_transform.origin, Vector3.UP)
+	cam = LockedCam.new(self, node)
+	emit_signal("cam_locked", node)
+	locked = node
+	if ! node.is_connected("tree_exiting", self, "_on_free"):
+		node.connect("tree_exiting", self, "_on_free", [node])
 
 
+func free_cam() -> void:
+	cam = FreeCam.new(self)
+	emit_signal("cam_freed")
+	if is_instance_valid(locked):
+		locked.disconnect("tree_exiting", self, "_on_free")
+	locked = null
+
+
+func set_cam_position(tform: Transform = Transform()) -> void:
+	global_transform = tform
+
+
+func _on_free(node) -> void:
+	if node == locked:
+		free_cam()
+
+	
+func _physics_process(delta):
+	global_transform = global_transform.interpolate_with(cam.cam_physics_process(delta), delta*interp_speed)
+	
+func _unhandled_input(event):
+	cam.handle_event(event)	
+
+func _process(delta):
+	cam.cam_process(delta)
+	
 

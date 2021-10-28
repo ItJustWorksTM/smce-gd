@@ -39,7 +39,7 @@ var button_group: BButtonGroup = BButtonGroup.new()
 var buttons: Array = []
 var paths: Dictionary = {}
 
-var cam_ctl: CamCtl = null
+var ctl_cam: ControllableCamera = null
 var profile = null
 var sketch_manager: SketchManager = null
 var master_manager = null
@@ -180,7 +180,7 @@ func _add_pane(pane: Control, slot):
 	pane.connect("tree_exited", self, "_remove_pane", slot)
 	connect("tree_exiting", pane, "disconnect", ["tree_exited", self, "_remove_pane"])
 	
-	pane.set_cam_ctl(cam_ctl)
+	pane.set_ctl_cam(ctl_cam)
 	paths[slot[1]] = pane.sketch_path
 	slot[0].add_child(pane)
 	_set_vis(slot[1].pressed, slot[0])
