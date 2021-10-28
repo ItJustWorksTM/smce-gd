@@ -1,70 +1,92 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/ui/sketch_control/preview.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/file_dialog/FilePicker.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+shadow_color = Color( 0, 0, 0, 0.207843 )
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0, 0, 0 )
 border_color = Color( 0, 0.45098, 0.752941, 1 )
 shadow_color = Color( 0, 0, 0, 0.282353 )
 
-[sub_resource type="StyleBoxEmpty" id=2]
-
 [sub_resource type="StyleBoxEmpty" id=3]
 
-[node name="MarginContainer" type="MarginContainer"]
-margin_right = 1286.0
-margin_bottom = 720.0
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[node name="PreviewPopout" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.56366
+margin_top = 0.781799
+margin_right = 1.56372
+margin_bottom = 0.781799
+rect_pivot_offset = Vector2( 0, 360 )
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 128
+custom_constants/margin_top = 64
+custom_constants/margin_left = 128
+custom_constants/margin_bottom = 64
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Panel" type="PanelContainer" parent="."]
-margin_right = 1286.0
-margin_bottom = 720.0
+margin_left = 128.0
+margin_top = 64.0
+margin_right = 1152.0
+margin_bottom = 656.0
+rect_min_size = Vector2( 100, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 1279.0
-margin_bottom = 713.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 1024.0
+margin_bottom = 592.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
-margin_right = 1272.0
-margin_bottom = 706.0
+margin_right = 1024.0
+margin_bottom = 592.0
 
 [node name="Control" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
-margin_right = 1272.0
+margin_right = 1024.0
 
 [node name="TextEdit" type="TextEdit" parent="Panel/MarginContainer/VBoxContainer/Control"]
-margin_left = -7.0
-margin_top = 38.5636
-margin_right = 1281.0
-margin_bottom = 711.564
+margin_left = 12.0
+margin_top = 34.0
+margin_right = 1009.0
+margin_bottom = 579.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/Control"]
-margin_left = 1210.0
-margin_top = -1.0
-margin_right = 1265.0
-margin_bottom = 25.0
+margin_left = 964.112
+margin_top = 6.1272
+margin_right = 1019.11
+margin_bottom = 32.1272
 text = "X"
+flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Save" type="Button" parent="Panel/MarginContainer/VBoxContainer/Control"]
-margin_left = -2.0
-margin_top = -4.0
-margin_right = 174.0
-margin_bottom = 32.0
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 49.0
+margin_bottom = 39.0
 text = "Save"
+flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -96,7 +118,7 @@ anchor_bottom = 0.0
 margin_top = 0.0
 margin_right = 1272.0
 margin_bottom = 706.0
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = SubResource( 2 )
 mode = 0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/Filepicker/VBoxContainer/TextAttach"]
@@ -105,12 +127,10 @@ margin_bottom = 706.0
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/focus = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
 custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
 scroll_following = true
 selection_enabled = true
 
-[connection signal="ready" from="Panel/MarginContainer/VBoxContainer/Control/TextEdit" to="." method="_on_textedit_ready"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/Control/Save" to="." method="_on_Save_pressed"]
 [connection signal="file_picked" from="Panel/Filepicker/VBoxContainer/TextAttach/FilePicker" to="." method="_on_FilePicker_file_picked"]

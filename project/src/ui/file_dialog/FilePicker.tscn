@@ -33,8 +33,8 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.ino", "*.pde" )
-current_dir = "/Users/SpEeDY/group-13-smce-gd/project"
-current_path = "/Users/SpEeDY/group-13-smce-gd/project/"
+current_dir = "/Users/seliy/source/repos/group-13-smce-gd/project"
+current_path = "/Users/seliy/source/repos/group-13-smce-gd/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }

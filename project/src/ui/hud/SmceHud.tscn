@@ -130,6 +130,9 @@ margin_bottom = 72.0
 icon = ExtResource( 2 )
 flat = true
 expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
 margin_top = 77.0

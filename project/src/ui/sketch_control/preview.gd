@@ -7,6 +7,7 @@ onready var close_btn = $Panel/MarginContainer/VBoxContainer/Control/CloseButton
 onready var texteditor = $Panel/MarginContainer/VBoxContainer/Control/TextEdit
 onready var save_btn = $Panel/MarginContainer/VBoxContainer/Control/Save
 onready var filepicker_window = $Panel/Filepicker
+onready var window = $Panel
 onready var select_window = $Panel/MarginContainer/VBoxContainer/Control
 onready var filepicker = $Panel/Filepicker/VBoxContainer/TextAttach/FilePicker
 
@@ -55,4 +56,12 @@ func _on_FilePicker_file_picked(path):
 	var f = File.new() # Replace with function body.
 	f.open(path,2)
 	f.store_string(texteditor.text)
-	select_window.visible=false
+	filepicker.visible=false
+	window.visible=false
+
+
+func _on_TextEdit_ready():
+	pass # Replace with function body.
+
+
+
