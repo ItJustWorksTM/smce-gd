@@ -30,7 +30,7 @@ var _board = null
 onready var compile_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Compile
 onready var compile_log_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/CompileLog
 onready var sketch_status: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchStatus
-onready var preview_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Control/Preview
+onready var preview_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Preview
 
 onready var close_btn: ToolButton = $MarginContainer/CloseButton
 onready var file_path_header: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchPath

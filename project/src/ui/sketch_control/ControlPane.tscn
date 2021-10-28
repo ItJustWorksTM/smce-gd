@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://src/ui/sketch_control/ControlPane.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/uart_console/UartConsole.tscn" type="PackedScene" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=4]
 [ext_resource path="res://src/ui/sketch_control/SketchLog.gd" type="Script" id=5]
 [ext_resource path="res://media/fonts/Open_Sans/OpenSans-Regular.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://src/ui/sketch_control/icon.jpg" type="Texture" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0 )
@@ -147,8 +146,8 @@ margin_bottom = 32.0
 alignment = 2
 
 [node name="Compile" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1154.0
-margin_right = 1225.0
+margin_left = 1114.0
+margin_right = 1185.0
 margin_bottom = 32.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
@@ -158,8 +157,8 @@ __meta__ = {
 }
 
 [node name="CompileLog" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1229.0
-margin_right = 1268.0
+margin_left = 1189.0
+margin_right = 1228.0
 margin_bottom = 32.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
@@ -168,21 +167,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1272.0
+[node name="Preview" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
+margin_left = 1232.0
 margin_right = 1272.0
 margin_bottom = 32.0
-
-[node name="Preview" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Control"]
-margin_left = -153.0
-margin_top = 1.0
-margin_right = -123.0
-margin_bottom = 31.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
-icon = ExtResource( 7 )
-flat = true
-expand_icon = true
+text = "Editor"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -434,7 +425,7 @@ __meta__ = {
 
 [node name="Log" parent="." instance=ExtResource( 3 )]
 visible = false
-margin_top = 366.0
+margin_top = 666.0
 margin_right = 1280.0
 margin_bottom = 693.0
 heading_text = "Log"
@@ -503,6 +494,9 @@ disabled = true
 
 [node name="UartPanel" type="PanelContainer" parent="Serial"]
 visible = false
+margin_top = 27.0
+margin_right = 1280.0
+margin_bottom = 327.0
 rect_min_size = Vector2( 0, 300 )
 custom_styles/panel = SubResource( 19 )
 __meta__ = {

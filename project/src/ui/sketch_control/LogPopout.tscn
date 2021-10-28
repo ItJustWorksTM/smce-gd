@@ -117,5 +117,3 @@ custom_styles/normal = SubResource( 7 )
 custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
 scroll_following = true
 selection_enabled = true
-
-[connection signal="ready" from="Panel/MarginContainer/VBoxContainer/TextAttach/RichTextLabel" to="." method="_on_RichTextLabel_ready"]
