@@ -56,7 +56,3 @@ func connect(sig_name: String, object: Object, func_name: String, bind: Array = 
 	return _wrapped.connect(sig_name, object, func_name, bind, idx)
 
 
-#func _on_FileDialog_file_selected(path):
-#	var f1 = File.new() # Replace with function body.
-#	f1.open(path,2)
-#	f1.store_string(window1.texteditor.text)

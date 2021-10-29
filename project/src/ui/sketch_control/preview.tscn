@@ -65,6 +65,7 @@ margin_left = 12.0
 margin_top = 34.0
 margin_right = 1009.0
 margin_bottom = 579.0
+show_line_numbers = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -81,12 +82,22 @@ __meta__ = {
 }
 
 [node name="Save" type="Button" parent="Panel/MarginContainer/VBoxContainer/Control"]
-margin_left = 6.0
-margin_top = 3.0
-margin_right = 49.0
-margin_bottom = 39.0
+margin_left = 156.0
+margin_top = -1.0
+margin_right = 199.0
+margin_bottom = 35.0
 text = "Save"
 flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="File" type="MenuButton" parent="Panel/MarginContainer/VBoxContainer/Control"]
+margin_left = 17.0
+margin_top = 3.0
+margin_right = 52.0
+margin_bottom = 29.0
+text = "File"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -133,4 +144,46 @@ custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
 scroll_following = true
 selection_enabled = true
 
+[node name="Openpicker" type="MarginContainer" parent="Panel"]
+visible = false
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1279.0
+margin_bottom = 713.0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="Panel/Openpicker"]
+margin_right = 1272.0
+margin_bottom = 706.0
+
+[node name="TextAttach" type="MarginContainer" parent="Panel/Openpicker/VBoxContainer"]
+margin_right = 1272.0
+margin_bottom = 706.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="OpenPicker" parent="Panel/Openpicker/VBoxContainer/TextAttach" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 0.0
+margin_right = 1272.0
+margin_bottom = 706.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/Openpicker/VBoxContainer/TextAttach"]
+margin_right = 1272.0
+margin_bottom = 706.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_colors/selection_color = Color( 0.439216, 0.439216, 0.439216, 0.4 )
+scroll_following = true
+selection_enabled = true
+
 [connection signal="file_picked" from="Panel/Filepicker/VBoxContainer/TextAttach/FilePicker" to="." method="_on_FilePicker_file_picked"]
+[connection signal="file_picked" from="Panel/Openpicker/VBoxContainer/TextAttach/OpenPicker" to="." method="_on_OpenPicker_file_picked"]

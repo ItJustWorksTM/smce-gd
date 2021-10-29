@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://src/ui/sketch_control/ControlPane.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/uart_console/UartConsole.tscn" type="PackedScene" id=2]
@@ -50,12 +50,6 @@ bg_color = Color( 0.164706, 0.164706, 0.164706, 1 )
 bg_color = Color( 0, 0.478431, 0.8, 1 )
 
 [sub_resource type="StyleBoxFlat" id=13]
-bg_color = Color( 0, 0.478431, 0.8, 1 )
-
-[sub_resource type="StyleBoxFlat" id=14]
-bg_color = Color( 0.0666667, 0.0666667, 0.0666667, 1 )
-
-[sub_resource type="StyleBoxFlat" id=15]
 content_margin_left = 4.0
 content_margin_right = 4.0
 content_margin_top = 4.0
@@ -63,14 +57,14 @@ content_margin_bottom = 4.0
 bg_color = Color( 0.105882, 0.105882, 0.105882, 1 )
 border_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=14]
 content_margin_left = 4.0
 content_margin_right = 4.0
 content_margin_top = 4.0
 content_margin_bottom = 4.0
 bg_color = Color( 0, 0, 0, 0 )
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="StyleBoxFlat" id=15]
 content_margin_left = 4.0
 content_margin_right = 4.0
 content_margin_top = 4.0
@@ -82,9 +76,11 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 0, 0.478431, 0.8, 1 )
 
-[sub_resource type="StyleBoxEmpty" id=18]
+[sub_resource type="StyleBoxEmpty" id=16]
 
-[sub_resource type="StyleBoxEmpty" id=19]
+[sub_resource type="StyleBoxEmpty" id=17]
+
+[sub_resource type="StyleBoxEmpty" id=18]
 
 [node name="ControlPane" type="VBoxContainer"]
 anchor_right = 1.0
@@ -232,7 +228,7 @@ margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 
 [node name="Start" type="Button" parent="PaddingBox2/SketchButtons"]
-margin_right = 421.0
+margin_right = 634.0
 margin_bottom = 30.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -247,8 +243,8 @@ __meta__ = {
 }
 
 [node name="Pause" type="Button" parent="PaddingBox2/SketchButtons"]
-margin_left = 425.0
-margin_right = 846.0
+margin_left = 638.0
+margin_right = 1272.0
 margin_bottom = 30.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -259,22 +255,6 @@ custom_styles/disabled = SubResource( 11 )
 custom_styles/normal = SubResource( 12 )
 disabled = true
 text = "Suspend"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Compile" type="Button" parent="PaddingBox2/SketchButtons"]
-margin_left = 850.0
-margin_right = 1272.0
-margin_bottom = 30.0
-mouse_default_cursor_shape = 2
-size_flags_horizontal = 3
-custom_styles/hover = SubResource( 8 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 10 )
-custom_styles/disabled = SubResource( 11 )
-custom_styles/normal = SubResource( 13 )
-text = "Compile"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -436,7 +416,7 @@ margin_top = 27.0
 margin_right = 1280.0
 margin_bottom = 327.0
 rect_min_size = Vector2( 0, 300 )
-custom_styles/panel = SubResource( 14 )
+custom_styles/panel = SubResource( 13 )
 script = ExtResource( 5 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Log/SketchLog"]
@@ -453,11 +433,11 @@ margin_right = 638.0
 margin_bottom = 28.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-custom_styles/hover = SubResource( 15 )
-custom_styles/pressed = SubResource( 16 )
-custom_styles/focus = SubResource( 17 )
-custom_styles/disabled = SubResource( 16 )
-custom_styles/normal = SubResource( 16 )
+custom_styles/hover = SubResource( 14 )
+custom_styles/pressed = SubResource( 15 )
+custom_styles/focus = SubResource( 16 )
+custom_styles/disabled = SubResource( 15 )
+custom_styles/normal = SubResource( 15 )
 text = "Copy To Clipboard"
 
 [node name="Open" type="Button" parent="Log/SketchLog/VBoxContainer/HBoxContainer"]
@@ -466,11 +446,11 @@ margin_right = 1280.0
 margin_bottom = 28.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-custom_styles/hover = SubResource( 15 )
-custom_styles/pressed = SubResource( 16 )
-custom_styles/focus = SubResource( 17 )
-custom_styles/disabled = SubResource( 16 )
-custom_styles/normal = SubResource( 16 )
+custom_styles/hover = SubResource( 14 )
+custom_styles/pressed = SubResource( 15 )
+custom_styles/focus = SubResource( 16 )
+custom_styles/disabled = SubResource( 15 )
+custom_styles/normal = SubResource( 15 )
 text = "Open In window ^"
 
 [node name="LogBox" type="RichTextLabel" parent="Log/SketchLog/VBoxContainer"]
@@ -478,7 +458,7 @@ margin_top = 28.0
 margin_right = 1280.0
 margin_bottom = 300.0
 size_flags_vertical = 3
-custom_styles/focus = SubResource( 18 )
+custom_styles/focus = SubResource( 17 )
 custom_colors/selection_color = Color( 0.184314, 0.184314, 0.184314, 1 )
 custom_colors/font_color_selected = Color( 1, 1, 1, 1 )
 bbcode_enabled = true
@@ -498,7 +478,7 @@ margin_top = 27.0
 margin_right = 1280.0
 margin_bottom = 327.0
 rect_min_size = Vector2( 0, 300 )
-custom_styles/panel = SubResource( 19 )
+custom_styles/panel = SubResource( 18 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
