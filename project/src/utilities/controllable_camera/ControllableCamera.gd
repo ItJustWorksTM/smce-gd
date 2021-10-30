@@ -21,9 +21,6 @@ extends Camera
 signal cam_locked
 signal cam_freed
 
-const LockedCam = preload("LockedCam.gd")
-const FreeCam = preload("FreeCam.gd")
-
 var cam: CameraControllerBase = null
 var locked = null
 

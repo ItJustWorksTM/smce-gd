@@ -15,6 +15,7 @@
 #  limitations under the License.
 #
 
+class_name FreeCam
 extends CameraControllerBase
 
 var lookaround_speed = 0.01

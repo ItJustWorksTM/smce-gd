@@ -15,7 +15,7 @@
 #  limitations under the License.
 #
 
-
+class_name LockedCam
 extends CameraControllerBase
 
 var rot_x = 0
