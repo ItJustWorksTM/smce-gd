@@ -23,9 +23,11 @@ signal exited
 onready var close_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/CloseButton
 onready var center_label = $LogPopout/Panel/Control/EmptyLabel
 onready var item_list = $LogPopout/Panel/Control/VBoxContainer/ItemList
+onready var rich_text_label = $LogPopout/Panel/Control/VBoxContainer/ItemList/RichTextLabel
 
 const WIKI_PATH = "./media/wiki/"
 var wiki_pages = []
+var wiki_content = []
 
 
 class WikiPage:
@@ -35,11 +37,10 @@ class WikiPage:
 
 func init() -> bool:
 	print("Loading help viewer...")
-	
 	wiki_pages = _get_wiki_from_storage(WIKI_PATH)
 	for page in wiki_pages:
 		print("Title: " + page.title)
-		# print("Content: " + page.content)
+		#print("Content: " + page.content)
 	
 	return true
 
@@ -51,7 +52,10 @@ func _ready():
 		center_label.set_text("") # TODO: Should remove the entire node?
 	for page in wiki_pages:
 		item_list.add_item(page.title)
-	
+		
+	# Add on-click event
+	item_list.connect("help_selected", self, "_on_help_selected")
+	item_list.connect("nothing_selected", self, "_on_help_selected", [-1])
 	print("HelpViewer loaded!")
 
 
@@ -89,6 +93,11 @@ func _gui_input(event: InputEvent):
 
 # TODO: Make the animation the same as when closing SketchSelect,
 # 		probably has something to do with the tween interpolate values.
+
+# Added enter_tree() to initialize the screen
+func _enter_tree() -> void:
+	_open()
+
 func _close() -> void:
 	emit_signal("exited")
 	var tween = TempTween.new()
@@ -100,3 +109,22 @@ func _close() -> void:
 	
 	yield(tween,"tween_all_completed")
 	queue_free()
+
+func _open() -> void:
+	var tween = TempTween.new()
+	add_child(tween)
+	tween.interpolate_property(self, "rect_scale:y", 0, 1, 0.15, Tween.TRANS_CUBIC)
+	tween.interpolate_property(self, "modulate:a", 0, 1, 0.15)
+	tween.start()
+
+# Find the selected help and update the text window
+func _select_help() -> void:
+	for n in item_list.get_item_count():
+		if item_list.is_selected(n) == true:
+			rich_text_label.clear()
+			rich_text_label.add_text(wiki_pages[n].content)
+			print("Item list select: Index ", n)
+
+# Catch the on-click event
+func _on_help_selected(_index: int) -> void:
+	_select_help()

@@ -1,6 +1,5 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://src/ui/themes/regular_button/hover.tres" type="StyleBox" id=3]
 [ext_resource path="res://media/fonts/Open_Sans/OpenSans-Light.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://src/ui/help_viewer/HelpViewer.gd" type="Script" id=6]
 
@@ -25,9 +24,12 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxEmpty" id=7]
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.196078, 0.196078, 0.196078, 1 )
 
-[sub_resource type="StyleBoxFlat" id=8]
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxFlat" id=9]
 bg_color = Color( 0, 0, 0, 0 )
 
 [node name="Control" type="Control"]
@@ -123,13 +125,21 @@ margin_top = 49.0
 margin_right = 768.0
 margin_bottom = 49.0
 mouse_default_cursor_shape = 2
-custom_styles/cursor = ExtResource( 3 )
-custom_styles/selected_focus = ExtResource( 3 )
-custom_styles/bg_focus = SubResource( 7 )
-custom_styles/selected = ExtResource( 3 )
-custom_styles/bg = SubResource( 8 )
+custom_styles/cursor = SubResource( 7 )
+custom_styles/selected_focus = SubResource( 7 )
+custom_styles/bg_focus = SubResource( 8 )
+custom_styles/selected = SubResource( 7 )
+custom_styles/bg = SubResource( 9 )
 custom_colors/guide_color = Color( 0.215686, 0.211765, 0.211765, 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_constants/vseparation = 8
 allow_rmb_select = true
 auto_height = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="LogPopout/Panel/Control/VBoxContainer/ItemList"]
+margin_left = 384.0
+margin_right = 768.0
+margin_bottom = 410.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
