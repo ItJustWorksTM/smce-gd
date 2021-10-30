@@ -59,6 +59,10 @@ func _on_free(node) -> void:
 	
 func _physics_process(delta):
 	global_transform = global_transform.interpolate_with(cam.cam_physics_process(delta), delta*interp_speed)
+	# Hack to solve wiggly camera rotation
+	var rot = global_transform.basis.get_euler()
+	rot.z = 0
+	global_transform.basis = Basis(Quat(rot))
 	
 func _unhandled_input(event):
 	cam.handle_event(event)	
