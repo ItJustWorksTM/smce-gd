@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/ui/code_editor/MainWindow.gd" type="Script" id=1]
+[ext_resource path="res://src/ui/code_editor/Tabs.gd" type="Script" id=2]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -13,6 +14,10 @@ __meta__ = {
 [node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.05948
+margin_top = -1.05946
+margin_right = 1.05945
+margin_bottom = -1.05945
 color = Color( 0.12549, 0.12549, 0.12549, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -58,15 +63,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Tabs" type="Tabs" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 38.0
+margin_right = -6.0
+margin_bottom = -648.0
+tab_align = 0
+tab_close_display_policy = 1
+scrolling_enabled = false
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TextEditor" type="TextEdit" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 35.0
+margin_left = 6.0
+margin_top = 77.0
 margin_right = -5.0
-margin_bottom = -5.0
+margin_bottom = -7.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="tab_changed" from="Tabs" to="Tabs" method="_on_Tabs_tab_changed"]
+[connection signal="tab_clicked" from="Tabs" to="Tabs" method="_on_Tabs_tab_clicked"]
+[connection signal="tab_close" from="Tabs" to="Tabs" method="_on_Tabs_tab_close"]

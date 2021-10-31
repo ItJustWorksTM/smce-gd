@@ -1,10 +1,16 @@
 extends Control
 
+	
 onready var close_btn: Button = $Close
 onready var dropdown_btn: MenuButton = $DropDown
 onready var fileDialog: FileDialog = $FileDialog
 onready var textEditor: TextEdit = $TextEditor
-onready var _path: String = ""
+
+
+var lastTab = 0
+var currentFileInfo = null
+var fileInfos = {}
+
 
 onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 # Called when the node enters the scene tree for the first time.
@@ -22,6 +28,9 @@ func _init_dropdown():
 
 #Initializes the texteditor settings
 func _init_TextEditor():
+	textEditor.text = "Please open a file to edit"
+	#Enable syntax highlightning
+	textEditor.syntax_highlighting = true
 	
 	#Arduino syntax highlighting
 	textEditor.add_color_region('//','',Color(0.638306, 0.65625, 0.65625)) # comments
@@ -71,18 +80,14 @@ func _on_item_pressed(id):
 
 # Function to collect the path of a selected file and send it to the editor
 func _on_FileDialog_file_selected(path):
-	#Save global path for quick save
-	_path = path
 	#Load text from file
 	var content = fileLoader.loadFile(path)
-	#Paste text into texteditor
-	textEditor.text = (content)
-
+	
+	#Tab management
+	get_node("Tabs")._create_new_tab_with_content(content,path)
 
 # Function save a file
 func _save_file():
 	#save text into texteditor
-	fileLoader.saveFile(_path,textEditor.text)
+	fileLoader.saveFile(currentFileInfo._path,textEditor.text)
 	
-
-
