@@ -2,11 +2,35 @@ name: CI
 on: [ push, pull_request ]
 env:
   GODOT_EXPORT_TEMPLATE_VERSION: 3.3.2
+  LIBSMCE_TAG: v1.4.0
+  LIBSMCE_VERSION: 1.4
 jobs:
+  rules:
+    name: Compute job rules
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+      build_linux: ${{ true }}
+      build_macos: ${{ true }}
+      build_windows: ${{ true }}
+      platform_package: ${{ steps.changed_files.outputs.any_changed == 'true' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed_files
+        uses: tj-actions/changed-files@v1.1.3
+        with:
+          files: |
+            CMakeLists.txt
+            \.yaml$
+            \.cmake$
+
   make-release:
     name: Publish release
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [ build-ubuntu, build-macos, build-windows ]
+    if: needs.rules.outputs.release == 'true'
+    needs: [ rules, build-ubuntu, build-macos, build-windows, package-deb ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,6 +54,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-ubuntu:
     name: SMCE-gd - Ubuntu (${{ matrix.compiler.name }})
+    needs: rules
+    if: needs.rules.outputs.build_linux == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -54,7 +80,7 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3-server --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
-          wget -O libsmce.sh https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Linux-x86_64-GNU.sh
+          wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Linux-x86_64-GNU.sh"
           chmod +x libsmce.sh
           sudo ./libsmce.sh --prefix=/usr --skip-license --exclude-subdir
       - name: Cache Godot export template
@@ -74,7 +100,7 @@ jobs:
       - name: CMake Configure
         run: |
           mkdir build
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build/
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSMCEGD_BUNDLE_DEPS=True -S . -B build/
       - name: CMake Build
         run: cmake --build build/
       - name: CPack
@@ -93,6 +119,8 @@ jobs:
           path: build/packages/*
   build-macos:
     name: SMCE-gd - macOS (${{ matrix.compiler.name }})
+    needs: rules
+    if: needs.rules.outputs.build_macos == 'true'
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -129,7 +157,7 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3 --version | egrep -o '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
-          wget -O libsmce.sh https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Darwin-x86_64-${{ matrix.compiler.smce_artifact }}.sh
+          wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Darwin-x86_64-${{ matrix.compiler.smce_artifact }}.sh"
           chmod +x libsmce.sh
           sudo ./libsmce.sh --prefix=/usr/local --skip-license --exclude-subdir
       - name: Cache Godot export template
@@ -150,7 +178,7 @@ jobs:
           [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           mkdir build
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DFORCE_STRIP_CODESIGNING=On -S . -B build/
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSMCEGD_BUNDLE_DEPS=True -DSMCE_CPACK_PROFILE=DragNDrop -DFORCE_STRIP_CODESIGNING=On -S . -B build/
       - name: CMake Build
         run: cmake --build build/
       - name: CPack
@@ -170,6 +198,8 @@ jobs:
           path: build/packages/*
   build-windows:
     name: SMCE-gd - Windows (${{ matrix.compiler.name }})
+    needs: rules
+    if: needs.rules.outputs.build_windows == 'true'
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -199,9 +229,9 @@ jobs:
           echo "Godot version: $godot_version_output"
           echo "::set-output name=GODOT_VERSION::$([regex]::Matches($godot_version_output, "\d+\.\d+(?:\.\d+)?\.\w+").Value)"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$($env:GODOT_EXPORT_TEMPLATE_VERSION.Replace('.', ''))"
-          wget -O libsmce.zip https://github.com/ItJustWorksTM/libSMCE/releases/download/v1.3.0/libSMCE-1.3.0-Windows-AMD64-MSVC-Release.zip
+          wget -O libsmce.zip https://github.com/ItJustWorksTM/libSMCE/releases/download/$($env:LIBSMCE_TAG)/libSMCE-$($env:LIBSMCE_VERSION)-Windows-AMD64-MSVC-Release.zip
           7z x libsmce.zip -oC:\
-          ren C:\libSMCE-1.3.0-Windows-AMD64-MSVC-Release C:\smce
+          ren C:\libSMCE-$($env:LIBSMCE_VERSION)-Windows-AMD64-MSVC-Release C:\smce
       - name: Cache Godot export template
         uses: actions/cache@v2
         id: cache-godot
@@ -226,7 +256,7 @@ jobs:
       - name: CMake configure
         run: |
           mkdir build
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S ./ -B ./build
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSMCEGD_BUNDLE_DEPS=True -DSMCE_CPACK_PROFILE=WiX -B ./build
       - name: CMake build
         run: cmake --build ./build
       - name: Package
@@ -244,3 +274,98 @@ jobs:
         with:
           name: SMCE_gd-windows-${{ matrix.compiler.c }}
           path: build/packages/*
+
+  package-deb:
+    name: Package per-distro DEBs (${{ matrix.os.name }} ${{ matrix.os.codename }})
+    needs: rules
+    if: needs.rules.outputs.platform_package == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - name: Debian
+            codename: Bookworm
+            image: debian:bookworm
+            slug: debian12
+          - name: Debian
+            codename: Bullseye
+            image: gcc:11-bullseye
+            slug: debian11
+          - name: Ubuntu
+            codename: Impish
+            image: ubuntu:impish
+            slug: ubuntu2110
+          - name: Ubuntu
+            codename: Hirsute
+            image: ubuntu:hirsute
+            slug: ubuntu2104
+          - name: Ubuntu
+            codename: Groovy
+            image: ubuntu:groovy
+            slug: ubuntu2010
+          - name: Ubuntu
+            codename: Focal
+            image: ubuntu:focal
+            slug: ubuntu2004
+    container:
+      image: ${{ matrix.os.image }}
+      options: --security-opt seccomp=unconfined
+    env:
+      DEBIAN_FRONTEND: "noninteractive"
+      CMAKE_VERSION: 3.21.3
+    steps:
+      - name: Setup workdir
+        run: mkdir /tmp/wk && cd /tmp/wk
+      - uses: actions/checkout@v2
+      - name: Fetch deps
+        id: deps
+        run: |
+          apt-get update -y
+          apt-get install -y godot3-server godot3 unzip python3 file dpkg-dev wget # CMake's dpkg-shlibdeps support needs 'file'
+          git --version || apt-get install -y git
+          ninja --version || apt-get install -y ninja-build
+          echo "::set-output name=GODOT_VERSION::$(godot3-server --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
+          echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
+          wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.sh
+          chmod +x cmake-$CMAKE_VERSION-linux-x86_64.sh
+          ./cmake-$CMAKE_VERSION-linux-x86_64.sh --skip-license --prefix=/usr/local
+          [ "$(g++ --version | grep -oP '\d+' | head -n1)0" -ge 100 ] || wget -O- https://github.com/ItJustWorksTM/libSMCE/raw/master/ci/install-highest-gcc.sh | bash # GCC 10 required for C++2a
+          wget "https://github.com/ItJustWorksTM/libSMCE/releases/download/${{ env.LIBSMCE_TAG }}/libsmce-bin_${{ env.LIBSMCE_VERSION }}-${{ matrix.os.slug }}.0_amd64.deb"
+          wget "https://github.com/ItJustWorksTM/libSMCE/releases/download/${{ env.LIBSMCE_TAG }}/libsmce-dev_${{ env.LIBSMCE_VERSION }}-${{ matrix.os.slug }}.0_amd64.deb"
+          apt-get install -y ./*.deb
+      - name: Cache Godot export template
+        uses: actions/cache@v2
+        id: cache-godot
+        with:
+          path: |
+            ~/.local/share/godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
+          key: godot-${{ steps.deps.outputs.GODOT_TEMPLATE_CACHE_KEY }}-linux_64
+      - name: Get export templates
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          wget -c "https://downloads.tuxfamily.org/godotengine/${GODOT_EXPORT_TEMPLATE_VERSION}/Godot_v${GODOT_EXPORT_TEMPLATE_VERSION}-stable_export_templates.tpz" -O godot_export.tpz
+          unzip godot_export.tpz
+          mkdir -p ~/.local/share/godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
+          mv templates/linux_x11_64* ~/.local/share/godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
+      - name: CMake Configure
+        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSMCE_BUILD_PROFILE=${{ matrix.os.name }}${{ matrix.os.codename }} -B build/
+      - name: CMake Build
+        run: cmake --build ./build
+      - name: CPack
+        run: (cd build; cpack)
+      - name: Test installation
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ${{ matrix.os.image }}
+          options: -v ${{ github.workspace }}:/host
+          run: |
+            apt-get update -y
+            apt-get install -y /host/libsmce-bin_${{ env.LIBSMCE_VERSION }}-${{ matrix.os.slug }}.0_amd64.deb
+            apt-get install -y /host/build/*.deb
+            which smce_gd
+      - name: Upload artifacts
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: SMCE_gd-DEB-${{ matrix.os.name }}${{ matrix.os.codename }}
+          path: build/*.deb

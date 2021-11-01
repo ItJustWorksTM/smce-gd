@@ -16,6 +16,7 @@
  *
  */
 
+#include <iostream>
 #include "bind/Board.hxx"
 #include "bind/BoardView.hxx"
 

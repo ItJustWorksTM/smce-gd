@@ -19,6 +19,7 @@
 #ifndef GODOT_SMCE_GDRESULT_HXX
 #define GODOT_SMCE_GDRESULT_HXX
 
+#include <system_error>
 #include <core/Godot.hpp>
 #include "gd/util.hxx"
 
