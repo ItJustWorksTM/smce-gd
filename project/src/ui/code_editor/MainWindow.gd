@@ -6,10 +6,14 @@ onready var dropdown_btn: MenuButton = $DropDown
 onready var fileDialog: FileDialog = $FileDialog
 onready var textEditor: TextEdit = $TextEditor
 
-
-var lastTab = 0
 var currentFileInfo = null
-var fileInfos = {}
+var fileInfos = {}				#Keeps track of all fileInfo objects
+
+#SAVES CURRENT STATE OF filedialog operation
+#Can have the following values:
+# OPEN  NEWFILE  SAVE NEWPROJ
+onready var fileDialogOperation: String = ""
+
 
 
 onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
@@ -24,6 +28,8 @@ func _init_dropdown():
 	dropdown_btn.get_popup().connect("id_pressed",self, "_on_item_pressed")
 	dropdown_btn.get_popup().add_item("Open File")
 	dropdown_btn.get_popup().add_item("Save File")
+	dropdown_btn.get_popup().add_item("New File")
+	dropdown_btn.get_popup().add_item("New Arduino-Project")
 	dropdown_btn.get_popup().add_item("Close")
 
 #Initializes the texteditor settings
@@ -72,19 +78,61 @@ func enableEditor() -> void:
 func _on_item_pressed(id):
 	var name = dropdown_btn.get_popup().get_item_text(id)
 	if name == "Open File":
-		fileDialog.popup() # Opens file dialog for file selection
+		_open_file()
 	elif name == "Save File":
 		_save_file()
+	elif name == "New File":
+		_new_file()
+	elif name == "New Arduino-Project":
+		_new_proj()
 	elif name == "Close":
 		_on_close()
-
+		
+func _open_file():
+	fileDialogOperation = "OPEN"
+	fileDialog.mode = fileDialog.MODE_OPEN_FILE	#Change mode back to open file	
+	fileDialog.popup() # Opens file dialog for file selection
+#Function to create a new file
+func _new_file():
+	fileDialogOperation = "NEWFILE"
+	fileDialog.mode = fileDialog.MODE_SAVE_FILE	#Change mode to open dir
+	fileDialog.add_filter("*.ino; ino file")
+	fileDialog.popup()	#Get path for new file
+	fileDialog.clear_filters()
+	
+#Function to create a new file
+func _new_proj():
+	fileDialogOperation = "NEWPROJ"
+	fileDialog.mode = fileDialog.MODE_SAVE_FILE	#Change mode to open dir
+	fileDialog.add_filter("*.ino; ino file")
+	fileDialog.popup()	#Get path for new file
+	fileDialog.clear_filters()
+	
+	
 # Function to collect the path of a selected file and send it to the editor
 func _on_FileDialog_file_selected(path):
-	#Load text from file
-	var content = fileLoader.loadFile(path)
+
+	if(fileDialogOperation == "OPEN"):
+		print(path)
+		fileDialogOperation = ""
+		#Load text from file
+		var content = fileLoader.loadFile(path)
+		#Tab management
+		get_node("Tabs")._create_new_tab_with_content(content,path)
+		
+	elif(fileDialogOperation == "NEWFILE" ):
+		get_node("Tabs")._create_new_tab_with_content("",path)
+		_save_file()
+		
+	elif(fileDialogOperation == "NEWPROJ"):
+		var template = fileLoader.loadFile("res://NewArduinoTemplate.txt")
+		var finalPath = path+"/"+path.get_file()+".ino"
+		Directory.new().make_dir_recursive (path)
+		get_node("Tabs")._create_new_tab_with_content(template,finalPath)
+		_save_file()
+		
+		
 	
-	#Tab management
-	get_node("Tabs")._create_new_tab_with_content(content,path)
 
 # Function save a file
 func _save_file():
