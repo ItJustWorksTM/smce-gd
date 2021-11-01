@@ -30,9 +30,7 @@ namespace godot {
 class Toolchain;
 
 // TODO: properly emit build_changed signal
-class Sketch : public Reference {
-    GODOT_CLASS(Sketch, Reference)
-
+class Sketch : public GdRef<"Sketch", Sketch> {
     friend Toolchain;
 
     smce::Sketch sketch{"", {}};
@@ -44,7 +42,6 @@ class Sketch : public Reference {
 
   public:
     static void _register_methods();
-    void _init() {}
 
     smce::Sketch& native() { return sketch; }
 

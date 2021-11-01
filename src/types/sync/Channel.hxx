@@ -34,11 +34,9 @@ struct Channel {
 class Receiver;
 class Sender;
 
-class Receiver : public Reference {
-    GODOT_CLASS(Receiver, Reference);
+class Receiver : public GdRef<"Receiver", Receiver> {
 
   public:
-    void _init() {}
     static void _register_methods();
 
     std::shared_ptr<Channel> internal{};
@@ -47,12 +45,9 @@ class Receiver : public Reference {
     Ref<Sender> new_sender();
 };
 
-class Sender : public Reference {
-    GODOT_CLASS(Sender, Reference);
+class Sender : public GdRef<"Sender", Sender> {
 
   public:
-    void _init() {}
-
     static void _register_methods();
 
     std::shared_ptr<Channel> internal{};

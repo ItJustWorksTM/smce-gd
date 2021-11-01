@@ -22,12 +22,10 @@
 
 namespace godot {
 
-class Future : public Reference {
-    GODOT_CLASS(Future, Reference);
+class Future : public GdRef<"Future", Future> {
 
   public:
     std::future<Variant> future;
-    void _init() {}
 
     static void _register_methods();
 
@@ -39,8 +37,7 @@ class Future : public Reference {
     Variant get() { return future.get(); }
 };
 
-class Promise : public Reference {
-    GODOT_CLASS(Promise, Reference);
+class Promise : public GdRef<"Promise", Promise> {
 
     std::promise<Variant> promise;
     Ref<Future> future;

@@ -23,17 +23,12 @@
 #include "SMCE/SketchConf.hpp"
 #include "core/Godot.hpp"
 #include "gen/Reference.hpp"
+#include "util/Extensions.hxx"
 
 namespace godot {
 
-class SketchConfig : public Reference {
-    GODOT_CLASS(SketchConfig, Reference)
-
-  public:
-    class PluginManifest : public Reference {
-        GODOT_CLASS(PluginManifest, Reference);
-
-      public:
+struct SketchConfig : public GdRef<"SketchConfig", SketchConfig> {
+    struct PluginManifest : public GdRef<"PluginManifest", PluginManifest> {
         String name;
         String version;
         Array /* String */ depends;
@@ -48,7 +43,6 @@ class SketchConfig : public Reference {
         bool development;
 
         static void _register_methods();
-        void _init() {}
 
         smce::PluginManifest to_native();
     };
@@ -65,7 +59,6 @@ class SketchConfig : public Reference {
     Array genbind_devices;
 
     static void _register_methods();
-    void _init() {}
 
     smce::SketchConfig to_native();
 };

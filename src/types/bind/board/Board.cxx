@@ -107,12 +107,12 @@ Ref<Result> Board::init(Ref<BoardConfig> board_config) {
 Ref<Result> Board::start(Ref<Sketch> sketch) {
     if (!sketch->is_compiled())
         return Result::err("Sketch is not compiled");
+    if (!board)
+        return Result::err("Bruh wtf no board?");
     if (!board->attach_sketch(sketch->native()))
         return Result::err("Failed to attach sketch");
     if (!board->start())
         return Result::err("Failed to start internal runner");
-
-    // TODO: check if sketch board devices match the board config
 
     m_sketch = sketch;
 

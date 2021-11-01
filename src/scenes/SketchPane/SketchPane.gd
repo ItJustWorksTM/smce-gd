@@ -26,20 +26,18 @@ onready var sketch_status_control: SketchStatusControl = $VBoxContainer/SketchSt
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal reset_vehicle_position
-    signal follow_vehicle
-    
-    signal start_board
-    signal stop_board
-    signal suspend_board
-    signal resume_board
+    # signal reset_vehicle_position()
+    # signal follow_vehicle()
 
-    signal compile_sketch
+    # signal start_board()
+    # signal stop_board()
+    # signal suspend_board()
+    # signal resume_board()
 
     func _init(n).(n):
-        conn(node.sketch_status_control, "compile_sketch", "compile_sketch")
-    
-    func compile_sketch(): emit_signal("compile_sketch")
+        node.sketch_status_control.init_model()
+
+        fwd_sig(node.sketch_status_control.model, "compile_sketch")
 
 var model: ViewModel
 

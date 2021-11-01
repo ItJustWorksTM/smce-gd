@@ -30,41 +30,41 @@ func _ready():
     var exec_path := "Executable: %s" % OS.get_executable_path()
     var build_mode := "Mode: %s" % "Debug" if OS.is_debug_build() else "Release"
     var working_dir := "Working Dir: %s" % Fs.get_current_working_dir()
-    
+
     OS.set_window_title(title)
-    
+
     print(title)
     print(exec_path)
     print(build_mode)
     print(working_dir)
-    
+
     var env_info = EnvInfo.new(".smcegd_home")
     print(env_info)
-    
+
     var res
-    
+
     res = assert_native_lib()
     if res.is_err():
         return bail(res.get_value())
-    
+
     res = assert_suitable_env(env_info)
     if res.is_err():
         return bail(res.error())
-    
-    
+
+
     # Index classes
-    
+
     # Apply mods
-    
+
     # if everything was succesfull
     var main := Main.new(env_info)
     main.name = "Main"
     main.universe.add_world("Test/Test", load("res://src/scenes/Test/Test.tscn"))
-    
+
     queue_free()
     call_deferred("replace_by", main)
     # else display error ui
-    
+
     # return bail("I hate it here")
 
 
@@ -73,7 +73,7 @@ func bail(res: String):
     var entry_fail_gui = EntryFailGui.instance()
     add_child(entry_fail_gui)
     entry_fail_gui.init_model(res, error_log)
-    
+
     # give the operating system some time to flush the file
     yield(get_tree().create_timer(0.5), "timeout")
     error_log.value = read_error_log()

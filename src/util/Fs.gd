@@ -19,7 +19,7 @@ class_name Fs
 
 static func cpdir(source: String, destination: String) -> bool:
     return _cpdir(source, destination)
-    
+
 static func _cpdir(path: String, to: String, base = null) -> bool:
     if ! base:
         base = path
@@ -51,7 +51,7 @@ static func mkdir(path: String, recursive: bool = false) -> bool:
         return true
     if (dir.make_dir_recursive(path) if recursive else dir.make_dir(path)) != OK:
         return false
-    
+
     return true
 
 static func write_file(path: String, content: String) -> bool:

@@ -25,7 +25,8 @@ class_name ProfilePane
 extends PanelContainer
 
 const SCENE_FILE := "res://src/scenes/ProfilePane/ProfilePane.tscn"
-static func instance():    return load(SCENE_FILE).instance()
+
+var model: ViewModel
 
 onready var profile_name_input: LineEdit = $VBox/Margin/NameEdit
 onready var switch_btn: Button = $VBox/HBox/SwitchButton
@@ -37,52 +38,52 @@ onready var version_label: Label = $Version
 
 class ViewModel:
     extends ViewModelExt.WithNode
-    
-    signal save_profile
-    signal reload_profile
-    signal switch_profile
-    
+
+    signal save_profile()
+    signal reload_profile()
+    signal switch_profile()
+
     var _profile: Observable # <Profile>
     var _dirty_profile: Observable # <Profile>
-    
+
     # TODO: Potentially not needed? the input field is synced with this,
     # though when the profile changes we need to be able to set the input field
     func profile_name(profile: Profile): return profile.name
-    
+
     func sketch_count(profile: Profile): return "Sketches: %d" % profile.sketches.size()
-    
+
     func save_disabled(dirty, orig): return dirty.name == orig.name
-    
+
     # Not sure if needed as we can get an array already from the Universe
     func worlds(arr): return arr
-    
-    func version(): "SMCE-gd: %s" % "NOTHING"
-    
+
+    func version(): return "SMCE-gd: %s" % "NOTHING"
+
     func delete(n): print(n)
-    
+
     func _init(n, profile: Observable, worlds: Observable).(n):
         _profile = profile
         _dirty_profile = Observable.new(profile.value.clone())
         profile.bind_change(self, "_set_dirty")
-        
+
         bind() \
             .worlds.dep([worlds]) \
             .sketch_count.dep([_dirty_profile]) \
             .version.dep([]) \
             .save_disabled.dep([_dirty_profile, profile]) \
             .profile_name.dep([_dirty_profile])
-        
+
         bind() \
             .worlds.to(self, "_list_worlds") \
             .sketch_count.to(node.sketches_label, "text") \
             .version.to(node.version_label, "text") \
             .save_disabled.to(node.save_btn, "disabled") \
             .profile_name.to(node.profile_name_input, "text")
-        
+
         var a = Observable2.new(self, "save_disabled")
         a.connect("value_changed", self, "delete")
         a.reference()
-        
+
         conn(node.save_btn, "pressed", "save_profile")
         conn(node.reload_btn, "pressed", "reload_profile")
         conn(node.switch_btn, "pressed", "switch_profile")
@@ -104,10 +105,10 @@ class ViewModel:
 
     func set_world(world: String):
         print("set world to: ", world)
-    
+
     func _set_dirty(profile: Profile):
         _dirty_profile.value = profile.clone()
-    
+
     func _list_worlds(worlds: Array):
         node.world_list.clear()
         for world in worlds:
@@ -117,15 +118,16 @@ class ViewModel:
     func _on_world_selected(index: int):
         set_world(node.world_list.get_item_metadata(index))
 
-var model: ViewModel
 
 func init_model(profile, worlds): # <Profile>, <Array<String>>
     model = ViewModel.new(self, Observable.from(profile), Observable.from(worlds))
 
 func _ready():
     # Debug
-    if true:
+    if not get_parent() is Control:
+        init_model(
+            Observable.new(Profile.new("A", [1,2,3,4], "C")),
+            Observable.new(["nice", "twice"])
+        )
 
-        
-        init_model(Observable.new(Profile.new("A", [1,2,3,4], "C")), Observable.new(["nice", "twice"]))
-
+static func instance(): return load(SCENE_FILE).instance()

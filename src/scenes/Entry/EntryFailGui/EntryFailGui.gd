@@ -27,23 +27,23 @@ onready var copy_btn := $CopyButton
 
 class ViewModel:
     extends ViewModelExt.WithNode
-    
+
     func log_content(val): return val
     func header_text(reason): return "FAILED TO INTIALIZE SMCE\n%s" % reason
     func full_error(reason, log_content): return "Error Reason: %s\n%s" % [reason, log_content]
-    
+
     func _init(n, reason, log_content).(n):
-        
+
         bind() \
             .log_content.to([log_content]) \
             .header_text.to([reason]) \
             .full_error.to([reason, log_content])
-        
+
         bind() \
             .header_text.to(node.header_lbl, "text") \
             .log_content.to(node.log_lbl, "text")
         node.copy_btn.connect("pressed", self, "_on_copy_btn")
-        
+
     func _on_copy_btn(): OS.clipboard = self.full_error
 
 var model: ViewModel

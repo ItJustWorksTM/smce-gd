@@ -19,7 +19,7 @@ class_name Universe
 extends Spatial
 
 signal active_world_changed(node)
-signal world_list_changed
+signal world_list_changed()
 
 var world_map := {}
 
@@ -34,14 +34,14 @@ func set_world_to(name: String) -> bool:
     if !world_map.has(name):
         return false
     destroy_current_world()
-    
+
     active_world = name
     active_world_node = world_map[name].instance()
-    
+
     add_child(active_world_node)
     emit_signal("active_world_changed", active_world_node)
     return true
-    
+
 
 # Will free the current world if one is loaded
 func destroy_current_world():

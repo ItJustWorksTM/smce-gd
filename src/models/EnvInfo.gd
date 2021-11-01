@@ -10,7 +10,7 @@ func profile_dir(): return user_dir.plus_file("config/profiles")
 
 func _init(user_dir_path = OS.get_user_data_dir()):
     user_dir = user_dir_path
-    
+
     self.bind() \
         .library_patches_dir.dep([]) \
         .smce_resources_dir.dep([]) \

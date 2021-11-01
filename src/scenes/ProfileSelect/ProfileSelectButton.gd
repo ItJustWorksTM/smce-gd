@@ -23,18 +23,18 @@ static func instance():    return load(SCENE_FILE).instance()
 
 class ViewModel:
     extends ViewModelBase
-    
-    signal pressed
-    
+
+    signal pressed()
+
     func profile_name(profile: Profile): return profile.name
     func profile_info(profile: Profile):
         return "[color=%s]World: %s[/color]\nSketches: %d" % ["white" if true else "red", profile.environment, profile.sketches.size()]
-    
+
     func _init(profile: Observable):
         set_depend("profile_info", [profile])
         set_depend("profile_name", [profile])
-        
-    
+
+
     func pressed(): emit_signal("pressed")
 
 onready var profile_name_label: Label = $MarginContainer/VBoxContainer/ProfileNameLabel

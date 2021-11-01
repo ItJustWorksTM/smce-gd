@@ -1,5 +1,5 @@
 #
-#  file.gd
+#  Hud.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,48 +25,59 @@ onready var animation_player := $AnimationPlayer
 
 class ViewModel:
     extends ViewModelExt.WithNode
-    
+
     var _profile: Observable
     var _active_sketch: Observable
-    
+
     func sketch_control_visible(active_sketch: SketchDescriptor): return active_sketch == null
-    
-    
-    func _init(n, profile, active_sketch).(n):
+
+    func sketches(profile: Profile): return profile.sketches
+
+    func _init(n, profile).(n):
         _profile = profile
-        _active_sketch = active_sketch
+        _active_sketch = Observable.new(null)
+
+        node.vertical_sketch_list.init_model(profile, _active_sketch)
+        node.profile_pane.init_model(profile, Observable.new(["no", "no again"]))
+
         bind() \
-            .sketch_control_visible.dep([active_sketch])
-        
-        node.vertical_sketch_list.init_model(profile, active_sketch)
+            .sketches.dep([profile]) \
+            .sketch_control_visible.dep([_active_sketch]) \
+            # .sketch_control_visible.to(self, "toggle_sketch_pane")
+
+        bind() \
+            .sketches.to(self, "_list_sketches") \
         
         conn(node.vertical_sketch_list.model, "select_sketch", "select_sketch")
         conn(node.vertical_sketch_list.model, "create_new", "create_new_sketch")
         conn(node.vertical_sketch_list.model, "context_pressed", "toggle_profile_config")
-    
-    
+
+
     func set_active(sketch):
         pass
-    
+
     func select_sketch(sketch):
         if sketch != null && ! sketch in _profile.value.sketches:
             return
-        
+
         print("select_sketch: ", sketch)
-        
+
         if sketch == null:
             node.animation_player.play_backwards("slide_active_sketch")
         elif _active_sketch.value == null:
             node.animation_player.play("slide_active_sketch")
-        
+
         _active_sketch.value = sketch
+
+        var ali = node.sketch_status_control_container
+        for child in ali.get_children(): child.visible = child.get_meta("sketch") == _active_sketch.value
+
 
     func toggle_sketch_pane(vis):
         if vis:
             node.animation_player.play("slide_active_sketch")
         else:
             node.animation_player.play_backwards("slide_active_sketch")
-        pass
 
     func create_new_sketch():
         print("create_new_sketch")
@@ -75,15 +86,40 @@ class ViewModel:
 
     func toggle_profile_config():
         node.animation_player.play("slide_profile_pane")
-        
-        pass
+
+
+    func _list_sketches(sketches: Array):
+        var ali = node.sketch_status_control_container
+
+        for child in ali.get_children(): child.queue_free()
+        for _i in range(sketches.size()):
+            print(_i)
+
+            var inst: SketchPane = SketchPane.instance()
+
+
+
+            inst.set_meta("sketch", sketches[_i])
+
+            inst.visible = _active_sketch.value == sketches[_i]
+
+            ali.add_child(inst)
+
+            inst.init_model()
+
+            inst.sketch_status_control.sketch_name_label.text = str(_i)
+
+            conn(inst.model, "compile_sketch", "_wacky")
+    
+    func _wacky(uh):
+        print(uh)
+
 
 var model: ViewModel
 
 func _ready():
     var profile := Observable.new(Profile.new("Holy Land", [SketchDescriptor.new()]))
-    var active_sketch := Observable.new(null)
-    
-    model = ViewModel.new(self, profile, active_sketch)
+
+    model = ViewModel.new(self, profile)
 
 

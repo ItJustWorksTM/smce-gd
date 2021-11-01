@@ -28,20 +28,17 @@
 
 namespace godot {
 
-class ToolchainLogReader : public Reference {
-    GODOT_CLASS(ToolchainLogReader, Reference);
+class ToolchainLogReader : public GdRef<"ToolchainLogReader", ToolchainLogReader> {
 
   public:
     std::shared_ptr<smce::Toolchain> tc;
 
     static void _register_methods();
-    void _init() {}
 
     Variant read();
 };
 
-class Toolchain : public Reference {
-    GODOT_CLASS(Toolchain, Reference)
+class Toolchain : public GdRef<"Toolchain", Toolchain> {
 
     std::shared_ptr<smce::Toolchain> tc;
 
@@ -51,8 +48,6 @@ class Toolchain : public Reference {
 
   public:
     static void _register_methods();
-
-    void _init() {}
 
     Ref<Result> init(String resource_dir);
 

@@ -39,20 +39,16 @@ namespace godot {
 
 namespace stdfs = std::filesystem;
 
-class BoardLogReader : public Reference {
-    GODOT_CLASS(BoardLogReader, Reference);
-
+class BoardLogReader : public GdRef<"BoardLogReader", BoardLogReader> {
   public:
     std::shared_ptr<smce::Board> board;
 
     static void _register_methods();
-    void _init() {}
 
     Variant read();
 };
 
-class Board : public Reference {
-    GODOT_CLASS(Board, Reference)
+class Board : public GdRef<"Board", Board> {
 
     std::shared_ptr<smce::Board> board;
 
@@ -92,6 +88,8 @@ class Board : public Reference {
     int get_status();
 
     smce::Board& native();
+
+    ~Board() { Godot::print("Board DTOR"); }
 };
 } // namespace godot
 

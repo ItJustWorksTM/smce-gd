@@ -17,5 +17,5 @@ func test_yield():
     print(Reflect.value_compare(BoardDeviceConfig.new().with_spec(BoardDeviceSpec.new().with_name("NICE")),
                                 BoardDeviceConfig.new().with_spec(BoardDeviceSpec.new().with_name("NICE").with_atomic_u8("sss"))))
 
-    
+
 

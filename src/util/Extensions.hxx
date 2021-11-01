@@ -63,4 +63,42 @@ template <class... Base> struct Visitor : Base... {
 };
 template <class... Ts> Visitor(Ts...) -> Visitor<std::remove_cvref_t<Ts>...>;
 
+template <size_t N> struct fixed_string {
+    char content[N] = {0};
+
+    constexpr fixed_string(const char (&input)[N]) {
+        for (size_t i = 0; i < N; ++i)
+            content[i] = input[i];
+    }
+
+    [[nodiscard]] constexpr const char* data() const { return +content; }
+};
+
+template <> struct fixed_string<0> {
+    char content[1] = {0};
+
+    constexpr fixed_string(const char*) {}
+};
+
+template <fixed_string Name, class Self, class Base> struct GdScript : public Base {
+    inline static const char* ___get_class_name() { return Name.data(); }
+    enum { ___CLASS_IS_SCRIPT = 1 };
+    inline static const char* ___get_godot_class_name() { return Base::___get_godot_class_name(); }
+    inline static Self* _new() { return godot::detail::create_custom_class_instance<Self>(); }
+    inline static size_t ___get_id() { return typeid(Self).hash_code(); }
+    inline static size_t ___get_base_id() { return Base::___get_id(); }
+    inline static const char* ___get_base_class_name() { return Base::___get_class_name(); }
+    inline static godot::Object* ___get_from_variant(godot::Variant a) {
+        return (godot::Object*)godot::detail::get_custom_class_instance<Self>(
+            godot::Object::___get_from_variant(a));
+    }
+
+    static void _register_methods() {}
+    void _init() {}
+
+    using This = Self;
+};
+
+template <fixed_string Name, class Base> using GdRef = GdScript<Name, Base, godot::Reference>;
+
 #endif // GODOT_SMCE_EXTENSIONS_HXX

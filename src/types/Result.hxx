@@ -24,8 +24,7 @@
 #include "util/Extensions.hxx"
 
 namespace godot {
-class Result : public Reference {
-    GODOT_CLASS(Result, Reference) // NOLINT(performance-unnecessary-value-param)
+class Result : public GdRef<"Result", Result> {
 
     bool is_error = false;
     Variant value = Variant{};
@@ -70,8 +69,6 @@ class Result : public Reference {
     }
 
     String _to_string() { return String{(is_err() ? "Err" : "Ok")} + "(" + (value.operator String() + ")"); }
-
-    void _init() {}
 };
 } // namespace godot
 

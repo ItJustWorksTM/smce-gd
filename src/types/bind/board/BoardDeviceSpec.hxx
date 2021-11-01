@@ -23,14 +23,14 @@
 #include <vector>
 #include <SMCE/internal/BoardDeviceSpecification.hpp>
 #include "gen/Reference.hpp"
+#include "util/Extensions.hxx"
 #include "Godot.hpp"
 
 namespace godot {
 
 class DynamicBoardDevice;
 // TODO: check for duplicate fields!
-class BoardDeviceSpec : public Reference {
-    GODOT_CLASS(BoardDeviceSpec, Reference);
+class BoardDeviceSpec : public GdRef<"BoardDeviceSpec", BoardDeviceSpec> {
 
     friend DynamicBoardDevice;
 
@@ -46,8 +46,6 @@ class BoardDeviceSpec : public Reference {
     Array /* String */ a16_fields;
     Array /* String */ a32_fields;
     Array /* String */ mtx_fields;
-
-    void _init() {}
 
     static void _register_methods();
 

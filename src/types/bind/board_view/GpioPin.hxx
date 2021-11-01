@@ -20,15 +20,13 @@
 #include "core/Godot.hpp"
 
 namespace godot {
-class GpioPin : public Reference {
-    GODOT_CLASS(GpioPin, Reference)
+class GpioPin : public GdRef<"GpioPin", GpioPin> {
 
     smce::VirtualPin vpin = smce::BoardView{}.pins[0];
 
     Ref<BoardConfig::GpioDriverConfig> m_info;
 
   public:
-    void _init() {}
     static void _register_methods();
 
     static Ref<GpioPin> from_native(Ref<BoardConfig::GpioDriverConfig> info, smce::VirtualPin pin);

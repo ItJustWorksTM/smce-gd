@@ -19,36 +19,45 @@ class_name SketchStatusControl
 extends PanelContainer
 
 const SCENE_FILE := "res://src/scenes/SketchStatusControl/SketchStatusControl.tscn"
-static func instance():    return load(SCENE_FILE).instance()
-
-class ViewModel:
-    extends ViewModelBase
-
-    signal compile_sketch
-    signal open_log
-
-    func sketch_name(): return "Nothing.ino"
-    func sketch_status(): "Compiled"
-
-    func _init():
-        pass
-    
-    func compile_sketch(): emit_signal("compile_sketch")
-    func open_log(): emit_signal("open_log")
-
-var model: ViewModel
-
-func init_model():
-    model = ViewModel.new()
-
-    model.bind_prop("sketch_status", sketch_status_label, "text")
-    model.bind_prop("sketch_name", sketch_name_label, "text")
-
-    var __= compile_button.connect("pressed", model, "compile_sketch")
-    __= log_button.connect("pressed", model, "open_log")
 
 onready var sketch_name_label: Label = $VBox/SketchName
 onready var sketch_status_label: Label = $VBox/SketchStatus
 
 onready var compile_button: Button = $HBox/CompileButton
 onready var log_button: Button = $HBox/LogButton
+
+class ViewModel:
+    extends ViewModelExt.WithNode
+
+    signal compile_sketch(sk)
+
+    func sketch_name(): return "Nothing.ino"
+    func sketch_status(): "Compiled"
+
+    func _init(n).(n):
+
+        bind() \
+            .sketch_name.dep([]) \
+            .sketch_status.dep([]) \
+
+        bind() \
+            .sketch_status.to(node.sketch_status_label, "text") \
+            .sketch_name.to(node.sketch_name_label, "text")
+
+        conn(node.compile_button, "pressed", "compile_sketch")
+        conn(node.log_button, "pressed", "open_log")
+
+
+    func compile_sketch(): emit_signal("compile_sketch", "yes I know this is not right but ...")
+
+    func open_log():
+        # TBH this should make its own floating window ??
+        # seems a bit much to signal this up for others to figure out
+        pass
+
+var model: ViewModel
+
+func init_model():
+    model = ViewModel.new(self)
+
+static func instance(): return load(SCENE_FILE).instance()

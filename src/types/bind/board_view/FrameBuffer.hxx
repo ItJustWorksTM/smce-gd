@@ -30,8 +30,7 @@ namespace godot {
 
 class BoardView;
 
-class FrameBuffer : public Reference {
-    GODOT_CLASS(FrameBuffer, Reference)
+class FrameBuffer : public GdRef<"FrameBuffer", FrameBuffer> {
     friend BoardView;
 
     smce::FrameBuffer frame_buf = smce::BoardView{}.frame_buffers[0];
@@ -42,7 +41,6 @@ class FrameBuffer : public Reference {
     static Ref<FrameBuffer> from_native(Ref<BoardConfig::FrameBufferConfig> info, smce::FrameBuffer fb);
 
     static void _register_methods();
-    void _init() {}
 
     bool exists();
     bool needs_horizontal_flip() noexcept;

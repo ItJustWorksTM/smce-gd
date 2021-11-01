@@ -18,104 +18,181 @@
 class_name Main
 extends Node
 
+# actually global
 var universe := Universe.new()
 var camera := ControllableCamera.new()
+
 var sketch_builder: SketchBuilder
 var sketch_loader: SketchLoader
 
-func _init(_env: EnvInfo):
-    sketch_builder = SketchBuilder.new(_env.smce_resources_dir)
-    sketch_loader = SketchLoader.new(SketchConfig.new())
+var entities = []
 
-    var sketch = sketch_loader.skload("/home/ruthgerd/Sources/smce-gd2/tests/sketches/noop/noop.ino")
 
+class UiState:
+    # sketch state
+    var _is_compiled: bool = false
+    var _source: String = ""
+
+    # compile state
+    var _build_pending: bool = false
+    var _build_success: bool = false
+    var _build_error: String = ""
+    var _build_log: String = ""
+
+    # board state:
+    var _board_available: bool = false
+    var _board_running: bool = false
+    var _board_error: String = ""
+
+    var _board_log: String = ""
+
+    # attachment state
+    var _attachments: Array = []
+    var _uart_log: String = ""
+
+    # camera state:
+    var _orbiting: bool = false
+
+
+func compile_sketch(sketch, ui_state):
+    ui_state._build_pending = true
+    
     var token = sketch_builder.queue_build(sketch)
 
     var future = token.future()
 
-    print(yield(future.yield(), "completed"))
+    var tree = get_tree()
+    while !future.poll_ready():
+        var read = token.read_log()
+        if read != "": ui_state._build_log += read
+        
+        yield(tree, "idle_frame")
 
-    if future.get().is_err():
-        print(future.read_log())
-        return
+    var compile_res = future.get()
 
-    var builder = BoardBuilder.new()
+    ui_state._build_pending = false
+    ui_state._build_success = compile_res.is_ok()
 
-    builder.request([])
+    if compile_res.is_err():
+        ui_state._build_error = str(compile_res)
+        return false
     
-    var maybe_board = builder.create(sketch)
+    return true
 
-    assert(maybe_board.is_ok(), maybe_board)
-
-    var board = maybe_board.get_value()
-
-    board.start()
-
-    print("started")
+var _env
+func _init(env: EnvInfo):
+    _env = env
+    sketch_builder = SketchBuilder.new(_env.smce_resources_dir)
+    sketch_loader = SketchLoader.new(SketchConfig.new())
 
 func _ready():
+    dostuff()
 
     add_child(universe)
     add_child(camera)
     camera.current = true
-    
 
-    var res = universe.set_world_to("Test/Test")
-    
-    assert(res)
+    var client = StupidClient.new(null)
+    add_child(client)
+
+
+
+    var __ = universe.set_world_to("Test/Test")
 
     camera.set_target_transform(universe.active_world_node.get_camera_starting_pos_hint())
 
 
-# class Attachment:
-#     class Controller:
-#         var pin: GpioPin
-#         var device
+func dostuff():
+    var sksource = "/home/ruthgerd/Sources/smce-gd2/tests/sketches/noop/noop.ino"
+    var sketch = sketch_loader.skload(sksource)
+
+    var ui_state = UiState.new()
+
+    # make sure the sketch is even valid??
+
+    ui_state._source = sksource
+    ui_state._is_compiled = sketch.is_compiled()
+
+    ### queue up sketch build (if not compiled)
     
-#     static func make_controller(builder: BoardBuilder, props: Dictionary):
-#         var pin := GpioDriverConfig.new()
-#         pin.pin = props["pin"]
-        
-#         var spec = BoardDeviceSpec.new() \
-#                         .with_name("Attachment") \
-#                         .with_atomic_u32("id") \
-#                         .with_atomic_u32("value")
-        
-#         var requested = [pin, BoardDeviceConfig.new().with_spec(spec)]
+    if !yield(compile_sketch(sketch, ui_state), "completed"):
+        return
 
-#         var hardware = yield(builder.request(requested), "completed")
+    ### setup attachments 
 
-#         if hardware == null:
-#             return null
+    var board = BoardNode.new()
+    add_child(board)
 
-#         var controller = Controller.new()
-#         controller.pin = hardware[0]
-#         controller.device = hardware[1]
-#         controller.device.id = props["id"]
+    var uart_puller = UartPuller.new()
+    var vehicle_thingy = VehicleThingy.new("vehicle config path or something..", universe)
 
-#         return controller
+    board.add_dep(uart_puller)
+    board.add_dep(vehicle_thingy)
 
-#     var _ctl: Controller
+    board.init()
 
-#     func set_controller(ctl): _ctl = ctl
+    var magic = Magic.new(ui_state, board, sketch)
+    magic.start()
+    magic.stop()
+    magic.free()
 
-#     func _init(ctl: Controller):
-#         _ctl = ctl
+class Magic:
+    extends Object
 
-# func prepare_board():
+    var ui_state
+    var board
+    var sketch
 
-#     var idk = BoardBuilder.new()
+    func _init(_ui_state: UiState, _board, _sketch):
+        ui_state = _ui_state
+        board = _board
+        sketch = _sketch
+        ui_state._board_available = true
 
-#     for props in [{ "pin": 123, "id": 99 }, { "pin": 124, "id": 1 }]:
-#         var _attachment = Attachment.make_controller(idk, props)
-#         # do some yield magic and construct the attachment
+    func start():
+        var res = board.start(sketch)
+        if res.is_ok():
+            ui_state._board_running = true
+            print("started")
+        else:
+            ui_state._board_error = str(res)
     
-#     var board = idk.consume()
-#     assert(board.is_ok(), board)
-
-
-#     board = board.get_value()
+    func suspend():
+        var res = board.suspend()
+        if res.is_ok():
+            ui_state._board_running = false
+            print("suspended")
+        else:
+            ui_state._board_error = str(res)
     
-#     # yield(Yield.yield(), "completed")
+    func resume():
+        var res = board.resume()
+
+        if res.is_ok():
+            ui_state._board_running = true
+            print("resumed")
+        else:
+            ui_state._board_error = str(res)
     
-#     pass
+    func stop():
+        print("stopped")
+        board.free()
+
+        ui_state._board_running = false
+        ui_state._board_available = false
+
+class VehicleThingy:
+    extends BoardNode.Dependent
+
+    func _init(_str, _uni): pass
+
+class StupidClient:
+
+    signal create_sketch(path)
+    signal compile_sketch(desc)
+    signal start_board(desc)
+
+    var state = UiState
+
+    func _init(state: UiState):
+        pass

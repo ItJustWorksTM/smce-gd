@@ -26,9 +26,7 @@
 
 namespace godot {
 
-class UartChannel : public Reference {
-    GODOT_CLASS(UartChannel, Reference)
-
+class UartChannel : public GdRef<"UartChannel", UartChannel> {
     smce::VirtualUart m_uart = smce::BoardView{}.uart_channels[0];
 
     String gread_buf;
@@ -39,8 +37,6 @@ class UartChannel : public Reference {
 
   public:
     static void _register_methods();
-
-    void _init() {}
 
     static Ref<UartChannel> from_native(Ref<BoardConfig::UartChannelConfig> info, smce::VirtualUart vu);
 

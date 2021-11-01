@@ -17,7 +17,7 @@
 
 class_name Observable2
 
-signal value_changed
+signal value_changed()
 
 var _object
 var _property

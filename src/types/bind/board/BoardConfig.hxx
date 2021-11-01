@@ -29,30 +29,22 @@
 
 namespace godot {
 
-class BoardConfig : public Reference {
-    GODOT_CLASS(BoardConfig, Reference);
+struct BoardConfig : public GdRef<"BoardConfig", BoardConfig> {
 
   public:
-    class GpioDriverConfig : public Reference {
-        GODOT_CLASS(GpioDriverConfig, Reference);
-
-      public:
+    struct GpioDriverConfig : public GdRef<"GpioDriverConfig", GpioDriverConfig> {
         int pin = 0;
         bool read = true;
         bool write = true;
 
         static void _register_methods();
 
-        void _init() {}
-
         bool eq(Ref<GpioDriverConfig> rhs) { return rhs->pin == pin; }
 
         smce::BoardConfig::GpioDrivers to_native() const;
     };
 
-    class UartChannelConfig : public Reference {
-        GODOT_CLASS(UartChannelConfig, Reference)
-      public:
+    struct UartChannelConfig : public GdRef<"UartChannelConfig", UartChannelConfig> {
         int rx_pin_override = -1;
         int tx_pin_override = -1;
         int baud_rate = 9600;
@@ -62,53 +54,36 @@ class BoardConfig : public Reference {
 
         static void _register_methods();
 
-        void _init() {}
-
         smce::BoardConfig::UartChannel to_native() const;
     };
 
-    class FrameBufferConfig : public Reference {
-        GODOT_CLASS(FrameBufferConfig, Reference)
-
-      public:
+    struct FrameBufferConfig : public GdRef<"FrameBufferConfig", FrameBufferConfig> {
         int key = 0;
         bool direction = true; // true = in, false = out
 
         static void _register_methods();
-
-        void _init() {}
 
         bool eq(Ref<FrameBufferConfig> rhs) { return rhs->key == key; }
 
         smce::BoardConfig::FrameBuffer to_native() const;
     };
 
-    class SecureDigitalStorage : public Reference {
-        GODOT_CLASS(SecureDigitalStorage, Reference)
-
-      public:
+    struct SecureDigitalStorage : public GdRef<"SecureDigitalStorage", SecureDigitalStorage> {
         int cspin;
         String root_dir;
 
         static void _register_methods();
-
-        void _init() {}
 
         bool eq(Ref<SecureDigitalStorage> rhs) { return rhs->cspin == cspin; }
 
         smce::BoardConfig::SecureDigitalStorage to_native() const;
     };
 
-    class BoardDeviceConfig : public Reference {
-        GODOT_CLASS(BoardDeviceConfig, Reference);
-
-      public:
+    struct BoardDeviceConfig : public GdRef<"BoardDeviceConfig", BoardDeviceConfig> {
         Ref<BoardDeviceSpec> spec;
         size_t amount = 1;
 
         static void _register_methods();
-
-        void _init() {}
 
         Ref<BoardDeviceConfig> with_spec(Ref<BoardDeviceSpec> s) {
             spec = s;
@@ -125,7 +100,6 @@ class BoardConfig : public Reference {
     Array board_devices;
 
     static void _register_methods();
-    void _init() {}
 
     smce::BoardConfig to_native() const;
 };

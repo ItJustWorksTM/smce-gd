@@ -41,16 +41,13 @@ namespace godot {
 
 class DynamicBoardDevice;
 
-class BoardDeviceMutex : public Reference {
-    GODOT_CLASS(BoardDeviceMutex, Reference);
+class BoardDeviceMutex : public GdRef<"BoardDeviceMutex", BoardDeviceMutex> {
 
     friend DynamicBoardDevice;
 
     smce_rt::Mutex mtx{};
 
   public:
-    void _init() {}
-
     static void _register_methods();
 
     void lock();
@@ -60,8 +57,7 @@ class BoardDeviceMutex : public Reference {
     void unlock();
 };
 
-class DynamicBoardDevice : public Reference {
-    GODOT_CLASS(DynamicBoardDevice, Reference);
+class DynamicBoardDevice : public GdRef<"DynamicBoardDevice", DynamicBoardDevice> {
 
     using PropType =
         std::variant<smce_rt::AtomicU8, smce_rt::AtomicU16, smce_rt::AtomicU32, Ref<BoardDeviceMutex>>;
@@ -70,8 +66,6 @@ class DynamicBoardDevice : public Reference {
     Ref<BoardDeviceSpec> m_info;
 
   public:
-    void _init() {}
-
     static void _register_methods();
 
     static Ref<DynamicBoardDevice> create(Ref<BoardDeviceSpec> spec, smce::BoardView& bv);

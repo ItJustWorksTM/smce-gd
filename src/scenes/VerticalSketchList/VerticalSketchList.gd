@@ -19,8 +19,6 @@ class_name VerticalSketchList
 extends PanelContainer
 
 const SCENE_FILE := "res://src/scenes/VerticalSketchList/VerticalSketchList.tscn"
-static func instance():    return load(SCENE_FILE).instance()
-
 
 onready var sketches_container = $VBox/Scroll/VBox
 onready var new_sketch_button = $VBox/Scroll/VBox/NewButton
@@ -30,32 +28,37 @@ class ViewModel:
     extends ViewModelExt.WithNode
 
     signal select_sketch(sketch_descriptor)
-    signal create_new
-    signal context_pressed
-    
+    signal create_new()
+    signal context_pressed()
+
 
     var _profile: Observable
     var _active_sketch: Observable
-    
+
     func active_sketch(sketch): return sketch
     func sketches(profile: Profile): return profile.sketches
 
     func _init(n, profile: Observable, active_sketch: Observable).(n):
         _profile = profile
         _active_sketch = active_sketch
-        
+
         bind() \
             .sketches.dep([profile]) \
             .active_sketch.dep([active_sketch])
-        
+
         print(self._func_map)
-        
+
         bind() \
             .sketches.to(self, "_list_sketches") \
             .active_sketch.to(self, "_set_active")
-        
+
         conn(node.new_sketch_button, "pressed", "create_new")
         conn(node.context_button, "pressed", "_emit_context")
+
+        yield(node.get_tree().create_timer(10), "timeout")
+        print("removing 3")
+        _profile.value.sketches.remove(3)
+        _profile.emit_change()
 
     func select_sketch(sketch): emit_signal("select_sketch", sketch)
     func create_new(): emit_signal("create_new")
@@ -70,27 +73,39 @@ class ViewModel:
         return existing
 
     func _list_sketches(sketches: Array):
-        for btn in _get_sketch_buttons(): btn.queue_free()
+        # TODO: somehow retain buttons that can still exist?
+        var existing: Array = _get_sketch_buttons()
         
-        var i = 1
-        for _sketch in sketches:
-            var sketch = _sketch
+        for btn in existing: node.sketches_container.remove_child(btn)
+
+        var buf = []
+        buf.resize(sketches.size())
+
+        for i in range(buf.size()):
+            for exist in existing:
+                if exist.get_meta("sketch") == sketches[i]:
+                    buf[i] = exist
+                    break
             
-            var btn := Button.new()
-            btn.toggle_mode = true
-            btn.set_meta("sketch", sketch)
-            btn.text = str(i)
-            btn.keep_pressed_outside = true
+            if buf[i] == null:
+                var btn := Button.new()
+                btn.toggle_mode = true
+                btn.set_meta("sketch", sketches[i])
+                btn.text = str(i + 1)
+                btn.keep_pressed_outside = true
+                assert(btn.connect("toggled", self, "_on_button_toggle", [btn]) == 0)
+                buf[i] = btn
+            else:
+                buf[i].text = str(i +1)
+                existing.erase(buf[i])
             
-            assert(btn.connect("toggled", self, "_on_button_toggle", [btn]) == 0)
-            
-            node.sketches_container.add_child(btn)
-            
-            i += 1
-        
+            node.sketches_container.add_child(buf[i])
+
+        for btn in existing: btn.queue_free()
+
         node.sketches_container.remove_child(node.new_sketch_button)
         node.sketches_container.add_child(node.new_sketch_button)
-        
+
         _set_active(get_nullable("active_sketch"))
 
     func _on_button_toggle(toggled, btn: Button):
@@ -118,3 +133,4 @@ func _ready():
         var active_sketch = Observable.new(sketch)
         model = ViewModel.new(self, profile, active_sketch)
 
+static func instance():    return load(SCENE_FILE).instance()

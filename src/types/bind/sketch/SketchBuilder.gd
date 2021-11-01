@@ -33,8 +33,11 @@ class Token:
         _future = fut
 
     func read_log() -> String:
-        _shared_log.buf += _shared_log.reader.read()
-        
+        var read = _shared_log.reader.read()
+
+        if read != null:
+            _shared_log.buf += read
+
         var ret := _shared_log.buf.substr(_log_head)
 
         _log_head = _shared_log.buf.length()
@@ -62,6 +65,10 @@ func queue_build(sketch) -> Token:
         future.connect("completed", self, "_on_compile_complete", [sketch])
     var x = ongoing[sketch]
     return Token.new(x[0], x[1])
+
+func cancel_build(token: Token) -> bool:
+    # TODO
+    return true
 
 func _on_compile_complete(sk):
     ongoing.erase(sk)

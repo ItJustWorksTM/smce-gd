@@ -31,8 +31,7 @@
 namespace godot {
 class Board;
 
-class BoardView : public Reference {
-    GODOT_CLASS(BoardView, Reference)
+class BoardView : public GdRef<"BoardView", BoardView> {
     friend Board;
 
     smce::BoardView view;

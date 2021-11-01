@@ -1,5 +1,5 @@
 #
-#  ObserversObserver.gd
+#  UartPuller.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,25 @@
 #  limitations under the License.
 #
 
-class_name ObserversObserver
+class_name UartPuller
+extends BoardNode.Dependent
 
-signal changed(value)
+signal read()
 
-var _deps: Array = []
+var _uart_channel
 
-func get_value() -> Array:
-    var ret := []
-    for dep in _deps:
-        ret.append(dep.get_value())
-    return ret
+func do_request(builder: BoardBuilder):
+    var uart: Array = yield(builder.request([UartChannelConfig.new()]), "completed")
 
-func _init(deps):
-    for dep in deps:
-        var obsv: Observable = Observable.from(dep)
-        _deps.append(obsv)
-        obsv.bind_change(self, "_on_change", [], CONNECT_REFERENCE_COUNTED)
+    if uart.empty():
+        return
+    
+    _uart_channel = uart[0]
 
-func _on_change(__): emit_signal("changed", get_value())
+func _process(__):
+    var read = _uart_channel.read()
+    if read != null:
+        emit_signal("read", read)
+
+func write(_text):
+    pass

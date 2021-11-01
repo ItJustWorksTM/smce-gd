@@ -31,7 +31,7 @@ static func from(other):
     return Self.new(other)
 
 signal changed(value)
-signal _changed
+signal _changed()
 
 var value setget set_value, get_value
 

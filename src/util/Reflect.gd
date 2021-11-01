@@ -70,12 +70,12 @@ static func inst2dict2(value: Object) -> Dictionary:
             for property in script.get_script_property_list():
                 ret[property.name] = value.get(property.name)
             var type_name = TypeRegistry.scripts.get(script.resource_path)
-            
+
             if type_name != null:
                 ret["@type"] = type_name
             else:
                 ret["@path"] = script.resource_path
-            
+
     return ret
 
 static func inst2dict2_recursive(value):
@@ -93,15 +93,15 @@ static func inst2dict2_recursive(value):
 
 static func dict2inst2(dict: Dictionary):
     var path = dict.get("@path", null)
-    
+
     var __ = dict.erase("@path") && dict.erase("@subpath")
-    
+
     if path == null:
         path = TypeRegistry.types.get(dict.get("@type", null))
         __ = dict.erase("@type")
         if path == null:
             return null
-    
+
     var script = load(path)
     if script != null && script is Script:
         var inst = script.new()
@@ -109,7 +109,7 @@ static func dict2inst2(dict: Dictionary):
             print("setting: ", key, "with", dict[key])
             inst.set(key, dict[key])
         return inst
-    
+
     return null
 
 static func dict2inst2_recursive(value):

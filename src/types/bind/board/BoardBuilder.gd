@@ -83,24 +83,18 @@ func request(arr):
     print(ret)
 
     if ret.size() != arr.size():
-        push_error("Overlapping requiremetns!")
+        push_error("Overlapping requirements!")
         return null
-    
+
     return ret
 
-func create(sketch):
-    if !sketch.is_compiled():
-        assert(false, "sketch needs to be compiled such that we can derive needed devices")
-        return null
-
-    for device in sketch.config.genbind_devices:
-        self.request([BoardDeviceConfig.new().with_spec(device)])
+func create():
 
     var board = Board.new()
     var init_res = board.init(_requ)
 
     emit_signal("_consume", board.get_view())
-    
+
     if init_res.is_err():
         assert(false, init_res)
         return null
