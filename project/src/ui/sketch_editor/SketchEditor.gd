@@ -19,7 +19,7 @@
 extends Node2D
 
 var sketch_path = ""
-var file
+
 
 func _ready():
 	if(sketch_path):
@@ -29,14 +29,14 @@ func _on_open_file():
 	$OpenDialogPopUp.popup()
 
 func _on_select_file(path):
-	file = File.new()
-	file.open(path, 1)
-	$TextEdit.text = file.get_as_text()
+	var sketch = File.new()
+	sketch.open(path, 1)
+	$Edit.text = sketch.get_as_text()
 
 func _on_save_file(path):
-	file = File.new()
-	file.open(path, 2)
-	file.store_string($TextEdit.text)
+	var sketch = File.new()
+	sketch.open(path, 2)
+	sketch.store_string($Edit.text)
 
 func _on_save():
 	$SaveDialogPopUp.popup()
