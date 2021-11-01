@@ -19,6 +19,7 @@ extends VBoxContainer
 
 var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
 var collapsable_t = preload("res://src/ui/collapsable/collapsable.tscn")
+var opened_sketch = preload("res://src/ui/sketch_editor/SketchEditor.tscn");
 
 signal notification_created
 signal grab_focus
@@ -35,7 +36,7 @@ onready var file_path_header: Label = $SketchSlot/VBoxContainer2/VBoxContainer/S
 
 onready var pause_btn: Button = $PaddingBox2/SketchButtons/Pause
 onready var start_btn: Button = $PaddingBox2/SketchButtons/Start
-
+onready var edit_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Edit
 onready var reset_pos_btn: Button = $PaddingBox/VehicleButtons/Reset
 onready var follow_btn: Button = $PaddingBox/VehicleButtons/Follow
 
@@ -111,7 +112,7 @@ func _ready():
 	
 	compile_btn.connect("pressed", self, "_on_compile")
 	compile_log_btn.connect("pressed", self, "_show_compile_log")
-	
+	edit_btn.connect("pressed", self, "_open_sketch_editor")
 	close_btn.connect("pressed", self, "_on_close")
 	pause_btn.connect("pressed", self, "_on_pause")
 	start_btn.connect("pressed", self, "_on_start")
@@ -187,6 +188,10 @@ func _on_board_started() -> void:
 	start_btn.text = "Stop"
 	follow_btn.disabled = false
 
+func _open_sketch_editor() -> void:
+	var edited_sketch = opened_sketch.instance()
+	edited_sketch.sketch_path = sketch_path
+	get_tree().get_root().add_child(edited_sketch)
 
 func _on_board_suspended_resumed(suspended: bool) -> void:
 	pause_btn.text = "Resume" if suspended else "Suspend"
@@ -381,3 +386,4 @@ func reset_vehicle_pos() -> void:
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE && is_instance_valid(compile_log_text_field):
 		compile_log_text_field.queue_free()
+
