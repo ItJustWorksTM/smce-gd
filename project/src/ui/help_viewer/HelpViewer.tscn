@@ -64,7 +64,7 @@ __meta__ = {
 [node name="Panel" type="PanelContainer" parent="LogPopout"]
 margin_left = 256.0
 margin_top = 128.0
-margin_right = 1024.0
+margin_right = 1028.0
 margin_bottom = 592.0
 rect_min_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
@@ -72,31 +72,31 @@ size_flags_vertical = 3
 custom_styles/panel = SubResource( 1 )
 
 [node name="Control" type="MarginContainer" parent="LogPopout/Panel"]
-margin_right = 768.0
+margin_right = 772.0
 margin_bottom = 464.0
 mouse_filter = 2
 
 [node name="EmptyLabel" type="Label" parent="LogPopout/Panel/Control"]
 margin_top = 222.0
-margin_right = 768.0
+margin_right = 772.0
 margin_bottom = 242.0
 custom_colors/font_color = Color( 0.286275, 0.286275, 0.286275, 1 )
 text = "A lot of help will be located here!"
 align = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="LogPopout/Panel/Control"]
-margin_right = 768.0
+margin_right = 772.0
 margin_bottom = 464.0
 mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="LogPopout/Panel/Control/VBoxContainer"]
-margin_right = 768.0
+margin_right = 772.0
 margin_bottom = 45.0
 mouse_filter = 2
 
 [node name="CloseButton" type="Button" parent="LogPopout/Panel/Control/VBoxContainer/MarginContainer"]
-margin_left = 723.0
-margin_right = 768.0
+margin_left = 727.0
+margin_right = 772.0
 margin_bottom = 45.0
 rect_min_size = Vector2( 45, 45 )
 mouse_default_cursor_shape = 2
@@ -112,7 +112,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="LogPopout/Panel/Control/VBoxContainer/MarginContainer"]
-margin_right = 768.0
+margin_right = 772.0
 margin_bottom = 45.0
 size_flags_vertical = 1
 custom_fonts/font = SubResource( 6 )
@@ -120,10 +120,15 @@ text = "Help viewer"
 align = 1
 valign = 1
 
-[node name="ItemList" type="ItemList" parent="LogPopout/Panel/Control/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="LogPopout/Panel/Control/VBoxContainer"]
 margin_top = 49.0
-margin_right = 768.0
-margin_bottom = 49.0
+margin_right = 772.0
+margin_bottom = 459.0
+
+[node name="ItemList" type="ItemList" parent="LogPopout/Panel/Control/VBoxContainer/HBoxContainer"]
+margin_right = 384.0
+margin_bottom = 410.0
+rect_min_size = Vector2( 384, 0 )
 mouse_default_cursor_shape = 2
 custom_styles/cursor = SubResource( 7 )
 custom_styles/selected_focus = SubResource( 7 )
@@ -134,12 +139,12 @@ custom_colors/guide_color = Color( 0.215686, 0.211765, 0.211765, 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_constants/vseparation = 8
 allow_rmb_select = true
-auto_height = true
 
-[node name="RichTextLabel" type="RichTextLabel" parent="LogPopout/Panel/Control/VBoxContainer/ItemList"]
-margin_left = 384.0
-margin_right = 768.0
+[node name="RichTextLabel" type="RichTextLabel" parent="LogPopout/Panel/Control/VBoxContainer/HBoxContainer"]
+margin_left = 388.0
+margin_right = 772.0
 margin_bottom = 410.0
+rect_min_size = Vector2( 384, 410 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

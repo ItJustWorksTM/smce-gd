@@ -22,8 +22,8 @@ signal exited
 
 onready var close_btn = $LogPopout/Panel/Control/VBoxContainer/MarginContainer/CloseButton
 onready var center_label = $LogPopout/Panel/Control/EmptyLabel
-onready var item_list = $LogPopout/Panel/Control/VBoxContainer/ItemList
-onready var rich_text_label = $LogPopout/Panel/Control/VBoxContainer/ItemList/RichTextLabel
+onready var item_list = $LogPopout/Panel/Control/VBoxContainer/HBoxContainer/ItemList
+onready var rich_text_label = $LogPopout/Panel/Control/VBoxContainer/HBoxContainer/RichTextLabel
 
 const WIKI_PATH = "./media/wiki/"
 var wiki_pages = []
@@ -54,7 +54,7 @@ func _ready():
 		item_list.add_item(page.title)
 		
 	# Add on-click event
-	item_list.connect("help_selected", self, "_on_help_selected")
+	item_list.connect("item_selected", self, "_on_help_selected")
 	item_list.connect("nothing_selected", self, "_on_help_selected", [-1])
 	print("HelpViewer loaded!")
 
