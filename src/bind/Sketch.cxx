@@ -37,13 +37,18 @@ void Sketch::init(String src, String home_dir) {
     sketch =
         smce::Sketch{std_str(src),
                      {.fqbn = "arduino:sam:arduino_due_x",
-                      .preproc_libs = {smce::SketchConfig::RemoteArduinoLibrary{"MQTT@2.5.0"},
-                                       smce::SketchConfig::RemoteArduinoLibrary{"WiFi@1.2.7"},
-                                       smce::SketchConfig::RemoteArduinoLibrary{"Arduino_OV767X@0.0.2"},
-                                       smce::SketchConfig::RemoteArduinoLibrary{"SD@1.2.4"}},
-                      .complink_libs = {smce::SketchConfig::LocalArduinoLibrary{
-                          std::filesystem::path{std_str(home_dir)} / "library_patches" / "smartcar_shield",
-                          "Smartcar shield@7.0.1"}}}};
+                      .legacy_preproc_libs = {smce::SketchConfig::ArduinoLibrary{"MQTT@2.5.0"},
+                                              smce::SketchConfig::ArduinoLibrary{"WiFi@1.2.7"},
+                                              smce::SketchConfig::ArduinoLibrary{"Arduino_OV767X@0.0.2"},
+                                              smce::SketchConfig::ArduinoLibrary{"SD@1.2.4"}},
+                      .plugins = {smce::PluginManifest{
+                          .name = "Smartcar_shield",
+                          .version = "7.0.1",
+                          .uri = "https://github.com/platisd/smartcar_shield/archive/refs/tags/7.0.1.tar.gz",
+                          .patch_uri = "file://" + (std::filesystem::absolute(std_str(home_dir)) /
+                                                    "library_patches" / "smartcar_shield")
+                                                       .generic_string(),
+                          .defaults = smce::PluginManifest::Defaults::arduino}}}};
 }
 
 String Sketch::get_source() { return sketch.get_source().c_str(); }
