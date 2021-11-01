@@ -45,6 +45,8 @@ func _init_TextEditor():
 		
 	textEditor.caret_blink = true
 	textEditor.show_line_numbers = true
+	textEditor.add_child(BraceEnabler.new())
+
 	#Minimap view
 	#textEditor.minimap_draw = true
 	#textEditor.minimap_width = 150
