@@ -96,13 +96,13 @@ __meta__ = {
 }
 
 [node name="SketchSlot" type="PanelContainer" parent="."]
-margin_right = 1280.0
+margin_right = 1315.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
 custom_styles/panel = SubResource( 1 )
 
 [node name="VBoxContainer2" type="MarginContainer" parent="SketchSlot"]
-margin_right = 1280.0
+margin_right = 1315.0
 margin_bottom = 41.0
 rect_min_size = Vector2( 0, 40 )
 custom_constants/margin_right = 4
@@ -146,8 +146,8 @@ margin_bottom = 32.0
 alignment = 2
 
 [node name="Compile" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1158.0
-margin_right = 1229.0
+margin_left = 1105.0
+margin_right = 1185.0
 margin_bottom = 32.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
@@ -157,8 +157,8 @@ __meta__ = {
 }
 
 [node name="CompileLog" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1233.0
-margin_right = 1272.0
+margin_left = 1190.0
+margin_right = 1230.0
 margin_bottom = 32.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
@@ -494,3 +494,11 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1280.0
 margin_bottom = 300.0
+
+[node name="Edit" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
+margin_left = 1230.0
+margin_right = 1320.0
+margin_bottom = 32.0
+mouse_default_cursor_shape = 2
+theme = ExtResource( 4 )
+text = "Edit"
