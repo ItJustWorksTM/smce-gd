@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/ui/sketch_editor/SketchEditor.gd" type="Script" id=1]
+
+[node name="Node2D" type="Node2D"]
+position = Vector2( 2, 3 )
+script = ExtResource( 1 )
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_top = 5.0
+margin_left = 240.0
+margin_right = 1000.0
+margin_bottom = 650.0
+
+[node name="OpenFile" type="Button" parent="."]
+margin_left = 800.0
+margin_right = 865.0
+margin_bottom = 25.0
+text = "Open File"
+
+[node name="SaveFile" type="Button" parent="."]
+margin_left = 880.0
+margin_right = 960.0
+margin_bottom = 25.0
+text = "Save File"
+
+[node name="Close" type="Button" parent="."]
+margin_left = 965.0
+margin_right = 1000.0
+margin_bottom = 25.0
+text = " X "
+[connection signal="pressed" from="OpenFile" to="." method="_on_open_file"]
+[connection signal="pressed" from="SaveFile" to="." method="_on_save"]
+[connection signal="pressed" from="Close" to="." method="_on_close"]
+
+[node name="SaveDialogPopUp" type="FileDialog" parent="."]
+visible = true
+margin_left = 300.0
+margin_top = 70.0
+margin_right = 940.0
+margin_bottom = 500.0
+window_title = "Save Sketch"
+access = 2
+
+[node name="OpenDialogPopUp" type="FileDialog" parent="."]
+visible = true
+margin_left = 300.0
+margin_top = 70.0
+margin_right = 940.0
+margin_bottom = 500.0
+window_title = "Open Sktech"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.ino ; SMCE Sketch files" )
+[connection signal="file_selected" from="SaveDialogPopUp" to="." method="_on_save_file"]
+[connection signal="file_selected" from="OpenDialogPopUp" to="." method="_on_select_file"]
