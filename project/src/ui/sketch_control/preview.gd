@@ -24,7 +24,7 @@ func _gui_input(event: InputEvent):
 
 func _ready() -> void:
 	close_btn.connect("pressed", self, "_on_close")
-	save_btn.connect("pressed", self, "_on_save")
+	#save_btn.connect("pressed", self, "_on_save")
 	file_btn.get_popup().add_item("Save")
 	file_btn.get_popup().add_item("Open")
 	file_btn.get_popup().add_item("Close")

@@ -64,7 +64,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/GDResult.gdns"
 }, {
-"base": "Reference",
+"base": "",
 "class": "GpioDriverConfig",
 "language": "NativeScript",
 "path": "res://src/bind/GpioDriverConfig.gdns"
@@ -104,7 +104,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/bind/SMCE.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "SecureDigitalStorage",
 "language": "NativeScript",
 "path": "res://src/bind/SecureDigitalStorage.gdns"
@@ -124,7 +124,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/simple_notification/SimpleNotification.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "Sketch",
 "language": "NativeScript",
 "path": "res://src/bind/Sketch.gdns"
@@ -144,17 +144,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/temp_tween/TempTween.gd"
 }, {
-"base": "Node",
+"base": "",
 "class": "Toolchain",
 "language": "NativeScript",
 "path": "res://src/bind/Toolchain.gdns"
 }, {
-"base": "Reference",
+"base": "",
 "class": "UartChannelConfig",
 "language": "NativeScript",
 "path": "res://src/bind/UartChannelConfig.gdns"
 }, {
-"base": "Node",
+"base": "",
 "class": "UartSlurper",
 "language": "NativeScript",
 "path": "res://src/bind/UartSlurper.gdns"

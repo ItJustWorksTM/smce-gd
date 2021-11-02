@@ -81,17 +81,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Save" type="Button" parent="Panel/MarginContainer/VBoxContainer/Control"]
-margin_left = 156.0
-margin_top = -1.0
-margin_right = 199.0
-margin_bottom = 35.0
-text = "Save"
-flat = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="File" type="MenuButton" parent="Panel/MarginContainer/VBoxContainer/Control"]
 margin_left = 17.0
 margin_top = 3.0
