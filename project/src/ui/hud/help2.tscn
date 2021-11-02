@@ -1,0 +1,181 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/ui/hud/help2.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+shadow_color = Color( 0, 0, 0, 0.207843 )
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 1, 1, 0.137255 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 1, 1, 0.243137 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[node name="Mcontainer" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.44217
+margin_top = 2.7755
+margin_right = 4.44214
+margin_bottom = 2.77551
+rect_pivot_offset = Vector2( 0, 360 )
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 128
+custom_constants/margin_top = 64
+custom_constants/margin_left = 128
+custom_constants/margin_bottom = 64
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="."]
+margin_left = 128.0
+margin_top = 64.0
+margin_right = 1152.0
+margin_bottom = 656.0
+rect_min_size = Vector2( 100, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+margin_right = 1024.0
+margin_bottom = 592.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 592.0
+
+[node name="Control" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+margin_right = 1024.0
+margin_bottom = 32.0
+mouse_filter = 1
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/Control"]
+margin_left = 992.0
+margin_right = 1024.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CopyButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/Control"]
+margin_right = 35.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "Help "
+
+[node name="TextAttach" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 1024.0
+margin_bottom = 592.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 8
+custom_constants/margin_left = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/TextAttach"]
+margin_left = 8.0
+margin_right = 1016.0
+margin_bottom = 556.0
+
+[node name="Control" type="Control" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer"]
+margin_right = 1008.0
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control"]
+margin_left = 365.21
+margin_top = 82.4772
+margin_right = 570.21
+margin_bottom = 150.477
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CompileSketch" type="LinkButton" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer"]
+margin_left = 51.0
+margin_top = 23.0
+margin_right = 154.0
+margin_bottom = 43.0
+text = "Compile Sketch"
+
+[node name="CenterContainer2" type="CenterContainer" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control"]
+margin_left = 358.655
+margin_top = 122.371
+margin_right = 582.655
+margin_bottom = 198.371
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Example Sketch" type="LinkButton" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer2"]
+margin_left = 59.0
+margin_top = 28.0
+margin_right = 164.0
+margin_bottom = 48.0
+focus_mode = 2
+text = "Example Sketch"
+
+[node name="CenterContainer3" type="CenterContainer" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control"]
+margin_left = 386.002
+margin_top = 180.301
+margin_right = 598.002
+margin_bottom = 239.301
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="version" type="LinkButton" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer3"]
+margin_left = 31.0
+margin_top = 19.0
+margin_right = 180.0
+margin_bottom = 39.0
+text = "Upgrade SMCE-Godot "
+
+[node name="CenterContainer6" type="CenterContainer" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control"]
+margin_left = 380.197
+margin_top = 229.675
+margin_right = 532.197
+margin_bottom = 295.675
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Github" type="LinkButton" parent="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer6"]
+margin_left = 37.0
+margin_top = 22.0
+margin_right = 115.0
+margin_bottom = 42.0
+text = "Github Wiki"
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/Control/CloseButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer/CompileSketch" to="." method="_on_CompileSketch_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer2/Example Sketch" to="." method="_on_Example_Sketch_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer3/version" to="." method="_on_version_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/TextAttach/VBoxContainer/Control/CenterContainer6/Github" to="." method="_on_Github_pressed"]

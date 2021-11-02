@@ -1,0 +1,9 @@
+void setup() {
+    Serial.begin(9600);
+    Serial.println("Hello world!");
+}
+
+void loop() {
+    Serial.println("This will get printed every second!");
+    delay(1000);
+}

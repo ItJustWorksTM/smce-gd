@@ -314,6 +314,7 @@ func _show_preview_log() -> void:
 #	f.open(path1,2)
 #	f.store_string(window1.texteditor.text)
 #	##f1.store_string(window1.texteditor.text)
+
 	
 	
 

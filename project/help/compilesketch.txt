@@ -1,0 +1,24 @@
+Pre Requisite
+Be sure to have SMCE and all the dependencies setup 
+
+Steps to Compile Sketch
+1.Click on the '+' icon in the  top left corner; a window should pop up asking you to select a sketch.
+2.Save a sketch to a folder, the sketch name ".ino" file and the foldername should be same.
+Example Sketch 
+void setup() {
+    Serial.begin(9600);
+    Serial.println("Hello world!");
+}
+
+void loop() {
+    Serial.println("This will get printed every second!");
+    delay(1000);
+}
+3.Click on the + Add new button and navigate to the location of your previously created sketch
+4.Click on the compile button 
+5.To view the actions occuring at backend, click on the log button. The same screen will help to know why the compilation failed
+6.Once compiled, hit start, you will see a car has appeared and the attachment list has populated.
+7.Open the Serial window on the bottom left; you should see text being printed out.
+8.To stop the sketch press Stop; the window won't disappear so you can restart the sketch immediately. 
+Note that once a sketch is compiled you can reuse it in multiple boards, but if you decide to recompile a sketch all active boards running that sketch get stopped.
+

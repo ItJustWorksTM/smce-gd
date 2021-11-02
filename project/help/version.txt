@@ -1,0 +1,7 @@
+To upgrade to a new version of SMCE-Godot, you have very little to do:
+
+Debian-based GNU/Linux: Install the latest .deb; dkpg will upgrade for you
+macOS: Remove SMCE-Godot from the Applications directory, and install the latest .dmg
+Windows: Simply download the latest .msi and install it; the installer will automatically take care of upgrading.
+
+Link -https://github.com/ItJustWorksTM/smce-gd/releases
