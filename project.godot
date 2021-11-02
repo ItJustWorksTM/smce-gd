@@ -230,11 +230,6 @@ _global_script_classes=[ {
 "path": "res://src/scenes/SketchStatusControl/SketchStatusControl.gd"
 }, {
 "base": "",
-"class": "TClass",
-"language": "NativeScript",
-"path": "res://src/TClass.gdns"
-}, {
-"base": "",
 "class": "Toolchain",
 "language": "NativeScript",
 "path": "res://src/types/bind/sketch/Toolchain.gdns"
@@ -339,7 +334,6 @@ _global_script_class_icons={
 "SketchLoader": "",
 "SketchPane": "",
 "SketchStatusControl": "",
-"TClass": "",
 "Toolchain": "",
 "ToolchainLogReader": "",
 "UartChannel": "",

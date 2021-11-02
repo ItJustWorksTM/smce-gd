@@ -15,6 +15,7 @@
 #  limitations under the License.
 #
 
+
 class_name SketchPane
 extends PanelContainer
 
@@ -26,13 +27,15 @@ onready var sketch_status_control: SketchStatusControl = $VBoxContainer/SketchSt
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    # signal reset_vehicle_position()
-    # signal follow_vehicle()
+    signal reset_vehicle_position()
+    signal follow_vehicle()
 
-    # signal start_board()
-    # signal stop_board()
-    # signal suspend_board()
-    # signal resume_board()
+    signal start_board()
+    signal stop_board()
+    signal suspend_board()
+    signal resume_board()
+
+    signal compile_sketch()
 
     func _init(n).(n):
         node.sketch_status_control.init_model()
@@ -43,3 +46,5 @@ var model: ViewModel
 
 func init_model():
     model = ViewModel.new(self)
+
+# warning-ignore-all:unused_signal

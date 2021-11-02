@@ -19,32 +19,45 @@ class_name ProfileSelect
 extends Control
 
 const SCENE_FILE := "res://src/scenes/ProfileSelect/ProfileSelect.tscn"
-static func instance():    return load(SCENE_FILE).instance()
+
+var model: ViewModel
+
+onready var profile_buttons_container: Control = $VBox/HScroll/Margin/HBox
 
 class ViewModel:
-    extends ViewModelBase
+    extends ViewModelExt.WithNode
 
     signal profile_selected(profile)
 
     func profiles(profiles: Array): return profiles
 
-    func _init(profiles: Observable):
-        set_depend("profiles", [profiles])
+    func _init(n, profiles: Observable).(n):
+        bind() \
+            .profiles.dep([profiles]) \
+        
+        bind() \
+            .profiles.to(self, "_list_profiles") \
 
-    func select_new_profile(): emit_signal("profile_selected", Profile.new("Profile"))
+    func select_new_profile():
+        emit_signal("profile_selected", Profile.new("Profile"))
 
-    func select_profile(index: int): emit_signal("profile_selected", get_prop("profiles")[index])
+    func select_profile(index: int):
+        emit_signal("profile_selected", self.profiles[index])
 
-
-onready var profile_buttons_container: Control = $VBox/HScroll/Margin/HBox
-
-var model: ViewModel
-
+    var labels := []
+    func _list_profiles(profiles: Array):
+        for node in labels:
+            node.queue_free()
+        labels.clear()
+        for profile in profiles:
+            var label: ProfileSelectButton = ProfileSelectButton.instance()
+            node.profile_buttons_container.add_child(label)
+            label.init_model(profile)
+            label.rect_min_size.x = 296
+            labels.append(label)
 
 func init_model(profiles): # Array<Profile>
-    model = ViewModel.new(Observable.from(profiles))
-    model.bind_func("profiles", self, "_list_profiles")
-
+    model = ViewModel.new(self, Observable.from(profiles))
 
 func _ready():
     # Debug
@@ -57,16 +70,4 @@ func _ready():
             profiles.value.append(Profile.new("Profile3"))
             profiles.emit_change()
 
-
-var labels := []
-func _list_profiles(profiles: Array):
-    for node in labels:
-        node.queue_free()
-    labels.clear()
-    for profile in profiles:
-        var label: ProfileSelectButton = ProfileSelectButton.instance()
-        profile_buttons_container.add_child(label)
-        label.init_model(profile)
-        label.rect_min_size.x = 296
-        labels.append(label)
-
+static func instance(): return load(SCENE_FILE).instance()

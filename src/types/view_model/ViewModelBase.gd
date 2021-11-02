@@ -79,19 +79,22 @@ func _apply(val, target, method, binds):
     binds.push_front(val)
     target.callv(method, binds)
 
+
+# TODO: technically, yield() provides a way to get all args as an array
 func _fwd_sig_jump0(sig): emit_signal(sig)
 func _fwd_sig_jump1(arg0, sig): emit_signal(sig, arg0)
 func _fwd_sig_jump2(arg0, arg1, sig): emit_signal(sig, arg0, arg1)
 func _fwd_sig_jump3(arg0, arg1, arg2, sig): emit_signal(sig, arg0, arg1, arg2)
 
-func fwd_sig(obj: Object, sig: String):
+func fwd_sig(obj: Object, sig: String, binds: Array = []):
     for r in obj.get_signal_list():
         if r.name == sig:
-            add_user_signal(sig, r.args)
-            var __ = obj.connect(sig, self, "_fwd_sig_jump%d" % r.args.size(), [sig])
+            if !has_signal(sig):
+                add_user_signal(sig, r.args) # TODO: take binds into account
+            var __ = obj.connect(sig, self, "_fwd_sig_jump%d" % (r.args.size() + binds.size()), binds + [sig])
             print("ADDED SIGNAL FORWARD FOR ", sig)
             return
-    push_error("Failed to forward signal!")
+    push_error("Failed to forward signal `%s`!" % sig)
             
 
 

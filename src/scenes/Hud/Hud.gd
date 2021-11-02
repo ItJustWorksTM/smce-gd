@@ -26,6 +26,9 @@ onready var animation_player := $AnimationPlayer
 class ViewModel:
     extends ViewModelExt.WithNode
 
+    signal create_sketch(path)
+    signal compile_sketch(sk)
+
     var _profile: Observable
     var _active_sketch: Observable
 
@@ -49,9 +52,8 @@ class ViewModel:
             .sketches.to(self, "_list_sketches") \
         
         conn(node.vertical_sketch_list.model, "select_sketch", "select_sketch")
-        conn(node.vertical_sketch_list.model, "create_new", "create_new_sketch")
         conn(node.vertical_sketch_list.model, "context_pressed", "toggle_profile_config")
-
+        conn(node.vertical_sketch_list.model, "create_new", "create_new_sketch")
 
     func set_active(sketch):
         pass
@@ -81,12 +83,12 @@ class ViewModel:
 
     func create_new_sketch():
         print("create_new_sketch")
+        emit_signal("create_sketch")
         _profile.value.sketches.append(SketchDescriptor.new())
         _profile.emit_change()
 
     func toggle_profile_config():
         node.animation_player.play("slide_profile_pane")
-
 
     func _list_sketches(sketches: Array):
         var ali = node.sketch_status_control_container
@@ -96,8 +98,6 @@ class ViewModel:
             print(_i)
 
             var inst: SketchPane = SketchPane.instance()
-
-
 
             inst.set_meta("sketch", sketches[_i])
 
@@ -109,10 +109,7 @@ class ViewModel:
 
             inst.sketch_status_control.sketch_name_label.text = str(_i)
 
-            conn(inst.model, "compile_sketch", "_wacky")
-    
-    func _wacky(uh):
-        print(uh)
+            fwd_sig(inst.model, "compile_sketch", [sketches[_i]])
 
 
 var model: ViewModel
@@ -122,4 +119,5 @@ func _ready():
 
     model = ViewModel.new(self, profile)
 
-
+    while true:
+        print(yield(model, "compile_sketch"))
