@@ -4,12 +4,15 @@ extends Control
 onready var close_btn: Button = $Close
 onready var dropdown_btn: MenuButton = $DropDown
 onready var fileDialog: FileDialog = $FileDialog
-onready var textEditor: TextEdit = $TextEditor
+onready var textEditor: TextEdit = $HBoxContainer/VBoxContainer/TextEditor
+onready var tabs: Tabs = $HBoxContainer/VBoxContainer/Tabs
+onready var file_tree: Tree = $HBoxContainer/FileTree
+onready var collapse_btn: Button = $HBoxContainer/CollapseBtn
 
 var src_file = null
 var currentFileInfo = null
 var fileInfos = {}				#Keeps track of all fileInfo objects
-
+var tree_filled = false
 #SAVES CURRENT STATE OF filedialog operation
 #Can have the following values:
 # OPEN  NEWFILE  SAVE NEWPROJ
@@ -77,7 +80,6 @@ func _on_close() -> void:
 	
 # Function that displays the hidden editor	
 func enableEditor() -> void:
-	print(src_file)
 	set_visible(true)
 
 # Function to handle dropdown menu button options
@@ -126,24 +128,38 @@ func _on_FileDialog_file_selected(path):
 		_load_content(path)
 		
 	elif(fileDialogOperation == "NEWFILE" ):
-		get_node("Tabs")._create_new_tab_with_content("",path)
+		tabs._create_new_tab_with_content("",path)
 		_save_file()
 		
 	elif(fileDialogOperation == "NEWPROJ"):
 		var template = fileLoader.loadFile("res://NewArduinoTemplate.txt")
 		var finalPath = path+"/"+path.get_file()+".ino"
 		Directory.new().make_dir_recursive (path)
-		get_node("Tabs")._create_new_tab_with_content(template,finalPath)
+		tabs._create_new_tab_with_content(template,finalPath)
 		_save_file()
-		
-		
+
+# load file and create new tab and fill tree if it is not filled
 func _load_content(path):
 	var content = fileLoader.loadFile(path)
 	#Tab management
-	get_node("Tabs")._create_new_tab_with_content(content,path)
+	tabs._create_new_tab_with_content(content,path)
+	_fill_tree()
+
+# Update the file tree with file structure
+func _fill_tree():
+	if(!tree_filled):
+		file_tree._fill_tree(src_file.get_base_dir())
+		tree_filled = true
 
 # Function save a file
 func _save_file():
-	#save text into texteditor
-	fileLoader.saveFile(currentFileInfo._path,textEditor.text)
-	
+	if currentFileInfo != null:
+		fileLoader.saveFile(currentFileInfo._path,textEditor.text)
+
+func _on_Collapse_btn_pressed():
+	if(file_tree.is_visible_in_tree()):
+		file_tree.visible = false
+		collapse_btn.text = ">"
+	else:
+		file_tree.visible = true
+		collapse_btn.text = "<"

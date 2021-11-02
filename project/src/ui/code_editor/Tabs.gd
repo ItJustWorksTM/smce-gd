@@ -1,7 +1,7 @@
 extends Tabs
 
 #onready var mainControl: Node = get_tree().get_root().get_node("Control")
-onready var mainControl: Node = get_parent_control()
+onready var mainControl: Node = get_parent().get_parent().get_parent()
 
 class fileinfo:
 	var _index: int
@@ -64,6 +64,7 @@ func _on_Tabs_tab_changed(tab):
 func _on_Tabs_tab_clicked(tab):
 	#Open file menu if pressed +
 	if(tabs.get_tab_title(tabs.current_tab) == "+"):
+		mainControl.fileDialogOperation = "OPEN"
 		mainControl.fileDialog.popup()
 		
 		return
