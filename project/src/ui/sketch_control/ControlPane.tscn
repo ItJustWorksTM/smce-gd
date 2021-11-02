@@ -145,10 +145,23 @@ margin_right = 1272.0
 margin_bottom = 32.0
 alignment = 2
 
+[node name="EditButton" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
+margin_left = 1120.0
+margin_right = 1154.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( -338.875, 73 )
+mouse_default_cursor_shape = 2
+theme = ExtResource( 4 )
+text = " Edit "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Compile" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
 margin_left = 1158.0
 margin_right = 1229.0
 margin_bottom = 32.0
+rect_pivot_offset = Vector2( -338.875, 73 )
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
 text = "  Compile  "

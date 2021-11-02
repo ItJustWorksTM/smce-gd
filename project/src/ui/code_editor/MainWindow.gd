@@ -6,6 +6,7 @@ onready var dropdown_btn: MenuButton = $DropDown
 onready var fileDialog: FileDialog = $FileDialog
 onready var textEditor: TextEdit = $TextEditor
 
+var src_file = null
 var currentFileInfo = null
 var fileInfos = {}				#Keeps track of all fileInfo objects
 
@@ -13,8 +14,6 @@ var fileInfos = {}				#Keeps track of all fileInfo objects
 #Can have the following values:
 # OPEN  NEWFILE  SAVE NEWPROJ
 onready var fileDialogOperation: String = ""
-
-
 
 onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 # Called when the node enters the scene tree for the first time.
@@ -34,7 +33,12 @@ func _init_dropdown():
 
 #Initializes the texteditor settings
 func _init_TextEditor():
-	textEditor.text = "Please open a file to edit"
+	#Standard text
+	if(src_file == null):
+		textEditor.text = "Please open a file to edit"
+	else:
+		_load_content(src_file)
+	
 	#Enable syntax highlightning
 	textEditor.syntax_highlighting = true
 	
@@ -73,6 +77,7 @@ func _on_close() -> void:
 	
 # Function that displays the hidden editor	
 func enableEditor() -> void:
+	print(src_file)
 	set_visible(true)
 
 # Function to handle dropdown menu button options
@@ -113,14 +118,12 @@ func _new_proj():
 	
 # Function to collect the path of a selected file and send it to the editor
 func _on_FileDialog_file_selected(path):
-
+	if(src_file == null):
+		src_file = path
+		
 	if(fileDialogOperation == "OPEN"):
-		print(path)
 		fileDialogOperation = ""
-		#Load text from file
-		var content = fileLoader.loadFile(path)
-		#Tab management
-		get_node("Tabs")._create_new_tab_with_content(content,path)
+		_load_content(path)
 		
 	elif(fileDialogOperation == "NEWFILE" ):
 		get_node("Tabs")._create_new_tab_with_content("",path)
@@ -134,7 +137,10 @@ func _on_FileDialog_file_selected(path):
 		_save_file()
 		
 		
-	
+func _load_content(path):
+	var content = fileLoader.loadFile(path)
+	#Tab management
+	get_node("Tabs")._create_new_tab_with_content(content,path)
 
 # Function save a file
 func _save_file():

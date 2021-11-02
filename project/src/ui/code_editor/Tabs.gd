@@ -1,6 +1,7 @@
 extends Tabs
 
-onready var mainControl: Node = get_tree().get_root().get_node("Control")
+#onready var mainControl: Node = get_tree().get_root().get_node("Control")
+onready var mainControl: Node = get_parent_control()
 
 class fileinfo:
 	var _index: int
