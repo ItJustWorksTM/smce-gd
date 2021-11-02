@@ -79,6 +79,3 @@ text = "Copy to clipboard"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
-use_threads = true
