@@ -304,7 +304,7 @@ func _show_preview_log() -> void:
 	var window1 = preload("res://src/ui/sketch_control/preview.tscn").instance()
 	get_tree().root.add_child(window1)
 	preview_log_text_field = TextEdit.new()
-	path1 =sketch_path.get_basename()+".ino"
+	path1 =sketch_path
 	print(path1)
 	var f =File.new()
 	##var f1= File.new()
