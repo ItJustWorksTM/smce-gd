@@ -24,7 +24,6 @@ func _gui_input(event: InputEvent):
 
 func _ready() -> void:
 	close_btn.connect("pressed", self, "_on_close")
-	#save_btn.connect("pressed", self, "_on_save")
 	file_btn.get_popup().add_item("Save")
 	file_btn.get_popup().add_item("Open")
 	file_btn.get_popup().add_item("Close")
@@ -44,7 +43,6 @@ func _on_save() -> void:
 func _on_open() -> void:
 	var tween: Tween = TempTween.new()
 	add_child(tween)
-	#openpicker.popup()
 	openpicker_window.visible = true
 	tween.interpolate_property(openpicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
 	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
