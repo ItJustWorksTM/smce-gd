@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/ui/code_editor/MainWindow.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/code_editor/Tabs.gd" type="Script" id=2]
+[ext_resource path="res://src/ui/code_editor/FileTree.gd" type="Script" id=3]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -37,9 +38,9 @@ __meta__ = {
 
 [node name="DropDown" type="MenuButton" parent="."]
 margin_left = 5.0
-margin_top = 5.0
+margin_top = 3.81079
 margin_right = 100.0
-margin_bottom = 31.0
+margin_bottom = 29.8108
 text = "File"
 flat = false
 __meta__ = {
@@ -57,19 +58,51 @@ window_title = "Open a File"
 resizable = true
 mode = 0
 access = 2
-current_dir = "/SCHOOL/MPSOF-1/Year2/LP1/SoftEv/GITKRAKEN/group-10-smce-gd/project"
-current_path = "/SCHOOL/MPSOF-1/Year2/LP1/SoftEv/GITKRAKEN/group-10-smce-gd/project/"
+current_dir = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project"
+current_path = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tabs" type="Tabs" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 6.0
-margin_top = 38.0
-margin_right = -6.0
-margin_bottom = -648.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileTree" type="Tree" parent="HBoxContainer"]
+margin_right = 248.0
+margin_bottom = 680.0
+size_flags_horizontal = 3
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollapseBtn" type="Button" parent="HBoxContainer"]
+margin_left = 252.0
+margin_right = 272.0
+margin_bottom = 680.0
+text = "<"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 276.0
+margin_right = 1270.0
+margin_bottom = 680.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="Tabs" type="Tabs" parent="HBoxContainer/VBoxContainer"]
+margin_right = 994.0
+margin_bottom = 30.0
 tab_align = 0
 tab_close_display_policy = 1
 scrolling_enabled = false
@@ -78,18 +111,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextEditor" type="TextEdit" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 6.0
-margin_top = 77.0
-margin_right = -5.0
-margin_bottom = -7.0
+[node name="TextEditor" type="TextEdit" parent="HBoxContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 994.0
+margin_bottom = 680.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
-[connection signal="tab_changed" from="Tabs" to="Tabs" method="_on_Tabs_tab_changed"]
-[connection signal="tab_clicked" from="Tabs" to="Tabs" method="_on_Tabs_tab_clicked"]
-[connection signal="tab_close" from="Tabs" to="Tabs" method="_on_Tabs_tab_close"]
+[connection signal="item_activated" from="HBoxContainer/FileTree" to="HBoxContainer/FileTree" method="_on_FileTree_item_activated"]
+[connection signal="pressed" from="HBoxContainer/CollapseBtn" to="." method="_on_Collapse_btn_pressed"]
+[connection signal="tab_changed" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_changed"]
+[connection signal="tab_clicked" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_clicked"]
+[connection signal="tab_close" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_close"]
