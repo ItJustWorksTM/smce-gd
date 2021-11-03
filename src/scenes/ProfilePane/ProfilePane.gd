@@ -134,4 +134,10 @@ func _ready():
             Observable.new(["nice", "twice"])
         )
 
+        while true:
+            yield(model, "save_profile")
+
+            profile.value = dirty.value.clone()
+            
+
 static func instance(): return load(SCENE_FILE).instance()
