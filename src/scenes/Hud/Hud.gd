@@ -29,6 +29,9 @@ class ViewModel:
     signal create_sketch(path)
     signal compile_sketch(sk)
 
+    # warning, bad terminology
+    signal remove_sketch(sk)
+
     var _profile: Observable
     var _active_sketch: Observable
 
@@ -41,6 +44,7 @@ class ViewModel:
         _active_sketch = Observable.new(null)
 
         node.vertical_sketch_list.init_model(profile, _active_sketch)
+        
         node.profile_pane.init_model(profile, Observable.new(["no", "no again"]))
 
         bind() \
@@ -93,6 +97,9 @@ class ViewModel:
     func _list_sketches(sketches: Array):
         var ali = node.sketch_status_control_container
 
+        if _active_sketch.value != null && not _active_sketch.value in sketches:
+            select_sketch(null)
+
         for child in ali.get_children(): child.queue_free()
         for _i in range(sketches.size()):
             print(_i)
@@ -111,13 +118,20 @@ class ViewModel:
 
             fwd_sig(inst.model, "compile_sketch", [sketches[_i]])
 
+            conn(inst.model, "remove_self", "emit_signal", ["remove_sketch", sketches[_i]])
+
+
 
 var model: ViewModel
 
 func _ready():
-    var profile := Observable.new(Profile.new("Holy Land", [SketchDescriptor.new()]))
+    var profile := Observable.new(Profile.new("Holy Land", []))
 
     model = ViewModel.new(self, profile)
 
     while true:
-        print(yield(model, "compile_sketch"))
+        var del = yield(model, "remove_sketch")
+
+        profile.value.sketches.erase(del)
+
+        profile.emit_change()

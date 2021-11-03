@@ -37,24 +37,47 @@ class ViewModel:
         
         bind() \
             .profiles.to(self, "_list_profiles") \
-
+        
     func select_new_profile():
         emit_signal("profile_selected", Profile.new("Profile"))
 
-    func select_profile(index: int):
-        emit_signal("profile_selected", self.profiles[index])
+    func select_profile(profile):
+        emit_signal("profile_selected", profile)
 
-    var labels := []
+    # TODO: reuse?
     func _list_profiles(profiles: Array):
-        for node in labels:
-            node.queue_free()
-        labels.clear()
-        for profile in profiles:
-            var label: ProfileSelectButton = ProfileSelectButton.instance()
-            node.profile_buttons_container.add_child(label)
-            label.init_model(profile)
-            label.rect_min_size.x = 296
-            labels.append(label)
+        var alias = node.profile_buttons_container
+
+        var existing = alias.get_children()
+        
+        for node in existing: alias.remove_child(node)
+        
+        var buf = []
+        buf.resize(profiles.size())
+
+        for i in range(buf.size()):
+            for exist in existing:
+                if exist.get_meta("profile") == profiles[i]:
+                    buf[i] = exist
+            
+            if buf[i] == null:
+                var label: ProfileSelectButton = ProfileSelectButton.instance()
+                label.set_meta("profile", profiles[i])
+                alias.add_child(label)
+                
+                label.init_model(profiles[i])
+                label.rect_min_size.x = 296
+                conn(label.model, "pressed", "select_profile", [profiles[i]])
+                buf[i] = label
+
+                print("created new!")
+            else:
+                existing.erase(buf[i])
+                alias.add_child(buf[i])
+            
+        
+        for node in existing: node.queue_free()
+
 
 func init_model(profiles): # Array<Profile>
     model = ViewModel.new(self, Observable.from(profiles))
@@ -66,8 +89,9 @@ func _ready():
         init_model(profiles)
 
         while true:
-            yield(get_tree().create_timer(3.0), "timeout")
             profiles.value.append(Profile.new("Profile3"))
             profiles.emit_change()
+
+            print(Reflect.inst2dict2(yield(model, "profile_selected")))
 
 static func instance(): return load(SCENE_FILE).instance()

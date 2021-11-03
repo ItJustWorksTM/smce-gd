@@ -29,7 +29,7 @@ onready var log_button: Button = $HBox/LogButton
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal compile_sketch(sk)
+    signal compile_sketch()
 
     func sketch_name(): return "Nothing.ino"
     func sketch_status(): "Compiled"
@@ -44,11 +44,8 @@ class ViewModel:
             .sketch_status.to(node.sketch_status_label, "text") \
             .sketch_name.to(node.sketch_name_label, "text")
 
-        conn(node.compile_button, "pressed", "compile_sketch")
+        conn(node.compile_button, "pressed", "emit_signal", ["compile_sketch"])
         conn(node.log_button, "pressed", "open_log")
-
-
-    func compile_sketch(): emit_signal("compile_sketch", "yes I know this is not right but ...")
 
     func open_log():
         # TBH this should make its own floating window ??
@@ -61,3 +58,5 @@ func init_model():
     model = ViewModel.new(self)
 
 static func instance(): return load(SCENE_FILE).instance()
+
+# warning-ignore-all:unused_signal

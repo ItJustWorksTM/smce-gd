@@ -24,6 +24,7 @@ var model: ViewModel
 
 onready var profile_name_label: Label = $MarginContainer/VBoxContainer/ProfileNameLabel
 onready var profile_info_label: RichTextLabel = $MarginContainer/VBoxContainer/ProfileInfoLabel
+onready var button: Button = $Button
 
 class ViewModel:
     extends ViewModelExt.WithNode
@@ -42,9 +43,8 @@ class ViewModel:
         bind() \
             .profile_name.to(node.profile_name_label, "text") \
             .profile_info.to(node.profile_info_label, "bbcode_text") \
-
-
-    func pressed(): emit_signal("pressed")
+        
+        fwd_sig(node.button, "pressed")
 
 func init_model(profile): # <Profile>
     model = ViewModel.new(self, Observable.from(profile))

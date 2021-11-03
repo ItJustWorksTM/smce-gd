@@ -31,7 +31,6 @@ class ViewModel:
     signal create_new()
     signal context_pressed()
 
-
     var _profile: Observable
     var _active_sketch: Observable
 
@@ -55,10 +54,10 @@ class ViewModel:
         conn(node.new_sketch_button, "pressed", "create_new")
         conn(node.context_button, "pressed", "_emit_context")
 
-        yield(node.get_tree().create_timer(10), "timeout")
-        print("removing 3")
-        _profile.value.sketches.remove(3)
-        _profile.emit_change()
+        # yield(node.get_tree().create_timer(10), "timeout")
+        # print("removing 3")
+        # _profile.value.sketches.remove(3)
+        # _profile.emit_change()
 
     func select_sketch(sketch): emit_signal("select_sketch", sketch)
     func create_new(): emit_signal("create_new")

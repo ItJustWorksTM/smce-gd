@@ -91,8 +91,9 @@ func fwd_sig(obj: Object, sig: String, binds: Array = []):
         if r.name == sig:
             if !has_signal(sig):
                 add_user_signal(sig, r.args) # TODO: take binds into account
-            var __ = obj.connect(sig, self, "_fwd_sig_jump%d" % (r.args.size() + binds.size()), binds + [sig])
-            print("ADDED SIGNAL FORWARD FOR ", sig)
+            var braindead = binds + [sig]
+            var __ = obj.connect(sig, self, "_fwd_sig_jump%d" % (r.args.size() + binds.size()), braindead)
+            # print("ADDED SIGNAL FORWARD FOR ", sig, binds + [sig], (braindead.size()), r.args.size(), binds.size())
             return
     push_error("Failed to forward signal `%s`!" % sig)
             

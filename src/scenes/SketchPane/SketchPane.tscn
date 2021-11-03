@@ -32,28 +32,35 @@ margin_right = 290.0
 [node name="BoardControl" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 46.0
 margin_right = 290.0
-margin_bottom = 84.0
+margin_bottom = 90.0
 
 [node name="Margin" type="MarginContainer" parent="VBoxContainer/BoardControl"]
 margin_right = 290.0
-margin_bottom = 14.0
+margin_bottom = 20.0
 custom_constants/margin_right = 4
 custom_constants/margin_left = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/BoardControl/Margin"]
 margin_left = 4.0
 margin_right = 286.0
-margin_bottom = 14.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Board"
 align = 1
 valign = 1
 
+[node name="CloseButton" type="Button" parent="VBoxContainer/BoardControl/Margin"]
+margin_left = 266.0
+margin_right = 286.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+text = "x"
+
 [node name="Margin2" type="MarginContainer" parent="VBoxContainer/BoardControl"]
-margin_top = 18.0
+margin_top = 24.0
 margin_right = 290.0
-margin_bottom = 38.0
+margin_bottom = 44.0
 custom_constants/margin_right = 4
 custom_constants/margin_left = 4
 
@@ -62,13 +69,13 @@ margin_left = 4.0
 margin_right = 286.0
 margin_bottom = 20.0
 
-[node name="Button" type="Button" parent="VBoxContainer/BoardControl/Margin2/Hbox"]
+[node name="BoardStartButton" type="Button" parent="VBoxContainer/BoardControl/Margin2/Hbox"]
 margin_right = 139.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Start"
 
-[node name="Button2" type="Button" parent="VBoxContainer/BoardControl/Margin2/Hbox"]
+[node name="BoardSuspendButton" type="Button" parent="VBoxContainer/BoardControl/Margin2/Hbox"]
 margin_left = 143.0
 margin_right = 282.0
 margin_bottom = 20.0
@@ -76,9 +83,9 @@ size_flags_horizontal = 3
 text = "Suspend"
 
 [node name="VehicleControl" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 88.0
+margin_top = 94.0
 margin_right = 290.0
-margin_bottom = 126.0
+margin_bottom = 132.0
 
 [node name="Margin" type="MarginContainer" parent="VBoxContainer/VehicleControl"]
 margin_right = 290.0
@@ -122,7 +129,7 @@ size_flags_horizontal = 3
 text = "Follow"
 
 [node name="AttachmentDisplay" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 130.0
+margin_top = 136.0
 margin_right = 290.0
 margin_bottom = 586.0
 size_flags_horizontal = 3
@@ -142,14 +149,14 @@ valign = 1
 [node name="Scroll" type="ScrollContainer" parent="VBoxContainer/AttachmentDisplay"]
 margin_top = 18.0
 margin_right = 290.0
-margin_bottom = 408.0
+margin_bottom = 402.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBox" type="VBoxContainer" parent="VBoxContainer/AttachmentDisplay/Scroll"]
 margin_right = 290.0
-margin_bottom = 390.0
+margin_bottom = 384.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -165,7 +172,7 @@ node_path = NodePath("../Label")
 [node name="Label" type="Label" parent="VBoxContainer/AttachmentDisplay/Scroll/VBox"]
 visible = false
 margin_top = 24.0
-margin_right = 317.0
+margin_right = 290.0
 margin_bottom = 38.0
 text = "hello world"
 
@@ -187,9 +194,9 @@ margin_bottom = 62.0
 text = "hello world"
 
 [node name="SketchLogButton" type="Button" parent="VBoxContainer/AttachmentDisplay"]
-margin_top = 412.0
+margin_top = 406.0
 margin_right = 290.0
-margin_bottom = 432.0
+margin_bottom = 426.0
 toggle_mode = true
 text = "Log"
 align = 0
@@ -197,14 +204,28 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-node_path = NodePath("../../../../VBoxContainer/AttachmentDisplay/VisibilityButton2/Label2")
+node_path = NodePath("../Label")
 
-[node name="SerialUartButton" type="Button" parent="VBoxContainer/AttachmentDisplay"]
-margin_top = 436.0
+[node name="Label" type="Label" parent="VBoxContainer/AttachmentDisplay"]
+visible = false
+margin_top = 442.0
 margin_right = 290.0
 margin_bottom = 456.0
+text = "log log log"
+
+[node name="SerialUartButton" type="Button" parent="VBoxContainer/AttachmentDisplay"]
+margin_top = 430.0
+margin_right = 290.0
+margin_bottom = 450.0
 toggle_mode = true
 text = "Serial"
 align = 0
 script = ExtResource( 2 )
-node_path = NodePath("../../../../VBoxContainer/AttachmentDisplay/Label2")
+node_path = NodePath("../Label2")
+
+[node name="Label2" type="Label" parent="VBoxContainer/AttachmentDisplay"]
+visible = false
+margin_top = 442.0
+margin_right = 290.0
+margin_bottom = 456.0
+text = "Serial epic"
