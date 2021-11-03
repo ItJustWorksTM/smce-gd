@@ -44,7 +44,7 @@ func _on_save() -> void:
 func _on_open() -> void:
 	var tween: Tween = TempTween.new()
 	add_child(tween)
-	#openpicker.popup()
+	openpicker._wrapped.popup()
 	openpicker_window.visible = true
 	tween.interpolate_property(openpicker, "modulate:a", 0, 1, 0.2, Tween.TRANS_CUBIC)
 	tween.interpolate_property(select_window, "modulate:a", 1, 0, 0.2, Tween.TRANS_CUBIC)
@@ -96,11 +96,9 @@ func _on_TextEdit_ready():
 	pass # Replace with function body.
 var preview_log_text_field = null	
 func _on_OpenPicker_file_picked(path):
-	var f =File.new()
-	f.open(path,1)
-	texteditor.text= f.get_as_text()
+	var f1 =File.new()
+	f1.open(path,1)
+	texteditor.text =f1.get_as_text()
 	texteditor.visible = true
 	openpicker.visible=false
 	window.visible=true
-#	
-#
