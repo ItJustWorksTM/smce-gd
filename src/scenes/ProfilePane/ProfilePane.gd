@@ -61,9 +61,9 @@ class ViewModel:
 
     func delete(n): print(n)
 
-    func _init(n, profile: Observable, worlds: Observable).(n):
+    func _init(n, profile: Observable, dirty_profile, worlds: Observable).(n):
         _profile = profile
-        _dirty_profile = Observable.new(profile.value.clone())
+        _dirty_profile = dirty_profile
         profile.bind_change(self, "_set_dirty")
 
         bind() \
@@ -119,14 +119,18 @@ class ViewModel:
         set_world(node.world_list.get_item_metadata(index))
 
 
-func init_model(profile, worlds): # <Profile>, <Array<String>>
-    model = ViewModel.new(self, Observable.from(profile), Observable.from(worlds))
+func init_model(profile, dirty_profile, worlds): # <Profile>, <Array<String>>
+
+    model = ViewModel.new(self, Observable.from(profile), Observable.from(dirty_profile), Observable.from(worlds))
 
 func _ready():
     # Debug
     if not get_parent() is Control:
+        var profile = Observable.new(Profile.new("A", [1,2,3,4], "C"))
+        var dirty = Observable.new(profile.value.clone())
         init_model(
-            Observable.new(Profile.new("A", [1,2,3,4], "C")),
+            profile,
+            dirty,
             Observable.new(["nice", "twice"])
         )
 

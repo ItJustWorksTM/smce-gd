@@ -44,38 +44,33 @@ class ViewModel:
     func select_profile(profile):
         emit_signal("profile_selected", profile)
 
-    # TODO: reuse?
+    # TODO: generalize node reuse
     func _list_profiles(profiles: Array):
         var alias = node.profile_buttons_container
 
         var existing = alias.get_children()
-        
         for node in existing: alias.remove_child(node)
         
-        var buf = []
-        buf.resize(profiles.size())
-
-        for i in range(buf.size()):
+        for prof in profiles:
+            var ex = null
             for exist in existing:
-                if exist.get_meta("profile") == profiles[i]:
-                    buf[i] = exist
+                if exist.get_meta("profile") == prof:
+                    ex = exist
+                    break
             
-            if buf[i] == null:
+            if ex == null:
                 var label: ProfileSelectButton = ProfileSelectButton.instance()
-                label.set_meta("profile", profiles[i])
+                label.set_meta("profile", prof)
                 alias.add_child(label)
                 
-                label.init_model(profiles[i])
+                label.init_model(prof)
                 label.rect_min_size.x = 296
-                conn(label.model, "pressed", "select_profile", [profiles[i]])
-                buf[i] = label
 
-                print("created new!")
+                conn(label.model, "pressed", "select_profile", [prof])
             else:
-                existing.erase(buf[i])
-                alias.add_child(buf[i])
-            
-        
+                existing.erase(ex)
+                alias.add_child(ex)
+
         for node in existing: node.queue_free()
 
 
@@ -89,7 +84,8 @@ func _ready():
         init_model(profiles)
 
         while true:
-            profiles.value.append(Profile.new("Profile3"))
+            # debug: whenever we receive a selection event we just create a new profile
+            profiles.value.append(Profile.new("Profile%d" % randi()))
             profiles.emit_change()
 
             print(Reflect.inst2dict2(yield(model, "profile_selected")))
