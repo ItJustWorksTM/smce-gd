@@ -80,10 +80,6 @@ class ViewModel:
             .save_disabled.to(node.save_btn, "disabled") \
             .profile_name.to(node.profile_name_input, "text")
 
-        var a = Observable2.new(self, "save_disabled")
-        a.connect("value_changed", self, "delete")
-        a.reference()
-
         conn(node.save_btn, "pressed", "save_profile")
         conn(node.reload_btn, "pressed", "reload_profile")
         conn(node.switch_btn, "pressed", "switch_profile")
@@ -138,6 +134,6 @@ func _ready():
             yield(model, "save_profile")
 
             profile.value = dirty.value.clone()
-            
+
 
 static func instance(): return load(SCENE_FILE).instance()

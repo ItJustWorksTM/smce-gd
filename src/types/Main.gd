@@ -28,22 +28,21 @@ var sketch_loader: SketchLoader
 var entities = []
 
 
+enum BoardState { READY, RUNNING, SUSPENDED, UNAVAILABLE }
+enum BuildState { PENDING, SUCCEEDED, FAILED }
+
 class UiState:
     # sketch state
-    var _is_compiled: bool = false
     var _source: String = ""
 
     # compile state
-    var _build_pending: bool = false
-    var _build_success: bool = false
+    var _build_state = BuildState.SUCCEEDED
     var _build_error: String = ""
     var _build_log: String = ""
 
     # board state:
-    var _board_available: bool = false
-    var _board_running: bool = false
+    var _board_state = BoardState.UNAVAILABLE
     var _board_error: String = ""
-
     var _board_log: String = ""
 
     # attachment state

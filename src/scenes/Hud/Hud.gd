@@ -39,13 +39,13 @@ class ViewModel:
 
     func sketches(profile: Profile): return profile.sketches
 
-    func _init(n, profile).(n):
+    func _init(n, profile, dirty_profile).(n):
         _profile = profile
         _active_sketch = Observable.new(null)
 
         node.vertical_sketch_list.init_model(profile, _active_sketch)
         
-        node.profile_pane.init_model(profile, Observable.new(["no", "no again"]))
+        node.profile_pane.init_model(profile, dirty_profile, Observable.new(["no", "no again"]))
 
         bind() \
             .sketches.dep([profile]) \
@@ -126,8 +126,10 @@ var model: ViewModel
 
 func _ready():
     var profile := Observable.new(Profile.new("Holy Land", []))
+    var dirty_profile := Observable.new(profile.value.clone())
 
-    model = ViewModel.new(self, profile)
+
+    model = ViewModel.new(self, profile, dirty_profile)
 
     while true:
         var del = yield(model, "remove_sketch")
