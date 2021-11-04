@@ -60,8 +60,7 @@ func _ready():
 
 
 func _get_wiki_from_storage(path) -> Array:
-	var pages = []	
-	var page_home : WikiPage
+	var pages = []
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		dir.list_dir_begin()
