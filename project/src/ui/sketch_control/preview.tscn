@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/ui/sketch_control/preview.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/file_dialog/FilePicker.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/ui/themes/regular_button/disabled.tres" type="StyleBox" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
@@ -20,10 +21,10 @@ shadow_color = Color( 0, 0, 0, 0.282353 )
 [node name="PreviewPopout" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 0.51828
-margin_top = -4.26358
-margin_right = 0.518311
-margin_bottom = -4.26367
+margin_left = 2.8967
+margin_top = -5.45279
+margin_right = 2.89673
+margin_bottom = -5.45288
 rect_pivot_offset = Vector2( 0, 360 )
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -57,51 +58,57 @@ margin_bottom = 591.0
 
 [node name="PopupPanel" type="Popup" parent="Panel/MarginContainer/Panel"]
 visible = true
+anchor_left = 0.0136719
+anchor_top = 0.072758
+anchor_right = 0.0136719
+anchor_bottom = 0.072758
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1017.0
 margin_bottom = 584.0
 
 [node name="VBoxContainer" type="PanelContainer" parent="Panel/MarginContainer/Panel/PopupPanel"]
-margin_left = 42.0
-margin_top = 54.0
-margin_right = 1020.0
-margin_bottom = 586.0
+margin_left = 120.0
+margin_top = 25.0
+margin_right = 1131.0
+margin_bottom = 580.0
+custom_styles/panel = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Control" type="Control" parent="Panel/MarginContainer/Panel/PopupPanel/VBoxContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 971.0
-margin_bottom = 525.0
+margin_right = 1011.0
+margin_bottom = 555.0
 
 [node name="File" type="MenuButton" parent="Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control"]
-margin_left = 116.0
-margin_top = 20.0
-margin_right = 232.0
-margin_bottom = 46.0
+margin_left = 1.0
+margin_top = -2.0
+margin_right = 37.0
+margin_bottom = 24.0
 text = "File"
+clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TextEdit" type="TextEdit" parent="Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control"]
-margin_left = 136.0
-margin_top = 66.0
-margin_right = 892.0
-margin_bottom = 482.0
+margin_left = 14.0
+margin_top = 30.0
+margin_right = 1003.0
+margin_bottom = 534.0
+show_line_numbers = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CloseButton" type="Button" parent="Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control"]
-margin_left = 782.0
-margin_top = 22.0
-margin_right = 850.0
-margin_bottom = 48.0
+margin_left = 976.0
+margin_top = 3.0
+margin_right = 1006.0
+margin_bottom = 29.0
 text = "X"
+flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -109,7 +116,7 @@ __meta__ = {
 [node name="Filepicker" type="MarginContainer" parent="Panel"]
 visible = false
 margin_right = 1024.0
-margin_bottom = 592.0
+margin_bottom = 591.0
 mouse_filter = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -117,11 +124,12 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer" type="PanelContainer" parent="Panel/Filepicker"]
 margin_right = 1024.0
-margin_bottom = 592.0
+margin_bottom = 591.0
+custom_styles/panel = ExtResource( 3 )
 
 [node name="TextAttach" type="MarginContainer" parent="Panel/Filepicker/VBoxContainer"]
 margin_right = 1024.0
-margin_bottom = 592.0
+margin_bottom = 591.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -130,13 +138,13 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 0.0
 margin_right = 1024.0
-margin_bottom = 592.0
+margin_bottom = 591.0
 custom_styles/panel = SubResource( 2 )
 mode = 0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/Filepicker/VBoxContainer/TextAttach"]
 margin_right = 1024.0
-margin_bottom = 592.0
+margin_bottom = 591.0
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -155,9 +163,10 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="HBoxContainer" parent="Panel/Openpicker"]
+[node name="VBoxContainer" type="PanelContainer" parent="Panel/Openpicker"]
 margin_right = 1024.0
 margin_bottom = 591.0
+custom_styles/panel = ExtResource( 3 )
 
 [node name="TextAttach" type="MarginContainer" parent="Panel/Openpicker/VBoxContainer"]
 margin_right = 1024.0

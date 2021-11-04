@@ -302,6 +302,7 @@ var preview_log_text_field = null
 
 func _show_preview_log() -> void:
 	var window1 = preload("res://src/ui/sketch_control/preview.tscn").instance()
+	var font = load('res://src/ui/Anonymous.ttf')
 	get_tree().root.add_child(window1)
 	preview_log_text_field = TextEdit.new()
 	path1 =sketch_path
@@ -310,6 +311,7 @@ func _show_preview_log() -> void:
 	##var f1= File.new()
 	f.open(path1,1)
 	window1.texteditor.text= f.get_as_text()
+	window1.window.visible= false
 #	var f1 = File.new() # Replace with function body.
 #	f.open(path1,2)
 #	f.store_string(window1.texteditor.text)

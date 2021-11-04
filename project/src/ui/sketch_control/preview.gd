@@ -15,6 +15,7 @@ onready var main = $PrewiewPopout
 onready var filepicker = $Panel/Filepicker/VBoxContainer/TextAttach/FilePicker
 onready var openpicker = $Panel/Openpicker/VBoxContainer/TextAttach/OpenPicker
 onready var poppanel =$Panel/MarginContainer/Panel/PopupPanel
+onready var window2 = $Panel/MarginContainer/Panel/
 
 func _gui_input(event: InputEvent):
 	if event.is_action_pressed("mouse_left"):
@@ -24,11 +25,11 @@ func _ready() -> void:
 	close_btn.connect("pressed", self, "_on_close")
 	file_btn.get_popup().add_item("Save")
 	file_btn.get_popup().add_item("Open")
-	file_btn.get_popup().add_item("Close")
 	file_btn.get_popup().connect("id_pressed",self,"_on_item_pressed")
 	poppanel.popup()
 	
 func _on_save() -> void:
+	window.visible=true
 	var tween: Tween = TempTween.new()
 	add_child(tween)
 	poppanel.hide()
@@ -41,6 +42,8 @@ func _on_save() -> void:
 	select_window.visible = false
 	
 func _on_open() -> void:
+	poppanel.hide()
+	window.visible=true
 	var tween: Tween = TempTween.new()
 	add_child(tween)
 	openpicker._wrapped.popup()
@@ -58,8 +61,6 @@ func _on_item_pressed(id):
 		_on_save()
 	if item_name == 'Open':
 		_on_open()
-	if item_name=='Close':
-		_on_close()
 		
 #	print(item_name+ 'pressed')
 
@@ -93,9 +94,9 @@ func _on_FilePicker_file_picked(path):
 	window.visible=false
 
 func _on_OpenPicker_file_picked(path):
-	openpicker.visible=false
+#	openpicker.visible=false
 	window.visible=false
-	poppanel.popup()
+	#poppanel.popup()
 	var tween = Tween.new()
 	add_child(tween)
 	tween.interpolate_property(poppanel, "rect_scale:y", 1, 0, 0.3, Tween.TRANS_CUBIC)
@@ -104,6 +105,7 @@ func _on_OpenPicker_file_picked(path):
 	f1.open(path,1)
 	print(path)
 	texteditor.text =f1.get_as_text()
+	poppanel.popup()
 	
 	
 	
