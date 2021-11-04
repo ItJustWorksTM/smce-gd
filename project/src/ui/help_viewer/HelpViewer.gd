@@ -69,7 +69,7 @@ func _get_wiki_from_storage(path) -> Array:
 			if !dir.current_is_dir():
 				print('Reading wiki page: ' + file_name)
 				var page = WikiPage.new()
-				page.title = file_name
+				page.title = file_name.trim_suffix(".md").replace("-", " ")
 				page.content = _read_file(file_name)
 				pages.append(page)
 			file_name = dir.get_next()
