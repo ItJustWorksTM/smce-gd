@@ -64,6 +64,10 @@ Ref<GDResult> Toolchain::check_suitable_environment() {
     return GDResult::from(tc->check_suitable_environment());
 }
 
+Ref<GDResult> Toolchain::check_cmake_availability() {
+    return GDResult::from(tc->check_cmake_availability());
+}
+
 String Toolchain::cmake_path() { return tc->cmake_path().c_str(); }
 
 String Toolchain::get_log() { return log; }

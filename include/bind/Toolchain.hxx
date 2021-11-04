@@ -51,6 +51,7 @@ class Toolchain : public Node {
     String resource_dir();
     String cmake_path();
     Ref<GDResult> check_suitable_environment();
+    Ref<GDResult> check_cmake_availability();
     String get_log();
 
     bool is_building() { return building; }
