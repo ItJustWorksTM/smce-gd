@@ -5,7 +5,6 @@ extends MarginContainer
 signal exited
 onready var close_btn = $Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control/CloseButton
 onready var texteditor = $Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control/TextEdit
-onready var save_btn = $Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control/Save
 onready var file_btn = $Panel/MarginContainer/Panel/PopupPanel/VBoxContainer/Control/File
 onready var filepicker_window = $Panel/Filepicker
 onready var openpicker_window = $Panel/Openpicker

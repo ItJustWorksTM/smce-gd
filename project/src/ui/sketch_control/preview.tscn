@@ -58,10 +58,6 @@ margin_bottom = 591.0
 
 [node name="PopupPanel" type="Popup" parent="Panel/MarginContainer/Panel"]
 visible = true
-anchor_left = 0.0136719
-anchor_top = 0.072758
-anchor_right = 0.0136719
-anchor_bottom = 0.072758
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1017.0
