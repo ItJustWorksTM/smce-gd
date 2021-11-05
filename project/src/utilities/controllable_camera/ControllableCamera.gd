@@ -25,7 +25,7 @@ var cam: CameraControllerBase = null
 var locked = null
 
 export var offset = Vector3.ZERO
-export var interp_speed: int = 10
+export var interp_speed = 15
 
 func _ready():
 	free_cam()
