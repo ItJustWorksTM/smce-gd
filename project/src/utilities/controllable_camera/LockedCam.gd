@@ -21,7 +21,7 @@ extends CameraControllerBase
 var rot_x = 0
 var rot_y = 0
 var lookaround_speed = 0.01
-var basis: Basis
+var basis: Basis = Basis.IDENTITY
 var target: Spatial = null setget set_target, get_target
 
 export(int, 5, 100, 1) var scroll_limit_low = 5
@@ -34,7 +34,26 @@ var _zoom = 9
 func _init(cam: Spatial, trgt: Spatial).(cam):
 	set_target(trgt)
 	set_y_angle_limit(y_angle_limit)
+	_set_init_rot_angles()
 	
+func _set_init_rot_angles() -> void:
+	var target_basis = target.global_transform.basis
+	var camera_basis = cam.global_transform.basis
+	
+	var cross = target_basis.y.cross(camera_basis.z).normalized()
+	var v = target_basis.x.normalized()
+	var normal = target_basis.y.normalized()
+	
+	# Calculate clockwise rotation angles between vectors
+	# in a 3D plane, with values between [-PI, PI] radians
+	# https://stackoverflow.com/a/16544330
+	var det = Basis(cross, v, normal).determinant()
+	var x_angle = - atan2(det, cross.dot(v))
+	var y_angle = target_basis.y.angle_to(camera_basis.z)
+	
+	rot_x = x_angle
+	rot_y = y_angle
+	_update_pos()
 
 func set_y_angle_limit(limit: float) -> void:
 	_y_angle_limit = range_lerp(limit, 0, 90, 0, PI/2)
@@ -42,7 +61,7 @@ func set_y_angle_limit(limit: float) -> void:
 	_update_pos()
 
 
-func set_target(trgt: Spatial) -> void:	
+func set_target(trgt: Spatial) -> void:
 	target = trgt
 	_update_pos()
 
@@ -59,7 +78,6 @@ func handle_event(event: InputEvent) -> void:
 	_zoom = clamp(_zoom, scroll_limit_low, scroll_limit_high)
 	
 	if event is InputEventMouseMotion and Input.is_action_pressed("mouse_left"):
-
 		rot_x -= event.relative.x * lookaround_speed
 		rot_y -= event.relative.y * lookaround_speed
 		_update_pos()
@@ -74,9 +92,13 @@ func _update_pos():
 func cam_physics_process(_delta: float) -> Transform:
 	if ! is_instance_valid(target):
 		return cam.global_transform
-	var new_position: Vector3 = target.global_transform.origin + (target.global_transform.basis * basis).xform((Vector3.UP) * _zoom)
-	var new_transform: Transform = Transform(cam.transform.basis, new_position)
-	cam.look_at(target.global_transform.origin, Vector3.UP)
+	
+	var new_pos_vec: Vector3 = (target.global_transform.basis * basis).xform(_zoom * Vector3.UP)
+	var new_position: Vector3 = target.global_transform.origin + new_pos_vec
+
+	var new_transform: Transform = Transform(cam.global_transform.basis, new_position)
+	new_transform = new_transform.looking_at(target.global_transform.origin, Vector3.UP)
+	
 	return new_transform
 
 	
