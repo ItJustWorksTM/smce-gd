@@ -1,0 +1,16 @@
+.idea
+.vscode
+
+cmake-build-*/
+build/
+
+.cmaw
+.smcegd_home
+
+.import
+assets/native/lib
+assets/smce_resources
+assets/version.txt
+godot.log
+*.png~
+

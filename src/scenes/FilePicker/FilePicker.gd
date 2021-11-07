@@ -1,0 +1,116 @@
+#
+#  FilePicker.gd
+#  Copyright 2021 ItJustWorksTM
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+class_name FilePicker
+extends PanelContainer
+
+var model: ViewModel
+
+onready var edit = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/TextEdit
+onready var up_btn = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Button
+onready var item_list = $VBoxContainer/PanelContainer/VBoxContainer/ItemList
+onready var open_button = $VBoxContainer/HBoxContainer2/Button
+onready var filter := $VBoxContainer/PanelContainer/VBoxContainer/OptionButton
+
+onready var create_btn := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Button3
+onready var folder_create_surface := $FolderCreate
+onready var create_dir_popup := $FolderCreate/CreateDirPopUp
+
+class ViewModel:
+    extends ViewModelExt.WithNode
+
+    func open_disabled(s): return s < 0
+    func pop_disabled(can_pop): return !can_pop
+
+    func input_color(is_valid): return Color.whitesmoke if is_valid else Color.red
+    
+    var _actions
+    var _files
+
+    func _init(n, props, actions, on_open).(n):
+        _actions = actions
+        _files = props.items
+
+        conn(node.edit, "text_changed", "_try_path_change")
+        conn(node.open_button, "pressed", "_open_pressed", [on_open, props.full_path])
+
+        props.full_path.bind_change(self, "_update_file_list")
+
+        actions.pop.invoke_on(node.up_btn, "pressed")
+
+        conn(node.create_btn, "toggled", "_on_create_btn_toggled")
+        conn(node.folder_create_surface, "pressed", "_on_surface_pressed")
+
+        bind() \
+            .open_disabled.dep([props.selected]) \
+            .pop_disabled.dep([props.can_pop]) \
+            .input_color.dep([props.is_valid]) \
+        
+        bind() \
+            .open_disabled.to(node.open_button, "disabled") \
+            .pop_disabled.to(node.up_btn, "disabled") \
+            .input_color.to(node.edit, "custom_colors/font_color")
+
+        node.item_list.init_model(_files, props.selected, action("_set_selected"), actions.open)
+        node.create_dir_popup.init_model(props.new_dir_name, actions.set_new_dir_name, props.new_dir_valid, action("_on_dir_create"))
+
+    func _on_dir_create():
+        _actions.create_dir.invoke()
+        _on_surface_pressed()
+
+    func _update_file_list(path):
+        node.edit.text = ""
+        node.edit.append_at_cursor(path)
+
+    func _on_item_selected(index):
+        if index != null:
+            _actions.open.invoke()
+
+    func _try_path_change(text):
+        _actions.set_full_path.invoke([text])
+    
+    func _open_pressed(on_open, full_path):
+        on_open.invoke([full_path.value])
+    
+    func _set_selected(index):
+        _actions.select.invoke([_files.value[index]])
+
+    func _on_create_btn_toggled(toggled):
+        node.folder_create_surface.disabled = !toggled
+        node.create_dir_popup.visible = toggled
+        if toggled: node.create_dir_popup.line_edit.grab_focus()
+    
+    func _on_surface_pressed():
+        node.create_btn.pressed = false
+        _on_create_btn_toggled(false)
+
+
+func init_model(props, actions, on_open):
+    model = ViewModel.new(self, props, actions, on_open)
+
+func _ready():
+    var fsf = FsTraverserMiddleMan.new()
+
+    var act = ActionSignal.new()
+
+    init_model(fsf.props(), fsf.actions(), act)
+
+    while true:
+        print(yield(act, "invoked"))
+
+
+

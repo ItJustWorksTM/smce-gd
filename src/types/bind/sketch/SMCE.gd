@@ -1,0 +1,3 @@
+class_name SMCE
+
+enum BoardStatus { CLEAN, CONFIGURED, RUNNING, SUSPENDED, STOPPED }

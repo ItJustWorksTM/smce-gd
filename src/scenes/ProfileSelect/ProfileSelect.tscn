@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scenes/ProfileSelect/ProfileSelect.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/OpenSans/variants/light_36px.tres" type="DynamicFont" id=2]
+
+[node name="ProfileSelect" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Header" type="Label" parent="."]
+anchor_right = 1.001
+margin_left = 1.18921
+margin_top = 52.3251
+margin_right = 0.165161
+margin_bottom = 102.325
+custom_fonts/font = ExtResource( 2 )
+text = "Select Your profile"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HScroll" type="ScrollContainer" parent="VBox"]
+margin_top = 175.0
+margin_right = 1024.0
+margin_bottom = 425.0
+rect_min_size = Vector2( 0, 250 )
+scroll_vertical_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Margin" type="MarginContainer" parent="VBox/HScroll"]
+margin_right = 1024.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 0, 250 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 32
+custom_constants/margin_top = 8
+custom_constants/margin_left = 32
+custom_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="VBox/HScroll/Margin"]
+margin_left = 32.0
+margin_top = 8.0
+margin_right = 992.0
+margin_bottom = 242.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 32
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

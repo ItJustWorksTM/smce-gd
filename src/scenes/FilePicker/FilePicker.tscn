@@ -1,0 +1,154 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/scenes/FilePicker/FilePicker.gd" type="Script" id=1]
+[ext_resource path="res://src/types/BetterItemList.gd" type="Script" id=2]
+[ext_resource path="res://src/ClickSurface.gd" type="Script" id=3]
+[ext_resource path="res://src/scenes/FilePicker/DirCreatePopUp.gd" type="Script" id=4]
+
+[node name="FilePicker" type="PanelContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -281.5
+margin_top = -165.0
+margin_right = 281.5
+margin_bottom = 165.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 556.0
+margin_bottom = 323.0
+
+[node name="HBoxContainer2" type="MarginContainer" parent="VBoxContainer"]
+margin_right = 549.0
+margin_bottom = 20.0
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2"]
+margin_right = 62.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+text = "Cancel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+margin_top = 3.0
+margin_right = 549.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "Select File"
+align = 1
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 496.0
+margin_right = 549.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+text = "Open"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 549.0
+margin_bottom = 316.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 542.0
+margin_bottom = 285.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+margin_right = 535.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="Button" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_right = 21.0
+margin_bottom = 24.0
+text = "<"
+
+[node name="TextEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 25.0
+margin_right = 510.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+context_menu_enabled = false
+
+[node name="Button3" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 514.0
+margin_right = 535.0
+margin_bottom = 24.0
+toggle_mode = true
+text = "+"
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 535.0
+margin_bottom = 254.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 2 )
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+margin_left = 461.0
+margin_top = 258.0
+margin_right = 535.0
+margin_bottom = 278.0
+size_flags_horizontal = 8
+text = "TODO"
+
+[node name="FolderCreate" type="Control" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 556.0
+margin_bottom = 323.0
+mouse_filter = 2
+script = ExtResource( 3 )
+
+[node name="CreateDirPopUp" type="PanelContainer" parent="FolderCreate"]
+visible = false
+margin_left = 308.128
+margin_top = 55.3125
+margin_right = 544.128
+margin_bottom = 111.312
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FolderCreate/CreateDirPopUp"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 229.0
+margin_bottom = 49.0
+
+[node name="Label" type="Label" parent="FolderCreate/CreateDirPopUp/VBoxContainer"]
+margin_right = 222.0
+margin_bottom = 14.0
+text = "Folder Name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FolderCreate/CreateDirPopUp/VBoxContainer"]
+margin_top = 18.0
+margin_right = 222.0
+margin_bottom = 42.0
+
+[node name="LineEdit" type="LineEdit" parent="FolderCreate/CreateDirPopUp/VBoxContainer/HBoxContainer"]
+margin_right = 156.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="FolderCreate/CreateDirPopUp/VBoxContainer/HBoxContainer"]
+margin_left = 160.0
+margin_right = 222.0
+margin_bottom = 24.0
+text = "Create"
