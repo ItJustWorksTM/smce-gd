@@ -27,9 +27,10 @@ var sketch_loader: SketchLoader
 
 var entities = []
 
-
 enum BoardState { READY, RUNNING, SUSPENDED, UNAVAILABLE }
 enum BuildState { PENDING, SUCCEEDED, FAILED }
+enum VehicleState { ACTIVE, FROZEN, UNAVAILABLE }
+enum CameraState { ORBITING, FREE }
 
 class UiState:
     # sketch state
@@ -49,8 +50,9 @@ class UiState:
     var _attachments: Array = []
     var _uart_log: String = ""
 
-    # camera state:
-    var _orbiting: bool = false
+    # vehicle state:
+    var _vehicle_state = VehicleState.UNAVAILABLE
+    var _camera_state = CameraState.FREE
 
 
 func compile_sketch(sketch, ui_state):

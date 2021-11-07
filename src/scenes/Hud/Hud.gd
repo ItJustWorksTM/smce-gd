@@ -86,7 +86,6 @@ class ViewModel:
             node.animation_player.play_backwards("slide_active_sketch")
 
     func create_new_sketch():
-        print("create_new_sketch")
         emit_signal("create_sketch")
         _profile.value.sketches.append(SketchDescriptor.new())
         _profile.emit_change()
@@ -127,7 +126,8 @@ var model: ViewModel
 func _ready():
     var profile := Observable.new(Profile.new("Holy Land", []))
     var dirty_profile := Observable.new(profile.value.clone())
-
+    
+    var _states = Observable.new([Observable.new(Main.BoardState.READY)])
 
     model = ViewModel.new(self, profile, dirty_profile)
 

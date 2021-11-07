@@ -80,7 +80,7 @@ static func read_file_as_string(path: String) -> String:
     file.close()
     return content
 
-static func list_files(path: String) -> Array:
+static func list_files(path: String, omit_base: bool = false, include_files: bool = true, include_dirs: bool = true) -> Array:
     var ret := []
     var dir = Directory.new()
     if dir.open(path) != OK:
@@ -88,9 +88,28 @@ static func list_files(path: String) -> Array:
     dir.list_dir_begin(true)
     var file_name = dir.get_next()
     while file_name != "":
-        ret.push_back(path.plus_file(file_name))
+        if dir.file_exists(file_name): 
+            if include_files:
+                ret.push_back(path.plus_file(file_name) if !omit_base else file_name)
+        elif include_dirs:
+                ret.push_back(path.plus_file(file_name) if !omit_base else file_name)
         file_name = dir.get_next()
     return ret
 
-static func parent_path(path: String):
+static func parent_path(path: String) -> String:
     return path.get_base_dir()
+
+static func has_item(dir: String, name: String) -> bool:
+    return name in list_files(dir, true)
+
+static func exists(path: String) -> bool:
+    return dir_exists(path) || file_exists(path)
+
+static func absolute(path: String) -> String:
+    var base = path.get_base_dir()
+    var item = path.get_file()
+    var dir := Directory.new()
+    if dir.open(base) != OK:
+        assert(false)
+    var z = dir.get_current_dir()
+    return z if path == "." else z.plus_file(item)

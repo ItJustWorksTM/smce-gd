@@ -31,8 +31,7 @@ func _get(property: String):
 
 func get_nullable(property: String):
     if _func_map.has(property):
-        var ret = callv(property, _func_map[property].get_value())
-        return ret
+        return callv(property, _func_map[property].get_value())
     return null
 
 func bind() -> BindMap: return _bind
@@ -93,11 +92,11 @@ func fwd_sig(obj: Object, sig: String, binds: Array = []):
                 add_user_signal(sig, r.args) # TODO: take binds into account
             var braindead = binds + [sig]
             var __ = obj.connect(sig, self, "_fwd_sig_jump%d" % (r.args.size() + binds.size()), braindead)
-            # print("ADDED SIGNAL FORWARD FOR ", sig, binds + [sig], (braindead.size()), r.args.size(), binds.size())
             return
     push_error("Failed to forward signal `%s`!" % sig)
             
-
+func action(method: String) -> Action:
+    return Action.new(self, method)
 
 # experimental
 class _State:

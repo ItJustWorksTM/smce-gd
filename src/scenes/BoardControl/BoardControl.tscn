@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/scenes/BoardControl/BoardControl.gd" type="Script" id=1]
+
+[node name="Hbox" type="HBoxContainer"]
+margin_left = 4.0
+margin_right = 286.0
+margin_bottom = 20.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Start" type="Button" parent="."]
+margin_right = 139.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Start"
+
+[node name="Suspend" type="Button" parent="."]
+margin_left = 143.0
+margin_right = 282.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Suspend"
