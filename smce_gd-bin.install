@@ -1,7 +1,0 @@
-post_install() {
-    ln -s /usr/lib/smce/smce_gd /usr/bin/smce_gd
-}
-
-post_remove() {
-	rm /usr/bin/smce_gd
-}
