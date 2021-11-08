@@ -26,7 +26,7 @@ using namespace godot;
     std::pair { STR(f), &Toolchain::f }
 
 void Toolchain::_register_methods() {
-    register_fns(U(init), U(resource_dir), U(check_suitable_environment), U(cmake_path), U(compile),
+    register_fns(U(init), U(resource_dir), U(check_suitable_environment), U(check_cmake_availability), U(cmake_path), U(compile),
                  U(set_free), U(is_building), U(_physics_process), U(get_log));
     register_signals<Toolchain>("building", "built", "log");
 }
@@ -62,6 +62,10 @@ String Toolchain::resource_dir() { return tc->resource_dir().c_str(); }
 
 Ref<GDResult> Toolchain::check_suitable_environment() {
     return GDResult::from(tc->check_suitable_environment());
+}
+
+Ref<GDResult> Toolchain::check_cmake_availability() {
+    return GDResult::from(tc->check_cmake_availability());
 }
 
 String Toolchain::cmake_path() { return tc->cmake_path().c_str(); }
