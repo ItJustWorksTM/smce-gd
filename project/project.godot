@@ -14,17 +14,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/attachments/AnalogRaycast.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "AnyTask",
 "language": "NativeScript",
 "path": "res://src/bind/AnyTask.gdns"
 }, {
-"base": "ButtonGroup",
+"base": "Reference",
 "class": "BButtonGroup",
 "language": "GDScript",
 "path": "res://src/utilities/toggleable_bgroup/BButtonGroup.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "Board",
 "language": "NativeScript",
 "path": "res://src/bind/Board.gdns"
@@ -54,17 +54,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/utilities/control_util/ControlUtil.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "FrameBufferConfig",
 "language": "NativeScript",
 "path": "res://src/bind/FrameBufferConfig.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "GDResult",
 "language": "NativeScript",
 "path": "res://src/bind/GDResult.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "GpioDriverConfig",
 "language": "NativeScript",
 "path": "res://src/bind/GpioDriverConfig.gdns"
@@ -104,7 +104,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/bind/SMCE.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "SecureDigitalStorage",
 "language": "NativeScript",
 "path": "res://src/bind/SecureDigitalStorage.gdns"
@@ -124,7 +124,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/simple_notification/SimpleNotification.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "Sketch",
 "language": "NativeScript",
 "path": "res://src/bind/Sketch.gdns"
@@ -144,12 +144,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/ui/temp_tween/TempTween.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "Toolchain",
 "language": "NativeScript",
 "path": "res://src/bind/Toolchain.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "UartChannelConfig",
 "language": "NativeScript",
 "path": "res://src/bind/UartChannelConfig.gdns"
@@ -329,6 +329,7 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
+quality/filters/anisotropic_filter_level=2
 quality/directional_shadow/size=2048
 quality/shadow_atlas/size=2048
 quality/shadow_atlas/quadrant_3_subdiv=3
@@ -337,7 +338,6 @@ quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/reflections/irradiance_max_size=32
 quality/shading/force_blinn_over_ggx=true
-quality/filters/anisotropic_filter_level=2
 quality/subsurface_scattering/quality=0
 quality/reflections/atlas_size=0
 quality/reflections/atlas_subdiv=16
