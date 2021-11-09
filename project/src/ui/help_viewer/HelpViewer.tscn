@@ -145,6 +145,7 @@ margin_left = 388.0
 margin_right = 772.0
 margin_bottom = 410.0
 rect_min_size = Vector2( 384, 410 )
+bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

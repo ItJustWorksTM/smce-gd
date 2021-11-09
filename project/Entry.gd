@@ -115,7 +115,6 @@ func _fetch_github_wiki() -> void:
 	var base_url = "https://raw.githubusercontent.com/wiki/ItJustWorksTM/smce-gd/"
 	for page in wiki_pages:
 		var http_node = HTTPRequest.new()
-		#http_node.set_name(page)
 		http_node.set_use_threads(true)
 		add_child(http_node)
 		var output_name = "./media/wiki/" + page + ".md"

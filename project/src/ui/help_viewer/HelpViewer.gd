@@ -56,7 +56,7 @@ func _ready():
 	# Add on-click event
 	item_list.connect("item_selected", self, "_on_help_selected")
 	item_list.connect("nothing_selected", self, "_on_help_selected", [-1])
-	print("HelpViewer loaded!")
+	# print("HelpViewer loaded!")
 
 
 func _get_wiki_from_storage(path) -> Array:
@@ -70,7 +70,7 @@ func _get_wiki_from_storage(path) -> Array:
 				print('Reading wiki page: ' + file_name)
 				var page = WikiPage.new()
 				page.title = file_name.trim_suffix(".md").replace("-", " ")
-				page.content = _read_file(file_name)
+				page.content = _read_wiki_file(file_name)
 				if page.title == "Home":
 					pages.push_front(page)
 				else:
@@ -81,7 +81,7 @@ func _get_wiki_from_storage(path) -> Array:
 	return pages
 
 
-func _read_file(file_name):
+func _read_wiki_file(file_name):
 	var file = File.new()
 	file.open(WIKI_PATH + file_name, File.READ)
 	var content = file.get_as_text()
@@ -93,9 +93,6 @@ func _gui_input(event: InputEvent):
 	if event.is_action_pressed("mouse_left"):
 		_close()
 
-
-# TODO: Make the animation the same as when closing SketchSelect,
-# 		probably has something to do with the tween interpolate values.
 
 # Added enter_tree() to initialize the screen
 func _enter_tree() -> void:
@@ -125,8 +122,8 @@ func _select_help() -> void:
 	for n in item_list.get_item_count():
 		if item_list.is_selected(n) == true:
 			rich_text_label.clear()
-			rich_text_label.add_text(wiki_pages[n].content)
-			print("Item list select: Index ", n)
+			rich_text_label.append_bbcode(wiki_pages[n].content)
+			# print("Item list select: Index ", n)
 
 # Catch the on-click event
 func _on_help_selected(_index: int) -> void:
