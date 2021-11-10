@@ -1,40 +1,45 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/ui/popup/popup_window.gd" type="Script" id=1]
+[ext_resource path="res://media/fonts/Open_Sans/OpenSasn-Regular-Popup.tres" type="DynamicFont" id=2]
 
 [node name="Control" type="Popup"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 2.74902
-margin_top = 5.92249
-margin_right = 2.74902
-margin_bottom = 5.92249
+margin_left = -0.963871
+margin_bottom = 4.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Panel" type="Panel" parent="."]
-margin_left = 320.0
-margin_top = 146.0
-margin_right = 800.0
-margin_bottom = 502.0
+margin_left = 511.0
+margin_top = 311.0
+margin_right = 793.0
+margin_bottom = 480.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="buttonOK" type="Button" parent="."]
-margin_left = 508.0
-margin_top = 446.0
-margin_right = 612.0
-margin_bottom = 490.0
+margin_left = 616.205
+margin_top = 440.496
+margin_right = 720.205
+margin_bottom = 484.496
+rect_scale = Vector2( 0.7, 0.7 )
 text = "OK"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="buttonYES" type="Button" parent="."]
-margin_left = 340.0
-margin_top = 444.0
-margin_right = 437.0
-margin_bottom = 492.0
+margin_left = 491.932
+margin_top = 423.36
+margin_right = 588.932
+margin_bottom = 471.36
+rect_scale = Vector2( 0.7, 0.7 )
 rect_pivot_offset = Vector2( 97, 48 )
 text = "Yes"
 __meta__ = {
@@ -42,24 +47,28 @@ __meta__ = {
 }
 
 [node name="buttonNO" type="Button" parent="."]
-margin_left = 682.0
-margin_top = 444.0
-margin_right = 779.0
-margin_bottom = 492.0
+margin_left = 713.684
+margin_top = 438.496
+margin_right = 810.684
+margin_bottom = 486.496
+rect_scale = Vector2( 0.7, 0.7 )
 text = "No"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="messageLabel" type="RichTextLabel" parent="."]
-anchor_right = 0.5
-anchor_bottom = 0.056
-margin_left = 338.0
-margin_top = 254.0
-margin_right = 138.0
-margin_bottom = 299.68
-text = "\"default\""
-scroll_active = false
+[node name="messageLabel" type="Label" parent="."]
+margin_left = 522.0
+margin_top = 311.0
+margin_right = 782.0
+margin_bottom = 434.0
+custom_fonts/font = ExtResource( 2 )
+text = "\"default\"
+"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
