@@ -123,6 +123,9 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.974, 
 [node name="Back" type="Position3D" parent="AttachmentSlots"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.4, 1.8 )
 
+[node name="Logo" type="Position3D" parent="AttachmentSlots"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00163135, 0.0371331, -2.20274 )
+
 [node name="BuiltinAttachments" type="Spatial" parent="."]
 
 [node name="Left BrushedMotor" type="Node" parent="BuiltinAttachments"]
