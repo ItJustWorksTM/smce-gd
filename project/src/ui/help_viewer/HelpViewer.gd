@@ -83,7 +83,6 @@ func _get_wiki_from_storage(path) -> Array:
 # Read line by line from the wiki file, format the text using BBCode, return the formatted content
 func _read_wiki_file(file_name):
 	var file = File.new()
-	var index = 1;
 	var content : String
 	file.open(WIKI_PATH + file_name, File.READ)
 	while not file.eof_reached():
@@ -150,7 +149,6 @@ func download_texture(url : String, file_name : String):
 	http_node.set_use_threads(true)
 	add_child(http_node)
 	http_node.set_download_file(file_name)
-	http_node.request(url)
 	var error = http_node.request(url)
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
