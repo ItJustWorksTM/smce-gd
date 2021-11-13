@@ -80,11 +80,30 @@ func _get_wiki_from_storage(path) -> Array:
 		print("An error occurred when trying to access the path: " + path)
 	return pages
 
-
+# Read line by line from the wiki file, format the text using BBCode, return the formatted content
 func _read_wiki_file(file_name):
 	var file = File.new()
+	var index = 1;
+	var content : String
 	file.open(WIKI_PATH + file_name, File.READ)
-	var content = file.get_as_text()
+	while not file.eof_reached():
+		var line = file.get_line()
+		# Format the text using BBCode
+		# TODO: Switch statement? Match statement (godot)?
+		if line.begins_with("## "):
+			line = line.replacen("## ", "")
+			line = "[b]" + line + "[/b]"
+		if line.begins_with("### "):
+			line = line.replacen("### ", "")
+			line = "[i]" + line + "[/i]"
+		if line.begins_with("![](https://i.imgur.com/"):
+			line = line.replacen("![](", "").replacen(")", "")
+			print("Image to download: " + line)
+			download_texture("line", WIKI_PATH + line)
+			line = "[img]" + WIKI_PATH + line + "[/img]"
+		line += "\n"
+		content = content + line;
+	#var content = file.get_as_text()
 	file.close()
 	return content
 
@@ -124,6 +143,18 @@ func _select_help() -> void:
 			rich_text_label.clear()
 			rich_text_label.append_bbcode(wiki_pages[n].content)
 			# print("Item list select: Index ", n)
+
+# TODO: Resolve downloading an image, now gets an error "ERROR: request: Condition "!is_inside_tree()" is true. Returned: ERR_UNCONFIGURED"
+func download_texture(url : String, file_name : String):
+	var http_node = HTTPRequest.new()
+	http_node.set_use_threads(true)
+	add_child(http_node)
+	http_node.set_download_file(file_name)
+	http_node.request(url)
+	var error = http_node.request(url)
+	if error != OK:
+		push_error("An error occurred in the HTTP request.")
+
 
 # Catch the on-click event
 func _on_help_selected(_index: int) -> void:
