@@ -43,6 +43,8 @@ func pipe(obj: Object, methods: Array, callback: String):
 
 func obsvr(val): return Observable.new(val)
 
+func action(method: String): return Action.new(self, method)
+
 func actions() -> Dictionary:
     return _actions
 

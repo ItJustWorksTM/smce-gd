@@ -27,26 +27,25 @@ class ViewModel:
     extends ViewModelExt.WithNode
 
     func create_btn_disabled(can_create): return !can_create
-
-    func _init(n, text_prop, set_text, can_create, on_create).(n):
-        text_prop.bind_change(self, "_update_line_edit")
-        conn(node.line_edit, "text_changed", "_set_text", [set_text])
-
+    
+    func _init(n).(n): pass
+    
+    func _on_init():
         bind() \
-            .create_btn_disabled.dep([can_create]) \
+            .create_btn_disabled.dep([self.can_create]) \
+            .text_prop.to(self, "_update_line_edit") \
             .create_btn_disabled.to(node.create_btn, "disabled")
-        
-        conn(node.create_btn, "pressed", "_on_create_pressed", [on_create])
 
+        invoke() \
+            ._on_text_changed.on(node.line_edit, "text_changed") \
+            .on_create.on(node.create_btn, "pressed")
+        
     func _update_line_edit(name):
         node.line_edit.text = ""
         node.line_edit.append_at_cursor(name)
     
-    func _set_text(text, setter):
-        setter.invoke([text])
-    
-    func _on_create_pressed(on_create):
-        on_create.invoke()
+    func _on_text_changed(text): self.set_text.invoke([text]) 
 
-func init_model(text_prop, set_text, can_create, on_create):
-    model = ViewModel.new(self, text_prop, set_text, can_create, on_create)
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)

@@ -24,11 +24,10 @@ func _init(obj, method):
     _obj = obj
     _method = method
 
-func invoke(args: Array = []) -> void:
+func invoke(args = []) -> void:
     _obj.callv(_method, args)
     print("Action: [", _method, "], Args: ", args)
 
 func invoke_on(obj: Object, sig: String):
     var res = obj.connect(sig, self, "invoke") == OK
     assert(res)
-

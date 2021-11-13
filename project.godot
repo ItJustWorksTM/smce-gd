@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://src/types/ActionSignal.gd"
 }, {
 "base": "Reference",
+"class": "Animations",
+"language": "GDScript",
+"path": "res://src/types/ui/Animations.gd"
+}, {
+"base": "Reference",
 "class": "Async",
 "language": "GDScript",
 "path": "res://src/types/sync/Async.gd"
@@ -74,6 +79,11 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/types/bind/board_view/BoardView.gdns"
 }, {
+"base": "ManyObserver",
+"class": "CalculatedProperty",
+"language": "GDScript",
+"path": "res://src/types/view_model/CalculatedProperty.gd"
+}, {
 "base": "Control",
 "class": "ClickSurface",
 "language": "GDScript",
@@ -83,6 +93,11 @@ _global_script_classes=[ {
 "class": "ControllableCamera",
 "language": "GDScript",
 "path": "res://src/types/ControllableCamera.gd"
+}, {
+"base": "Reference",
+"class": "Dict",
+"language": "GDScript",
+"path": "res://src/util/Dict.gd"
 }, {
 "base": "PanelContainer",
 "class": "DirCreatePopUp",
@@ -159,10 +174,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scenes/Hud/Hud.gd"
 }, {
+"base": "Reference",
+"class": "InvokeMap",
+"language": "GDScript",
+"path": "res://src/types/view_model/InvokeMap.gd"
+}, {
 "base": "Node",
 "class": "Main",
 "language": "GDScript",
 "path": "res://src/types/Main.gd"
+}, {
+"base": "Observable",
+"class": "ManyObserver",
+"language": "GDScript",
+"path": "res://src/types/view_model/ManyObserver.gd"
 }, {
 "base": "Reference",
 "class": "MiddleManBase",
@@ -173,16 +198,6 @@ _global_script_classes=[ {
 "class": "Observable",
 "language": "GDScript",
 "path": "res://src/types/view_model/Observable.gd"
-}, {
-"base": "Reference",
-"class": "Observable2",
-"language": "GDScript",
-"path": "res://src/types/view_model/Observable2.gd"
-}, {
-"base": "Reference",
-"class": "ObserversObserver",
-"language": "GDScript",
-"path": "res://src/types/view_model/ObserversObserver.gd"
 }, {
 "base": "",
 "class": "PluginManifest",
@@ -289,6 +304,11 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/types/bind/sketch/ToolchainLogReader.gdns"
 }, {
+"base": "Reference",
+"class": "TweenTemplate",
+"language": "GDScript",
+"path": "res://src/types/Tween2.gd"
+}, {
 "base": "",
 "class": "UartChannel",
 "language": "NativeScript",
@@ -342,6 +362,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Action": "",
 "ActionSignal": "",
+"Animations": "",
 "Async": "",
 "BetterItemList": "",
 "BindMap": "",
@@ -353,8 +374,10 @@ _global_script_class_icons={
 "BoardDeviceSpec": "",
 "BoardNode": "",
 "BoardView": "",
+"CalculatedProperty": "",
 "ClickSurface": "",
 "ControllableCamera": "",
+"Dict": "",
 "DirCreatePopUp": "",
 "DynamicBoardDevice": "",
 "Entry": "",
@@ -370,11 +393,11 @@ _global_script_class_icons={
 "GpioDriverConfig": "",
 "GpioPin": "",
 "Hud": "",
+"InvokeMap": "",
 "Main": "",
+"ManyObserver": "",
 "MiddleManBase": "",
 "Observable": "",
-"Observable2": "",
-"ObserversObserver": "",
 "PluginManifest": "",
 "Profile": "",
 "ProfilePane": "",
@@ -396,6 +419,7 @@ _global_script_class_icons={
 "SketchStatusControl": "",
 "Toolchain": "",
 "ToolchainLogReader": "",
+"TweenTemplate": "",
 "UartChannel": "",
 "UartChannelConfig": "",
 "UartPuller": "",
@@ -446,32 +470,32 @@ mouse_scroll_down={
 }
 camera_up={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 camera_left={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 camera_right={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 camera_down={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 camera_backward={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 camera_forward={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

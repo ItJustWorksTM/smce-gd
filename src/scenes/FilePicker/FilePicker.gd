@@ -35,38 +35,51 @@ class ViewModel:
 
     func open_disabled(s): return s < 0
     func pop_disabled(can_pop): return !can_pop
-
     func input_color(is_valid): return Color.whitesmoke if is_valid else Color.red
+    func items(files, folders): return folders + files
+    func selected_index(items, selected): return items.find(selected)
     
-    var _actions
-    var _files
+    func _init(n).(n): pass
 
-    func _init(n, props, actions, on_open).(n):
-        _actions = actions
-        _files = props.items
-
-        conn(node.edit, "text_changed", "_try_path_change")
-        conn(node.open_button, "pressed", "_open_pressed", [on_open, props.full_path])
-
-        props.full_path.bind_change(self, "_update_file_list")
-
-        actions.pop.invoke_on(node.up_btn, "pressed")
-
-        conn(node.create_btn, "toggled", "_on_create_btn_toggled")
-        conn(node.folder_create_surface, "pressed", "_on_surface_pressed")
-
+    func _on_init():
         bind() \
-            .open_disabled.dep([props.selected]) \
-            .pop_disabled.dep([props.can_pop]) \
-            .input_color.dep([props.is_valid]) \
+            .items.dep([self.files, self.folders]) \
+            .selected_index.dep([self.items, self.selected]) \
+            .open_disabled.dep([self.selected_index]) \
+            .pop_disabled.dep([self.can_pop]) \
+            .input_color.dep([self.is_valid]) \
         
         bind() \
             .open_disabled.to(node.open_button, "disabled") \
             .pop_disabled.to(node.up_btn, "disabled") \
-            .input_color.to(node.edit, "custom_colors/font_color")
+            .input_color.to(node.edit, "custom_colors/font_color") \
+            .full_path.to(self, "_update_file_list") \
 
-        node.item_list.init_model(_files, props.selected, action("_set_selected"), actions.open)
-        node.create_dir_popup.init_model(props.new_dir_name, actions.set_new_dir_name, props.new_dir_valid, action("_on_dir_create"))
+        invoke() \
+            ._try_path_change.on(node.edit, "text_changed") \
+            ._open_pressed.on(node.open_button, "pressed") \
+            ._on_create_btn_toggled.on(node.create_btn, "toggled") \
+            ._on_surface_pressed.on(node.folder_create_surface, "pressed") \
+            .pop.on(node.up_btn, "pressed")
+
+        # Initialize children
+        node.item_list.init_model() \
+            .props() \
+                .items.to(self.items) \
+                .selected.to(self.selected_index) \
+            .actions() \
+                .set_selected.to(self._set_selected) \
+                .activate.to(self.open) \
+            .init()
+
+        node.create_dir_popup.init_model() \
+            .props() \
+                .text_prop.to(self.new_dir_name) \
+                .can_create.to(self.new_dir_valid) \
+            .actions() \
+                .set_text.to(self.set_new_dir_name) \
+                .on_create.to(self._on_dir_create) \
+            .init()
 
     func _on_dir_create():
         _actions.create_dir.invoke()
@@ -83,34 +96,57 @@ class ViewModel:
     func _try_path_change(text):
         _actions.set_full_path.invoke([text])
     
-    func _open_pressed(on_open, full_path):
-        on_open.invoke([full_path.value])
+    func _open_pressed():
+        self.on_open.invoke([self.selected_path.value])
     
     func _set_selected(index):
-        _actions.select.invoke([_files.value[index]])
+        _actions.select.invoke([_props.items.value[index]])
 
     func _on_create_btn_toggled(toggled):
         node.folder_create_surface.disabled = !toggled
-        node.create_dir_popup.visible = toggled
-        if toggled: node.create_dir_popup.line_edit.grab_focus()
+        if !toggled:
+            Animations.anim_open(node.create_dir_popup).start()
+        else:
+            Animations.anim_close(node.create_dir_popup).start()
+            node.create_dir_popup.line_edit.grab_focus()
     
     func _on_surface_pressed():
         node.create_btn.pressed = false
         _on_create_btn_toggled(false)
 
 
-func init_model(props, actions, on_open):
-    model = ViewModel.new(self, props, actions, on_open)
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
 func _ready():
+    self.rect_pivot_offset = self.rect_size / 2
     var fsf = FsTraverserMiddleMan.new()
-
     var act = ActionSignal.new()
-
-    init_model(fsf.props(), fsf.actions(), act)
+    print("do we even init")
+    self.init_model() \
+        .props() \
+            .from_dict(fsf.props()) \
+        .actions() \
+            .from_dict(fsf.actions()) \
+            .on_open.to(act) \
+        .init()
 
     while true:
         print(yield(act, "invoked"))
 
+        var twe = Animations.anim_open(self)
+        twe.start()
 
+        yield(twe, "tween_all_completed")
 
+        # yield(get_tree().create_timer(4), "timeout")
+
+        twe = Animations.anim_close(self)
+        twe.start()
+
+        yield(twe, "tween_all_completed")
+
+        # queue_free()
+
+# warning-ignore-all:return_value_discarded

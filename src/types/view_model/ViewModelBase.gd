@@ -18,65 +18,65 @@
 class_name ViewModelBase
 
 var _bind := BindMap.new(self)
-var _func_map := {}
+var _invoke := InvokeMap.new(self)
+
+var _props: Dictionary = {}
+var _actions: Dictionary = {}
 
 # TODO: implement _get_property_list
 
+func actually_init(props = {}, actions = {}, args = []):
+    _props = props
+    _actions = actions
+    callv("_on_init", args)
+
 func _get(property: String):
-    var ret = get_nullable(property)
+    if property in _props:
+        return _props[property]
+    if property in _actions:
+        return _actions[property]
+    if has_method(property):
+        _actions[property] = action(property)
+        return _actions[property]
 
-    if ret == null && _func_map.has(property):
-        push_warning("sugar caveat: Calculated property `%s` exists but was null!" % property)
-    return ret
-
-func get_nullable(property: String):
-    if _func_map.has(property):
-        return callv(property, _func_map[property].get_value())
-    return null
-
+    
 func bind() -> BindMap: return _bind
+func props() -> Dictionary: return _props
+
+func invoke(): return _invoke
+func actions() -> Dictionary: return _actions
+
+func bind_change(property, object, method, binds: Array = []):
+    if ! property in _props:
+        push_error("Can't bind change of non existent property `%s`" % property)
+        return
+    _props[property].bind_change(object, method, binds)
+    print("Bound change `%s` to `%s`" % [property, method])
+
+func bind_dependent(property, value):
+    if property in _props:
+        push_error("Can't create calculated property `%s`: already exists" % property)
+        return false
+    for method_desc in get_method_list():
+        if method_desc["name"] == property && method_desc["args"].size() == value.size():
+            _props[property] = CalculatedProperty.new(self, property, value)
+            return true
+    push_error("Could not find function for  calculated property `%s`" % property)
+    return false
+
+func invoke_on(action_name: String, object: Object, sig: String):
+    if action_name in _actions:
+        _actions[action_name].invoke_on(object, sig)
+    elif has_method(action_name):
+        var __ = object.connect(sig, self, action_name)
+    else:
+        push_error("Invalid action `%s` bound to signal" % action_name)
 
 func conn(target: Object, sig: String, method: String, binds: Array = [], flags: int = 0):
     if target.connect(sig, self, method, binds, flags) != OK:
         push_error("Failed to connect to signal '%s'" % sig)
         assert(false)
 
-func bind_change(property, object, method, binds: Array = []):
-    var suffix := "_prop" if binds.empty() && Reflect.has_property(object, method) else ""
-    if connect(changed_signal(property) + suffix, object, method, binds) != OK:
-        push_error("tried to bind to nonexistent property. did you initialize it?")
-        return
-    _apply(get(property), object, method, binds)
-
-func bind_dependent(property, value):
-    if !(value is Array):
-        value = [value]
-    for method_desc in get_method_list():
-        if method_desc["name"] == property && method_desc["args"].size() == value.size():
-            _func_map[property] = ObserversObserver.new(value)
-            _func_map[property].connect("changed", self, "_on_dependent_change", [property])
-            add_user_signal(changed_signal(property))
-            add_user_signal(changed_signal(property) + "_prop")
-            return true
-    return false
-
-func changed_signal(property): return property + "_changed"
-
-func _on_dependent_change(__, property):
-    if has_user_signal(changed_signal(property)):
-        var val = get(property)
-        emit_signal(changed_signal(property), val)
-        for connection in get_signal_connection_list(changed_signal(property) + "_prop"):
-            _apply(val, connection["target"], connection["method"], connection["binds"])
-    else:
-        push_error("Something bad happened")
-
-func _apply(val, target, method, binds):
-    if binds.empty() && Reflect.has_property(target, method):
-        target.set(method, val)
-        return
-    binds.push_front(val)
-    target.callv(method, binds)
 
 
 # TODO: technically, yield() provides a way to get all args as an array
@@ -98,33 +98,50 @@ func fwd_sig(obj: Object, sig: String, binds: Array = []):
 func action(method: String) -> Action:
     return Action.new(self, method)
 
-# experimental
-class _State:
-    var _inner
-
-    func _init(inner): _inner = inner
-
-    func _get(property):
-        return _inner[property]
-
-    func _set(property, value):
-        print("set ", property, value)
-        _inner[property] = value
-        return true
-
-var state
-func set_state(_state):
-    state = _State.new(_state)
-
-func observe_(name):
-    pass
-
-func set_(state_desc):
-    pass
-
-func get_(state_desc):
-    pass
+static func merge(a: Dictionary, b: Dictionary):
+    Dict.merge(a, b)
 
 
-func state():
-    pass
+class ViewModelBaseBuilderExt:
+    var _vm
+    var _s
+
+    func _init(s, vm):
+        _s = s
+        _vm = vm
+
+    func to(variant):
+        _vm._active[_s] = variant
+        return _vm
+
+class ViewModelBaseBuilder:
+    var _props: Dictionary = {}
+    var _actions: Dictionary = {}
+    var _instance: ViewModelBase
+
+    var _active = null
+
+    func props(): 
+        _active = _props
+        return self
+    
+    func actions():
+        _active = _actions
+        return self
+
+    func from_dict(dict: Dictionary):
+        print("hello")
+        Dict.merge(_active, dict)
+        return self
+
+    func _get(property: String):
+        return ViewModelBaseBuilderExt.new(property, self)
+
+    func _init(instance):
+        _instance = instance
+
+    func init(args: Array = []):
+        _instance.actually_init(_props, _actions, args)
+
+static func builder(script):
+    return ViewModelBaseBuilder.new(script)

@@ -39,7 +39,5 @@ func _init(vm):
     vm.unreference()
 
 func _get(property):
-    if _vm._func_map.has(property) || _vm.has_method(property):
-        return BindMapExt.new(self, property)
-    return null
+    return BindMapExt.new(self, property)
 

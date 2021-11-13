@@ -52,10 +52,10 @@ class Test:
     var object
     var methods
 
-    func _init(path, obj, methods):
-        self.path = path
-        self.object = obj
-        self.methods = methods
+    func _init(_path, _obj, _methods):
+        self.path = _path
+        self.object = _obj
+        self.methods = _methods
 
 func discover_tests(specific_test) -> Array:
     var scripts = Fs.list_files("res://tests")

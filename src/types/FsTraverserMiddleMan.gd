@@ -15,29 +15,17 @@
 #  limitations under the License.
 #
 
-class_name FsTraverserMiddleMan
-extends MiddleManBase
-var _impl := FsTraverser.new()
-
-
 # What functionality do we want?
 # - READ
 # - [ ] Filtering, with ability to choose
-var filters: Array
-var active_filer: int
 # - [?] Item choosing (Open File, Open Folder, Select current folder, Open Any)
 # I believe this is a gui feature? maybe middle man
 # - [x] Item selecting
-var selected_item: int
 # - [?] Item destinction (file, folder)
-var files: Array
-var folders: Array
 # - [x] Pop directory
 # action, pop_dir
 # - [x] Path existence feedback (when typing)
-var path_is_valid: bool
 # - [ ] Toggle hidden items
-var hide_hidden: bool
 # - [x] Refresh view
 # action, refresh?
 # - [x] Setting abs dir
@@ -48,13 +36,18 @@ var hide_hidden: bool
 # - [ ] File saving (type name in header, then press save)
 # might be gui feature, simply return the path instead?
 
+class_name FsTraverserMiddleMan
+extends MiddleManBase
+var _impl := FsTraverser.new()
 
 func _init():
     _props = {
         "can_pop": obsvr(false),
-        "items": obsvr([]),
+        "folders": obsvr([]),
+        "files": obsvr([]),
         "full_path": obsvr(""),
-        "selected": obsvr(-1),
+        "selected": obsvr(""),
+        "selected_path": obsvr(""),
         "is_valid": obsvr(true),
         "new_dir_name": obsvr(""),
         "new_dir_valid": obsvr(false)
@@ -62,8 +55,9 @@ func _init():
     pipe(_impl, ["pop", "open", "refresh"], "_update_items")
     pipe(_impl, ["set_full_path"], "_update_path")
     pipe(_impl, ["select", "unselect"], "_update_selected")
-    _actions["set_new_dir_name"] = Action.new(self, "_set_new_dir")
-    _actions["create_dir"] = Action.new(self, "_create_dir")
+    
+    _actions["set_new_dir_name"] = action("_set_new_dir")
+    _actions["create_dir"] = action("_create_dir")
 
     _update_items(true)
 
@@ -83,14 +77,15 @@ func _update_path(res):
 
 func _update_items(res):
     if !res: return
-    _props.items.value = _impl.folders + _impl.files
+    _props.folders.value = _impl.folders
+    _props.files.value = _impl.files
     _props.full_path.value = _impl.get_path()
     _props.can_pop.value = _impl.can_pop()
     _update_selected()
 
 func _update_selected(res = true):
     if !res: return 
-    var find = _props.items.value.find(_impl._current_item)
-    _props.selected.value = find
+    _props.selected_path.value = _impl.get_selected_path()
+    _props.selected.value = _impl._current_item
     _props.full_path.value = _impl.get_path()
 

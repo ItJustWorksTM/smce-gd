@@ -46,12 +46,19 @@ func _init(var _value = null):
     value = _value
 
 
+
 # Convience function that will connect the change signal to specified method,
 # and directly call given method with the current value.
 func bind_change(var target: Object, var method: String, var binds: Array = [], flags: int = 0):
+    
+    if binds.empty() && Reflect.has_property(target, method) && !target.has_method(method):
+        bind_prop(target, method)
+        return
+    
     var __ = connect("changed", target, method, binds, flags)
     binds.push_front(self.value) # push front to mimmic signal
     target.callv(method, binds)
+    print("called ", method)
 
 
 # Convience function that will set a target property on change
@@ -64,11 +71,11 @@ func bind_prop(var target: Object, var property: String):
 # Manually trigger a change even if none occured.
 # Useful for when dealing with reference types.
 func emit_change():
-    emit_signal("changed", value)
+    emit_signal("changed", get_value())
 
     # very hacky
     for connection in get_signal_connection_list("_changed"):
         connection["target"].set(connection["binds"][0], self.value)
 
 func _to_string():
-    return str(self.value)
+    return "Observable(%s)" % str(self.value)

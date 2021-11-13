@@ -120,7 +120,8 @@ visible = false
 margin_left = 308.128
 margin_top = 55.3125
 margin_right = 544.128
-margin_bottom = 111.312
+margin_bottom = 111.313
+rect_pivot_offset = Vector2( 118, 28 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -130,7 +131,7 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 229.0
-margin_bottom = 49.0
+margin_bottom = 49.0005
 
 [node name="Label" type="Label" parent="FolderCreate/CreateDirPopUp/VBoxContainer"]
 margin_right = 222.0

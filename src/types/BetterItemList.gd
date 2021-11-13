@@ -23,34 +23,31 @@ var model: ViewModel
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    func items(items): return items
+    func _init(n).(n): pass
 
-    var _selected = null
+    func _on_init():
+        # This relies on the fact we can bind to property changes
+        bind() \
+            .items.to(self, "_update_list") \
+            .selected.to(self, "_on_selected_change") \
 
-    func selected(s): return s
-
-    var _set_selected
-
-    func _init(n, _items, selected, set_selected, activate).(n):
-        _set_selected = set_selected
-        _selected = selected
-        conn(node, "item_selected", "_on_selected")
-        conn(node, "item_activated", "_on_activated", [activate])
-        bind().items.dep([_items]).items.to(self, "_update_list")
-        bind().selected.dep([_selected]).selected.to(self, "_on_selected_change")
+        invoke() \
+            ._on_selected.on(node, "item_selected") \
+            ._on_activated.on(node, "item_activated")
 
     func _update_list(items):
         node.clear()
         for item in items:
+            # TODO: get fucked
             node.add_item(item, node.get_icon("folder"))
     
     func _on_selected(index):
-        if _selected.value != index:
-            _on_selected_change(_selected.value)
-            _set_selected.invoke([index])
+        if self.selected.value != index:
+            _on_selected_change(self.selected.value)
+            self.set_selected.invoke([index])
     
-    func _on_activated(__, activate):
-        activate.invoke()
+    func _on_activated(__):
+        self.activate.invoke()
     
     func _on_selected_change(index):
         if index >= 0:
@@ -59,7 +56,7 @@ class ViewModel:
         else:
             node.unselect_all()
 
-func init_model(items, selected, set_selected, activate):
-    model = ViewModel.new(self, items, selected, set_selected, activate)
-
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
