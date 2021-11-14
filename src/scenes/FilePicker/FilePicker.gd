@@ -42,8 +42,7 @@ class ViewModel:
         SELECT_FOLDER,
         SELECT_ANY
     }
-    # .new_file_name.to(obsvr("")) \
-    # .new_file_valid.to(obsvr(false)) \
+
     func save_mode(mode): return mode == Mode.SAVE_FILE
     func items(save_mode, files, folders): return folders + (files if !save_mode else [])
     func selected_index(items, selected): return items.find(selected)
@@ -52,9 +51,11 @@ class ViewModel:
     func header_text(save): return "Name" if save else "Open"
     func select_mode(save): return !save
 
-    func open_disabled(select_mode, s, on_folder, file_valid):
-        if select_mode:
-            return s < 0 || s >= 0 && on_folder
+    func open_disabled(mode, s, on_folder, file_valid):
+        if mode != Mode.SAVE_FILE:
+            return s < 0 || s >= 0 && !(mode == Mode.SELECT_ANY 
+                                        || (on_folder && mode == Mode.SELECT_FOLDER)
+                                        || (!on_folder && mode == Mode.SELECT_FILE))
         else:
             return !file_valid
     
@@ -78,7 +79,7 @@ class ViewModel:
             .items.dep([self.save_mode, self.files, self.folders]) \
             .selected_index.dep([self.items, self.selected]) \
             .on_folder.dep([self.folders, self.selected_index]) \
-            .open_disabled.dep([self.select_mode, self.selected_index, self.on_folder, self.new_file_valid]) \
+            .open_disabled.dep([self.mode, self.selected_index, self.on_folder, self.new_file_valid]) \
             .pop_disabled.dep([self.can_pop]) \
             .input_color.dep([self.is_valid]) \
             .filters_text.dep([self.filters]) \
@@ -189,7 +190,7 @@ func _ready():
     fsf.set_active_filter.invoke(["Any"])
 
     var act = ActionSignal.new()
-    var mode = Observable.new(ViewModel.Mode.SAVE_FILE)
+    var mode = Observable.new(ViewModel.Mode.SELECT_FILE)
 
     self.init_model() \
         .props() \
@@ -200,7 +201,7 @@ func _ready():
             .on_open.to(act) \
         .init()
 
-    var flip = true
+    var flip = false
     while true:
         print(yield(act, "invoked"))
 
