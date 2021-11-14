@@ -63,7 +63,7 @@ class ViewModel:
             .open_disabled.to(node.open_button, "disabled") \
             .pop_disabled.to(node.up_btn, "disabled") \
             .input_color.to(node.edit, "custom_colors/font_color") \
-            .full_path.to(self, "_update_file_list") \
+            .full_path.to(self, "_update_path_edit") \
 
         invoke() \
             ._try_path_change.on(node.edit, "text_changed") \
@@ -106,7 +106,7 @@ class ViewModel:
         _actions.create_dir.invoke()
         _on_surface_pressed()
 
-    func _update_file_list(path):
+    func _update_path_edit(path):
         node.edit.text = ""
         node.edit.append_at_cursor(path)
 
