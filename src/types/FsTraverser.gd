@@ -18,13 +18,8 @@
 class_name FsTraverser
 
 # Patterns using String::match syntax
-var filters: Array # <String>
-
-# -1 = ignore, 0 = all, > 0 = specific filter
-var active_filter: int = -1
-
-# Currently selected item, can be a folder or a file
-# var selected_item: String = ""
+var filters: Dictionary = {} # <String, [String]>
+var active_filter: String = ""
 
 # Files present in currently open directory
 var files: Array = []
@@ -39,7 +34,6 @@ var _current_dir: String = ""
 var _current_item: String = ""
 
 func _init(base: String = Fs.absolute(".")):
-    print("huh: ", Fs.absolute("."))
     _current_dir = base
     refresh()
 
@@ -54,7 +48,7 @@ func get_selected_path() -> String:
 
 func refresh() -> bool:
     folders = Fs.list_files(_current_dir, true, false, true)
-    files = Fs.list_files(_current_dir, true, true, false)
+    files = Fs.list_files(_current_dir, true, true, false, filters.get(active_filter, []))
 
     if !(_current_item in folders || _current_item in files):
         _current_item = ""
@@ -125,3 +119,17 @@ func can_create_dir(name: String) -> bool:
     if name.length() == 0: return false
     print("its fine!")
     return true
+
+func set_filters(dict: Dictionary) -> bool:
+    filters = dict
+    active_filter = ""
+    refresh()
+    return true
+
+func set_active_filter(name: String) -> bool:
+    if !filters.has(name): return false
+    active_filter = name
+    refresh()
+    return true
+
+# warning-ignore-all:return_value_discarded

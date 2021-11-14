@@ -24,7 +24,7 @@ onready var edit = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Tex
 onready var up_btn = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Button
 onready var item_list = $VBoxContainer/PanelContainer/VBoxContainer/ItemList
 onready var open_button = $VBoxContainer/HBoxContainer2/Button
-onready var filter := $VBoxContainer/PanelContainer/VBoxContainer/OptionButton
+onready var filter_dropdown := $VBoxContainer/PanelContainer/VBoxContainer/OptionButton
 
 onready var create_btn := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Button3
 onready var folder_create_surface := $FolderCreate
@@ -33,11 +33,18 @@ onready var create_dir_popup := $FolderCreate/CreateDirPopUp
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    func open_disabled(s): return s < 0
+    func open_disabled(s, on_folder): return s < 0 || s >= 0 && on_folder
     func pop_disabled(can_pop): return !can_pop
     func input_color(is_valid): return Color.whitesmoke if is_valid else Color.red
     func items(files, folders): return folders + files
     func selected_index(items, selected): return items.find(selected)
+    func on_folder(folders, index): return index < folders.size() && index != -1
+
+    func filters_index(filters, active_filter): return filters.keys().find(active_filter)
+    func filters_text(filters: Dictionary):
+        var ret = []
+        for key in filters.keys(): ret.append("%s %s" % [key, str(filters[key])])
+        return ret
     
     func _init(n).(n): pass
 
@@ -45,9 +52,12 @@ class ViewModel:
         bind() \
             .items.dep([self.files, self.folders]) \
             .selected_index.dep([self.items, self.selected]) \
-            .open_disabled.dep([self.selected_index]) \
+            .on_folder.dep([self.folders, self.selected_index]) \
+            .open_disabled.dep([self.selected_index, self.on_folder]) \
             .pop_disabled.dep([self.can_pop]) \
             .input_color.dep([self.is_valid]) \
+            .filters_text.dep([self.filters]) \
+            .filters_index.dep([self.filters, self.active_filter]) \
         
         bind() \
             .open_disabled.to(node.open_button, "disabled") \
@@ -60,7 +70,7 @@ class ViewModel:
             ._open_pressed.on(node.open_button, "pressed") \
             ._on_create_btn_toggled.on(node.create_btn, "toggled") \
             ._on_surface_pressed.on(node.folder_create_surface, "pressed") \
-            .pop.on(node.up_btn, "pressed")
+            .pop.on(node.up_btn, "pressed") \
 
         # Initialize children
         node.item_list.init_model() \
@@ -72,6 +82,14 @@ class ViewModel:
                 .activate.to(self.open) \
             .init()
 
+        node.filter_dropdown.init_model() \
+            .props() \
+                .items.to(self.filters_text) \
+                .selected.to(self.filters_index) \
+            .actions() \
+                .set_selected.to(self._on_set_filter) \
+            .init() 
+
         node.create_dir_popup.init_model() \
             .props() \
                 .text_prop.to(self.new_dir_name) \
@@ -80,6 +98,9 @@ class ViewModel:
                 .set_text.to(self.set_new_dir_name) \
                 .on_create.to(self._on_dir_create) \
             .init()
+
+    func _on_set_filter(i):
+        self.set_active_filter.invoke([self.filters.value.keys()[i]])
 
     func _on_dir_create():
         _actions.create_dir.invoke()
@@ -122,8 +143,11 @@ func init_model():
 func _ready():
     self.rect_pivot_offset = self.rect_size / 2
     var fsf = FsTraverserMiddleMan.new()
+    fsf._actions.set_filters.invoke([{ "Any": ["*"], "Arduino": ["*.ino", "*.pde"], "C++": ["*.cpp", "*.hpp", "*.hxx", "*.cxx"] }])
+    fsf._actions.set_active_filter.invoke(["Any"])
+
     var act = ActionSignal.new()
-    print("do we even init")
+
     self.init_model() \
         .props() \
             .from_dict(fsf.props()) \

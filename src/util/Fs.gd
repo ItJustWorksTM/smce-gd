@@ -80,19 +80,26 @@ static func read_file_as_string(path: String) -> String:
     file.close()
     return content
 
-static func list_files(path: String, omit_base: bool = false, include_files: bool = true, include_dirs: bool = true) -> Array:
+static func list_files(path: String, omit_base: bool = false, include_files: bool = true, include_dirs: bool = true, filters: Array = ["*"]) -> Array:
     var ret := []
     var dir = Directory.new()
     if dir.open(path) != OK:
         return ret
     dir.list_dir_begin(true)
-    var file_name = dir.get_next()
+    var file_name: String = dir.get_next()
     while file_name != "":
-        if dir.file_exists(file_name): 
-            if include_files:
-                ret.push_back(path.plus_file(file_name) if !omit_base else file_name)
-        elif include_dirs:
-                ret.push_back(path.plus_file(file_name) if !omit_base else file_name)
+        
+        var matched = false
+        for pattern in filters:
+            if file_name.matchn(pattern):
+                matched = true
+                break
+        if matched:
+            if dir.file_exists(file_name): 
+                if include_files:
+                    ret.push_back(path.plus_file(file_name) if !omit_base else file_name)
+            elif include_dirs:
+                    ret.push_back(path.plus_file(file_name) if !omit_base else file_name)
         file_name = dir.get_next()
     return ret
 

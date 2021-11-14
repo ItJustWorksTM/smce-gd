@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/types/BetterItemList.gd"
 }, {
+"base": "OptionButton",
+"class": "BetterOptionButton",
+"language": "GDScript",
+"path": "res://src/BetterOptionButton.gd"
+}, {
 "base": "Reference",
 "class": "BindMap",
 "language": "GDScript",
@@ -365,6 +370,7 @@ _global_script_class_icons={
 "Animations": "",
 "Async": "",
 "BetterItemList": "",
+"BetterOptionButton": "",
 "BindMap": "",
 "Board": "",
 "BoardBuilder": "",

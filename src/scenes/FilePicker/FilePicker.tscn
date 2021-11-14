@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/scenes/FilePicker/FilePicker.gd" type="Script" id=1]
 [ext_resource path="res://src/types/BetterItemList.gd" type="Script" id=2]
 [ext_resource path="res://src/ClickSurface.gd" type="Script" id=3]
 [ext_resource path="res://src/scenes/FilePicker/DirCreatePopUp.gd" type="Script" id=4]
+[ext_resource path="res://src/BetterOptionButton.gd" type="Script" id=5]
 
 [node name="FilePicker" type="PanelContainer"]
 anchor_left = 0.5
@@ -25,36 +26,53 @@ margin_top = 7.0
 margin_right = 556.0
 margin_bottom = 323.0
 
-[node name="HBoxContainer2" type="MarginContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 549.0
-margin_bottom = 20.0
+margin_bottom = 24.0
 
 [node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2"]
 margin_right = 62.0
-margin_bottom = 20.0
+margin_bottom = 24.0
 size_flags_horizontal = 0
 text = "Cancel"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
-margin_top = 3.0
-margin_right = 549.0
-margin_bottom = 17.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 66.0
+margin_right = 498.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
-text = "Select File"
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer2"]
+margin_left = 89.0
+margin_right = 342.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer2/HBoxContainer"]
+margin_top = 5.0
+margin_right = 49.0
+margin_bottom = 19.0
+text = "Name "
 align = 1
 
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer2/HBoxContainer2/HBoxContainer"]
+margin_left = 53.0
+margin_right = 253.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 200, 0 )
+
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 496.0
+margin_left = 502.0
 margin_right = 549.0
-margin_bottom = 20.0
+margin_bottom = 24.0
 size_flags_horizontal = 8
-text = "Open"
+text = "Save"
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 24.0
+margin_top = 28.0
 margin_right = 549.0
 margin_bottom = 316.0
 size_flags_horizontal = 3
@@ -64,7 +82,7 @@ size_flags_vertical = 3
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 542.0
-margin_bottom = 285.0
+margin_bottom = 281.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 margin_right = 535.0
@@ -94,18 +112,19 @@ text = "+"
 [node name="ItemList" type="ItemList" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 margin_top = 28.0
 margin_right = 535.0
-margin_bottom = 254.0
+margin_bottom = 250.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 2 )
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 margin_left = 461.0
-margin_top = 258.0
+margin_top = 254.0
 margin_right = 535.0
-margin_bottom = 278.0
+margin_bottom = 274.0
 size_flags_horizontal = 8
 text = "TODO"
+script = ExtResource( 5 )
 
 [node name="FolderCreate" type="Control" parent="."]
 margin_left = 7.0
