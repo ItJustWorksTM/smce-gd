@@ -1,5 +1,5 @@
 #
-#  ViewModelBaseForNode.gd
+#  TrampolineAction.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +15,17 @@
 #  limitations under the License.
 #
 
-class_name ViewModelExt
+class_name TrampolineAction
+extends Action
 
-class WithNode:
-    extends ViewModelBase
-    var node: Node
+var _owner: Object
+var _callback: String
 
-    func _init(_owner: Node): node = _owner
+func _init(obj: Object, method: String, owner: Object, callback: String).(obj, method):
+    _owner = owner
+    _callback = callback
 
-    func get_node(path: NodePath): return node.get_node(path)
-
-class ReactiveWrapper:
-    extends ViewModelBase
-
-    func pipe(obj: Object, methods: Array, callback: String):
-        var ret := {}
-        for method in methods:
-            ret[method] = TrampolineAction.new(obj, method, self, callback)
-        return ret
+func invoke(args: Array = []) -> void:
+    var res = _obj.callv(_method, args)
+    _owner.call(_callback, res)
+    print("Action: [", _method, "], Args: ", args, ", Result: [", res, "]")

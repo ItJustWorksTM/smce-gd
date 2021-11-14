@@ -142,9 +142,10 @@ func init_model():
 
 func _ready():
     self.rect_pivot_offset = self.rect_size / 2
-    var fsf = FsTraverserMiddleMan.new()
-    fsf._actions.set_filters.invoke([{ "Any": ["*"], "Arduino": ["*.ino", "*.pde"], "C++": ["*.cpp", "*.hpp", "*.hxx", "*.cxx"] }])
-    fsf._actions.set_active_filter.invoke(["Any"])
+    var fsf = ReactiveFsTraverser.new()
+    
+    fsf.set_filters.invoke([{ "Any": ["*"], "Arduino": ["*.ino", "*.pde"], "C++": ["*.cpp", "*.hpp", "*.hxx", "*.cxx"] }])
+    fsf.set_active_filter.invoke(["Any"])
 
     var act = ActionSignal.new()
 

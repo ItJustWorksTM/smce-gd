@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/scenes/SketchStatusControl/SketchStatusControl.tscn" type="PackedScene" id=1]
-[ext_resource path="res://src/types/VisibilityButton.gd" type="Script" id=2]
+[ext_resource path="res://src/types/ui/VisibilityButton.gd" type="Script" id=2]
 [ext_resource path="res://src/scenes/SketchPane/SketchPane.gd" type="Script" id=3]
 [ext_resource path="res://src/scenes/BoardControl/BoardControl.tscn" type="PackedScene" id=4]
 

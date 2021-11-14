@@ -1,5 +1,5 @@
 #
-#  FsTraverserMiddleMan.gd
+#  ReactiveFsTraverser.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,31 +15,33 @@
 #  limitations under the License.
 #
 
-class_name FsTraverserMiddleMan
-extends MiddleManBase
+class_name ReactiveFsTraverser
+extends ViewModelExt.ReactiveWrapper
 var _impl := FsTraverser.new()
 
 func _init():
-    _props = {
-        "can_pop": obsvr(false),
-        "folders": obsvr([]),
-        "files": obsvr([]),
-        "full_path": obsvr(""),
-        "selected": obsvr(""),
-        "selected_path": obsvr(""),
-        "is_valid": obsvr(true),
-        "new_dir_name": obsvr(""),
-        "new_dir_valid": obsvr(false),
-        "filters": obsvr({}),
-        "active_filter": obsvr("")
-    }
-    pipe(_impl, ["pop", "open", "refresh", "set_filters", "set_active_filter"], "_update_items")
-    pipe(_impl, ["set_full_path"], "_update_path")
-    pipe(_impl, ["select", "unselect"], "_update_selected")
-    
-    _actions["set_new_dir_name"] = action("_set_new_dir")
-    _actions["create_dir"] = action("_create_dir")
+    builder(self) \
+        .props() \
+            .can_pop.to(obsvr(false)) \
+            .folders.to(obsvr([])) \
+            .files.to(obsvr([])) \
+            .full_path.to(obsvr("")) \
+            .selected.to(obsvr("")) \
+            .selected_path.to(obsvr("")) \
+            .is_valid.to(obsvr(true)) \
+            .new_dir_name.to(obsvr("")) \
+            .new_dir_valid.to(obsvr(false)) \
+            .filters.to(obsvr({})) \
+            .active_filter.to(obsvr("")) \
+        .actions() \
+            .from_dict(pipe(_impl, ["pop", "open", "refresh", "set_filters", "set_active_filter"], "_update_items")) \
+            .from_dict(pipe(_impl, ["set_full_path"], "_update_path")) \
+            .from_dict(pipe(_impl, ["select", "unselect"], "_update_selected")) \
+            .set_new_dir_name.to(self._set_new_dir) \
+            .create_dir.to(self._create_dir) \
+        .init()
 
+func _on_init():
     _impl.set_filters(_props.filters.value)
     _impl.set_active_filter(_props.active_filter.value)
     _update_items(true)

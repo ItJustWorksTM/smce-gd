@@ -1,20 +1,20 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/scenes/FilePicker/FilePicker.gd" type="Script" id=1]
-[ext_resource path="res://src/types/BetterItemList.gd" type="Script" id=2]
-[ext_resource path="res://src/ClickSurface.gd" type="Script" id=3]
+[ext_resource path="res://src/types/ui/BetterItemList.gd" type="Script" id=2]
+[ext_resource path="res://src/types/ui/ClickSurface.gd" type="Script" id=3]
 [ext_resource path="res://src/scenes/FilePicker/DirCreatePopUp.gd" type="Script" id=4]
-[ext_resource path="res://src/BetterOptionButton.gd" type="Script" id=5]
+[ext_resource path="res://src/types/ui/BetterOptionButton.gd" type="Script" id=5]
 
 [node name="FilePicker" type="PanelContainer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -281.5
-margin_top = -165.0
-margin_right = 281.5
-margin_bottom = 165.0
+margin_left = -277.724
+margin_top = -188.597
+margin_right = 285.276
+margin_bottom = 141.403
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -172,3 +172,11 @@ margin_left = 160.0
 margin_right = 222.0
 margin_bottom = 24.0
 text = "Create"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 556.0
+margin_bottom = 323.0
+window_title = "Open a File or Directory"
+mode = 3

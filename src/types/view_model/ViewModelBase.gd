@@ -36,7 +36,7 @@ func _get(property: String):
     if property in _actions:
         return _actions[property]
     if has_method(property):
-        _actions[property] = action(property)
+        _actions[property] = Action.new(self, property)
         return _actions[property]
 
     
@@ -72,35 +72,7 @@ func invoke_on(action_name: String, object: Object, sig: String):
     else:
         push_error("Invalid action `%s` bound to signal" % action_name)
 
-func conn(target: Object, sig: String, method: String, binds: Array = [], flags: int = 0):
-    if target.connect(sig, self, method, binds, flags) != OK:
-        push_error("Failed to connect to signal '%s'" % sig)
-        assert(false)
-
-
-
-# TODO: technically, yield() provides a way to get all args as an array
-func _fwd_sig_jump0(sig): emit_signal(sig)
-func _fwd_sig_jump1(arg0, sig): emit_signal(sig, arg0)
-func _fwd_sig_jump2(arg0, arg1, sig): emit_signal(sig, arg0, arg1)
-func _fwd_sig_jump3(arg0, arg1, arg2, sig): emit_signal(sig, arg0, arg1, arg2)
-
-func fwd_sig(obj: Object, sig: String, binds: Array = []):
-    for r in obj.get_signal_list():
-        if r.name == sig:
-            if !has_signal(sig):
-                add_user_signal(sig, r.args) # TODO: take binds into account
-            var braindead = binds + [sig]
-            var __ = obj.connect(sig, self, "_fwd_sig_jump%d" % (r.args.size() + binds.size()), braindead)
-            return
-    push_error("Failed to forward signal `%s`!" % sig)
-            
-func action(method: String) -> Action:
-    return Action.new(self, method)
-
-static func merge(a: Dictionary, b: Dictionary):
-    Dict.merge(a, b)
-
+static func obsvr(val) -> Observable: return Observable.new(val)
 
 class ViewModelBaseBuilderExt:
     var _vm
