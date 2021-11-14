@@ -120,6 +120,11 @@ func can_create_dir(name: String) -> bool:
     print("its fine!")
     return true
 
+func can_create_file(name: String) -> bool:
+    if name.length() == 0: return false
+    print("its fine!")
+    return true
+
 func set_filters(dict: Dictionary) -> bool:
     filters = dict
     active_filter = ""

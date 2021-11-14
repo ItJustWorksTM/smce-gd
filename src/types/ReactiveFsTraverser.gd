@@ -31,6 +31,8 @@ func _init():
             .is_valid.to(obsvr(true)) \
             .new_dir_name.to(obsvr("")) \
             .new_dir_valid.to(obsvr(false)) \
+            .new_file_name.to(obsvr("")) \
+            .new_file_valid.to(obsvr(false)) \
             .filters.to(obsvr({})) \
             .active_filter.to(obsvr("")) \
         .actions() \
@@ -38,41 +40,46 @@ func _init():
             .from_dict(pipe(_impl, ["set_full_path"], "_update_path")) \
             .from_dict(pipe(_impl, ["select", "unselect"], "_update_selected")) \
             .set_new_dir_name.to(self._set_new_dir) \
+            .set_new_file_name.to(self._set_new_file) \
             .create_dir.to(self._create_dir) \
         .init()
 
 func _on_init():
-    _impl.set_filters(_props.filters.value)
-    _impl.set_active_filter(_props.active_filter.value)
+    _impl.set_filters(self.filters.value)
+    _impl.set_active_filter(self.active_filter.value)
     _update_items(true)
 
 func _create_dir():
-    if _impl.create_dir(_props.new_dir_name.value):
+    if _impl.create_dir(self.new_dir_name.value):
         _actions.refresh.invoke()
-        _actions.select.invoke([_props.new_dir_name.value])
+        _actions.select.invoke([self.new_dir_name.value])
         _set_new_dir("")
 
 func _set_new_dir(name):
-    _props.new_dir_name.value = name
-    _props.new_dir_valid.value = _impl.can_create_dir(name)
+    self.new_dir_name.value = name
+    self.new_dir_valid.value = _impl.can_create_dir(name)
+
+func _set_new_file(name):
+    self.new_file_name.value = name
+    self.new_file_valid.value = _impl.can_create_file(name)
 
 func _update_path(res):
-    _props.is_valid.value = res
+    self.is_valid.value = res
     _update_items(res)
 
 func _update_items(res):
     if !res: return
-    _props.folders.value = _impl.folders
-    _props.files.value = _impl.files
-    _props.full_path.value = _impl.get_path()
-    _props.can_pop.value = _impl.can_pop()
-    _props.filters.value = _impl.filters
-    _props.active_filter.value = _impl.active_filter
+    self.folders.value = _impl.folders
+    self.files.value = _impl.files
+    self.full_path.value = _impl.get_path()
+    self.can_pop.value = _impl.can_pop()
+    self.filters.value = _impl.filters
+    self.active_filter.value = _impl.active_filter
     _update_selected()
 
 func _update_selected(res = true):
     if !res: return 
-    _props.selected_path.value = _impl.get_selected_path()
-    _props.selected.value = _impl._current_item
-    _props.full_path.value = _impl.get_path()
+    self.selected_path.value = _impl.get_selected_path()
+    self.selected.value = _impl._current_item
+    self.full_path.value = _impl.get_path()
 

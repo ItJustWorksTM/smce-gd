@@ -39,6 +39,10 @@ func _get(property: String):
         _actions[property] = Action.new(self, property)
         return _actions[property]
 
+func _set(property, __) -> bool:
+    if property in _props:
+        return true
+    return false
     
 func bind() -> BindMap: return _bind
 func props() -> Dictionary: return _props

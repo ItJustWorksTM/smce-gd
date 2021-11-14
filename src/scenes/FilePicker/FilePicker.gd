@@ -30,15 +30,36 @@ onready var create_btn := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContai
 onready var folder_create_surface := $FolderCreate
 onready var create_dir_popup := $FolderCreate/CreateDirPopUp
 
+onready var filename_input := $VBoxContainer/HBoxContainer2/HBoxContainer2/HBoxContainer/LineEdit
+onready var header_label := $VBoxContainer/HBoxContainer2/HBoxContainer2/HBoxContainer/Label
+
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    func open_disabled(s, on_folder): return s < 0 || s >= 0 && on_folder
-    func pop_disabled(can_pop): return !can_pop
-    func input_color(is_valid): return Color.whitesmoke if is_valid else Color.red
-    func items(files, folders): return folders + files
+    enum Mode {
+        SAVE_FILE,
+        SELECT_FILE,
+        SELECT_FOLDER,
+        SELECT_ANY
+    }
+    # .new_file_name.to(obsvr("")) \
+    # .new_file_valid.to(obsvr(false)) \
+    func save_mode(mode): return mode == Mode.SAVE_FILE
+    func items(save_mode, files, folders): return folders + (files if !save_mode else [])
     func selected_index(items, selected): return items.find(selected)
     func on_folder(folders, index): return index < folders.size() && index != -1
+    func open_text(save): return "Save" if save else "Select"
+    func header_text(save): return "Name" if save else "Open"
+    func select_mode(save): return !save
+
+    func open_disabled(select_mode, s, on_folder, file_valid):
+        if select_mode:
+            return s < 0 || s >= 0 && on_folder
+        else:
+            return !file_valid
+    
+    func pop_disabled(can_pop): return !can_pop
+    func input_color(is_valid): return Color.whitesmoke if is_valid else Color.red
 
     func filters_index(filters, active_filter): return filters.keys().find(active_filter)
     func filters_text(filters: Dictionary):
@@ -50,10 +71,14 @@ class ViewModel:
 
     func _on_init():
         bind() \
-            .items.dep([self.files, self.folders]) \
+            .save_mode.dep([self.mode]) \
+            .select_mode.dep([self.save_mode]) \
+            .header_text.dep([self.save_mode]) \
+            .open_text.dep([self.save_mode]) \
+            .items.dep([self.save_mode, self.files, self.folders]) \
             .selected_index.dep([self.items, self.selected]) \
             .on_folder.dep([self.folders, self.selected_index]) \
-            .open_disabled.dep([self.selected_index, self.on_folder]) \
+            .open_disabled.dep([self.select_mode, self.selected_index, self.on_folder, self.new_file_valid]) \
             .pop_disabled.dep([self.can_pop]) \
             .input_color.dep([self.is_valid]) \
             .filters_text.dep([self.filters]) \
@@ -61,12 +86,18 @@ class ViewModel:
         
         bind() \
             .open_disabled.to(node.open_button, "disabled") \
+            .open_text.to(node.open_button, "text") \
             .pop_disabled.to(node.up_btn, "disabled") \
             .input_color.to(node.edit, "custom_colors/font_color") \
             .full_path.to(self, "_update_path_edit") \
+            .header_text.to(node.header_label, "text") \
+            .save_mode.to(node.filename_input, "visible") \
+            .select_mode.to(node.filter_dropdown, "visible") \
+            .new_file_name.to(self, "new_file_name")
 
         invoke() \
             ._try_path_change.on(node.edit, "text_changed") \
+            ._try_filename_change.on(node.filename_input, "text_changed") \
             ._open_pressed.on(node.open_button, "pressed") \
             ._on_create_btn_toggled.on(node.create_btn, "toggled") \
             ._on_surface_pressed.on(node.folder_create_surface, "pressed") \
@@ -99,6 +130,13 @@ class ViewModel:
                 .on_create.to(self._on_dir_create) \
             .init()
 
+    func _try_filename_change(text):
+        self.set_new_file_name.invoke([text])
+    
+    func sync_new_filename(text):
+        node.edit.text = ""
+        node.edit.append_at_cursor(text)
+
     func _on_set_filter(i):
         self.set_active_filter.invoke([self.filters.value.keys()[i]])
 
@@ -118,7 +156,10 @@ class ViewModel:
         _actions.set_full_path.invoke([text])
     
     func _open_pressed():
-        self.on_open.invoke([self.selected_path.value])
+        var ret = self.selected_path.value
+        if self.save_mode.value:
+            ret = ret.plus_file(self.new_file_name.value)
+        self.on_open.invoke([ret])
     
     func _set_selected(index):
         _actions.select.invoke([_props.items.value[index]])
@@ -148,15 +189,18 @@ func _ready():
     fsf.set_active_filter.invoke(["Any"])
 
     var act = ActionSignal.new()
+    var mode = Observable.new(ViewModel.Mode.SAVE_FILE)
 
     self.init_model() \
         .props() \
             .from_dict(fsf.props()) \
+            .mode.to(mode) \
         .actions() \
             .from_dict(fsf.actions()) \
             .on_open.to(act) \
         .init()
 
+    var flip = true
     while true:
         print(yield(act, "invoked"))
 
@@ -166,6 +210,9 @@ func _ready():
         yield(twe, "tween_all_completed")
 
         # yield(get_tree().create_timer(4), "timeout")
+
+        mode.value = ViewModel.Mode.SELECT_FILE if flip else ViewModel.Mode.SAVE_FILE
+        flip = !flip
 
         twe = Animations.anim_close(self)
         twe.start()
