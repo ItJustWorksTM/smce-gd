@@ -121,6 +121,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="LabelLineLimit" type="Label" parent="."]
+margin_left = 1088.47
+margin_top = 50.4142
+margin_right = 1205.47
+margin_bottom = 70.4142
+text = "Line length limit:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineLimitField" type="LineEdit" parent="."]
+margin_left = 1214.59
+margin_top = 46.669
+margin_right = 1272.59
+margin_bottom = 76.669
+hint_tooltip = "Values below 10 will be ignored"
+text = "80"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
 [connection signal="item_activated" from="HBoxContainer/FileTree" to="HBoxContainer/FileTree" method="_on_FileTree_item_activated"]
 [connection signal="pressed" from="HBoxContainer/CollapseBtn" to="." method="_on_Collapse_btn_pressed"]
