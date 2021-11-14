@@ -8,6 +8,7 @@ onready var textEditor: TextEdit = $HBoxContainer/VBoxContainer/TextEditor
 onready var tabs: Tabs = $HBoxContainer/VBoxContainer/Tabs
 onready var file_tree: Tree = $HBoxContainer/FileTree
 onready var collapse_btn: Button = $HBoxContainer/CollapseBtn
+onready var lineLimit: LineEdit = $LineLimitField
 
 var src_file = null
 var currentFileInfo = null
@@ -81,6 +82,17 @@ func _on_close() -> void:
 # Function that displays the hidden editor	
 func enableEditor() -> void:
 	set_visible(true)
+	
+# Limit line length
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		var line = textEditor.cursor_get_line()
+		var s = textEditor.get_line(line)
+		if (event.as_text() == "Tab" && lineLimit.text != "" && s.length()>=(int(lineLimit.text)-1) && int(lineLimit.text) >= 10):
+			textEditor.get_tree().set_input_as_handled()
+		if event.get_unicode() != 0: # allow editing
+			if (lineLimit.text != "" && s.length()>=int(lineLimit.text) && int(lineLimit.text) >= 10):
+				textEditor.get_tree().set_input_as_handled() # ignore key press after limit
 
 # Function to handle dropdown menu button options
 # Options to open and save file
