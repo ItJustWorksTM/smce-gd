@@ -155,6 +155,8 @@ func _fill_tree():
 func _save_file():
 	if currentFileInfo != null:
 		fileLoader.saveFile(currentFileInfo._path,textEditor.text)
+		currentFileInfo._savedContent = currentFileInfo._content
+		tabs._update_saved_status()
 
 func _on_Collapse_btn_pressed():
 	if(file_tree.is_visible_in_tree()):
