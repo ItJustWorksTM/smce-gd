@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/ui/code_editor/MainWindow.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/code_editor/Tabs.gd" type="Script" id=2]
 [ext_resource path="res://src/ui/code_editor/FileTree.gd" type="Script" id=3]
+[ext_resource path="res://src/ui/code_editor/TextEditor.gd" type="Script" id=4]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -117,6 +118,7 @@ margin_right = 994.0
 margin_bottom = 680.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
+script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
