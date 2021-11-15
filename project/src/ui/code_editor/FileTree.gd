@@ -1,7 +1,6 @@
 extends Tree
 
-
-
+onready var mainControl: Node = get_owner()
 onready var file_tree: Tree = self
 
 # Called when the node enters the scene tree for the first time.
@@ -28,15 +27,7 @@ func add_files_to_tree(path, parent):
 			child.set_metadata(0, dir.get_current_dir() + "/" + file_name)
 		file_name = dir.get_next()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
-
-
 func _on_FileTree_item_activated():
 	var path = file_tree.get_selected().get_metadata(0)
 	if path != null:
-		get_parent().get_parent()._load_content(path)
+		mainControl._load_content(path)

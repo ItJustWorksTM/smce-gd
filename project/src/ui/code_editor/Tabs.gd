@@ -1,7 +1,7 @@
 extends Tabs
 
-#onready var mainControl: Node = get_tree().get_root().get_node("Control")
-onready var mainControl: Node = get_parent().get_parent().get_parent()
+onready var mainControl: Node = get_owner()
+onready var tabs: Tabs = self
 
 class fileinfo:
 	var _index: int
@@ -9,13 +9,11 @@ class fileinfo:
 	var _path: String
 	var _content: String
 		
-onready var tabs: Tabs = self
 #Function that Initializes the tabssystem
-
 func _ready():
 	tabs.add_tab("+")
 	tabs.tab_close_display_policy =Tabs.CLOSE_BUTTON_SHOW_NEVER
-	
+
 #Create a new tab when openning a new file
 func _create_new_tab_with_content(content,path):
 	#Save the content of the current file in memory

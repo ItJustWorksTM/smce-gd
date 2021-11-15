@@ -143,8 +143,8 @@ func _on_edit_btn() -> void:
 		code_editor = code_main_window_t.instance()
 		code_editor.src_file = sketch_path
 		get_tree().root.add_child(code_editor)
-		
-	code_editor.enableEditor()
+	else:
+		code_editor.enableEditor()
 
 func _on_board_cleaned() -> void:
 	sketch_status.text = " Not Compiled" if ! _toolchain.is_building() else " Compiling..."
