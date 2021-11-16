@@ -1,14 +1,19 @@
 extends Tabs
 
+
 onready var mainControl: Node = get_owner()
 onready var tabs: Tabs = self
+onready var popupWindow = preload("res://src/ui/popup/popup_window.tscn")
 
 class fileinfo:
 	var _index: int
 	var _name: String
 	var _path: String
 	var _content: String
-		
+	var _savedContent: String
+	var _cursorColumn: int
+	var _cursorLine: int
+			
 #Function that Initializes the tabssystem
 func _ready():
 	tabs.add_tab("+")
@@ -27,7 +32,10 @@ func _create_new_tab_with_content(content,path):
 	newFile._index 		= tabs.get_tab_count()-2		
 	newFile._name 		= name
 	newFile._content 	= content
+	newFile._savedContent 	= content
 	newFile._path 		= path
+	newFile._cursorLine = 0
+	newFile._cursorColumn = 0
 	mainControl.fileInfos[newFile._index] = newFile			#Store the info in memory
 	tabs.current_tab = newFile._index			#Switch to the correct tab
 	_show_new_file(newFile)						#Display the file content
@@ -39,12 +47,16 @@ func _show_new_file(file):
 		mainControl.currentFileInfo = null
 		return
 	mainControl.textEditor.text = file._content
+	mainControl.textEditor.cursor_set_line(file._cursorLine)
+	mainControl.textEditor.cursor_set_column(file._cursorColumn)
 	mainControl.currentFileInfo = file
 	
 #Save the content of the file in memory (An array of fileInfo class objects)
 func _save_tab_content():
 	if(mainControl.currentFileInfo != null):
 		mainControl.currentFileInfo._content = mainControl.textEditor.text
+		mainControl.currentFileInfo._cursorColumn = mainControl.textEditor.cursor_get_column()
+		mainControl.currentFileInfo._cursorLine = mainControl.textEditor.cursor_get_line()
 		mainControl.fileInfos[mainControl.currentFileInfo._index] = mainControl.currentFileInfo
 		
 
@@ -75,6 +87,7 @@ func _on_Tabs_tab_clicked(tab):
 	#Display the content for the selected tab	
 	_show_new_file(fileInfo)
 
+
 #Signal from pressing X on a tab
 func _on_Tabs_tab_close(tab):
 	#If pressing X on another tab switch to that tab
@@ -82,6 +95,17 @@ func _on_Tabs_tab_close(tab):
 		tabs.current_tab = tab
 		_on_Tabs_tab_clicked(tab)
 		return
+		
+	var saved = _is_saved()
+	if(!saved):
+		var popup = popupWindow.instance()
+		get_tree().root.add_child(popup)
+		popup.confirmation("The tab you are trying to close is not saved!\nDo you wish to proceed?")
+		yield(popup,"click")
+		var choice = popup.choiseRet()
+		if(!choice):
+			return
+
 		
 	#The following changes the index for all tabs and shifts them by one	
 	var removedIndex = tab
@@ -102,3 +126,25 @@ func _on_Tabs_tab_close(tab):
 	#If only the + tab is left do not allow the user to remove it
 	if(tabs.get_tab_count() == 1):
 		tabs.tab_close_display_policy = Tabs.CLOSE_BUTTON_SHOW_NEVER
+
+func _is_saved():
+	var fileInfo = mainControl.fileInfos[tabs.current_tab]
+	if(fileInfo._savedContent == fileInfo._content):
+		#print("EQUAL")
+		return true;
+	else:
+		#print("NOT EQUAL")
+		return false;
+		
+
+
+func _on_TextEditor_text_changed():
+	_update_saved_status()
+		
+func _update_saved_status():
+	_save_tab_content()
+	var fileInfo = mainControl.fileInfos[tabs.current_tab]
+	if(_is_saved()):
+		tabs.set_tab_title(current_tab,fileInfo._name)
+	else:
+		tabs.set_tab_title(current_tab,fileInfo._name+"*")

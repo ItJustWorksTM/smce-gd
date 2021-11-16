@@ -59,8 +59,8 @@ window_title = "Open a File"
 resizable = true
 mode = 0
 access = 2
-current_dir = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project"
-current_path = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project/"
+current_dir = "/SCHOOL/MPSOF-1/Year2/LP1/SoftEv/GITKRAKEN/group-10-smce-gd/project"
+current_path = "/SCHOOL/MPSOF-1/Year2/LP1/SoftEv/GITKRAKEN/group-10-smce-gd/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -129,3 +129,4 @@ __meta__ = {
 [connection signal="tab_changed" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_changed"]
 [connection signal="tab_clicked" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_clicked"]
 [connection signal="tab_close" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_close"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/TextEditor" to="HBoxContainer/VBoxContainer/Tabs" method="_on_TextEditor_text_changed"]

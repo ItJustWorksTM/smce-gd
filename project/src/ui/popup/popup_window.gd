@@ -77,12 +77,12 @@ func _buttonOK_pressed() -> void:
 	
 func _buttonYes_pressed() -> void:
 	choice = true
-	emit_signal("click")
+	emit_signal("click",choice)
 	queue_free()
 	
 func _buttonNo_pressed() -> void:
 	choice = false
-	emit_signal("click")
+	emit_signal("click",choice)
 	queue_free()
 	
 # Returns user's choice (only for confirmation popup)
