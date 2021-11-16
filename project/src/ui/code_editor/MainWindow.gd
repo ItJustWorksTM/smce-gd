@@ -2,6 +2,7 @@ extends Control
 
 	
 onready var close_btn: Button = $Close
+onready var compile_btn: Button = $Compile
 onready var dropdown_btn: MenuButton = $DropDown
 onready var fileDialog: FileDialog = $FileDialog
 onready var textEditor: TextEdit = $HBoxContainer/VBoxContainer/TextEditor
@@ -13,6 +14,8 @@ var src_file = null
 var currentFileInfo = null
 var fileInfos = {}				#Keeps track of all fileInfo objects
 var tree_filled = false
+var sketch_owner = null
+
 #SAVES CURRENT STATE OF filedialog operation
 #Can have the following values:
 # OPEN  NEWFILE  SAVE NEWPROJ
@@ -22,6 +25,8 @@ onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	close_btn.connect("pressed", self, "_on_close")
+	compile_btn.visible = false
+	compile_btn.connect("pressed",self, "_on_compile")
 	_init_dropdown()
 	textEditor._init_content()
 
@@ -37,6 +42,11 @@ func _init_dropdown():
 # Function that hides the editor when its closed with a dedicated button
 func _on_close() -> void:
 	set_visible(false)
+
+# Function that calls compile function and closes("hides") the editor
+func _on_compile() -> void:
+	sketch_owner._on_compile() #Running compile functionality in ControlPane instance
+	_on_close()
 	
 # Function that displays the hidden editor	
 func enableEditor() -> void:
@@ -61,6 +71,7 @@ func _open_file():
 	fileDialogOperation = "OPEN"
 	fileDialog.mode = fileDialog.MODE_OPEN_FILE	#Change mode back to open file	
 	fileDialog.popup() # Opens file dialog for file selection
+	
 #Function to create a new file
 func _new_file():
 	fileDialogOperation = "NEWFILE"

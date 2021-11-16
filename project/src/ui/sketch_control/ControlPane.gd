@@ -142,7 +142,9 @@ func _on_edit_btn() -> void:
 	if (code_editor == null):
 		code_editor = code_main_window_t.instance()
 		code_editor.src_file = sketch_path
+		code_editor.sketch_owner = self
 		get_tree().root.add_child(code_editor)
+		code_editor.compile_btn.visible = true
 	else:
 		code_editor.enableEditor()
 
