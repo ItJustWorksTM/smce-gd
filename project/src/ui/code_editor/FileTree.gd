@@ -11,6 +11,7 @@ func _fill_tree(path):
 	var name = path.substr(path.get_base_dir().length()+1,path.length())
 	var root = file_tree.create_item()
 	root.set_text(0, name)
+	add_icon(root, true)
 	add_files_to_tree(path, root)
 	
 func add_files_to_tree(path, parent):
@@ -22,11 +23,20 @@ func add_files_to_tree(path, parent):
 		var child = file_tree.create_item(parent)
 		child.set_text(0, file_name)
 		if dir.current_is_dir():
+			add_icon(child, true)
 			add_files_to_tree(dir.get_current_dir() + "/" + file_name, child)
 		else:
 			child.set_metadata(0, dir.get_current_dir() + "/" + file_name)
+			add_icon(child, false)
 		file_name = dir.get_next()
-
+		
+func add_icon(node, is_folder):
+	if is_folder:
+		node.set_icon(0, load('res://media/images/outline_folder_white_48dp.png'))
+	else:
+		node.set_icon(0, load('res://media/images/outline_description_white_48dp.png'))
+	node.set_icon_max_width(0, 20)
+	
 func _on_FileTree_item_activated():
 	var path = file_tree.get_selected().get_metadata(0)
 	if path != null:
