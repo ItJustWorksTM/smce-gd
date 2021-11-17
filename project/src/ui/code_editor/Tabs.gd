@@ -86,6 +86,8 @@ func _on_Tabs_tab_clicked(tab):
 	var fileInfo = mainControl.fileInfos[tabs.current_tab]
 	#Display the content for the selected tab	
 	_show_new_file(fileInfo)
+	
+	mainControl.file_tree._select_node(fileInfo._path)
 
 
 #Signal from pressing X on a tab

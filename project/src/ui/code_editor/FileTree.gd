@@ -4,6 +4,8 @@ onready var mainControl: Node = get_owner()
 onready var file_tree: Tree = self
 onready var popupWindow = preload("res://src/ui/popup/popup_window.tscn")
 
+
+
 var icon_folder
 var icon_doc
 var icon_refresh
@@ -58,8 +60,21 @@ func _on_FileTree_item_activated():
 	var path = file_tree.get_selected().get_metadata(0)
 	if path != null:
 		mainControl._load_content(path)
+		
+func _select_node(path):
+	_select_node_util(file_tree.get_root(), path)
 
-
+func _select_node_util(node, path):
+	if node == null:
+		return
+	elif node.get_metadata(0) == path:
+		node.select(0)
+	else:
+		var c = node.get_children()
+		while(c):
+			_select_node_util(c, path)
+			c = c.get_next()
+	
 func _on_FileTree_button_pressed(item, column, id):
 	match(id):
 		0: 
