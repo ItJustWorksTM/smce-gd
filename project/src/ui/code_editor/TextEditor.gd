@@ -24,7 +24,7 @@ func _ready():
 		textEditor.add_keyword_color(o,Color(0.605167, 0.875, 0.071777))
 	
 	#stream, serial, other operations
-	var other = ['interrupts','noInterrupts','CAN','setCursor','display','bit','read','peek','onReceive','onRequest','flush', 'requestFrom','endTransmission','beginTransmission','setClock', 'status','write','size_t','Stream','Serial','begin','end','stop','print','printf','println','delay','attach','readMsgBuf','sendMsgBuf']
+	var other = ['interrupts','noInterrupts','CAN','setCursor','display','bit','read','peek','onReceive','onRequest','flush', 'requestFrom','endTransmission','beginTransmission','setClock', 'status','write','size_t','Stream','Serial','begin','end','stop','print','printf','println','delay','attach','readMsgBuf','sendMsgBuf','analogWrite','analogRead', 'digitalWrite', 'digitalRead', 'writeMicroseconds','pinMode','delayMicroseconds']
 	for t in other:
 		textEditor.add_keyword_color(t,Color(0.976563, 0.599444, 0.324249))
 		
