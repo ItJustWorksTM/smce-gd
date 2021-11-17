@@ -55,12 +55,12 @@ margin_left = 107.635
 margin_top = 220.315
 margin_right = 677.635
 margin_bottom = 539.315
-window_title = "Öppna en Fil"
+window_title = "Open a File"
 resizable = true
 mode = 0
 access = 2
-current_dir = "/Users/Anton/Desktop/MPSOF-1/DAT265/group10/group-10-smce-gd/project"
-current_path = "/Users/Anton/Desktop/MPSOF-1/DAT265/group10/group-10-smce-gd/project/"
+current_dir = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project"
+current_path = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -155,6 +155,7 @@ __meta__ = {
 }
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="button_pressed" from="HBoxContainer/FileTree" to="HBoxContainer/FileTree" method="_on_FileTree_button_pressed"]
 [connection signal="item_activated" from="HBoxContainer/FileTree" to="HBoxContainer/FileTree" method="_on_FileTree_item_activated"]
 [connection signal="pressed" from="HBoxContainer/CollapseBtn" to="." method="_on_Collapse_btn_pressed"]
 [connection signal="tab_changed" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_changed"]
