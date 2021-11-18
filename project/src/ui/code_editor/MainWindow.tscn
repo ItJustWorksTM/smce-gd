@@ -134,20 +134,24 @@ __meta__ = {
 }
 
 [node name="LabelLineLimit" type="Label" parent="."]
-margin_left = 1088.47
-margin_top = 50.4142
-margin_right = 1205.47
-margin_bottom = 70.4142
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -185.739
+margin_top = 51.8284
+margin_right = -68.7388
+margin_bottom = 71.8284
 text = "Line length limit:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LineLimitField" type="LineEdit" parent="."]
-margin_left = 1214.59
-margin_top = 46.669
-margin_right = 1272.59
-margin_bottom = 76.669
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -66.6904
+margin_top = 46.6691
+margin_right = -8.69043
+margin_bottom = 76.6691
 hint_tooltip = "Values below 10 will be ignored"
 text = "80"
 __meta__ = {
