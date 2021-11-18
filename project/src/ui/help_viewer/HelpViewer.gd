@@ -37,17 +37,18 @@ class WikiPage:
 
 func init() -> bool:
 	print("Loading help viewer...")
-	wiki_pages = _get_wiki_from_storage(WIKI_PATH)
-	for page in wiki_pages:
-		print("Title: " + page.title)
-		#print("Content: " + page.content)
+	
 	
 	return true
 
 
 func _ready():
 	close_btn.connect("pressed", self, "_close")
-	
+	wiki_pages = _get_wiki_from_storage(WIKI_PATH)
+	for page in wiki_pages:
+		print("Title: " + page.title)
+		#print("Content: " + page.content)
+		
 	if wiki_pages.size() > 0:
 		center_label.set_text("") # TODO: Should remove the entire node?
 	for page in wiki_pages:
@@ -84,6 +85,7 @@ func _get_wiki_from_storage(path) -> Array:
 func _read_wiki_file(file_name):
 	var file = File.new()
 	var content : String
+	var index = 0
 	file.open(WIKI_PATH + file_name, File.READ)
 	while not file.eof_reached():
 		var line = file.get_line()
@@ -98,10 +100,11 @@ func _read_wiki_file(file_name):
 		if line.begins_with("![](https://i.imgur.com/"):
 			line = line.replacen("![](", "").replacen(")", "")
 			print("Image to download: " + line)
-			download_texture("line", WIKI_PATH + line)
-			line = "[img]" + WIKI_PATH + line + "[/img]"
+			download_texture(line, WIKI_PATH + str(index) + ".png")
+			line = "[img]" + "media/wiki/" + str(index) + ".png" + "[/img]"
 		line += "\n"
 		content = content + line;
+		index = index + 1
 	#var content = file.get_as_text()
 	file.close()
 	return content
