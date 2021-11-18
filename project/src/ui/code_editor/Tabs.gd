@@ -46,6 +46,14 @@ func _show_new_file(file):
 		mainControl.textEditor.text = "Please open a file to edit"
 		mainControl.currentFileInfo = null
 		return
+		
+	#Enables syntax highlighting only for Arduino and Godot files
+	var format = (file._name.rsplit(".", true, 1))[1]
+	if (format == "ino" || format == "h" || format == "gd"):
+		mainControl.textEditor.syntax_highlighting = true
+	else:
+		mainControl.textEditor.syntax_highlighting = false
+		
 	mainControl.textEditor.text = file._content
 	mainControl.textEditor.cursor_set_line(file._cursorLine)
 	mainControl.textEditor.cursor_set_column(file._cursorColumn)
