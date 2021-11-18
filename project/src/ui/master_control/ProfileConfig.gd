@@ -19,6 +19,7 @@ class_name ProfileConfig
 
 var profile_name: String = "No Name"
 var environment: String = "playground/Playground"
+var compiler: String = "No Compiler"
 var slots: Array = []
 
 func type_info() -> Dictionary:

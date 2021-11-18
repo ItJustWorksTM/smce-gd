@@ -19,7 +19,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/AnyTask.gdns"
 }, {
-"base": "Reference",
+"base": "ButtonGroup",
 "class": "BButtonGroup",
 "language": "GDScript",
 "path": "res://src/utilities/toggleable_bgroup/BButtonGroup.gd"
@@ -29,12 +29,12 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/Board.gdns"
 }, {
-"base": "",
+"base": "Reference",
 "class": "BoardConfig",
 "language": "NativeScript",
 "path": "res://src/bind/BoardConfig.gdns"
 }, {
-"base": "",
+"base": "Node",
 "class": "BoardView",
 "language": "NativeScript",
 "path": "res://src/bind/BoardView.gdns"
@@ -154,7 +154,7 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://src/bind/UartChannelConfig.gdns"
 }, {
-"base": "",
+"base": "Node",
 "class": "UartSlurper",
 "language": "NativeScript",
 "path": "res://src/bind/UartSlurper.gdns"
@@ -329,7 +329,6 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
-quality/filters/anisotropic_filter_level=2
 quality/directional_shadow/size=2048
 quality/shadow_atlas/size=2048
 quality/shadow_atlas/quadrant_3_subdiv=3
@@ -338,6 +337,7 @@ quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/reflections/irradiance_max_size=32
 quality/shading/force_blinn_over_ggx=true
+quality/filters/anisotropic_filter_level=2
 quality/subsurface_scattering/quality=0
 quality/reflections/atlas_size=0
 quality/reflections/atlas_subdiv=16
