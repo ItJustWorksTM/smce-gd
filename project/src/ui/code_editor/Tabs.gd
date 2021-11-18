@@ -47,9 +47,9 @@ func _show_new_file(file):
 		mainControl.currentFileInfo = null
 		return
 		
-	#Enables syntax highlighting only for Arduino and Godot files
+	#Enables syntax highlighting only for Arduino files
 	var format = (file._name.rsplit(".", true, 1))[1]
-	if (format == "ino" || format == "h" || format == "gd"):
+	if (format == "ino" || format == "h" || format == "pde" || format == "cpp" || format == "c"):
 		mainControl.textEditor.syntax_highlighting = true
 	else:
 		mainControl.textEditor.syntax_highlighting = false
