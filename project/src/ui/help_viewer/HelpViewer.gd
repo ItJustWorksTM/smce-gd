@@ -86,8 +86,14 @@ func _read_wiki_file(file_name):
 	var file = File.new()
 	var content : String
 	var index = 0
+	var img_width = 384
 	file.open(WIKI_PATH + file_name, File.READ)
 	while not file.eof_reached():
+#		var start = 0
+#		var end = null
+#		var end_2 = null
+#		var end_true = null
+#		var line_length = 0
 		var line = file.get_line()
 		# Format the text using BBCode
 		# TODO: Switch statement? Match statement (godot)?
@@ -100,11 +106,20 @@ func _read_wiki_file(file_name):
 		if line.begins_with("![](https://i.imgur.com/"):
 			line = line.replacen("![](", "").replacen(")", "")
 			print("Image to download: " + line)
-			download_texture(line, WIKI_PATH + str(index) + ".png")
-			line = "[img]" + "media/wiki/" + str(index) + ".png" + "[/img]"
+			download_texture(line, WIKI_PATH + "images/" + str(index) + ".png")
+			line = "[img=<" + str(img_width) + ">]" + "media/wiki/images/" + str(index) + ".png" + "[/img]"
+			index = index + 1
+#		if "https://" in line:
+#			start = line.find("https://")
+#			end = line.findn(" ", start)
+#			end_2 = line.findn(")", start)
+#			end_true = min(end, end_2)
+#			if end == null && end_2 == null:
+#				end_true = line.length()
+#			line = line.insert(start - 1, "[u]")
+#			line = line.insert(end_true + 1, "[/u]")
 		line += "\n"
 		content = content + line;
-		index = index + 1
 	#var content = file.get_as_text()
 	file.close()
 	return content
