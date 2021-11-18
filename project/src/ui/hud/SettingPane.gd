@@ -43,6 +43,7 @@ func set_master_manager(mngr) -> void:
 
 var unique_sketches: int = 0
 var boards: Array = []
+var compilers: Array = []
 
 func _ready():
 	toggle_btn.connect("pressed", self, "emit_signal", ["toggled"])
@@ -78,7 +79,7 @@ func _reflect_profile() -> void:
 	sketches_label.text = "Sketches: %d" % map.size()
 
 	world_list.select(Global.environments.keys().find(profile.environment))
-# TODO: select default compiler
+	compiler_list.select(master_manager.active_profile.compiler)
 
 
 func _update_envs():
@@ -87,7 +88,7 @@ func _update_envs():
 
 
 func _update_compilers():
-	var compilers = Toolchain.new().find_compilers()
+	compilers = Toolchain.new().find_compilers()
 	for compiler in compilers:
 		compiler_list.add_item(compiler.name + " (" + compiler.version + ")")
 
@@ -121,8 +122,7 @@ func _on_world_selected(index: int) -> void:
 	master_manager.load_profile(master_manager.active_profile)
 	
 func _on_compiler_selected(index: int) -> void:
-	master_manager.active_profile.compiler = compiler_list.get_item_text(index)
-	master_manager.load_profile(master_manager.active_profile)
+	master_manager.active_profile.compiler = index
 
 func _process(_delta) -> void:
 	_reflect_profile()

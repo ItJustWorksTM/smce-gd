@@ -111,6 +111,12 @@ void Toolchain::set_free() {
 Array Toolchain::find_compilers() {
     Array result;
 
+    auto compilerDefault = make_ref<Toolchain::CompilerInformation>();
+    compilerDefault->name = "Default compiler";
+    compilerDefault->path = "";
+    compilerDefault->version = "";
+    result.push_back(compilerDefault);
+
     auto compiler1 = make_ref<Toolchain::CompilerInformation>();
     compiler1->name = "Compiler 1";
     compiler1->path = "Path/To/Compiler1";
