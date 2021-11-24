@@ -49,6 +49,7 @@ class FrameBuffer : public GdRef<"FrameBuffer", FrameBuffer> {
     int get_height() noexcept;
     int get_freq() noexcept;
     bool write_rgb888(PoolByteArray img);
+    PoolByteArray read_rgb888();
 
     Ref<BoardConfig::FrameBufferConfig> info();
 };

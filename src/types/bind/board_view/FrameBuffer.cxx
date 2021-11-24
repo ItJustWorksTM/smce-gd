@@ -36,6 +36,7 @@ void FrameBuffer::_register_methods() {
     register_method("get_height", &FrameBuffer::get_height);
     register_method("get_freq", &FrameBuffer::get_freq);
     register_method("write_rgb888", &FrameBuffer::write_rgb888);
+    register_method("read_rgb888", &FrameBuffer::read_rgb888);
     register_method("info", &FrameBuffer::info);
 }
 
@@ -54,6 +55,20 @@ bool FrameBuffer::write_rgb888(PoolByteArray bytes) {
         std::span{reinterpret_cast<const std::byte*>(bytes.read().ptr()), static_cast<size_t>(bytes.size())};
 
     return frame_buf.write_rgb888(byte_span);
+}
+
+PoolByteArray FrameBuffer::read_rgb888() {
+    auto bytes = PoolByteArray{};
+
+    bytes.resize(get_height() * get_width() * 3);
+
+    const auto byte_span =
+        std::span{reinterpret_cast<std::byte*>(bytes.write().ptr()), static_cast<size_t>(bytes.size())};
+
+    // TODO: maybe check success :|
+    frame_buf.read_rgb888(byte_span);
+
+    return bytes; // pray for some kind of return value optimization
 }
 
 Ref<BoardConfig::FrameBufferConfig> FrameBuffer::info() { return m_info; }
