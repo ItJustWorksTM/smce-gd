@@ -12,8 +12,11 @@ func set_value(__):
 func _init(observables: Array):
     var i = 0
     for obsvr in observables:
-        obsvr.connect("changed", self, "_on_change", [i])
-        _values.append(obsvr.value)
+        if obsvr is Observable:
+            obsvr.connect("changed", self, "_on_change", [i])
+            _values.append(obsvr.value)
+        else:
+            _values.append(obsvr)
         i += 1
 
 func _on_change(new_value, i):

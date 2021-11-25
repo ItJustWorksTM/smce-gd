@@ -27,67 +27,51 @@ onready var profile_buttons_container: Control = $VBox/HScroll/Margin/HBox
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal profile_selected(profile)
+    func _init(n).(n): pass
 
-    func profiles(profiles: Array): return profiles
-
-    func _init(n, profiles: Observable).(n):
-        bind() \
-            .profiles.dep([profiles]) \
-        
+    func _on_init():
         bind() \
             .profiles.to(self, "_list_profiles") \
         
-    func select_new_profile():
-        emit_signal("profile_selected", Profile.new("Profile"))
-
-    func select_profile(profile):
-        emit_signal("profile_selected", profile)
-
-    # TODO: generalize node reuse
     func _list_profiles(profiles: Array):
         var alias = node.profile_buttons_container
 
         var existing = alias.get_children()
-        for node in existing: alias.remove_child(node)
-        
-        for prof in profiles:
-            var ex = null
-            for exist in existing:
-                if exist.get_meta("profile") == prof:
-                    ex = exist
-                    break
-            
-            if ex == null:
-                var label: ProfileSelectButton = ProfileSelectButton.instance()
-                label.set_meta("profile", prof)
-                alias.add_child(label)
-                
-                label.init_model(prof)
-                label.rect_min_size.x = 296
-
-                conn(label.model, "pressed", "select_profile", [prof])
-            else:
-                existing.erase(ex)
-                alias.add_child(ex)
-
         for node in existing: node.queue_free()
+        
+        for i in range(profiles.size()):
+            var label: ProfileSelectButton = ProfileSelectButton.instance()
+            alias.add_child(label)
+            
+            label.init_model() \
+                .props() \
+                    .profile.to(profiles[i]) \
+                .actions() \
+                    .pressed.to(self.selected.with([i])) \
+                .init()
+            
+            label.rect_min_size.x = 296
 
 
-func init_model(profiles): # Array<Profile>
-    model = ViewModel.new(self, Observable.from(profiles))
+
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
 func _ready():
+    self.rect_pivot_offset = self.rect_size / 2
+    
     # Debug
     if true:
-        var profiles: Observable = Observable.from([Profile.new("Profile1"), Profile.new("Profile2")])
-        init_model(profiles)
+        var profiles: Observable = Observable.new([Profile.new("Profile1"), Profile.new("Profile2")])
 
-        while true:
-            # debug: whenever we receive a selection event we just create a new profile
-            profiles.value.append(Profile.new("Profile%d" % randi()))
-            profiles.emit_change()
+        var on_selected = ActionSignal.new()
 
-            print(Reflect.inst2dict2(yield(model, "profile_selected")))
+        init_model() \
+            .props() \
+                .profiles.to(profiles) \
+            .actions() \
+                .selected.to(on_selected) \
+            .init()
 
 static func instance(): return load(SCENE_FILE).instance()

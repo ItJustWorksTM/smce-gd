@@ -29,24 +29,26 @@ onready var button: Button = $Button
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal pressed()
-
     func profile_name(profile: Profile): return profile.name
     func profile_info(profile: Profile):
         return "[color=%s]World: %s[/color]\nSketches: %d" % ["white" if true else "red", profile.environment, profile.sketches.size()]
 
-    func _init(n, profile: Observable).(n):
+    func _init(n).(n): pass
+
+    func _on_init():
         bind() \
-            .profile_name.dep([profile]) \
-            .profile_info.dep([profile]) \
+            .profile_name.dep([self.profile]) \
+            .profile_info.dep([self.profile]) \
         
         bind() \
             .profile_name.to(node.profile_name_label, "text") \
             .profile_info.to(node.profile_info_label, "bbcode_text") \
         
-        fwd_sig(node.button, "pressed")
+        invoke() \
+            .pressed.on(node.button, "pressed")
 
-func init_model(profile): # <Profile>
-    model = ViewModel.new(self, Observable.from(profile))
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
-static func instance():    return load(SCENE_FILE).instance()
+static func instance(): return load(SCENE_FILE).instance()

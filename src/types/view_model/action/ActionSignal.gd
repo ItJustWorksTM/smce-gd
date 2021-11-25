@@ -22,6 +22,7 @@ signal invoked(args)
 
 func _init().(null, ""): pass
 
-func invoke(args: Array = []) -> void:
-    callv("emit_signal", ["invoked"] + args)
-    print("ActionSignal: [", _method, "], Args: ", args)
+func invoke(args: Array = [], binds = []) -> void:
+    print(["invoked"] + args + _extra + binds)
+    callv("emit_signal", ["invoked"] + args + _extra + binds)
+    print("ActionSignal: [", _method, "], Args: ", args, " Binds: ", binds)

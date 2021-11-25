@@ -35,105 +35,90 @@ onready var save_btn: Button = $VBox/HBox/SaveButton
 onready var world_list: OptionButton = $VBox/HBox2/WorldOptions
 onready var sketches_label: Label = $VBox/Sketches
 onready var version_label: Label = $Version
+onready var context_btn: Button = $VBox/Margin/ContextButton
 
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal save_profile()
-    signal reload_profile()
-    signal switch_profile()
-
-    var _profile: Observable # <Profile>
-    var _dirty_profile: Observable # <Profile>
-
-    # TODO: Potentially not needed? the input field is synced with this,
-    # though when the profile changes we need to be able to set the input field
-    func profile_name(profile: Profile): return profile.name
-
-    func sketch_count(profile: Profile): return "Sketches: %d" % profile.sketches.size()
-
+    func sketch_count(sketches): return "Sketches: %d" % sketches.size()
     func save_disabled(dirty, orig): return dirty.name == orig.name
-
-    # Not sure if needed as we can get an array already from the Universe
-    func worlds(arr): return arr
-
     func version(): return "SMCE-gd: %s" % "NOTHING"
+    func save_btn_disabled(saveable): return !saveable
 
-    func delete(n): print(n)
+    func _init(n).(n): pass
 
-    func _init(n, profile: Observable, dirty_profile, worlds: Observable).(n):
-        _profile = profile
-        _dirty_profile = dirty_profile
-        profile.bind_change(self, "_set_dirty")
+    func _on_init():
 
         bind() \
-            .worlds.dep([worlds]) \
-            .sketch_count.dep([_dirty_profile]) \
+            .sketch_count.dep([self.sketches]) \
             .version.dep([]) \
-            .save_disabled.dep([_dirty_profile, profile]) \
-            .profile_name.dep([_dirty_profile])
+            .save_btn_disabled.dep([self.profile_saveable])
 
         bind() \
             .worlds.to(self, "_list_worlds") \
             .sketch_count.to(node.sketches_label, "text") \
             .version.to(node.version_label, "text") \
-            .save_disabled.to(node.save_btn, "disabled") \
-            .profile_name.to(node.profile_name_input, "text")
+            .save_btn_disabled.to(node.save_btn, "disabled") \
+            .profile_name.to(self, "_update_path_edit") \
+            .current_world.to(node.world_list, "selected")
 
-        conn(node.save_btn, "pressed", "save_profile")
-        conn(node.reload_btn, "pressed", "reload_profile")
-        conn(node.switch_btn, "pressed", "switch_profile")
-        conn(node.profile_name_input, "text_changed", "set_profile_name")
-        # TODO: two way binding so that the selected world is displayed
-        conn(node.world_list, "item_selected", "_on_world_selected")
+        invoke() \
+            .context_pressed.on(node.context_btn, "pressed") \
+            .save_profile.on(node.save_btn, "pressed") \
+            .reload_profile.on(node.reload_btn, "pressed") \
+            .switch_profile.on(node.switch_btn, "pressed") \
+            ._set_profile_name.on(node.profile_name_input, "text_changed") \
+            ._select_world.on(node.world_list, "item_selected")
 
+    func _set_profile_name(name):
+        _update_path_edit(self.profile_name.value)
+        self.set_profile_name.invoke([name])
 
-    func set_profile_name(name: String):
-        _dirty_profile.value.name = name
+    func _select_world(i):
+        node.world_list.selected = self.current_world.value
+        self.select_world.invoke([i])
 
-    func save_profile(): emit_signal("save_profile")
-
-    func reload_profile():
-        _set_dirty(_profile.value)
-        emit_signal("reload_profile")
-
-    func switch_profile(): emit_signal("switch_profile")
-
-    func set_world(world: String):
-        print("set world to: ", world)
-
-    func _set_dirty(profile: Profile):
-        _dirty_profile.value = profile.clone()
+    func _update_path_edit(path):
+        node.profile_name_input.text = ""
+        node.profile_name_input.append_at_cursor(path)
 
     func _list_worlds(worlds: Array):
         node.world_list.clear()
         for world in worlds:
             node.world_list.add_item(world)
-            node.world_list.set_item_metadata(node.world_list.get_item_count() - 1, world)
 
-    func _on_world_selected(index: int):
-        set_world(node.world_list.get_item_metadata(index))
-
-
-func init_model(profile, dirty_profile, worlds): # <Profile>, <Array<String>>
-
-    model = ViewModel.new(self, Observable.from(profile), Observable.from(dirty_profile), Observable.from(worlds))
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
 func _ready():
     # Debug
     if not get_parent() is Control:
-        var profile = Observable.new(Profile.new("A", [1,2,3,4], "C"))
-        var dirty = Observable.new(profile.value.clone())
-        init_model(
-            profile,
-            dirty,
-            Observable.new(["nice", "twice"])
-        )
+        var worlds = Observable.new(["nice", "twice"])
+        var name = Observable.new("hello world")
+
+        var set_name = ActionSignal.new()
+        var save_profile = ActionSignal.new()
+        var noop = ActionSignal.new()
+
+        init_model() \
+            .props() \
+                .profile_name.to(name) \
+                .profile_saveable.to(Observable.new(false)) \
+                .worlds.to(worlds) \
+                .current_world.to(Observable.new(1)) \
+                .sketches.to(Observable.new()) \
+            .actions() \
+                .set_profile_name.to(set_name) \
+                .save_profile.to(save_profile) \
+                .switch_profile.to(noop) \
+                .select_world.to(noop) \
+                .reload_profile.to(noop) \
+                .select_world.to(noop) \
+                .context_pressed.to(noop) \
+            .init()
 
         while true:
-            yield(model, "save_profile")
-
-            profile.value = dirty.value.clone()
-
+            name.value = yield(set_name, "invoked")
 
 static func instance(): return load(SCENE_FILE).instance()

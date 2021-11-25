@@ -27,44 +27,22 @@ onready var context_button = $VBox/ContextButton
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal select_sketch(sketch_descriptor)
-    signal create_new()
-    signal context_pressed()
+    func _init(n).(n): pass
 
-    var _profile: Observable
-    var _active_sketch: Observable
-
-    func active_sketch(sketch): return sketch
-    func sketches(profile: Profile): return profile.sketches
-
-    func _init(n, profile: Observable, active_sketch: Observable).(n):
-        _profile = profile
-        _active_sketch = active_sketch
-
-        bind() \
-            .sketches.dep([profile]) \
-            .active_sketch.dep([active_sketch])
-
-        print(self._func_map)
-
+    func _on_init():
         bind() \
             .sketches.to(self, "_list_sketches") \
-            .active_sketch.to(self, "_set_active")
+            .active_sketch.to(self, "_set_active") \
 
-        conn(node.new_sketch_button, "pressed", "create_new")
-        conn(node.context_button, "pressed", "_emit_context")
+        invoke() \
+            .create_new.on(node.new_sketch_button, "pressed") \
+            .context_pressed.on(node.context_button, "pressed")
 
-        # yield(node.get_tree().create_timer(10), "timeout")
-        # print("removing 3")
-        # _profile.value.sketches.remove(3)
-        # _profile.emit_change()
-
-    func select_sketch(sketch): emit_signal("select_sketch", sketch)
-    func create_new(): emit_signal("create_new")
-
-    func _set_active(sketch):
+    func _set_active(j):
+        var i = 0
         for btn in _get_sketch_buttons():
-            btn.pressed = btn.get_meta("sketch") == sketch
+            btn.pressed = i == j
+            i += 1
 
     func _get_sketch_buttons() -> Array:
         var existing = node.sketches_container.get_children()
@@ -72,64 +50,71 @@ class ViewModel:
         return existing
 
     func _list_sketches(sketches: Array):
-        # TODO: somehow retain buttons that can still exist?
         var existing: Array = _get_sketch_buttons()
         
-        for btn in existing: node.sketches_container.remove_child(btn)
-
-        var buf = []
-        buf.resize(sketches.size())
-
-        for i in range(buf.size()):
-            for exist in existing:
-                if exist.get_meta("sketch") == sketches[i]:
-                    buf[i] = exist
-                    break
-            
-            if buf[i] == null:
-                var btn := Button.new()
-                btn.toggle_mode = true
-                btn.set_meta("sketch", sketches[i])
-                btn.text = str(i + 1)
-                btn.keep_pressed_outside = true
-                assert(btn.connect("toggled", self, "_on_button_toggle", [btn]) == 0)
-                buf[i] = btn
-            else:
-                buf[i].text = str(i +1)
-                existing.erase(buf[i])
-            
-            node.sketches_container.add_child(buf[i])
-
         for btn in existing: btn.queue_free()
+
+        for i in range(sketches.size()):
+            var btn := Button.new()
+            node.sketches_container.add_child(btn)
+            
+            btn.toggle_mode = true
+            btn.text = str(i + 1)
+            btn.keep_pressed_outside = true
+            btn.pressed = self.active_sketch.value == i
+
+            invoke()._on_button_toggle.on(btn, "toggled", [i])
+
 
         node.sketches_container.remove_child(node.new_sketch_button)
         node.sketches_container.add_child(node.new_sketch_button)
 
-        _set_active(get_nullable("active_sketch"))
 
-    func _on_button_toggle(toggled, btn: Button):
-        var btn_sketch = btn.get_meta("sketch")
-        var active_sketch = get_nullable("active_sketch")
-        _set_active(active_sketch)
-        if !toggled && btn_sketch != active_sketch:
+    func _on_button_toggle(toggled, i):
+        var active_sketch = self.active_sketch.value
+        if !toggled && i == active_sketch:
+            self.select_sketch.invoke([-1])
             return
-        if toggled && btn_sketch == active_sketch:
+        
+        if !toggled && i != active_sketch:
             return
-        select_sketch(btn_sketch if toggled else null)
+        
+        _set_active(self.active_sketch.value)
+        self.select_sketch.invoke([i])
 
-
-    func _emit_context(): emit_signal("context_pressed")
 
 var model: ViewModel
 
-func init_model(profile, active_sketch): # <Profile>, <SketchDescriptor>
-    model = ViewModel.new(self, Observable.from(profile), Observable.from(active_sketch))
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
 func _ready():
     if false:
-        var sketch = SketchDescriptor.new("nice")
-        var profile = Observable.new(Profile.new("nigga", [sketch,  SketchDescriptor.new("nice"),  SketchDescriptor.new("nice"),  SketchDescriptor.new("nice")]))
-        var active_sketch = Observable.new(sketch)
-        model = ViewModel.new(self, profile, active_sketch)
+        var sketches = Observable.new([SketchDescriptor.new("nice"),  SketchDescriptor.new("nice"),  SketchDescriptor.new("nice")])
+        
+        var active_sketch = Observable.new(1)
+        var new = ActionSignal.new()
+        var select = ActionSignal.new()
 
-static func instance():    return load(SCENE_FILE).instance()
+        init_model() \
+            .props() \
+                .sketches.to(sketches) \
+                .active_sketch.to(active_sketch) \
+            .actions() \
+                .create_new.to(new) \
+                .select_sketch.to(select) \
+                .context_pressed.to(ActionSignal.new()) \
+            .init()
+
+        while true:
+            yield(new, "invoked")
+            sketches.value += [SketchDescriptor.new("nice2")]
+
+            var i = yield(select, "invoked")
+
+            active_sketch.value = i
+
+        return
+
+static func instance(): return load(SCENE_FILE).instance()

@@ -27,6 +27,7 @@ func get_scripts() -> Dictionary:
     return scripts
 
 func _init():
+    return
     var read: String = Fs.read_file_as_string("res://project.godot")
 
     var start = "_global_script_classes=["

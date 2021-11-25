@@ -8,8 +8,8 @@ class InvokeMapExt:
         _vm = vm
         _property = property
 
-    func on(object, method):
-        _vm._vm.invoke_on(_property, object, method)
+    func on(object, method, binds: Array = []):
+        _vm._vm.invoke_on(_property, object, method, binds)
         return _vm
 
 var _vm

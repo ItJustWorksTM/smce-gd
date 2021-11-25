@@ -25,7 +25,7 @@ func _init(obj: Object, method: String, owner: Object, callback: String).(obj, m
     _owner = owner
     _callback = callback
 
-func invoke(args: Array = []) -> void:
+func invoke(args: Array = [], binds = []) -> void:
     var res = _obj.callv(_method, args)
     _owner.call(_callback, res)
     print("Action: [", _method, "], Args: ", args, ", Result: [", res, "]")

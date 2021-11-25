@@ -44,18 +44,42 @@ static func save_value(fnstate):
 class _SafeYield:
     extends GDScriptFunctionState
 
+    static func coroutine(): return yield()
+
     func _init():
         var l = get_incoming_connections()[0]
+
+        var routine = coroutine()
+
+        RAII.on_death(l.source, routine, "resume", [null])
         l.source.disconnect(l.signal_name, self, "_signal_callback")
-        var res = yield(l.source, l.signal_name)
+
+        # https://github.com/godotengine/godot/blob/3.x/modules/gdscript/gdscript_function.cpp#L1740
+        l.source.connect(l.signal_name, routine, "_signal_callback", [routine, routine, routine])
+
+        var res = yield(routine, "completed")
+
+        if res != null:
+            res.pop_back()
+            res.pop_back()
+        if is_instance_valid(l.source):
+            l.source.disconnect(l.signal_name, routine, "_signal_callback")
         if is_valid(true):
             resume(res)
         else:
             emit_signal("completed", null)
+        set_block_signals(true)
+        
 
 static func safe(fnstate: GDScriptFunctionState):
     fnstate.script = _SafeYield
     return fnstate
+
+static func _sig(obj, sig):
+    return yield(obj, sig)
+
+static func sig(obj: Object, sig: String):
+    return safe(_sig(obj, sig))
 
 class _Yield3:
     signal completed()

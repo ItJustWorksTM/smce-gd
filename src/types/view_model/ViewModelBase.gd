@@ -37,6 +37,7 @@ func _get(property: String):
         return _actions[property]
     if has_method(property):
         _actions[property] = Action.new(self, property)
+        unreference()
         return _actions[property]
 
 func _set(property, __) -> bool:
@@ -51,10 +52,11 @@ func invoke(): return _invoke
 func actions() -> Dictionary: return _actions
 
 func bind_change(property, object, method, binds: Array = []):
-    if ! property in _props:
+    if ! property in self:
         push_error("Can't bind change of non existent property `%s`" % property)
         return
-    _props[property].bind_change(object, method, binds)
+    
+    self[property].bind_change(object, method, binds)
     print("Bound change `%s` to `%s`" % [property, method])
 
 func bind_dependent(property, value):
@@ -64,15 +66,16 @@ func bind_dependent(property, value):
     for method_desc in get_method_list():
         if method_desc["name"] == property && method_desc["args"].size() == value.size():
             _props[property] = CalculatedProperty.new(self, property, value)
+            unreference()
             return true
     push_error("Could not find function for  calculated property `%s`" % property)
     return false
 
-func invoke_on(action_name: String, object: Object, sig: String):
+func invoke_on(action_name: String, object: Object, sig: String, binds: Array = []):
     if action_name in _actions:
-        _actions[action_name].invoke_on(object, sig)
+        _actions[action_name].invoke_on(object, sig, binds)
     elif has_method(action_name):
-        var __ = object.connect(sig, self, action_name)
+        var __ = object.connect(sig, self, action_name, binds)
     else:
         push_error("Invalid action `%s` bound to signal" % action_name)
 
@@ -93,7 +96,7 @@ class ViewModelBaseBuilderExt:
 class ViewModelBaseBuilder:
     var _props: Dictionary = {}
     var _actions: Dictionary = {}
-    var _instance: ViewModelBase
+    var _instance
 
     var _active = null
 

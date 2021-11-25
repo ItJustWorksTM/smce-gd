@@ -19,15 +19,24 @@ class_name Action
 
 var _obj: Object
 var _method: String
+var _extra: Array = []
 
-func _init(obj, method):
+func _init(obj, method, extra = []):
     _obj = obj
     _method = method
+    _extra = extra
 
-func invoke(args = []) -> void:
-    _obj.callv(_method, args)
-    print("Action: [", _method, "], Args: ", args)
+func invoke(args: Array = [], binds: Array = []) -> void:
+    print(args + _extra + binds)
+    _obj.callv(_method, args + _extra + binds)
+    print("Action: [", _method, "], Args: ", args, " Binds: ", binds)
 
-func invoke_on(obj: Object, sig: String):
-    var res = obj.connect(sig, self, "invoke") == OK
-    assert(res)
+func invoke_on(obj: Object, sig: String, binds: Array = []):
+    while is_instance_valid(obj):
+        var args = yield(Yield.sig(obj, sig), "completed")
+        if args == null: break
+        invoke(args, binds)
+
+func with(_binds: Array):
+    var Self = load("res://src/types/view_model/action/Action.gd")
+    return Self.new(self, "invoke", [_binds])

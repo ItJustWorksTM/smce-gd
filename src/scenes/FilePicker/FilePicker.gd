@@ -133,10 +133,6 @@ class ViewModel:
 
     func _try_filename_change(text):
         self.set_new_file_name.invoke([text])
-    
-    func sync_new_filename(text):
-        node.edit.text = ""
-        node.edit.append_at_cursor(text)
 
     func _on_set_filter(i):
         self.set_active_filter.invoke([self.filters.value.keys()[i]])

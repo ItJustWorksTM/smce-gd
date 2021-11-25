@@ -42,50 +42,68 @@ class ViewModel:
 
     func board_toggles_disabled(state): return state == Main.BoardState.UNAVAILABLE   
 
-    func _init(n, board_state).(n):
-        node.sketch_status_control.init_model()
+    func _init(n).(n): pass
 
-        node.board_control.init_model(board_state)
+    func _on_init():
 
 
         bind() \
-            .board_toggles_disabled.dep([board_state]) \
+            .board_toggles_disabled.dep([self.board_state]) \
 
         bind() \
             .board_toggles_disabled.to(node.vehicle_pos_reset_btn, "disabled") \
             .board_toggles_disabled.to(node.vehicle_toggle_follow_btn, "disabled") \
 
-        fwd_sig(node.sketch_status_control.model, "compile_sketch")
 
-        fwd_sig(node.board_control.model, "suspend_board")
-        fwd_sig(node.board_control.model, "resume_board")
-        fwd_sig(node.board_control.model, "start_board")
-        fwd_sig(node.board_control.model, "stop_board")
-
-        conn(node.close_btn, "pressed", "emit_signal", ["remove_self"])
+        node.sketch_status_control.init_model() \
+            .props() \
+                .sketch_path.to(Observable.new("hello world.ino")) \
+                .sketch_compiled.to(Observable.new(false)) \
+            .actions() \
+                .compile_sketch.to(ActionSignal.new()) \
+                .open_log.to(ActionSignal.new()) \
+            .init()
+        
+        node.board_control.init_model() \
+            .props() \
+                .state.to(self.board_state) \
+            .actions() \
+                .start_board.to(ActionSignal.new()) \
+                .stop_board.to(ActionSignal.new()) \
+                .suspend_board.to(ActionSignal.new()) \
+                .resume_board.to(ActionSignal.new()) \
+            .init()
+        
+        invoke() \
+            .remove_self.on(node.close_btn, "pressed")
 
 var model: ViewModel
 
 func init_model():
-    var state = Observable.new(Main.BoardState.READY)
-    model = ViewModel.new(self, state)
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
+func _ready():
 
-    while true:
-        var action = yield(Yield.many(model, ["suspend_board", "resume_board", "stop_board", "start_board"]), "completed")
+    if true:
+        var state = Observable.new(Main.BoardState.READY)
 
-        match action:
-            "suspend_board":
-                state.value = Main.BoardState.SUSPENDED
-            "resume_board":
-                state.value = Main.BoardState.RUNNING
-            "stop_board":
-                state.value = Main.BoardState.UNAVAILABLE
-            "start_board":
-                state.value = Main.BoardState.RUNNING
+        init_model() \
+            .props() \
+                .board_state.to(state) \
+            .actions() \
+                .remove_self.to(ActionSignal.new()) \
+            .init()
 
-
-
+        while true:
+            yield(get_tree().create_timer(2.0),"timeout")
+            state.value = Main.BoardState.SUSPENDED
+            yield(get_tree().create_timer(2.0),"timeout")
+            state.value = Main.BoardState.RUNNING
+            yield(get_tree().create_timer(2.0),"timeout")
+            state.value = Main.BoardState.UNAVAILABLE
+            yield(get_tree().create_timer(2.0),"timeout")
+            state.value = Main.BoardState.RUNNING
 
 static func instance(): return load(SCENE_FILE).instance()
 

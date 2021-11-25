@@ -30,11 +30,6 @@ const State = Main.BoardState
 class ViewModel:
     extends ViewModelExt.WithNode
 
-    signal start_board
-    signal stop_board
-    signal suspend_board
-    signal resume_board
-
     func start_btn_disabled(state): return state == State.UNAVAILABLE
 
     func suspend_btn_disabled(state): 
@@ -52,16 +47,14 @@ class ViewModel:
             State.READY, State.UNAVAILABLE: return "Start"
             State.RUNNING, State.SUSPENDED: return "Stop"
 
-    var _state
+    func _init(n).(n): pass
 
-    func _init(n, state).(n):
-        _state = state
-
+    func _on_init():
         bind() \
-            .suspend_btn_disabled.dep([state]) \
-            .suspend_btn_text.dep([state]) \
-            .start_btn_text.dep([state]) \
-            .start_btn_disabled.dep([state])
+            .suspend_btn_disabled.dep([self.state]) \
+            .suspend_btn_text.dep([self.state]) \
+            .start_btn_text.dep([self.state]) \
+            .start_btn_disabled.dep([self.state])
 
         bind() \
             .suspend_btn_disabled.to(node.suspend_btn, "disabled") \
@@ -69,23 +62,24 @@ class ViewModel:
             .start_btn_disabled.to(node.start_btn, "disabled") \
             .start_btn_text.to(node.start_btn, "text") \
         
-        # Idea: unwrap observables if passed in
-        conn(node.start_btn, "pressed", "toggle_start")
-        conn(node.suspend_btn, "pressed", "toggle_suspend")
+        invoke() \
+            .toggle_start.on(node.start_btn, "pressed") \
+            .toggle_suspend.on(node.suspend_btn, "pressed")
     
     func toggle_start():
-        match _state.value:
-            State.READY: emit_signal("start_board")
-            State.RUNNING, State.SUSPENDED: emit_signal("stop_board")
+        match self.state.value:
+            State.READY: self.start_board.invoke([])
+            State.RUNNING, State.SUSPENDED: self.stop_board.invoke([])
     
     func toggle_suspend():
-        match _state.value:
-            State.SUSPENDED: emit_signal("resume_board")
-            State.RUNNING: emit_signal("suspend_board")
+        match self.state.value:
+            State.SUSPENDED: self.resume_board.invoke([])
+            State.RUNNING: self.suspend_board.invoke([])
 
 
-func init_model(state):
-    model = ViewModel.new(self, state)
+func init_model():
+    model = ViewModel.new(self)
+    return ViewModel.builder(model)
 
 func _ready():  
     pass
