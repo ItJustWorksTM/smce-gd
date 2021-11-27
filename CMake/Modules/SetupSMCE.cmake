@@ -46,9 +46,9 @@ elseif (SMCEGD_SMCE_LINKING STREQUAL "STATIC")
 elseif (SMCEGD_SMCE_LINKING STREQUAL "SOURCE")
   include (FetchContent)
   FetchContent_Declare (libsmce
-      GIT_REPOSITORY "https://github.com/ItJustWorksTM/libSMCE"
-      GIT_TAG v1.4.0
-      GIT_SHALLOW On
+          GIT_REPOSITORY "https://github.com/Team-3-Software-Evolution-Project/libSMCE"
+          GIT_TAG a7028ece98b0d1a56a6be204902490151743e99b
+          GIT_SHALLOW On
   )
   FetchContent_GetProperties (libsmce)
   if (NOT libsmce_POPULATED)
