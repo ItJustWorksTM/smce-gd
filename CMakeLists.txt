@@ -17,6 +17,8 @@
 
 cmake_minimum_required (VERSION 3.17)
 
+set (SMCEGD_SMCE_LINKING "SOURCE")
+
 project (godot-smce VERSION 1.3.2 LANGUAGES CXX)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 include (UserConfigVars)
