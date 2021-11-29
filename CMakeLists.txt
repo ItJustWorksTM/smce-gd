@@ -81,6 +81,7 @@ file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
         COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_RESOURCES_ARK}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:smcegd_SMCE>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
         COMMAND "${CMAKE_COMMAND}" -E copy_directory "./RtResources" "${PROJECT_SOURCE_DIR}/project/share/RtResources"
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "./RtResources"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"

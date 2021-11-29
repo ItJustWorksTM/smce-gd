@@ -17,6 +17,8 @@
 
 include_guard ()
 
+set (SMCEGD_SMCE_LINKING "SOURCE")
+
 if (SMCEGD_SMCE_LINKING STREQUAL "AUTO")
   find_package (SMCE 1.4)
   if (SMCE_FOUND)
@@ -46,8 +48,10 @@ elseif (SMCEGD_SMCE_LINKING STREQUAL "STATIC")
 elseif (SMCEGD_SMCE_LINKING STREQUAL "SOURCE")
   include (FetchContent)
   FetchContent_Declare (libsmce
-          GIT_REPOSITORY "https://github.com/ItJustWorksTM/libSMCE"
-          GIT_TAG v1.4.0
+          #GIT_REPOSITORY "https://github.com/ItJustWorksTM/libSMCE"
+          #GIT_TAG master
+          GIT_REPOSITORY "https://github.com/Team-3-Software-Evolution-Project/libSMCE"
+          GIT_TAG task10
           GIT_SHALLOW On
   )
   FetchContent_GetProperties (libsmce)
@@ -61,7 +65,7 @@ elseif (SMCEGD_SMCE_LINKING STREQUAL "SOURCE")
 
     set (SMCE_BUILD_SHARED Off CACHE INTERNAL "")
     set (SMCE_BUILD_STATIC On CACHE INTERNAL "")
-    set (SMCE_CXXRT_LINKING "${SMCEGD_CXXRT_LINKING}" CACHE INTERNAL "")
+    set (SMCE_CXXRT_LINKING "${SMCEGD_CXXRT_LINKING}" CACHE INTERNAL "" FORCE)
     set (SMCE_BOOST_LINKING "SOURCE" CACHE INTERNAL "")
     add_subdirectory ("${libsmce_SOURCE_DIR}" "${libsmce_BINARY_DIR}" EXCLUDE_FROM_ALL)
   endif ()
