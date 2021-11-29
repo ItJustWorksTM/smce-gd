@@ -58,7 +58,7 @@ func _buttonNo_pressed() -> void:
 	queue_free()
 	
 # Returns user's choice (only for confirmation popup)
-func choiseRet():
+func choice_Ret():
 	return choice
 
 
