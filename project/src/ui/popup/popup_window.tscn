@@ -7,68 +7,78 @@
 visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -0.963871
-margin_bottom = 4.0
+margin_left = -139.135
+margin_top = -42.3918
+margin_right = -138.171
+margin_bottom = -38.3918
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Panel" parent="."]
-margin_left = 511.0
-margin_top = 311.0
+[node name="Panel" type="PanelContainer" parent="."]
+margin_left = 502.0
+margin_top = 305.0
 margin_right = 793.0
 margin_bottom = 480.0
+size_flags_vertical = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="buttonOK" type="Button" parent="."]
-margin_left = 616.205
-margin_top = 440.496
-margin_right = 720.205
-margin_bottom = 484.496
-rect_scale = Vector2( 0.7, 0.7 )
-text = "OK"
+[node name="btnContainer" type="HBoxContainer" parent="Panel"]
+margin_left = 7.0
+margin_top = 142.0
+margin_right = 284.0
+margin_bottom = 168.0
+size_flags_vertical = 14
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="buttonYES" type="Button" parent="."]
-margin_left = 491.932
-margin_top = 423.36
-margin_right = 588.932
-margin_bottom = 471.36
-rect_scale = Vector2( 0.7, 0.7 )
+[node name="buttonYES" type="Button" parent="Panel/btnContainer"]
+margin_right = 35.0
+margin_bottom = 26.0
 rect_pivot_offset = Vector2( 97, 48 )
+size_flags_horizontal = 9
 text = "Yes"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="buttonNO" type="Button" parent="."]
-margin_left = 713.684
-margin_top = 438.496
-margin_right = 810.684
-margin_bottom = 486.496
-rect_scale = Vector2( 0.7, 0.7 )
+[node name="buttonOK" type="Button" parent="Panel/btnContainer"]
+margin_left = 39.0
+margin_right = 71.0
+margin_bottom = 26.0
+size_flags_horizontal = 8
+text = "OK"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buttonNO" type="Button" parent="Panel/btnContainer"]
+margin_left = 246.0
+margin_right = 277.0
+margin_bottom = 26.0
+size_flags_horizontal = 10
 text = "No"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="messageLabel" type="Label" parent="."]
-margin_left = 522.0
-margin_top = 311.0
-margin_right = 782.0
-margin_bottom = 434.0
+[node name="messageLabel" type="Label" parent="Panel"]
+margin_left = 7.0
+margin_top = 63.0
+margin_right = 284.0
+margin_bottom = 112.0
+size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 2 )
 text = "\"default\"
 "
 align = 1
 valign = 1
 autowrap = true
-clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
