@@ -110,7 +110,6 @@ func _on_clipboard_copy() -> void:
 # Fetch smce-gd GitHub wiki into project/media/wiki
 # TODO: wiki_pages should be fetched automatically
 func _fetch_github_wiki() -> void:
-	_create_folder("wiki", "./media")
 	var wiki_pages = ["Home", "Arch-based-Linux-setup", "Compiling-a-sketch", "Configuration", "Debian-based-Linux-setup", "MacOS-setup", "Modding", "Vehicle-Capabilities", "Windows-setup"]
 	var base_url = "https://raw.githubusercontent.com/wiki/ItJustWorksTM/smce-gd/"
 	for page in wiki_pages:
@@ -123,13 +122,3 @@ func _fetch_github_wiki() -> void:
 		var error = http_node.request(download_link)
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
-
-
-# Creates folder named {dir_name} in given path if it doesn"t already exist
-func _create_folder(dir_name, path):
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		if !dir.dir_exists("wiki"):
-			dir.make_dir("wiki")
-	else:
-		print("An error occurred trying to create folder: " + dir_name)
