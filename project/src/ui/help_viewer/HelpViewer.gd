@@ -107,7 +107,7 @@ func _read_wiki_file(file_name):
 			print("Image to download: " + line)
 			var image_file_name = line.split("/")[-1]
 			download_texture(line, "user://" + image_file_name)
-			line = "[img=<" + str(img_width) + ">]" + "user://" + "test.jpg" + "[/img]"
+			line = "[img=<" + str(img_width) + ">]" + "user://" + image_file_name + "[/img]"
 			index = index + 1
 #		if "https://" in line:
 #			start = line.find("https://")
