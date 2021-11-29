@@ -41,10 +41,9 @@ func init() -> bool:
 	
 	return true
 
-
 func _ready():
 	close_btn.connect("pressed", self, "_close")
-	wiki_pages = _get_wiki_from_storage(WIKI_PATH)
+	wiki_pages = _get_wiki_from_storage("user://")
 	for page in wiki_pages:
 		print("Title: " + page.title)
 		#print("Content: " + page.content)
@@ -67,7 +66,7 @@ func _get_wiki_from_storage(path) -> Array:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if !dir.current_is_dir():
+			if !dir.current_is_dir() && file_name.ends_with(".md"):
 				print('Reading wiki page: ' + file_name)
 				var page = WikiPage.new()
 				page.title = file_name.trim_suffix(".md").replace("-", " ")
@@ -87,7 +86,7 @@ func _read_wiki_file(file_name):
 	var content : String
 	var index = 0
 	var img_width = 384
-	file.open(WIKI_PATH + file_name, File.READ)
+	file.open("user://" + file_name, File.READ)
 	while not file.eof_reached():
 #		var start = 0
 #		var end = null
@@ -106,8 +105,8 @@ func _read_wiki_file(file_name):
 		if line.begins_with("![](https://i.imgur.com/"):
 			line = line.replacen("![](", "").replacen(")", "")
 			print("Image to download: " + line)
-			download_texture(line, WIKI_PATH + "images/" + str(index) + ".png")
-			line = "[img=<" + str(img_width) + ">]" + "media/wiki/images/" + str(index) + ".png" + "[/img]"
+			download_texture(line, "user://" + str(index) + ".png")
+			line = "[img=<" + str(img_width) + ">]" + "user://" + str(index) + ".png" + "[/img]"
 			index = index + 1
 #		if "https://" in line:
 #			start = line.find("https://")
