@@ -117,30 +117,14 @@ Array Toolchain::find_compilers() {
     compilerDefault->version = "";
     result.push_back(compilerDefault);
 
-    auto compiler1 = make_ref<Toolchain::CompilerInformation>();
-    compiler1->name = "Compiler 1";
-    compiler1->path = "Path/To/Compiler1";
-    compiler1->version = "1.0";
-    result.push_back(compiler1);
-
-    auto compiler2 = make_ref<Toolchain::CompilerInformation>();
-    compiler2->name = "Compiler 2";
-    compiler2->path = "Path/To/Compiler2";
-    compiler2->version = "2.0";
-    result.push_back(compiler2);
+    auto compilers = tc->find_compilers();
+    for (const smce::Toolchain::CompilerInformation ci : compilers) {
+        auto compiler = make_ref<Toolchain::CompilerInformation>();
+        compiler->name = ci.name.c_str();
+        compiler->path = ci.path.c_str();
+        compiler->version = ci.version.c_str();
+        result.push_back(compiler);
+    };
 
     return result;
 }
-
-/*Array Toolchain::find_compilers() {
-    Array result;
-    auto compilers = tc->find_compilers();
-    for (const smce::Toolchain::CompilerInformation ci : compilers) {
-        auto ciGodot = make_ref<Toolchain::CompilerInformation>();
-        ciGodot->name = ci.name;
-        ciGodot->path = ci.path;
-        ciGodot->version = ci.version;
-        result.push_back(ciGodot);
-    };
-    return result;
-} */
