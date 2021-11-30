@@ -26,9 +26,15 @@ using namespace godot;
     std::pair { STR(f), &Toolchain::f }
 
 void Toolchain::_register_methods() {
-    register_fns(U(init), U(resource_dir), U(check_suitable_environment), U(check_cmake_availability), U(cmake_path), U(compile),
-                 U(set_free), U(is_building), U(_physics_process), U(get_log));
+    register_fns(U(init), U(resource_dir), U(check_suitable_environment), U(check_cmake_availability), U(cmake_path),
+                  U(compile), U(set_free), U(is_building), U(_physics_process), U(get_log), U(find_compilers));
     register_signals<Toolchain>("building", "built", "log");
+}
+
+void Toolchain::CompilerInformation::_register_methods() {
+    register_property("name", &CompilerInformation::name, String{});
+    register_property("path", &CompilerInformation::path, String{});
+    register_property("version", &CompilerInformation::version, String{});
 }
 
 #undef STR
@@ -104,4 +110,25 @@ void Toolchain::set_free() {
     if (building)
         return Godot::print("Warning: BoardRunner queued to be freed while still building");
     queue_free();
+}
+
+Array Toolchain::find_compilers() {
+    Array result;
+
+    auto compilerDefault = make_ref<Toolchain::CompilerInformation>();
+    compilerDefault->name = "Default compiler";
+    compilerDefault->path = "";
+    compilerDefault->version = "";
+    result.push_back(compilerDefault);
+
+    auto compilers = tc->find_compilers();
+    for (const smce::Toolchain::CompilerInformation ci : compilers) {
+        auto compiler = make_ref<Toolchain::CompilerInformation>();
+        compiler->name = ci.name.c_str();
+        compiler->path = ci.path.c_str();
+        compiler->version = ci.version.c_str();
+        result.push_back(compiler);
+    };
+
+    return result;
 }

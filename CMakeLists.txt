@@ -17,6 +17,8 @@
 
 cmake_minimum_required (VERSION 3.17)
 
+set (SMCEGD_SMCE_LINKING "SOURCE")
+
 project (godot-smce VERSION 1.3.2 LANGUAGES CXX)
 list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
 include (UserConfigVars)
@@ -35,18 +37,6 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-find_package (Threads REQUIRED)
-find_package (SMCE 1.4 REQUIRED)
-
-set (SMCE_TARGET SMCE::SMCE)
-if (SMCEGD_SMCE_LINKING STREQUAL "STATIC")
-    if (NOT TARGET SMCE::SMCE_static)
-        message (FATAL_ERROR "Static link requested but libSMCE static library not installed")
-    endif ()
-    set (SMCE_TARGET SMCE::SMCE_static)
-    message (STATUS "libSMCE statically linked")
-endif ()
-
 if (APPLE)
     set (CMAKE_BUILD_RPATH "@loader_path/../Frameworks;${CMAKE_BUILD_RPATH}")
     set (CMAKE_INSTALL_RPATH "@loader_path/../Frameworks;${CMAKE_INSTALL_RPATH}")
@@ -56,7 +46,12 @@ include (CheckIPOSupported)
 check_ipo_supported (RESULT CMAKE_IPO_SUPPORTED LANGUAGES CXX)
 set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ${CMAKE_IPO_SUPPORTED})
 
-include (FetchContent)
+find_package (Threads REQUIRED)
+include (SetupSMCE)
+if (SMCEGD_BUNDLE_DEPS AND NOT SMCEGD_SMCE_LINKING STREQUAL "SHARED")
+    message (FATAL_ERROR "SMCEGD_BUNDLE_DEPS may only be set to True when SMCEGD_SMCE_LINKING resolves to \"SHARED\"")
+endif ()
+
 list (APPEND GDCPP_NEEDED_CLASSES Reference Node Resource _ResourceLoader)
 include (SetupGodotCpp)
 
@@ -73,7 +68,7 @@ target_sources (godot-smce PRIVATE
 )
 
 target_include_directories (godot-smce PUBLIC include)
-target_link_libraries (godot-smce PUBLIC godot-cpp ${SMCE_TARGET})
+target_link_libraries (godot-smce PUBLIC godot-cpp smcegd_SMCE)
 
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties (godot-smce PROPERTIES LINK_FLAGS_RELEASE -s)
@@ -82,19 +77,18 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     endif ()
 endif ()
 
-get_target_property (SMCE_RT_RES SMCE::SMCE RESOURCES_ARCHIVE)
-
 file (MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/project/gdnative/lib/RtResources")
 add_custom_command (TARGET godot-smce POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:godot-smce>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
-        COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_RT_RES}"
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:SMCE::SMCE>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
+
+        COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_RESOURCES_ARK}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:smcegd_SMCE>" "${PROJECT_SOURCE_DIR}/project/gdnative/lib/"
         COMMAND "${CMAKE_COMMAND}" -E copy_directory "./RtResources" "${PROJECT_SOURCE_DIR}/project/share/RtResources"
         COMMAND "${CMAKE_COMMAND}" -E rm -rf "./RtResources"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
 
-include(GNUInstallDirs)
+include (GNUInstallDirs)
 
 if (NOT GODOT_DEBUG)
     set (GODOT_BUILD_TYPE "GodotRelease")
@@ -118,7 +112,7 @@ endif ()
 file (REMOVE_RECURSE "${PROJECT_BINARY_DIR}/export")
 file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/export")
 
-if (SMCEGD_BUNDLE_DEPS)
+if (SMCEGD_BUNDLE_DEPS AND SMCEGD_SMCE_LINKING STREQUAL "SHARED")
     if (UNIX AND NOT APPLE)
         set (SMCE_DYLIB_VER_SUFFIX ".1")
     elseif (APPLE)
