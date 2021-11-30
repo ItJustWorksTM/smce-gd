@@ -27,7 +27,10 @@ onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 func _ready():
 	close_btn.connect("pressed", self, "_on_close")
 	compile_btn.visible = false
-	compile_btn.connect("pressed",self, "_on_compile")
+	compile_btn.connect("pressed", self, "_on_compile")
+	fileDialog.connect("file_selected", self, "_on_FileDialog_file_selected")
+	collapse_btn.connect("pressed", self, "_on_Collapse_btn_pressed")
+	textEditor.connect("text_changed", tabs, "_on_TextEditor_text_changed")
 	_init_dropdown()
 	textEditor._init_content()
 	

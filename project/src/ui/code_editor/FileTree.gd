@@ -13,6 +13,9 @@ var src_file
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	file_tree.connect("button_pressed", self, "_on_FileTree_button_pressed")
+	file_tree.connect("item_activated", self, "_on_FileTree_item_activated")
+	
 	icon_folder = resize_image_to_texture('res://media/images/outline_folder_white_48dp.png')
 	icon_doc = resize_image_to_texture('res://media/images/outline_description_white_48dp.png')
 	icon_refresh = resize_image_to_texture('res://media/images/outline_refresh_white_48dp.png')
