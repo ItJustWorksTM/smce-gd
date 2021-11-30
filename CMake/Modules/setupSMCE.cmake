@@ -51,7 +51,7 @@ elseif (SMCEGD_SMCE_LINKING STREQUAL "SOURCE")
             #GIT_REPOSITORY "https://github.com/ItJustWorksTM/libSMCE"
             #GIT_TAG master
             GIT_REPOSITORY "https://github.com/Team-3-Software-Evolution-Project/libSMCE"
-            GIT_TAG task10
+            GIT_TAG Add-cmake-check
             GIT_SHALLOW On
             )
     FetchContent_GetProperties (libsmce)
