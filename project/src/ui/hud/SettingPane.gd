@@ -30,7 +30,6 @@ onready var save_btn: Button = $VBoxContainer/MarginContainer/VBoxContainer/HBox
 onready var world_list: OptionButton = $VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2/Worlds
 onready var sketches_label: Label = $VBoxContainer/MarginContainer/VBoxContainer/Sketches
 onready var boards_label: Label = $VBoxContainer/MarginContainer/VBoxContainer/Boards
-onready var compiler_list: OptionButton = $VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3/Compilers
 
 onready var version_label: Label = $VBoxContainer/MarginContainer/Version
 
@@ -43,7 +42,6 @@ func set_master_manager(mngr) -> void:
 
 var unique_sketches: int = 0
 var boards: Array = []
-var compilers: Array = []
 
 func _ready():
 	toggle_btn.connect("pressed", self, "emit_signal", ["toggled"])
@@ -52,11 +50,9 @@ func _ready():
 	save_btn.connect("pressed", self, "_save_profile")
 	profile_name_input.connect("text_changed", self, "_change_profile_name")
 	world_list.connect("item_selected", self, "_on_world_selected")
-	compiler_list.connect("item_selected", self, "_on_compiler_selected")
 	version_label.text = "SMCE-gd: %s" % Global.version
 	
 	_update_envs()
-	_update_compilers()
 
 
 func _reflect_profile() -> void:
@@ -77,20 +73,13 @@ func _reflect_profile() -> void:
 		map[slot.path] = null
 	
 	sketches_label.text = "Sketches: %d" % map.size()
-
+	
 	world_list.select(Global.environments.keys().find(profile.environment))
-	compiler_list.select(master_manager.active_profile.compiler)
 
 
 func _update_envs():
 	for env in Global.environments.keys():
 		world_list.add_item(env)
-
-
-func _update_compilers():
-	compilers = Toolchain.new().find_compilers()
-	for compiler in compilers:
-		compiler_list.add_item(compiler.name + " (" + compiler.version + ")")
 
 
 func _switch_profile() -> void:
@@ -120,9 +109,7 @@ func _change_profile_name(text: String) -> void:
 func _on_world_selected(index: int) -> void:
 	master_manager.active_profile.environment = world_list.get_item_text(index)
 	master_manager.load_profile(master_manager.active_profile)
-	
-func _on_compiler_selected(index: int) -> void:
-	master_manager.active_profile.compiler = index
+
 
 func _process(_delta) -> void:
 	_reflect_profile()

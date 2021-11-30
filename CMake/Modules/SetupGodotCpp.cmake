@@ -18,7 +18,6 @@
 if(NOT GDCPP_ROOT OR NOT EXISTS GDCPP_ROOT)
     set (GDCPP_USER_ROOT "${GDCPP_ROOT}")
 
-    include (FetchContent)
     FetchContent_Declare (fc-godot-cpp
             GIT_REPOSITORY https://github.com/godotengine/godot-cpp.git
             GIT_TAG        3.x

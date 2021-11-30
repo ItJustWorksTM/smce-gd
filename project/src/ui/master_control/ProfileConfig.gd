@@ -19,7 +19,6 @@ class_name ProfileConfig
 
 var profile_name: String = "No Name"
 var environment: String = "playground/Playground"
-var compiler: int = 0
 var slots: Array = []
 
 func type_info() -> Dictionary:
@@ -36,9 +35,6 @@ func is_equal(other) -> bool:
 		return false
 	
 	if other.environment != environment:
-		return false
-		
-	if other.compiler != compiler:
 		return false
 	
 	for i in range(slots.size()):
