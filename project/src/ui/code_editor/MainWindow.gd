@@ -30,6 +30,7 @@ func _ready():
 	compile_btn.connect("pressed",self, "_on_compile")
 	_init_dropdown()
 	textEditor._init_content()
+	
 
 # Initializes the dropdown menu button
 func _init_dropdown():
@@ -130,7 +131,7 @@ func _load_content(path):
 # Update the file tree with file structure
 func _fill_tree():
 	if(!tree_filled):
-		file_tree._fill_tree(src_file.get_base_dir())
+		file_tree._update_tree(src_file)
 		tree_filled = true
 
 # Function save a file
