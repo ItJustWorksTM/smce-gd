@@ -26,9 +26,10 @@ onready var item_list = $LogPopout/Panel/Control/VBoxContainer/HBoxContainer/Ite
 onready var rich_text_label = $LogPopout/Panel/Control/VBoxContainer/HBoxContainer/RichTextLabel
 
 const WIKI_PATH = "./media/wiki/"
+const USER_DIR = "user://"
 var wiki_pages = []
 var wiki_content = []
-
+const INT64_MAX = (1 << 63) - 1 # 9223372036854775807
 
 class WikiPage:
 	var title: String
@@ -43,7 +44,7 @@ func init() -> bool:
 
 func _ready():
 	close_btn.connect("pressed", self, "_close")
-	wiki_pages = _get_wiki_from_storage("user://")
+	wiki_pages = _get_wiki_from_storage(USER_DIR)
 	for page in wiki_pages:
 		print("Title: " + page.title)
 		#print("Content: " + page.content)
@@ -84,17 +85,28 @@ func _get_wiki_from_storage(path) -> Array:
 func _read_wiki_file(file_name):
 	var file = File.new()
 	var content : String
-	var index = 0
-	var img_width = 384
-	file.open("user://" + file_name, File.READ)
+	var img_width = 364 # 384
+	var code_snippet = false
+	file.open(USER_DIR + file_name, File.READ)
 	while not file.eof_reached():
-#		var start = 0
-#		var end = null
-#		var end_2 = null
-#		var end_true = null
-#		var line_length = 0
+		var start = 0
+		var end = null
+		var end_2 = null
+		var end_3 = null
+		var end_true = null
+		var line_length = 0
 		var line = file.get_line()
 		# Format the text using BBCode
+		if line.begins_with("```") && code_snippet == false:
+			code_snippet = true
+			line = "[color=aqua]" + line + "[/color]"
+			print("Code started")
+		if !line.begins_with("```") && code_snippet == true:
+			line = "[color=aqua]" + line + "[/color]"
+		if line.begins_with("```") && code_snippet == true:
+			line = "[color=aqua]" + line + "[/color]"
+			code_snippet = false
+			print("Code ended")
 		# TODO: Switch statement? Match statement (godot)?
 		if line.begins_with("## "):
 			line = line.replacen("## ", "")
@@ -106,18 +118,38 @@ func _read_wiki_file(file_name):
 			line = line.replacen("![](", "").replacen(")", "")
 			print("Image to download: " + line)
 			var image_file_name = line.split("/")[-1]
-			download_texture(line, "user://" + image_file_name)
-			line = "[img=<" + str(img_width) + ">]" + "user://" + image_file_name + "[/img]"
-			index = index + 1
-#		if "https://" in line:
-#			start = line.find("https://")
-#			end = line.findn(" ", start)
-#			end_2 = line.findn(")", start)
-#			end_true = min(end, end_2)
-#			if end == null && end_2 == null:
-#				end_true = line.length()
-#			line = line.insert(start - 1, "[u]")
-#			line = line.insert(end_true + 1, "[/u]")
+			#print("IMG FILE NAME: " + image_file_name)
+			download_texture(line, USER_DIR + image_file_name)
+#			# Check if image exists
+#			var directory = Directory.new();
+#			print("DOWNLOADED FILE EXISTS: " + str(directory.file_exists(USER_DIR + image_file_name)))
+#			print("RES LOADER CHECK 1 : " + str(ResourceLoader.exists(USER_DIR + image_file_name)))
+#			ResourceLoader.load(USER_DIR + image_file_name)
+#			print("RES LOADER CHECK 2: " + str(ResourceLoader.exists(USER_DIR + image_file_name)))
+			line = "[img=<" + str(img_width) + ">]" + USER_DIR + image_file_name + "[/img]"
+#			var image : Image
+#			image.load("user://" + image_file_name)
+#			print("RES PATH: " + image.resource_path())
+		if "https://" in line:
+			start = line.find("https://")
+			print("HYPERLINK START: " + str(start))
+			end = line.findn(" ", start)
+			end_2 = line.findn(")", start)
+			end_3 = line.findn("\\", start)
+			if end == -1:
+				end = INT64_MAX
+			if end_2 == -1:
+				end_2 = INT64_MAX	
+			if end_3 == -1:
+				end_3 = INT64_MAX 
+			if end == INT64_MAX && end_2 == INT64_MAX && end_3 == INT64_MAX:
+				end_true = line.length()
+			else:
+				end_true = min(end, min(end_2, end_3))
+			print("HYPERLINK END: " + str(end_true))
+
+			line = line.insert(start, "[u]")
+			line = line.insert(end_true + 3, "[/u]") # for some reason doesn't end at the end, need +3
 		line += "\n"
 		content = content + line;
 	#var content = file.get_as_text()

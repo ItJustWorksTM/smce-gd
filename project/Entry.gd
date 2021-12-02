@@ -116,7 +116,7 @@ func _fetch_github_wiki() -> void:
 		var http_node = HTTPRequest.new()
 		http_node.set_use_threads(true)
 		add_child(http_node)
-		var output_name = "./media/wiki/" + page + ".md"
+		var output_name = "user://" + page + ".md"
 		http_node.set_download_file(output_name)
 		var download_link = base_url + page + ".md"
 		var error = http_node.request(download_link)
