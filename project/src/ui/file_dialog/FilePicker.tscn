@@ -30,8 +30,8 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.ino", "*.pde" )
-current_dir = "/home/ruthgerd/Sources/godot-smce/project"
-current_path = "/home/ruthgerd/Sources/godot-smce/project/"
+current_dir = "/Users/Anton/Desktop/MPSOF-1/DAT265/group10/group-10-smce-gd/project"
+current_path = "/Users/Anton/Desktop/MPSOF-1/DAT265/group10/group-10-smce-gd/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
