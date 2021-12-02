@@ -1,9 +1,178 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://src/ui/code_editor/MainWindow.gd" type="Script" id=1]
 [ext_resource path="res://src/ui/code_editor/Tabs.gd" type="Script" id=2]
 [ext_resource path="res://src/ui/code_editor/FileTree.gd" type="Script" id=3]
 [ext_resource path="res://src/ui/code_editor/TextEditor.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.368627, 0.368627, 0.368627, 0.231373 )
+border_width_bottom = 2
+border_color = Color( 0.27451, 0.27451, 0.27451, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 1, 1, 1, 0.152941 )
+border_width_bottom = 2
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 4.0
+bg_color = Color( 0.196078, 0.196078, 0.211765, 1 )
+border_width_bottom = 2
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 4.0
+bg_color = Color( 0.196078, 0.196078, 0.211765, 1 )
+border_width_bottom = 2
+border_color = Color( 0.282353, 0.282353, 0.282353, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.231373 )
+border_width_left = 2
+border_width_right = 2
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 2.0
+content_margin_right = 2.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+shadow_size = 2
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0, 0, 0, 0.231373 )
+border_width_left = 2
+border_width_right = 2
+border_color = Color( 0, 0.74902, 1, 1 )
+expand_margin_left = 28.0
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0, 0.74902, 1, 1 )
+border_width_left = 5
+border_width_right = 5
+border_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+
+[sub_resource type="StyleBoxFlat" id=11]
+bg_color = Color( 0, 0.74902, 1, 1 )
+border_width_left = 4
+border_width_right = 4
+border_color = Color( 0.145098, 0.145098, 0.164706, 1 )
+
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+border_color = Color( 0, 0.74902, 1, 1 )
+
+[sub_resource type="Theme" id=13]
+Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 1 )
+Button/styles/focus = SubResource( 1 )
+Button/styles/hover = SubResource( 2 )
+Button/styles/normal = SubResource( 1 )
+Button/styles/pressed = SubResource( 2 )
+LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
+LineEdit/colors/clear_button_color_pressed = Color( 1, 1, 1, 1 )
+LineEdit/colors/cursor_color = Color( 0.94, 0.94, 0.94, 1 )
+LineEdit/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+LineEdit/colors/font_color_selected = Color( 0, 0, 0, 1 )
+LineEdit/colors/font_color_uneditable = Color( 0.88, 0.88, 0.88, 0.5 )
+LineEdit/colors/selection_color = Color( 0.49, 0.49, 0.49, 1 )
+LineEdit/constants/minimum_spaces = 12
+LineEdit/fonts/font = null
+LineEdit/icons/clear = null
+LineEdit/styles/focus = SubResource( 3 )
+LineEdit/styles/normal = SubResource( 4 )
+LineEdit/styles/read_only = null
+PopupMenu/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+PopupMenu/colors/font_color_accel = Color( 0.7, 0.7, 0.7, 0.8 )
+PopupMenu/colors/font_color_disabled = Color( 0.4, 0.4, 0.4, 0.8 )
+PopupMenu/colors/font_color_hover = Color( 0.88, 0.88, 0.88, 1 )
+PopupMenu/constants/hseparation = 4
+PopupMenu/constants/vseparation = 4
+PopupMenu/fonts/font = null
+PopupMenu/icons/checked = null
+PopupMenu/icons/radio_checked = null
+PopupMenu/icons/radio_unchecked = null
+PopupMenu/icons/submenu = null
+PopupMenu/icons/unchecked = null
+PopupMenu/styles/hover = SubResource( 5 )
+PopupMenu/styles/labeled_separator_left = null
+PopupMenu/styles/labeled_separator_right = null
+PopupMenu/styles/panel = SubResource( 6 )
+PopupMenu/styles/panel_disabled = null
+PopupMenu/styles/separator = null
+Tree/colors/custom_button_font_highlight = Color( 0.941176, 0.941176, 0.941176, 1 )
+Tree/colors/drop_position_color = Color( 0, 0.74902, 1, 1 )
+Tree/colors/font_color = Color( 1, 1, 1, 1 )
+Tree/colors/font_color_selected = Color( 1, 1, 1, 1 )
+Tree/colors/guide_color = Color( 1, 1, 1, 0 )
+Tree/colors/relationship_line_color = Color( 1, 1, 1, 0 )
+Tree/colors/title_button_color = Color( 0.88, 0.88, 0.88, 1 )
+Tree/constants/button_margin = 0
+Tree/constants/draw_guides = 0
+Tree/constants/draw_relationship_lines = 0
+Tree/constants/hseparation = 16
+Tree/constants/item_margin = 12
+Tree/constants/scroll_border = 0
+Tree/constants/scroll_speed = 12
+Tree/constants/vseparation = 5
+Tree/fonts/font = null
+Tree/fonts/title_button_font = null
+Tree/icons/arrow = null
+Tree/icons/arrow_collapsed = null
+Tree/icons/checked = null
+Tree/icons/select_arrow = null
+Tree/icons/unchecked = null
+Tree/icons/updown = null
+Tree/styles/bg = SubResource( 7 )
+Tree/styles/bg_focus = SubResource( 8 )
+Tree/styles/button_pressed = null
+Tree/styles/cursor = null
+Tree/styles/cursor_unfocused = null
+Tree/styles/custom_button = null
+Tree/styles/custom_button_hover = null
+Tree/styles/custom_button_pressed = null
+Tree/styles/selected = SubResource( 9 )
+Tree/styles/selected_focus = SubResource( 9 )
+Tree/styles/title_button_hover = null
+Tree/styles/title_button_normal = null
+Tree/styles/title_button_pressed = null
+VScrollBar/icons/decrement = null
+VScrollBar/icons/decrement_highlight = null
+VScrollBar/icons/increment = null
+VScrollBar/icons/increment_highlight = null
+VScrollBar/styles/grabber = SubResource( 10 )
+VScrollBar/styles/grabber_highlight = SubResource( 11 )
+VScrollBar/styles/grabber_pressed = SubResource( 10 )
+VScrollBar/styles/scroll = null
+VScrollBar/styles/scroll_focus = null
+WindowDialog/colors/title_color = Color( 1, 1, 1, 0 )
+WindowDialog/constants/close_h_ofs = 0
+WindowDialog/constants/close_v_ofs = -999
+WindowDialog/constants/scaleborder_size = 4
+WindowDialog/constants/title_height = 0
+WindowDialog/fonts/title_font = null
+WindowDialog/icons/close = null
+WindowDialog/icons/close_highlight = null
+WindowDialog/styles/panel = SubResource( 12 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -51,16 +220,17 @@ __meta__ = {
 [node name="FileDialog" type="FileDialog" parent="."]
 anchor_left = 0.00215611
 anchor_right = 0.00215611
-margin_left = 107.635
-margin_top = 220.315
-margin_right = 677.635
-margin_bottom = 539.315
-window_title = "Open a File"
+margin_left = 306.24
+margin_top = 105.0
+margin_right = 1078.24
+margin_bottom = 539.0
+theme = SubResource( 13 )
+window_title = "Öppna en Fil"
 resizable = true
 mode = 0
 access = 2
-current_dir = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project"
-current_path = "/Users/Kjeller/Documents/dev/SMCE/group-10-smce-gd/project/"
+current_dir = "/Users/Anton/Desktop/MPSOF-1/DAT265/group10/group-10-smce-gd/project"
+current_path = "/Users/Anton/Desktop/MPSOF-1/DAT265/group10/group-10-smce-gd/project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -157,12 +327,3 @@ text = "80"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
-[connection signal="button_pressed" from="HBoxContainer/FileTree" to="HBoxContainer/FileTree" method="_on_FileTree_button_pressed"]
-[connection signal="item_activated" from="HBoxContainer/FileTree" to="HBoxContainer/FileTree" method="_on_FileTree_item_activated"]
-[connection signal="pressed" from="HBoxContainer/CollapseBtn" to="." method="_on_Collapse_btn_pressed"]
-[connection signal="tab_changed" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_changed"]
-[connection signal="tab_clicked" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_clicked"]
-[connection signal="tab_close" from="HBoxContainer/VBoxContainer/Tabs" to="HBoxContainer/VBoxContainer/Tabs" method="_on_Tabs_tab_close"]
-[connection signal="text_changed" from="HBoxContainer/VBoxContainer/TextEditor" to="HBoxContainer/VBoxContainer/Tabs" method="_on_TextEditor_text_changed"]

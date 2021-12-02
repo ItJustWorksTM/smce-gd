@@ -27,9 +27,13 @@ onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 func _ready():
 	close_btn.connect("pressed", self, "_on_close")
 	compile_btn.visible = false
-	compile_btn.connect("pressed",self, "_on_compile")
+	compile_btn.connect("pressed", self, "_on_compile")
+	fileDialog.connect("file_selected", self, "_on_FileDialog_file_selected")
+	collapse_btn.connect("pressed", self, "_on_Collapse_btn_pressed")
+	textEditor.connect("text_changed", tabs, "_on_TextEditor_text_changed")
 	_init_dropdown()
 	textEditor._init_content()
+	
 
 # Initializes the dropdown menu button
 func _init_dropdown():
@@ -53,16 +57,61 @@ func _on_compile() -> void:
 func enableEditor() -> void:
 	set_visible(true)
 	
-# Limit line length
+# Limit line length + handle shortcuts
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		var line = textEditor.cursor_get_line()
 		var s = textEditor.get_line(line)
-		if (event.as_text() == "Tab" && lineLimit.text != "" && s.length()>=(int(lineLimit.text)-1) && int(lineLimit.text) >= 10):
+		var tb = get_node("Tabs").return_tab()
+		if ((event.as_text() == "Tab" || event.as_text() == "Control+V") && lineLimit.text != "" && s.length()>=(int(lineLimit.text)-1) && int(lineLimit.text) >= 10):
 			textEditor.get_tree().set_input_as_handled()
+		if "Control" in event.as_text():
+			if (event.as_text() == "Control+S"): # save file
+				_save_file()		
+			if (event.as_text() == "Control+W" && fileInfos.size() !=0): # close current tab
+				get_node("Tabs")._on_Tabs_tab_close(tb)		
+			if (event.as_text() == "Control+N"): #new file in tab
+				_new_file()
+			if (event.as_text() == "Control+P"): #new project
+				_new_proj()
+			if (event.as_text() == "Control+O"): #open file
+				_open_file()
+			if (event.as_text() == "Control+Slash"): #comment/uncomment line
+				if "//" in s:
+					var result = textEditor.search("//", 0, line, 0)
+					if result.size() > 0:
+						#var res_line = result[TextEdit.SEARCH_RESULT_LINE]
+						var result_column = result[TextEdit.SEARCH_RESULT_COLUMN]	
+						textEditor.select(line, result_column, line, result_column+2)
+						textEditor.insert_text_at_cursor("")
+				else :
+					textEditor.cursor_set_column(0)
+					textEditor.insert_text_at_cursor("//")
+			if (event.as_text() == "Control+Q"):
+				_on_close()
+			var cmdArr = (event.as_text().rsplit("+", true, 1))
+			if (event.as_text() == "Control+J"): # switch between tabs, one by one				
+				if (tb>=fileInfos.size()-1):
+					get_node("Tabs")._save_tab_content()
+					get_node("Tabs")._show_new_file(fileInfos[0])
+					get_node("Tabs").switch_tab(0)
+				if (tb<fileInfos.size()-1):
+					get_node("Tabs")._save_tab_content()
+					get_node("Tabs")._show_new_file(fileInfos[tb+1])
+					get_node("Tabs").switch_tab(tb+1)
+			if (cmdArr.size()==2): # switch between tabs by number
+				var cmd = cmdArr[1]
+				if (int(cmd)!=0): # check if its integer
+					var tabNumb = int(cmd)
+					if (fileInfos.size()<tabNumb || tabNumb == 0):
+						return
+					get_node("Tabs")._save_tab_content()
+					get_node("Tabs")._show_new_file(fileInfos[tabNumb-1])
+					get_node("Tabs").switch_tab(tabNumb-1)
 		if event.get_unicode() != 0: # allow editing
 			if (lineLimit.text != "" && s.length()>=int(lineLimit.text) && int(lineLimit.text) >= 10):
 				textEditor.get_tree().set_input_as_handled() # ignore key press after limit
+				
 
 # Function to handle dropdown menu button options
 # Options to open and save file
@@ -130,7 +179,7 @@ func _load_content(path):
 # Update the file tree with file structure
 func _fill_tree():
 	if(!tree_filled):
-		file_tree._fill_tree(src_file.get_base_dir())
+		file_tree._update_tree(src_file)
 		tree_filled = true
 
 # Function save a file

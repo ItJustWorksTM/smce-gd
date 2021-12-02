@@ -16,6 +16,11 @@ class fileinfo:
 			
 #Function that Initializes the tabssystem
 func _ready():
+	tabs.connect("tab_changed", self, "_on_Tabs_tab_changed")
+	tabs.connect("tab_clicked", self, "_on_Tabs_tab_clicked")
+	tabs.connect("tab_close", self, "_on_Tabs_tab_close")	
+
+	
 	tabs.add_tab("+")
 	tabs.tab_close_display_policy =Tabs.CLOSE_BUTTON_SHOW_NEVER
 
@@ -39,6 +44,14 @@ func _create_new_tab_with_content(content,path):
 	mainControl.fileInfos[newFile._index] = newFile			#Store the info in memory
 	tabs.current_tab = newFile._index			#Switch to the correct tab
 	_show_new_file(newFile)						#Display the file content
+	
+
+#Two methods for shortcut commands
+func switch_tab(tabN):
+	tabs.current_tab = tabN
+	
+func return_tab():
+	return current_tab
 	
 #Displays a new file of the type fileInfo
 func _show_new_file(file):
