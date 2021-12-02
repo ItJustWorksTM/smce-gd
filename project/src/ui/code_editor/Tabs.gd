@@ -45,14 +45,6 @@ func _create_new_tab_with_content(content,path):
 	tabs.current_tab = newFile._index			#Switch to the correct tab
 	_show_new_file(newFile)						#Display the file content
 	
-
-#Two methods for shortcut commands
-func switch_tab(tabN):
-	tabs.current_tab = tabN
-	
-func return_tab():
-	return current_tab
-	
 #Displays a new file of the type fileInfo
 func _show_new_file(file):
 	if(file == null):
