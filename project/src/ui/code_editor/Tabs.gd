@@ -64,6 +64,15 @@ func _show_new_file(file):
 	mainControl.textEditor.cursor_set_column(file._cursorColumn)
 	mainControl.currentFileInfo = file
 	
+	
+#Two methods for shortcut commands
+func switch_tab(tabN):
+	tabs.current_tab = tabN
+	
+func return_tab():
+	return current_tab
+	
+	
 #Save the content of the file in memory (An array of fileInfo class objects)
 func _save_tab_content():
 	if(mainControl.currentFileInfo != null):
