@@ -27,9 +27,13 @@ onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 func _ready():
 	close_btn.connect("pressed", self, "_on_close")
 	compile_btn.visible = false
-	compile_btn.connect("pressed",self, "_on_compile")
+	compile_btn.connect("pressed", self, "_on_compile")
+	fileDialog.connect("file_selected", self, "_on_FileDialog_file_selected")
+	collapse_btn.connect("pressed", self, "_on_Collapse_btn_pressed")
+	textEditor.connect("text_changed", tabs, "_on_TextEditor_text_changed")
 	_init_dropdown()
 	textEditor._init_content()
+	
 
 # Initializes the dropdown menu button
 func _init_dropdown():
@@ -130,7 +134,7 @@ func _load_content(path):
 # Update the file tree with file structure
 func _fill_tree():
 	if(!tree_filled):
-		file_tree._fill_tree(src_file.get_base_dir())
+		file_tree._update_tree(src_file)
 		tree_filled = true
 
 # Function save a file

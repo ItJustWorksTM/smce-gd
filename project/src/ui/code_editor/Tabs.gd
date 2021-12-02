@@ -16,6 +16,11 @@ class fileinfo:
 			
 #Function that Initializes the tabssystem
 func _ready():
+	tabs.connect("tab_changed", self, "_on_Tabs_tab_changed")
+	tabs.connect("tab_clicked", self, "_on_Tabs_tab_clicked")
+	tabs.connect("tab_close", self, "_on_Tabs_tab_close")	
+
+	
 	tabs.add_tab("+")
 	tabs.tab_close_display_policy =Tabs.CLOSE_BUTTON_SHOW_NEVER
 
