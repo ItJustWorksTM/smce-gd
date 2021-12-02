@@ -8,7 +8,7 @@ extends Popup
 #	Either popup.confirmation("your message") OR popup.info("your message")
 #   Following only for confirmation popup:
 #	yield(popup,"click")
-#	var h = popup.choiseRet() - "no" = false, "yes" = true
+#	var h = popup.choice_ret() - "no" = false, "yes" = true
 #
 
 onready var buttonOK = $Panel/btnContainer/buttonOK # for information popup
