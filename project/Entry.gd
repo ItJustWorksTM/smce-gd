@@ -78,9 +78,9 @@ func _ready():
 	if ! is_instance_valid(bar):
 		return _error("Shared library not loaded")
 	
-	var res = bar.init(Global.user_dir)
-	if ! res.ok():
-		return _error("Unsuitable environment: %s" % res.error())
+	#var res = bar.init(Global.user_dir)
+	#if ! res.ok():
+	#	return _error("Unsuitable environment: %s" % res.error())
 	print(bar.resource_dir())
 	bar.free()
 	
@@ -129,14 +129,15 @@ func _download_cmake():
 	yield(get_tree(), "idle_frame")
 
 	var da = osi.get(OS.get_name())
+	print(OS.get_name())
+	print(osi.get(OS.get_name()))
 	var file: String = da[0]
 	var file_path: String = "user://%s" % file
-	
+	print("haha")
 	var toolchain = Toolchain.new()
 	print("Looking for CMake...")
-	print("0")
-	print("haha")
-	if ! toolchain.check_cmake_availability():
+	print(toolchain.check_cmake_availability())
+	if true:
 		
 		#prompt user here--------------------------------------
 		# NO CMAKE VERSION FOUND. DO YOU WANT TO INSTALL?
@@ -144,21 +145,35 @@ func _download_cmake():
 		
 		print("Starting CMake download")
 		_request.download_file = file_path + ".download"
+		print(file_path)
+		print(file)
+		print("1")
 		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [cmakeVersion, file]
-		if ! _request.request(url):
+		print(url)
+		print("2")
+		var res = _request.request(url)
+		print(res)
+		
+		if ! res:
+			print("3")
 			var ret = yield(_request, "request_completed")
+			print("4")
 			Directory.new().copy(_request.download_file, file_path)
+			print("5")
 			Directory.new().remove(_request.download_file)
 			print("Completed CMake download")
 			print(ret)
 		else:
 			return null
-		
+		print("6")
 		if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
 			return null
 		var cmake_exec = OS.get_user_data_dir() + da[1]
+		print("7")
 		var cmake_ver = []
+		print("8")
 		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
+		print("9")
 		if cmake_res != 0:
 			return false
 		print("--\n%s--" % cmake_ver.front())
