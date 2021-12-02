@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=13 format=2]
+[gd_resource type="Theme" load_steps=14 format=2]
 
 [ext_resource path="res://src/ui/themes/regular_button/disabled.tres" type="StyleBox" id=1]
 [ext_resource path="res://src/ui/themes/regular_button/hover.tres" type="StyleBox" id=2]
@@ -10,28 +10,31 @@
 content_margin_left = 10.0
 bg_color = Color( 0.180392, 0.180392, 0.180392, 1 )
 
-[sub_resource type="StyleBoxFlat" id=7]
-bg_color = Color( 0.243137, 0.243137, 0.243137, 1 )
-
-[sub_resource type="StyleBoxFlat" id=6]
+[sub_resource type="StyleBoxFlat" id=8]
 bg_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
-[sub_resource type="StyleBoxFlat" id=5]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color( 0.180392, 0.180392, 0.180392, 1 )
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.243137, 0.243137, 0.243137, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 10.0
 content_margin_right = 10.0
+bg_color = Color( 0.180392, 0.180392, 0.180392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 10.0
+content_margin_right = 10.0
 bg_color = Color( 0.243137, 0.243137, 0.243137, 1 )
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 5.0
 content_margin_right = 0.0
 bg_color = Color( 0.180392, 0.180392, 0.180392, 1 )
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.180392, 0.180392, 0.180392, 1 )
 
 [resource]
@@ -73,6 +76,7 @@ OptionButton/styles/focus = ExtResource( 4 )
 OptionButton/styles/hover = ExtResource( 2 )
 OptionButton/styles/normal = ExtResource( 3 )
 OptionButton/styles/pressed = null
+Panel/styles/panel = SubResource( 8 )
 PopupMenu/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
 PopupMenu/colors/font_color_accel = Color( 0.7, 0.7, 0.7, 0.8 )
 PopupMenu/colors/font_color_disabled = Color( 0.4, 0.4, 0.4, 0.8 )
@@ -86,10 +90,10 @@ PopupMenu/icons/radio_checked = null
 PopupMenu/icons/radio_unchecked = null
 PopupMenu/icons/submenu = null
 PopupMenu/icons/unchecked = null
-PopupMenu/styles/hover = SubResource( 7 )
+PopupMenu/styles/hover = SubResource( 2 )
 PopupMenu/styles/labeled_separator_left = null
 PopupMenu/styles/labeled_separator_right = null
-PopupMenu/styles/panel = SubResource( 6 )
+PopupMenu/styles/panel = SubResource( 3 )
 PopupMenu/styles/panel_disabled = null
 PopupMenu/styles/separator = null
 Tabs/colors/font_color_bg = Color( 0.69, 0.69, 0.69, 1 )
@@ -108,9 +112,9 @@ Tabs/icons/increment_highlight = null
 Tabs/styles/button = null
 Tabs/styles/button_pressed = null
 Tabs/styles/panel = null
-Tabs/styles/tab_bg = SubResource( 5 )
+Tabs/styles/tab_bg = SubResource( 4 )
 Tabs/styles/tab_disabled = null
-Tabs/styles/tab_fg = SubResource( 4 )
+Tabs/styles/tab_fg = SubResource( 5 )
 TextEdit/colors/background_color = Color( 0, 0, 0, 0 )
 TextEdit/colors/bookmark_color = Color( 0.08, 0.49, 0.98, 1 )
 TextEdit/colors/brace_mismatch_color = Color( 1, 0.2, 0.2, 1 )
@@ -149,7 +153,7 @@ TextEdit/icons/space = null
 TextEdit/icons/tab = null
 TextEdit/styles/completion = null
 TextEdit/styles/focus = null
-TextEdit/styles/normal = SubResource( 2 )
+TextEdit/styles/normal = SubResource( 6 )
 TextEdit/styles/read_only = null
 ToolButton/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
 ToolButton/colors/font_color_disabled = Color( 0.9, 0.95, 1, 0.3 )
@@ -185,7 +189,7 @@ Tree/icons/checked = null
 Tree/icons/select_arrow = null
 Tree/icons/unchecked = null
 Tree/icons/updown = null
-Tree/styles/bg = SubResource( 3 )
+Tree/styles/bg = SubResource( 7 )
 Tree/styles/bg_focus = null
 Tree/styles/button_pressed = null
 Tree/styles/cursor = null

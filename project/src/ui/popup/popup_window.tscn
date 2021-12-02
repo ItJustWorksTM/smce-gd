@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/ui/popup/popup_window.gd" type="Script" id=1]
 [ext_resource path="res://media/fonts/Open_Sans/OpenSasn-Regular-Popup.tres" type="DynamicFont" id=2]
+[ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=3]
 
 [node name="Control" type="Popup"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -0.963871
@@ -19,6 +19,7 @@ margin_left = 511.0
 margin_top = 311.0
 margin_right = 793.0
 margin_bottom = 480.0
+theme = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -29,6 +30,7 @@ margin_top = 440.496
 margin_right = 720.205
 margin_bottom = 484.496
 rect_scale = Vector2( 0.7, 0.7 )
+theme = ExtResource( 3 )
 text = "OK"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -41,6 +43,7 @@ margin_right = 588.932
 margin_bottom = 471.36
 rect_scale = Vector2( 0.7, 0.7 )
 rect_pivot_offset = Vector2( 97, 48 )
+theme = ExtResource( 3 )
 text = "Yes"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -52,6 +55,7 @@ margin_top = 438.496
 margin_right = 810.684
 margin_bottom = 486.496
 rect_scale = Vector2( 0.7, 0.7 )
+theme = ExtResource( 3 )
 text = "No"
 __meta__ = {
 "_edit_use_anchors_": false
