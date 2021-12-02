@@ -23,6 +23,7 @@ class fileinfo:
 		self._cursorColumn = _cursorColumn
 		self._cursorLine = _cursorLine
 		
+		
 			
 #Function that Initializes the tabssystem
 func _ready():
@@ -45,7 +46,7 @@ func _create_new_tab_with_content(content,path):
 	tabs.add_tab("+")							#Add the + tab
 	
 	#Create an instance of fielinfo
-	var newFile = fileinfo.new(tabs.get_tab_count()-2, name, content, content, path, 0, 0)
+	var newFile = fileinfo.new(tabs.get_tab_count()-2, name, path, content, content, 0, 0)
 	mainControl.fileInfos[newFile._index] = newFile			#Store the info in memory
 	tabs.current_tab = newFile._index			#Switch to the correct tab
 	_show_new_file(newFile)						#Display the file content
