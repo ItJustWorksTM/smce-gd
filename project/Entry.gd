@@ -103,3 +103,7 @@ func _error(message: String) -> void:
 
 func _on_clipboard_copy() -> void:
 	OS.clipboard = error
+
+
+
+

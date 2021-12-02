@@ -5,6 +5,8 @@ onready var mainControl: Node = get_owner()
 onready var tabs: Tabs = self
 onready var popupWindow = preload("res://src/ui/popup/popup_window.tscn")
 
+enum {fdo_NEWPROJ,fdo_NEWFILE,fdo_OPEN}
+
 class fileinfo:
 	var _index: int
 	var _name: String
@@ -53,11 +55,15 @@ func _show_new_file(file):
 		return
 		
 	#Enables syntax highlighting only for Arduino files
-	var format = (file._name.rsplit(".", true, 1))[1]
-	if (format == "ino" || format == "h" || format == "pde" || format == "cpp" || format == "c"):
-		mainControl.textEditor.syntax_highlighting = true
+	var format = (file._name.rsplit(".", true, 1))
+	if(format.size() > 1):
+		print(format)
+		format = format[1]
+		if (format == "ino" || format == "h" || format == "pde" || format == "cpp" || format == "c"):
+			mainControl.textEditor.syntax_highlighting = true
 	else:
 		mainControl.textEditor.syntax_highlighting = false
+		
 		
 	mainControl.textEditor.text = file._content
 	mainControl.textEditor.cursor_set_line(file._cursorLine)
@@ -96,7 +102,7 @@ func _on_Tabs_tab_changed(tab):
 func _on_Tabs_tab_clicked(tab):
 	#Open file menu if pressed +
 	if(tabs.get_tab_title(tabs.current_tab) == "+"):
-		mainControl.fileDialogOperation = "OPEN"
+		mainControl.fileDialogOperation = fdo_OPEN
 		mainControl.fileDialog.popup()
 		
 		return
