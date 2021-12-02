@@ -91,6 +91,7 @@ func _ready():
 	#---------------------------------------------------------------------------
 	var cmake_exec = yield(_download_cmake(), "completed")
 	if ! cmake_exec:
+		print("cmake not found")
 		return _error("Failed to retrieve cmake")
 	#---------------------------------------------------------------------------
 	_continue()
@@ -116,11 +117,11 @@ func _on_clipboard_copy() -> void:
 	OS.clipboard = error
 
 #-------------------------------------------------------------------------------
-var godotVersion = "3.19.6" 
+var cmakeVersion = "3.19.6" 
 var osi = {
-	"X11": ["cmake-%s-Linux-x86_64.tar.gz"%godotVersion, "/cmake-%s-Linux-x86_64/bin/cmake"%godotVersion],
-	"OSX": ["cmake-%s-macos-universal.tar.gz"%godotVersion, "/cmake-%s-macos-universal/CMake.app/Contents/bin/cmake"%godotVersion], # people using < macos 10.13 will have more problems anyways
-	"Windows": ["cmake-%s-win32-x86.zip"%godotVersion, "/cmake-%s-win32-x86/bin/cmake.exe"%godotVersion]
+	"X11": ["cmake-%s-Linux-x86_64.tar.gz"%cmakeVersion, "/cmake-%s-Linux-x86_64/bin/cmake"%cmakeVersion],
+	"OSX": ["cmake-%s-macos-universal.tar.gz"%cmakeVersion, "/cmake-%s-macos-universal/CMake.app/Contents/bin/cmake"%cmakeVersion], # people using < macos 10.13 will have more problems anyways
+	"Windows": ["cmake-%s-win32-x86.zip"%cmakeVersion, "/cmake-%s-win32-x86/bin/cmake.exe"%cmakeVersion]
 }
 
 
@@ -133,16 +134,17 @@ func _download_cmake():
 	
 	var toolchain = Toolchain.new()
 	print("Looking for CMake...")
+	print("0")
+	print("haha")
 	if ! toolchain.check_cmake_availability():
 		
 		#prompt user here--------------------------------------
 		# NO CMAKE VERSION FOUND. DO YOU WANT TO INSTALL?
 		#var window  = WindowDialog.new() 
 		
-		
 		print("Starting CMake download")
 		_request.download_file = file_path + ".download"
-		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [godotVersion, file]
+		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [cmakeVersion, file]
 		if ! _request.request(url):
 			var ret = yield(_request, "request_completed")
 			Directory.new().copy(_request.download_file, file_path)
@@ -151,20 +153,18 @@ func _download_cmake():
 			print(ret)
 		else:
 			return null
+		
+		if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
+			return null
+		var cmake_exec = OS.get_user_data_dir() + da[1]
+		var cmake_ver = []
+		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
+		if cmake_res != 0:
+			return false
+		print("--\n%s--" % cmake_ver.front())
+		return cmake_exec
 	else:
 		print("CMake already downloaded")
-
-	if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
-		return null
-
-	var cmake_exec = OS.get_user_data_dir() + da[1]
-
-	var cmake_ver = []
-	var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
-	if cmake_res != 0:
-		return false
-
-	print("--\n%s--" % cmake_ver.front())
-
-	return cmake_exec
+		return true
+	
 #-------------------------------------------------------------------------------
