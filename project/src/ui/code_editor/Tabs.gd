@@ -131,8 +131,9 @@ func _on_Tabs_tab_close(tab):
 		get_tree().root.add_child(popup)
 		popup.confirmation("The tab you are trying to close is not saved!\nDo you wish to proceed?")
 		yield(popup,"click")
-		var choice = popup.choiseRet()
+		var choice = popup.choice_ret()
 		popup.queue_free()
+
 		if(!choice):
 			return
 

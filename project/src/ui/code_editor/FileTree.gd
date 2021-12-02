@@ -90,9 +90,8 @@ func delete_file(path, file_name):
 	get_tree().root.add_child(popup)
 	popup.confirmation('Are you sure you want to delete: ' + file_name + '?')
 	yield(popup,"click")
-	var accept = popup.choiseRet()
+	var accept = popup.choice_ret()
 	if accept:
 		var dir = Directory.new()
 		dir.remove(path)
 		_update_tree(src_file)
-
