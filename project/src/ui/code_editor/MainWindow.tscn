@@ -4,6 +4,11 @@
 [ext_resource path="res://src/ui/code_editor/Tabs.gd" type="Script" id=2]
 [ext_resource path="res://src/ui/code_editor/FileTree.gd" type="Script" id=3]
 [ext_resource path="res://src/ui/code_editor/TextEditor.gd" type="Script" id=4]
+[ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0 )
+border_color = Color( 0, 0.478431, 0.8, 1 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 8.0
@@ -201,16 +206,20 @@ margin_left = -50.0
 margin_top = 5.0
 margin_right = -5.0
 margin_bottom = 30.0
+theme = ExtResource( 5 )
 text = "X"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DropDown" type="MenuButton" parent="."]
+anchor_bottom = 0.00277778
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 100.0
 margin_bottom = 29.0
+theme = ExtResource( 5 )
+custom_styles/focus = SubResource( 1 )
 text = "File"
 flat = false
 __meta__ = {
@@ -236,10 +245,12 @@ __meta__ = {
 }
 
 [node name="Compile" type="Button" parent="."]
+anchor_bottom = 0.00277778
 margin_left = 105.0
 margin_top = 5.0
 margin_right = 200.0
 margin_bottom = 29.0
+theme = ExtResource( 5 )
 text = "Compile"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -260,6 +271,7 @@ __meta__ = {
 margin_right = 248.0
 margin_bottom = 680.0
 size_flags_horizontal = 3
+theme = ExtResource( 5 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -270,6 +282,7 @@ margin_left = 252.0
 margin_right = 272.0
 margin_bottom = 680.0
 text = "<"
+flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -284,6 +297,7 @@ size_flags_stretch_ratio = 4.0
 [node name="Tabs" type="Tabs" parent="HBoxContainer/VBoxContainer"]
 margin_right = 994.0
 margin_bottom = 30.0
+theme = ExtResource( 5 )
 tab_align = 0
 tab_close_display_policy = 1
 scrolling_enabled = false
@@ -298,6 +312,7 @@ margin_right = 994.0
 margin_bottom = 680.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
+theme = ExtResource( 5 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -306,10 +321,10 @@ __meta__ = {
 [node name="LabelLineLimit" type="Label" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -185.739
-margin_top = 51.8284
-margin_right = -68.7388
-margin_bottom = 71.8284
+margin_left = -182.822
+margin_top = 46.259
+margin_right = -65.8218
+margin_bottom = 66.259
 text = "Line length limit:"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -318,11 +333,12 @@ __meta__ = {
 [node name="LineLimitField" type="LineEdit" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -66.6904
-margin_top = 46.6691
-margin_right = -8.69043
-margin_bottom = 76.6691
+margin_left = -64.0
+margin_top = 46.0
+margin_right = -6.0
+margin_bottom = 66.0
 hint_tooltip = "Values below 10 will be ignored"
+theme = ExtResource( 5 )
 text = "80"
 __meta__ = {
 "_edit_use_anchors_": false

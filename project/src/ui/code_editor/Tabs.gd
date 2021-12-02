@@ -13,6 +13,16 @@ class fileinfo:
 	var _savedContent: String
 	var _cursorColumn: int
 	var _cursorLine: int
+	
+	func _init(_index, _name, _path, _content, _savedContent, _cursorColumn, _cursorLine):
+		self._index = _index
+		self._name = _name
+		self._path = _path
+		self._content = _content
+		self._savedContent = _savedContent
+		self._cursorColumn = _cursorColumn
+		self._cursorLine = _cursorLine
+		
 			
 #Function that Initializes the tabssystem
 func _ready():
@@ -33,25 +43,12 @@ func _create_new_tab_with_content(content,path):
 	tabs.remove_tab(tabs.get_tab_count()-1);	#Remove the + tab
 	tabs.add_tab(name)							#Add the actuall tab
 	tabs.add_tab("+")							#Add the + tab
-	var newFile = fileinfo.new()				#Create an instance of fielinfo
-	newFile._index 		= tabs.get_tab_count()-2		
-	newFile._name 		= name
-	newFile._content 	= content
-	newFile._savedContent 	= content
-	newFile._path 		= path
-	newFile._cursorLine = 0
-	newFile._cursorColumn = 0
+	
+	#Create an instance of fielinfo
+	var newFile = fileinfo.new(tabs.get_tab_count()-2, name, content, content, path, 0, 0)
 	mainControl.fileInfos[newFile._index] = newFile			#Store the info in memory
 	tabs.current_tab = newFile._index			#Switch to the correct tab
 	_show_new_file(newFile)						#Display the file content
-	
-
-#Two methods for shortcut commands
-func switch_tab(tabN):
-	tabs.current_tab = tabN
-	
-func return_tab():
-	return current_tab
 	
 #Displays a new file of the type fileInfo
 func _show_new_file(file):
@@ -71,6 +68,15 @@ func _show_new_file(file):
 	mainControl.textEditor.cursor_set_line(file._cursorLine)
 	mainControl.textEditor.cursor_set_column(file._cursorColumn)
 	mainControl.currentFileInfo = file
+	
+	
+#Two methods for shortcut commands
+func switch_tab(tabN):
+	tabs.current_tab = tabN
+	
+func return_tab():
+	return current_tab
+	
 	
 #Save the content of the file in memory (An array of fileInfo class objects)
 func _save_tab_content():
@@ -126,6 +132,8 @@ func _on_Tabs_tab_close(tab):
 		popup.confirmation("The tab you are trying to close is not saved!\nDo you wish to proceed?")
 		yield(popup,"click")
 		var choice = popup.choice_ret()
+		popup.queue_free()
+
 		if(!choice):
 			return
 
@@ -152,13 +160,7 @@ func _on_Tabs_tab_close(tab):
 
 func _is_saved():
 	var fileInfo = mainControl.fileInfos[tabs.current_tab]
-	if(fileInfo._savedContent == fileInfo._content):
-		#print("EQUAL")
-		return true;
-	else:
-		#print("NOT EQUAL")
-		return false;
-		
+	return fileInfo._savedContent == fileInfo._content
 
 
 func _on_TextEditor_text_changed():
@@ -167,7 +169,4 @@ func _on_TextEditor_text_changed():
 func _update_saved_status():
 	_save_tab_content()
 	var fileInfo = mainControl.fileInfos[tabs.current_tab]
-	if(_is_saved()):
-		tabs.set_tab_title(current_tab,fileInfo._name)
-	else:
-		tabs.set_tab_title(current_tab,fileInfo._name+"*")
+	tabs.set_tab_title(current_tab,fileInfo._name + "" if _is_saved() else fileInfo._name + "*")

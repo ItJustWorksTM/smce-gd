@@ -57,57 +57,58 @@ func _on_compile() -> void:
 func enableEditor() -> void:
 	set_visible(true)
 	
-# Limit line length + handle shortcuts
+# Limit line length + shortcuts
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		var line = textEditor.cursor_get_line()
 		var s = textEditor.get_line(line)
-		var tb = get_node("Tabs").return_tab()
+		var tb = tabs.return_tab()
 		if ((event.as_text() == "Tab" || event.as_text() == "Control+V") && lineLimit.text != "" && s.length()>=(int(lineLimit.text)-1) && int(lineLimit.text) >= 10):
 			textEditor.get_tree().set_input_as_handled()
 		if "Control" in event.as_text():
-			if (event.as_text() == "Control+S"): # save file
-				_save_file()		
 			if (event.as_text() == "Control+W" && fileInfos.size() !=0): # close current tab
-				get_node("Tabs")._on_Tabs_tab_close(tb)		
-			if (event.as_text() == "Control+N"): #new file in tab
-				_new_file()
-			if (event.as_text() == "Control+P"): #new project
-				_new_proj()
-			if (event.as_text() == "Control+O"): #open file
-				_open_file()
-			if (event.as_text() == "Control+Slash"): #comment/uncomment line
-				if "//" in s:
-					var result = textEditor.search("//", 0, line, 0)
-					if result.size() > 0:
-						#var res_line = result[TextEdit.SEARCH_RESULT_LINE]
-						var result_column = result[TextEdit.SEARCH_RESULT_COLUMN]	
-						textEditor.select(line, result_column, line, result_column+2)
-						textEditor.insert_text_at_cursor("")
-				else :
-					textEditor.cursor_set_column(0)
-					textEditor.insert_text_at_cursor("//")
-			if (event.as_text() == "Control+Q"):
-				_on_close()
+				tabs._on_Tabs_tab_close(tb)	
+			match event.as_text():
+				"Control+S": # save file
+					_save_file()		
+				"Control+N": #new file in tab
+					_new_file()
+				"Control+P": #new project
+					_new_proj()
+				"Control+O": #open file
+					_open_file()
+				"Control+Slash": #comment/uncomment line
+					if "//" in s:
+						var result = textEditor.search("//", 0, line, 0)
+						if result.size() > 0:
+							#var res_line = result[TextEdit.SEARCH_RESULT_LINE]
+							var result_column = result[TextEdit.SEARCH_RESULT_COLUMN]	
+							textEditor.select(line, result_column, line, result_column+2)
+							textEditor.insert_text_at_cursor("")
+					else :
+						textEditor.cursor_set_column(0)
+						textEditor.insert_text_at_cursor("//")
+				"Control+Q":
+					_on_close()
 			var cmdArr = (event.as_text().rsplit("+", true, 1))
 			if (event.as_text() == "Control+J"): # switch between tabs, one by one				
 				if (tb>=fileInfos.size()-1):
-					get_node("Tabs")._save_tab_content()
-					get_node("Tabs")._show_new_file(fileInfos[0])
-					get_node("Tabs").switch_tab(0)
+					tabs._save_tab_content()
+					tabs._show_new_file(fileInfos[0])
+					tabs.switch_tab(0)
 				if (tb<fileInfos.size()-1):
-					get_node("Tabs")._save_tab_content()
-					get_node("Tabs")._show_new_file(fileInfos[tb+1])
-					get_node("Tabs").switch_tab(tb+1)
+					tabs._save_tab_content()
+					tabs._show_new_file(fileInfos[tb+1])
+					tabs.switch_tab(tb+1)
 			if (cmdArr.size()==2): # switch between tabs by number
 				var cmd = cmdArr[1]
 				if (int(cmd)!=0): # check if its integer
 					var tabNumb = int(cmd)
 					if (fileInfos.size()<tabNumb || tabNumb == 0):
 						return
-					get_node("Tabs")._save_tab_content()
-					get_node("Tabs")._show_new_file(fileInfos[tabNumb-1])
-					get_node("Tabs").switch_tab(tabNumb-1)
+					tabs._save_tab_content()
+					tabs._show_new_file(fileInfos[tabNumb-1])
+					tabs.switch_tab(tabNumb-1)
 		if event.get_unicode() != 0: # allow editing
 			if (lineLimit.text != "" && s.length()>=int(lineLimit.text) && int(lineLimit.text) >= 10):
 				textEditor.get_tree().set_input_as_handled() # ignore key press after limit
