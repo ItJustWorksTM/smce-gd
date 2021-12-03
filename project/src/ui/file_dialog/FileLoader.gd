@@ -12,7 +12,10 @@
 static func loadFile(filepath: String):
 	var f = File.new()
 	if f.file_exists(filepath):
-		f.open(filepath, File.READ)
+		var err = f.open(filepath, File.READ)
+		if err != OK:
+			print("Failed openning file",err)
+			return null
 		var content = ""
 		while not f.eof_reached():
 			var contentFragment = f.get_line()

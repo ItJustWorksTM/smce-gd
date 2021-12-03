@@ -17,10 +17,13 @@ var fileInfos = {}				#Keeps track of all fileInfo objects
 var tree_filled = false
 var sketch_owner = null
 
+
+
 #SAVES CURRENT STATE OF filedialog operation
 #Can have the following values:
 # OPEN  NEWFILE  SAVE NEWPROJ
-onready var fileDialogOperation: String = ""
+onready var fileDialogOperation: int = -1
+enum {fdo_NEWPROJ,fdo_NEWFILE,fdo_OPEN,fdo_NONE}
 
 onready var fileLoader = load("res://src/ui/file_dialog/FileLoader.gd").new()
 # Called when the node enters the scene tree for the first time.
@@ -118,25 +121,26 @@ func _input(event):
 # Options to open and save file
 func _on_item_pressed(id):
 	var name = dropdown_btn.get_popup().get_item_text(id)
-	if name == "Open File":
-		_open_file()
-	elif name == "Save File":
-		_save_file()
-	elif name == "New File":
-		_new_file()
-	elif name == "New Arduino-Project":
-		_new_proj()
-	elif name == "Close":
-		_on_close()
+	match name:
+		"Open File":
+			_open_file()
+		"Save File":
+			_save_file()
+		"New File":
+			_new_file()
+		"New Arduino-Project":
+			_new_proj()
+		"Close":
+			_on_close()
 		
 func _open_file():
-	fileDialogOperation = "OPEN"
+	fileDialogOperation = fdo_OPEN
 	fileDialog.mode = fileDialog.MODE_OPEN_FILE	#Change mode back to open file	
 	fileDialog.popup() # Opens file dialog for file selection
 	
 #Function to create a new file
 func _new_file():
-	fileDialogOperation = "NEWFILE"
+	fileDialogOperation = fdo_NEWFILE
 	fileDialog.mode = fileDialog.MODE_SAVE_FILE	#Change mode to open dir
 	fileDialog.add_filter("*.ino; ino file")
 	fileDialog.popup()	#Get path for new file
@@ -144,7 +148,7 @@ func _new_file():
 	
 #Function to create a new file
 func _new_proj():
-	fileDialogOperation = "NEWPROJ"
+	fileDialogOperation = fdo_NEWPROJ
 	fileDialog.mode = fileDialog.MODE_SAVE_FILE	#Change mode to open dir
 	fileDialog.add_filter("*.ino; ino file")
 	fileDialog.popup()	#Get path for new file
@@ -155,15 +159,15 @@ func _on_FileDialog_file_selected(path):
 	if(src_file == null):
 		src_file = path
 		
-	if(fileDialogOperation == "OPEN"):
-		fileDialogOperation = ""
+	if(fileDialogOperation == fdo_OPEN):
+		fileDialogOperation = fdo_NONE
 		_load_content(path)
 		
-	elif(fileDialogOperation == "NEWFILE" ):
+	elif(fileDialogOperation == fdo_NEWFILE ):
 		tabs._create_new_tab_with_content("",path)
 		_save_file()
 		
-	elif(fileDialogOperation == "NEWPROJ"):
+	elif(fileDialogOperation == fdo_NEWPROJ):
 		var template = fileLoader.loadFile("res://NewArduinoTemplate.txt")
 		var finalPath = path+"/"+path.get_file()+".ino"
 		Directory.new().make_dir_recursive (path)
