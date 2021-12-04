@@ -78,22 +78,26 @@ func _ready():
 	if ! is_instance_valid(bar):
 		return _error("Shared library not loaded")
 	
-	#var res = bar.init(Global.user_dir)
-	#if ! res.ok():
-	#	return _error("Unsuitable environment: %s" % res.error())
-	print(bar.resource_dir())
-	bar.free()
-	
-	Global.scan_named_classes("res://src")
-	
-	# somehow destroys res://
-	ModManager.load_mods()
 	#---------------------------------------------------------------------------
 	var cmake_exec = yield(_download_cmake(), "completed")
 	if ! cmake_exec:
 		print("cmake not found")
 		return _error("Failed to retrieve cmake")
 	#---------------------------------------------------------------------------
+	
+	
+	# Complains that cmake isn't in path. Will uncomment when this is fixed. 
+	#var res = bar.init(Global.user_dir)
+	#if ! res.ok():
+	#	return _error("Unsuitable environment: %s" % res.error())
+	#print(bar.resource_dir())
+	#bar.free()
+	
+	Global.scan_named_classes("res://src")
+	
+	# somehow destroys res://
+	ModManager.load_mods()
+
 	_continue()
 
 func _continue():
@@ -126,20 +130,17 @@ var osi = {
 
 
 func _download_cmake():
-	return
 	yield(get_tree(), "idle_frame")
 
 	var da = osi.get(OS.get_name())
-	print(OS.get_name())
-	print(osi.get(OS.get_name()))
 	var file: String = da[0]
 	#var file_path: String = "user://%s" % file
 	var download_path = OS.get_system_dir(3, true)
 	var file_path = download_path + ("\\%s" % file)
-	print(file_path)
-	var toolchain = Toolchain.new()
+	var toolchain = Toolchain.new() #is it okay to use a new toolchain?
 	print("Looking for CMake...")
-	if toolchain.check_cmake_availability():
+	print(toolchain.check_cmake_availability())
+	if !toolchain.check_cmake_availability().ok():
 		print("CMake not found")
 		#prompt user here--------------------------------------
 		# NO CMAKE VERSION FOUND. DO YOU WANT TO INSTALL?
@@ -166,19 +167,16 @@ func _download_cmake():
 			print("unzip failed")
 			return null
 		var cmake_exec = OS.get_user_data_dir() + da[1]
-		print("G")
 		var cmake_ver = []
-		print("H")
 		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
-		print("I")
 		if cmake_res != 0:
-			print(" installation failed")
+			print("installation failed")
 			return false
 		print("--\n%s--" % cmake_ver.front())
 		print("CMake installed")
 		return cmake_exec
 	else:
-		print("CMake already downloaded")
+		print("CMake found")
 		return true
 	
 #-------------------------------------------------------------------------------
