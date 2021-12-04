@@ -85,82 +85,69 @@ func _get_wiki_from_storage(path) -> Array:
 func _read_wiki_file(file_name):
 	var file = File.new()
 	var content : String
-	var img_width = 464 # 384
 	var code_snippet = false
 	file.open(USER_DIR + file_name, File.READ)
-	while not file.eof_reached():
-		var start = 0
-		var end = null
-		var end_2 = null
-		var end_3 = null
-		var end_true = null
-		var line_length = 0
+	while not file.eof_reached():		
 		var line = file.get_line()
-		# Format the text using BBCode
-		if line.begins_with("```") && code_snippet == false:
-			code_snippet = true
-			line = "[color=aqua]" + line + "[/color]"
-			print("Code started")
-		if !line.begins_with("```") && code_snippet == true:
-			line = "[color=aqua]" + line + "[/color]"
-		if line.begins_with("```") && code_snippet == true:
-			line = "[color=aqua]" + line + "[/color]"
-			code_snippet = false
-			print("Code ended")
-		# TODO: Switch statement? Match statement (godot)?
-		if line.begins_with("## "):
-			line = line.replacen("## ", "")
-			line = "[b]" + line + "[/b]"
-		if line.begins_with("### "):
-			line = line.replacen("### ", "")
-			line = "[i]" + line + "[/i]"
-		if line.begins_with("![](https://i.imgur.com/"):
-			line = line.replacen("![](", "").replacen(")", "")
-			print("Image to download: " + line)
-			var image_file_name = line.split("/")[-1]
-			#print("IMG FILE NAME: " + image_file_name)
-			download_texture(line, USER_DIR + image_file_name)
-#			# Check if image exists
-#			var directory = Directory.new();
-#			print("DOWNLOADED FILE EXISTS: " + str(directory.file_exists(USER_DIR + image_file_name)))
-#			print("RES LOADER CHECK 1 : " + str(ResourceLoader.exists(USER_DIR + image_file_name)))
-#			ResourceLoader.load(USER_DIR + image_file_name)
-#			print("RES LOADER CHECK 2: " + str(ResourceLoader.exists(USER_DIR + image_file_name)))
-			line = "[img=<" + str(img_width) + ">]" + USER_DIR + image_file_name + "[/img]"
-#			var image : Image
-#			image.load("user://" + image_file_name)
-#			print("RES PATH: " + image.resource_path())
-		if "https://" in line:
-			start = line.find("https://")
-			print("HYPERLINK START: " + str(start))
-			end = line.findn(" ", start)
-			end_2 = line.findn(")", start)
-			end_3 = line.findn("\\", start)
-			if end == -1:
-				end = INT64_MAX
-			if end_2 == -1:
-				end_2 = INT64_MAX	
-			if end_3 == -1:
-				end_3 = INT64_MAX 
-			if end == INT64_MAX && end_2 == INT64_MAX && end_3 == INT64_MAX:
-				end_true = line.length()
-			else:
-				end_true = min(end, min(end_2, end_3))
-			print("HYPERLINK END: " + str(end_true))
-
-			line = line.insert(start, "[u]")
-			line = line.insert(end_true + 3, "[/u]") # for some reason doesn't end at the end, need +3
+		var values
+		# Format the text using BBCode (code snippet includes more lines, therefore it needs to be dealt with here)
+		values = _markdown_line(line, code_snippet)
+		line = values[0]
+		code_snippet = values[1]
 		line += "\n"
 		content = content + line;
-	#var content = file.get_as_text()
 	file.close()
 	return content
 
+func _markdown_line(line : String, code_snippet : bool):
+	var img_width = 464 # depends on the window width
+	var hyperlink_position_start = 0
+	var hyperlink_position_end_space = null
+	var hyperlink_position_end_bracket = null
+	var hyperlink_position_end_backslash = null
+	var hyperlink_position_end = null
+	var line_length = 0
+	if line.begins_with("```") && code_snippet == false:
+		code_snippet = true
+		line = "[color=aqua]" + line + "[/color]"
+	if !line.begins_with("```") && code_snippet == true:
+		line = "[color=aqua]" + line + "[/color]"
+	if line.begins_with("```") && code_snippet == true:
+		line = "[color=aqua]" + line + "[/color]"
+		code_snippet = false
+	if line.begins_with("## "):
+		line = line.replacen("## ", "")
+		line = "[b]" + line + "[/b]"
+	if line.begins_with("### "):
+		line = line.replacen("### ", "")
+		line = "[i]" + line + "[/i]"
+	if line.begins_with("![](https://i.imgur.com/"):
+		line = line.replacen("![](", "").replacen(")", "")
+		var image_file_name = line.split("/")[-1]
+		_download_image(line, USER_DIR + image_file_name)
+		line = "[img=<" + str(img_width) + ">]" + USER_DIR + image_file_name + "[/img]"
+	if "https://" in line:
+		hyperlink_position_start = line.find("https://")
+		hyperlink_position_end_space = line.findn(" ", hyperlink_position_start)
+		hyperlink_position_end_bracket = line.findn(")", hyperlink_position_start)
+		hyperlink_position_end_backslash = line.findn("\\", hyperlink_position_start)
+		if hyperlink_position_end_space == -1:
+			hyperlink_position_end_space = INT64_MAX
+		if hyperlink_position_end_bracket == -1:
+			hyperlink_position_end_bracket = INT64_MAX	
+		if hyperlink_position_end_backslash == -1:
+			hyperlink_position_end_backslash = INT64_MAX 
+		if hyperlink_position_end_space == INT64_MAX && hyperlink_position_end_bracket == INT64_MAX && hyperlink_position_end_backslash == INT64_MAX:
+			hyperlink_position_end = line.length()
+		else:
+			hyperlink_position_end = min(hyperlink_position_end_space, min(hyperlink_position_end_bracket, hyperlink_position_end_backslash))
+		line = line.insert(hyperlink_position_start, "[u]")
+		line = line.insert(hyperlink_position_end + 3, "[/u]") # for some reason doesn't end at the end, need +3
+	return [line, code_snippet]
 
 func _gui_input(event: InputEvent):
 	if event.is_action_pressed("mouse_left"):
 		_close()
-
 
 # Added enter_tree() to initialize the screen
 func _enter_tree() -> void:
@@ -194,7 +181,7 @@ func _select_help() -> void:
 			# print("Item list select: Index ", n)
 
 # TODO: Resolve downloading an image, now gets an error "ERROR: request: Condition "!is_inside_tree()" is true. Returned: ERR_UNCONFIGURED"
-func download_texture(url : String, file_name : String):
+func _download_image(url : String, file_name : String):
 	var http_node = HTTPRequest.new()
 	http_node.set_use_threads(true)
 	add_child(http_node)
