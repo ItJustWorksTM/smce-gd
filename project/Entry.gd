@@ -132,11 +132,14 @@ func _download_cmake():
 	print(OS.get_name())
 	print(osi.get(OS.get_name()))
 	var file: String = da[0]
-	var file_path: String = "user://%s" % file
-	print("haha")
+	#var file_path: String = "user://%s" % file
+	var download_path = OS.get_system_dir(3, true)
+	var file_path = download_path + ("\\%s" % file)
+	print(file_path)
 	var toolchain = Toolchain.new()
 	print("Looking for CMake...")
 	print(toolchain.check_cmake_availability())
+	print(toolchain.check_suitable_environment())
 	if true:
 		
 		#prompt user here--------------------------------------
@@ -145,35 +148,34 @@ func _download_cmake():
 		
 		print("Starting CMake download")
 		_request.download_file = file_path + ".download"
-		print(file_path)
-		print(file)
-		print("1")
+		print("A")
 		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [cmakeVersion, file]
 		print(url)
-		print("2")
+		print(url)
+		print("B")
 		var res = _request.request(url)
 		print(res)
 		
 		if ! res:
-			print("3")
+			print("C")
 			var ret = yield(_request, "request_completed")
-			print("4")
+			print("D")
 			Directory.new().copy(_request.download_file, file_path)
-			print("5")
+			print("E")
 			Directory.new().remove(_request.download_file)
 			print("Completed CMake download")
 			print(ret)
 		else:
 			return null
-		print("6")
+		print("F")
 		if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
 			return null
 		var cmake_exec = OS.get_user_data_dir() + da[1]
-		print("7")
+		print("G")
 		var cmake_ver = []
-		print("8")
+		print("H")
 		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
-		print("9")
+		print("I")
 		if cmake_res != 0:
 			return false
 		print("--\n%s--" % cmake_ver.front())
