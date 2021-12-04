@@ -126,6 +126,7 @@ var osi = {
 
 
 func _download_cmake():
+	return
 	yield(get_tree(), "idle_frame")
 
 	var da = osi.get(OS.get_name())
@@ -138,37 +139,31 @@ func _download_cmake():
 	print(file_path)
 	var toolchain = Toolchain.new()
 	print("Looking for CMake...")
-	print(toolchain.check_cmake_availability())
-	print(toolchain.check_suitable_environment())
-	if true:
-		
+	if toolchain.check_cmake_availability():
+		print("CMake not found")
 		#prompt user here--------------------------------------
 		# NO CMAKE VERSION FOUND. DO YOU WANT TO INSTALL?
 		#var window  = WindowDialog.new() 
 		
-		print("Starting CMake download")
+		print("Downloading CMake...")
 		_request.download_file = file_path + ".download"
-		print("A")
 		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [cmakeVersion, file]
-		print(url)
-		print(url)
-		print("B")
 		var res = _request.request(url)
 		print(res)
 		
 		if ! res:
-			print("C")
 			var ret = yield(_request, "request_completed")
-			print("D")
 			Directory.new().copy(_request.download_file, file_path)
-			print("E")
 			Directory.new().remove(_request.download_file)
-			print("Completed CMake download")
 			print(ret)
+			print("Completed CMake download")
 		else:
+			print("Download Failed")
 			return null
-		print("F")
+			
+		print("Installing CMake...")
 		if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
+			print("unzip failed")
 			return null
 		var cmake_exec = OS.get_user_data_dir() + da[1]
 		print("G")
@@ -177,8 +172,10 @@ func _download_cmake():
 		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
 		print("I")
 		if cmake_res != 0:
+			print(" installation failed")
 			return false
 		print("--\n%s--" % cmake_ver.front())
+		print("CMake installed")
 		return cmake_exec
 	else:
 		print("CMake already downloaded")
