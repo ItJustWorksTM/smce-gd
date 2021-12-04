@@ -142,9 +142,9 @@ margin_right = 772.0
 margin_bottom = 459.0
 
 [node name="ItemList" type="ItemList" parent="LogPopout/Panel/Control/VBoxContainer/HBoxContainer"]
-margin_right = 384.0
+margin_right = 284.0
 margin_bottom = 410.0
-rect_min_size = Vector2( 384, 0 )
+rect_min_size = Vector2( 284, 0 )
 mouse_default_cursor_shape = 2
 custom_styles/cursor = SubResource( 7 )
 custom_styles/selected_focus = SubResource( 7 )
@@ -157,10 +157,10 @@ custom_constants/vseparation = 8
 allow_rmb_select = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="LogPopout/Panel/Control/VBoxContainer/HBoxContainer"]
-margin_left = 388.0
+margin_left = 288.0
 margin_right = 772.0
 margin_bottom = 410.0
-rect_min_size = Vector2( 384, 410 )
+rect_min_size = Vector2( 484, 410 )
 focus_mode = 2
 custom_fonts/bold_italics_font = SubResource( 10 )
 custom_fonts/italics_font = SubResource( 11 )

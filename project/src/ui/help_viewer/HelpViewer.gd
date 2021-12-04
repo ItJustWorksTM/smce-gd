@@ -85,7 +85,7 @@ func _get_wiki_from_storage(path) -> Array:
 func _read_wiki_file(file_name):
 	var file = File.new()
 	var content : String
-	var img_width = 364 # 384
+	var img_width = 464 # 384
 	var code_snippet = false
 	file.open(USER_DIR + file_name, File.READ)
 	while not file.eof_reached():
