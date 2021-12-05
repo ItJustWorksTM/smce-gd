@@ -85,8 +85,6 @@ func _ready():
 		return _error("Failed to retrieve cmake")
 	#---------------------------------------------------------------------------
 	
-	
-	# Complains that cmake isn't in path. Will uncomment when this is fixed. 
 	#var res = bar.init(Global.user_dir)
 	#if ! res.ok():
 	#	return _error("Unsuitable environment: %s" % res.error())
@@ -123,9 +121,9 @@ func _on_clipboard_copy() -> void:
 #-------------------------------------------------------------------------------
 var cmakeVersion = "3.19.6" 
 var osi = {
-	"X11": ["cmake-%s-Linux-x86_64.tar.gz"%cmakeVersion, "/cmake-%s-Linux-x86_64/bin/cmake"%cmakeVersion],
-	"OSX": ["cmake-%s-macos-universal.tar.gz"%cmakeVersion, "/cmake-%s-macos-universal/CMake.app/Contents/bin/cmake"%cmakeVersion], # people using < macos 10.13 will have more problems anyways
-	"Windows": ["cmake-%s-win32-x86.zip"%cmakeVersion, "/cmake-%s-win32-x86/bin/cmake.exe"%cmakeVersion]
+	"X11": ["cmake-%s-Linux-x86_64.tar.gz"%cmakeVersion, "/bin/cmake"],
+	"OSX": ["cmake-%s-macos-universal.tar.gz"%cmakeVersion, "/CMake.app/Contents/bin/cmake"], # people using < macos 10.13 will have more problems anyways
+	"Windows": ["cmake-%s-win32-x86.zip"%cmakeVersion, "/bin/cmake.exe"]
 }
 
 
@@ -134,12 +132,14 @@ func _download_cmake():
 
 	var da = osi.get(OS.get_name())
 	var file: String = da[0]
+	print("1")
+	#var download_path = OS.get_system_dir(3, true)
+	#var download_path = OS.get_user_data_dir()
+	print("2")
 	#var file_path: String = "user://%s" % file
-	var download_path = OS.get_system_dir(3, true)
-	var file_path = download_path + ("\\%s" % file)
+	var file_path = OS.get_user_data_dir() + ("\\%s" % file)
 	var toolchain = Toolchain.new() #is it okay to use a new toolchain?
 	print("Looking for CMake...")
-	print(toolchain.check_cmake_availability())
 	if !toolchain.check_cmake_availability().ok():
 		print("CMake not found")
 		#prompt user here--------------------------------------
@@ -150,33 +150,47 @@ func _download_cmake():
 		_request.download_file = file_path + ".download"
 		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [cmakeVersion, file]
 		var res = _request.request(url)
-		print(res)
-		
+		var dir = Directory.new()
 		if ! res:
 			var ret = yield(_request, "request_completed")
-			Directory.new().copy(_request.download_file, file_path)
-			Directory.new().remove(_request.download_file)
-			print(ret)
-			print("Completed CMake download")
+			dir.copy(_request.download_file, file_path)
+			dir.remove(_request.download_file)
+			print("CMake Downloaded")
 		else:
 			print("Download Failed")
 			return null
-			
+			#Global.usr_dir_plus("RtResources")------------------------
 		print("Installing CMake...")
-		if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
+		dir.open(OS.get_user_data_dir())
+		dir.rename (file, "CMake")
+		dir.open(Global.usr_dir_plus("RtResources"))
+		print("A")
+		if dir.dir_exists("CMake"):
+			print("b")
+			dir.remove("CMake")
+		print("c")
+		print("d")
+		print(file_path)
+		var cmake_installation_path: String = Global.usr_dir_plus("RtResources")
+		if ! Util.unzip(Util.user2abs(file_path), cmake_installation_path):
+			print("e")
 			print("unzip failed")
 			return null
-		var cmake_exec = OS.get_user_data_dir() + da[1]
+		print("f")
+		var cmake_exec = cmake_installation_path + "CMake" + da[1]
+		print("g")
 		var cmake_ver = []
 		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
 		if cmake_res != 0:
-			print("installation failed")
+			print("Installation Failed") # maybe not propper to say installation failed here. Maybe replace with: "something went wrong"?
 			return false
 		print("--\n%s--" % cmake_ver.front())
-		print("CMake installed")
+		print("CMake Installed")
+		print("Does cmake exist after installation?")
+		print(toolchain.check_cmake_availability().ok())
 		return cmake_exec
 	else:
-		print("CMake found")
+		print("CMake Found")
 		return true
 	
 #-------------------------------------------------------------------------------
