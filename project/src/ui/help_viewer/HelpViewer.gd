@@ -110,6 +110,10 @@ func _markdown_to_bbcode(line: String, code_snippet: bool):
 		line = "[b]" + line + "[/b]"
 	elif line.begins_with("### "):
 		line = line.replacen("### ", "")
+		line = "[b][i]" + line + "[/i][/b]"
+		
+	# Note
+	if "**note:**" in line:
 		line = "[i]" + line + "[/i]"
 
 	# Image
