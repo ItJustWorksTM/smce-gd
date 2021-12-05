@@ -122,7 +122,6 @@ func _on_help_btn() -> void:
 	_set_vis(false)
 
 	var help_viewer = help_viewer_t.instance()
-	help_viewer.init()
 	get_tree().root.add_child(help_viewer)
 
 
