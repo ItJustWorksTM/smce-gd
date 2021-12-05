@@ -47,6 +47,8 @@ func _ready():
 	# Add on-click event
 	item_list.connect("item_selected", self, "_on_help_selected")
 	item_list.connect("nothing_selected", self, "_on_help_selected", [-1])
+	
+	rich_text_label.connect("meta_clicked", self, "_richtextlabel_on_meta_clicked")
 
 
 func _get_wiki_from_storage(path: String) -> Array:
@@ -152,11 +154,16 @@ func _markdown_to_bbcode(line: String, code_snippet: bool):
 				hyperlink_position_end_space,
 				min(hyperlink_position_end_bracket, hyperlink_position_end_backslash)
 			)
-		line = line.insert(hyperlink_position_start, "[u]")
-		line = line.insert(hyperlink_position_end + 3, "[/u]")  # for some reason doesn't end at the end, need +3
+		line = line.insert(hyperlink_position_start, "[url]")
+		line = line.insert(hyperlink_position_end + 5, "[/url]")  # for some reason doesn't end at the actual end, need + 5
 
 	line += "\n"
 	return [line, code_snippet]
+
+
+
+func _richtextlabel_on_meta_clicked(meta):
+	OS.shell_open(str(meta))
 
 
 func _gui_input(event: InputEvent):
