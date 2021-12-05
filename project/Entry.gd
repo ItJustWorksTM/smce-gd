@@ -25,9 +25,11 @@ onready var _button: Button = $Button
 
 var error: String = ""
 
+const USER_DIR = "user://"
+
 
 func _ready():
-	_fetch_github_wiki()
+	_fetch_github_wiki(_fetch_github_wiki_pages_names())
 
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
@@ -107,27 +109,42 @@ func _error(message: String) -> void:
 func _on_clipboard_copy() -> void:
 	OS.clipboard = error
 
-
-# Fetch smce-gd GitHub wiki into project/media/wiki
-# TODO: wiki_pages should be fetched automatically
-func _fetch_github_wiki() -> void:
-	var wiki_pages = [
-		"Home",
-		"Arch-based-Linux-setup",
-		"Compiling-a-sketch",
-		"Configuration",
-		"Debian-based-Linux-setup",
-		"MacOS-setup",
-		"Modding",
-		"Vehicle-Capabilities",
-		"Windows-setup"
-	]
+# Fetch smce-gd Github wiki html, return all the wiki pages names to be downloaded
+# Didn't find any API endpoint for this
+# Temporary solution (github can change the html tags overtime)
+func _fetch_github_wiki_pages_names():
+	var wiki_html_file = "wiki.html"
+	# Download the html
+	var http_node = HTTPRequest.new()
+	http_node.set_use_threads(true)
+	add_child(http_node)
+	var output_name = USER_DIR + wiki_html_file
+	http_node.set_download_file(output_name)
+	var download_link = "https://github.com/ItJustWorksTM/smce-gd/wiki.html"
+	var error = http_node.request(download_link)
+	if error != OK:
+		push_error("An error occurred in the HTTP request.")
+	# Get the wiki pages names
+	var file = File.new()
+	var line
+	var wiki_pages = []
+	file.open(USER_DIR + wiki_html_file, File.READ)
+	while not file.eof_reached():
+		line = file.get_line()
+		if '<a class="flex-1 py-1 text-bold"' in line:
+			line = line.split(">")[1].split("<")[0]
+			line = line.replacen(" ", "-")
+			wiki_pages.append(line)
+	return wiki_pages
+	
+# Fetch smce-gd GitHub wiki into user directory
+func _fetch_github_wiki(wiki_pages) -> void:
 	var base_url = "https://raw.githubusercontent.com/wiki/ItJustWorksTM/smce-gd/"
 	for page in wiki_pages:
 		var http_node = HTTPRequest.new()
 		http_node.set_use_threads(true)
 		add_child(http_node)
-		var output_name = "user://" + page + ".md"
+		var output_name = USER_DIR + page + ".md"
 		http_node.set_download_file(output_name)
 		var download_link = base_url + page + ".md"
 		var error = http_node.request(download_link)
