@@ -116,6 +116,8 @@ func _markdown_to_bbcode(line: String, code_snippet: bool):
 		
 	# Note
 	if "**note:**" in line:
+		line = line.replacen("_**note:**", "note:")
+		line = line.trim_suffix("_")
 		line = "[i]" + line + "[/i]"
 
 	# Image

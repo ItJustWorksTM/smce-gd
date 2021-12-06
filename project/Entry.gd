@@ -29,10 +29,8 @@ const USER_DIR = "user://"
 
 
 func _ready():
-	print("Downloading wiki pages...")
-	var wiki_pages = yield(_fetch_github_wiki_pages_names(), "completed")
-	print("Wiki pages downloaded")
-	_fetch_github_wiki(wiki_pages)
+	var wiki_titles = yield(_fetch_wiki_titles(), "completed")
+	_download_wiki_pages(wiki_titles)
 
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
@@ -112,17 +110,16 @@ func _error(message: String) -> void:
 func _on_clipboard_copy() -> void:
 	OS.clipboard = error
 
-# Fetch smce-gd Github wiki html, return all the wiki pages names to be downloaded
-# Didn't find any API endpoint for this
-# Temporary solution (github can change the html tags overtime)
-func _fetch_github_wiki_pages_names():
-	var wiki_html_file = "wiki.html"
+# Fetch smce-gd GitHub wiki html, return all the wiki page names to downloaded
+# TODO: Temporary solution (GitHub can change the html tags, breaking this)
+func _fetch_wiki_titles():
+	var wiki_file_name = "wiki.html"
 	
 	# Download the html
 	var http_node = HTTPRequest.new()
 	http_node.set_use_threads(true)
 	add_child(http_node)
-	var output_name = USER_DIR + wiki_html_file
+	var output_name = USER_DIR + wiki_file_name
 	http_node.set_download_file(output_name)
 	var download_link = "https://github.com/ItJustWorksTM/smce-gd/wiki.html"
 	var error = http_node.request(download_link)
@@ -132,11 +129,10 @@ func _fetch_github_wiki_pages_names():
 		
 	# Get the wiki pages names
 	var file = File.new()
-	var line
 	var wiki_pages = []
-	file.open(USER_DIR + wiki_html_file, File.READ)
+	file.open(USER_DIR + wiki_file_name, File.READ)
 	while not file.eof_reached():
-		line = file.get_line()
+		var line = file.get_line()
 		if '<a class="flex-1 py-1 text-bold"' in line:
 			line = line.split(">")[1].split("<")[0]
 			line = line.replacen(" ", "-")
@@ -144,9 +140,9 @@ func _fetch_github_wiki_pages_names():
 	return wiki_pages
 	
 # Fetch smce-gd GitHub wiki into user directory
-func _fetch_github_wiki(wiki_pages) -> void:
+func _download_wiki_pages(wiki_pages_to_download) -> void:
 	var base_url = "https://raw.githubusercontent.com/wiki/ItJustWorksTM/smce-gd/"
-	for page in wiki_pages:
+	for page in wiki_pages_to_download:
 		var http_node = HTTPRequest.new()
 		http_node.set_use_threads(true)
 		add_child(http_node)
