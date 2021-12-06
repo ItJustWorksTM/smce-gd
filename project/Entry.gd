@@ -29,7 +29,10 @@ const USER_DIR = "user://"
 
 
 func _ready():
-	_fetch_github_wiki(_fetch_github_wiki_pages_names())
+	print("Downloading wiki pages...")
+	var wiki_pages = yield(_fetch_github_wiki_pages_names(), "completed")
+	print("Wiki pages downloaded")
+	_fetch_github_wiki(wiki_pages)
 
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
@@ -114,6 +117,7 @@ func _on_clipboard_copy() -> void:
 # Temporary solution (github can change the html tags overtime)
 func _fetch_github_wiki_pages_names():
 	var wiki_html_file = "wiki.html"
+	
 	# Download the html
 	var http_node = HTTPRequest.new()
 	http_node.set_use_threads(true)
@@ -122,8 +126,10 @@ func _fetch_github_wiki_pages_names():
 	http_node.set_download_file(output_name)
 	var download_link = "https://github.com/ItJustWorksTM/smce-gd/wiki.html"
 	var error = http_node.request(download_link)
+	yield(http_node, "request_completed")
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
+		
 	# Get the wiki pages names
 	var file = File.new()
 	var line
