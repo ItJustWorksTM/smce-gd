@@ -174,6 +174,8 @@ func _on_TextEditor_text_changed():
 	_update_saved_status()
 		
 func _update_saved_status():
+	if(mainControl.fileInfos):
+		return
 	_save_tab_content()
 	var fileInfo = mainControl.fileInfos[tabs.current_tab]
 	tabs.set_tab_title(current_tab,fileInfo._name + "" if _is_saved() else fileInfo._name + "*")
