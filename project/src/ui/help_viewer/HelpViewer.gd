@@ -77,90 +77,87 @@ func _read_wiki_file(file_name: String):
 	var file = File.new()
 	var content: String
 
-	var code_snippet = false
 	file.open(USER_DIR + file_name, File.READ)
-	while not file.eof_reached():
-		# Format the text using BBCode (code snippet includes more lines, therefore it needs to be dealt with here)
-		var values = _markdown_to_bbcode(file.get_line(), code_snippet)
-		var line = values[0]
-		code_snippet = values[1]
-		content = content + line
+	content = _markdown_to_bbcode(file)
 	file.close()
 
 	return content
 
 
-func _markdown_to_bbcode(line: String, code_snippet: bool):
-	# Detects start of code snippet
-	if line.begins_with("```") && code_snippet == false:
-		code_snippet = true
-		# Returns empty string to remove both the "```" and syntax definition if present
-		# Not using general return at end of function in order to avoid new line ("\n")
-		return ["", code_snippet]
-	# Content part of code snippet
-	elif !line.begins_with("```") && code_snippet == true:
-		line = "[code][color=aqua]" + line + "[/color][/code]"
-	# End of code snippet
-	elif line.begins_with("```") && code_snippet == true:
-		line = line.replace("```", "")
-		line = "[code][color=aqua]" + line + "[/color][/code]"
-		code_snippet = false
+func _markdown_to_bbcode(file: File):
+	var content : String
+	var code_snippet = false
+	while not file.eof_reached():
+		var line = file.get_line()
+		# Detects start of code snippet
+		if line.begins_with("```") && code_snippet == false:
+			code_snippet = true
+			line = "[code][color=aqua]" + line.replace("```", "") + "[/color][/code]"
+		# Content part of code snippet
+		elif !line.begins_with("```") && code_snippet == true:
+			line = "[code][color=aqua]" + line + "[/color][/code]"
+		# End of code snippet
+		elif line.begins_with("```") && code_snippet == true:
+			line = line.replace("```", "")
+			line = "[code][color=aqua]" + line + "[/color][/code]"
+			code_snippet = false
 
-	# Heading
-	elif line.begins_with("## "):
-		line = line.replacen("## ", "")
-		line = "[b]" + line + "[/b]"
-	elif line.begins_with("### "):
-		line = line.replacen("### ", "")
-		line = "[b][i]" + line + "[/i][/b]"
-		
-	# Note
-	if "**note:**" in line:
-		line = line.replacen("_**note:**", "note:")
-		line = line.trim_suffix("_")
-		line = "[i]" + line + "[/i]"
+		# Heading
+		elif line.begins_with("## "):
+			line = line.replacen("## ", "")
+			line = "[b]" + line + "[/b]"
+		elif line.begins_with("### "):
+			line = line.replacen("### ", "")
+			line = "[b][i]" + line + "[/i][/b]"
+			
+		# Note
+		if "**note:**" in line:
+			line = line.replacen("_**note:**", "note:")
+			line = line.trim_suffix("_")
+			line = "[i]" + line + "[/i]"
 
-	# Image
-	var img_width = 464  # depends on the window width
-	if line.begins_with("![](https://i.imgur.com/"):
-		line = line.replacen("![](", "").replacen(")", "")
-		var image_file_name = line.split("/")[-1]
-		_download_image(line, USER_DIR + image_file_name)
-		line = "[img=<" + str(img_width) + ">]" + USER_DIR + image_file_name + "[/img]"
+		# Image
+		var img_width = 464  # depends on the window width
+		if line.begins_with("![](https://i.imgur.com/"):
+			line = line.replacen("![](", "").replacen(")", "")
+			var image_file_name = line.split("/")[-1]
+			_download_image(line, USER_DIR + image_file_name)
+			line = "[img=<" + str(img_width) + ">]" + USER_DIR + image_file_name + "[/img]"
 
-	# Link
-	var hyperlink_position_start = 0
-	var hyperlink_position_end_space = null
-	var hyperlink_position_end_bracket = null
-	var hyperlink_position_end_backslash = null
-	var hyperlink_position_end = null
-	if "https://" in line:
-		hyperlink_position_start = line.find("https://")
-		hyperlink_position_end_space = line.findn(" ", hyperlink_position_start)
-		hyperlink_position_end_bracket = line.findn(")", hyperlink_position_start)
-		hyperlink_position_end_backslash = line.findn("\\", hyperlink_position_start)
-		if hyperlink_position_end_space == -1:
-			hyperlink_position_end_space = INT64_MAX
-		if hyperlink_position_end_bracket == -1:
-			hyperlink_position_end_bracket = INT64_MAX
-		if hyperlink_position_end_backslash == -1:
-			hyperlink_position_end_backslash = INT64_MAX
-		if (
-			hyperlink_position_end_space == INT64_MAX
-			&& hyperlink_position_end_bracket == INT64_MAX
-			&& hyperlink_position_end_backslash == INT64_MAX
-		):
-			hyperlink_position_end = line.length()
-		else:
-			hyperlink_position_end = min(
-				hyperlink_position_end_space,
-				min(hyperlink_position_end_bracket, hyperlink_position_end_backslash)
-			)
-		line = line.insert(hyperlink_position_start, "[url]")
-		line = line.insert(hyperlink_position_end + 5, "[/url]")  # for some reason doesn't end at the actual end, need + 5
+		# Link
+		var hyperlink_position_start = 0
+		var hyperlink_position_end_space = null
+		var hyperlink_position_end_bracket = null
+		var hyperlink_position_end_backslash = null
+		var hyperlink_position_end = null
+		if "https://" in line:
+			hyperlink_position_start = line.find("https://")
+			hyperlink_position_end_space = line.findn(" ", hyperlink_position_start)
+			hyperlink_position_end_bracket = line.findn(")", hyperlink_position_start)
+			hyperlink_position_end_backslash = line.findn("\\", hyperlink_position_start)
+			if hyperlink_position_end_space == -1:
+				hyperlink_position_end_space = INT64_MAX
+			if hyperlink_position_end_bracket == -1:
+				hyperlink_position_end_bracket = INT64_MAX
+			if hyperlink_position_end_backslash == -1:
+				hyperlink_position_end_backslash = INT64_MAX
+			if (
+				hyperlink_position_end_space == INT64_MAX
+				&& hyperlink_position_end_bracket == INT64_MAX
+				&& hyperlink_position_end_backslash == INT64_MAX
+			):
+				hyperlink_position_end = line.length()
+			else:
+				hyperlink_position_end = min(
+					hyperlink_position_end_space,
+					min(hyperlink_position_end_bracket, hyperlink_position_end_backslash)
+				)
+			line = line.insert(hyperlink_position_start, "[url]")
+			line = line.insert(hyperlink_position_end + 5, "[/url]")  # for some reason doesn't end at the actual end, need + 5
 
-	line += "\n"
-	return [line, code_snippet]
+		line += "\n"
+		content = content + line
+	return content
 
 
 
