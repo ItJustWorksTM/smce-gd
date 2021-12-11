@@ -53,22 +53,16 @@ func _ready():
 
 func _get_wiki_from_storage(path: String) -> Array:
 	var pages = []
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if !dir.current_is_dir() && file_name.ends_with(".md"):
-				var page = WikiPage.new()
-				page.title = file_name.trim_suffix(".md").replace("-", " ")
-				page.content = _read_wiki_file(file_name)
-				if page.title == "Home":
-					pages.push_front(page)
-				else:
-					pages.append(page)
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the path: " + path)
+	var array = Util.ls(path)
+	for item in array:
+		if item != "" && item.ends_with(".md"):
+			var page = WikiPage.new()
+			page.title = item.trim_suffix(".md").replace("-", " ")
+			page.content = _read_wiki_file(item)
+			if page.title == "Home":
+				pages.push_front(page)
+			else:
+				pages.append(page)
 	return pages
 
 
