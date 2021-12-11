@@ -122,33 +122,19 @@ func _markdown_to_bbcode(file: File):
 		var hyperlink_position_start = 0
 		var hyperlink_position_end_space = null
 		var hyperlink_position_end_bracket = null
-		var hyperlink_position_end_backslash = null
 		var hyperlink_position_end = null
 		if "https://" in line:
 			hyperlink_position_start = line.find("https://")
 			hyperlink_position_end_space = line.findn(" ", hyperlink_position_start)
 			hyperlink_position_end_bracket = line.findn(")", hyperlink_position_start)
-			hyperlink_position_end_backslash = line.findn("\\", hyperlink_position_start)
-			if hyperlink_position_end_space == -1:
-				hyperlink_position_end_space = INT64_MAX
-			if hyperlink_position_end_bracket == -1:
-				hyperlink_position_end_bracket = INT64_MAX
-			if hyperlink_position_end_backslash == -1:
-				hyperlink_position_end_backslash = INT64_MAX
-			if (
-				hyperlink_position_end_space == INT64_MAX
-				&& hyperlink_position_end_bracket == INT64_MAX
-				&& hyperlink_position_end_backslash == INT64_MAX
-			):
+			if hyperlink_position_end_space == -1 && hyperlink_position_end_bracket == -1:
 				hyperlink_position_end = line.length()
+			elif hyperlink_position_end_space == -1 || hyperlink_position_end_bracket == -1:
+				hyperlink_position_end = max(hyperlink_position_end_space, hyperlink_position_end_bracket)
 			else:
-				hyperlink_position_end = min(
-					hyperlink_position_end_space,
-					min(hyperlink_position_end_bracket, hyperlink_position_end_backslash)
-				)
+				hyperlink_position_end = min(hyperlink_position_end_space, hyperlink_position_end_bracket)
 			line = line.insert(hyperlink_position_start, "[url]")
 			line = line.insert(hyperlink_position_end + 5, "[/url]")  # for some reason doesn't end at the actual end, need + 5
-
 		line += "\n"
 		content = content + line
 	return content
