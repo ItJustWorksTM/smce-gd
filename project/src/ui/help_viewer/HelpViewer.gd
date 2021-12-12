@@ -35,6 +35,9 @@ class WikiPage:
 
 
 func _ready():
+	var wiki_titles = yield(_fetch_wiki_titles(), "completed")
+	yield(_download_wiki_pages(wiki_titles), "completed")
+	
 	close_btn.connect("pressed", self, "_close")
 	wiki_pages = _get_wiki_from_storage(USER_DIR)
 
@@ -49,6 +52,53 @@ func _ready():
 	
 	rich_text_label.connect("meta_clicked", self, "_richtextlabel_on_meta_clicked")
 
+# Fetch smce-gd GitHub wiki html, return all the wiki page names to downloaded
+# TODO: Temporary solution (GitHub can change the html tags, breaking this)
+func _fetch_wiki_titles():
+	var wiki_file_name = "wiki.html"
+	
+	# Download the html
+	var http_node = HTTPRequest.new()
+	http_node.set_use_threads(true)
+	add_child(http_node)
+	var output_name = USER_DIR + wiki_file_name
+	http_node.set_download_file(output_name)
+	var download_link = "https://github.com/ItJustWorksTM/smce-gd/wiki.html"
+	var error = http_node.request(download_link)
+	yield(http_node, "request_completed")
+	http_node.queue_free()
+	if error != OK:
+		push_error("An error occurred in the HTTP request.")
+	
+	
+	# Get the wiki pages names
+	var file = File.new()
+	var wiki_pages = []
+	file.open(USER_DIR + wiki_file_name, File.READ)
+	while not file.eof_reached():
+		var line = file.get_line()
+		if '<a class="flex-1 py-1 text-bold"' in line:
+			line = line.split(">")[1].split("<")[0]
+			line = line.replacen(" ", "-")
+			wiki_pages.append(line)
+	return wiki_pages
+	
+# Fetch smce-gd GitHub wiki into user directory
+func _download_wiki_pages(wiki_pages_to_download) -> void:
+	var base_url = "https://raw.githubusercontent.com/wiki/ItJustWorksTM/smce-gd/"
+	for page in wiki_pages_to_download:
+		var http_node = HTTPRequest.new()
+		http_node.set_use_threads(true)
+		add_child(http_node)
+		var output_name = USER_DIR + page + ".md"
+		http_node.set_download_file(output_name)
+		var download_link = base_url + page + ".md"
+		var error = http_node.request(download_link)
+		yield(http_node, "request_completed")
+		http_node.queue_free()
+		if error != OK:
+			push_error("An error occurred in the HTTP request.")
+		
 
 func _get_wiki_from_storage(path: String) -> Array:
 	var pages = []
@@ -73,7 +123,7 @@ func _read_wiki_file(file_name: String):
 	var content =  _markdown_to_bbcode(file)
 	file.close()
 
-	return str(content)
+	return content
 
 
 func _markdown_to_bbcode(file: File):
