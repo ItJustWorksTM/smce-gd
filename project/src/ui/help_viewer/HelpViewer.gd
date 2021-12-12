@@ -27,7 +27,6 @@ onready var rich_text_label = $LogPopout/Panel/Control/VBoxContainer/HBoxContain
 const USER_DIR = "user://"
 var wiki_pages = []
 var wiki_content = []
-const INT64_MAX = (1 << 63) - 1  # 9223372036854775807
 
 
 class WikiPage:
@@ -69,13 +68,12 @@ func _get_wiki_from_storage(path: String) -> Array:
 # Read line by line from the wiki file, format the text using BBCode, return the formatted content
 func _read_wiki_file(file_name: String):
 	var file = File.new()
-	var content: String
 
 	file.open(USER_DIR + file_name, File.READ)
-	content = _markdown_to_bbcode(file)
+	var content =  _markdown_to_bbcode(file)
 	file.close()
 
-	return content
+	return str(content)
 
 
 func _markdown_to_bbcode(file: File):
@@ -190,6 +188,8 @@ func _download_image(url: String, file_name: String):
 	add_child(http_node)
 	http_node.set_download_file(file_name)
 	var error = http_node.request(url)
+	yield(http_node, "request_completed")
+	http_node.queue_free()
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 

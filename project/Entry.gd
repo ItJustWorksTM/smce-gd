@@ -30,7 +30,7 @@ const USER_DIR = "user://"
 
 func _ready():
 	var wiki_titles = yield(_fetch_wiki_titles(), "completed")
-	_download_wiki_pages(wiki_titles)
+	yield(_download_wiki_pages(wiki_titles), "completed")
 
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
@@ -124,9 +124,11 @@ func _fetch_wiki_titles():
 	var download_link = "https://github.com/ItJustWorksTM/smce-gd/wiki.html"
 	var error = http_node.request(download_link)
 	yield(http_node, "request_completed")
+	http_node.queue_free()
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
-		
+	
+	
 	# Get the wiki pages names
 	var file = File.new()
 	var wiki_pages = []
@@ -150,5 +152,8 @@ func _download_wiki_pages(wiki_pages_to_download) -> void:
 		http_node.set_download_file(output_name)
 		var download_link = base_url + page + ".md"
 		var error = http_node.request(download_link)
+		yield(http_node, "request_completed")
+		http_node.queue_free()
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
+		
