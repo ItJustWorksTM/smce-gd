@@ -22,18 +22,12 @@ export var main_scene: PackedScene = null
 onready var _header: Label = $Header
 onready var _log: RichTextLabel = $Log
 onready var _button: Button = $Button
-#-------------------------------------------------------------------------------
 onready var _request: HTTPRequest = $HTTPRequest
-#-------------------------------------------------------------------------------
 
 var error: String = ""
 
 
 func _ready():
-	#---------------------------------------------------------------------------
-	print("OS: ", OS.get_name())
-	print("Data dir: ", OS.get_user_data_dir())
-	#---------------------------------------------------------------------------
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
 		print("Custom user directory set")
@@ -56,7 +50,6 @@ func _ready():
 	print("Executable: %s" % exec_path)
 	print("Mode: %s" % "Debug" if OS.is_debug_build() else "Release")
 	print("User dir: %s" % Global.user_dir)
-	print()
 	
 	var dir = Directory.new()
 	
@@ -77,19 +70,16 @@ func _ready():
 	var bar = Toolchain.new()
 	if ! is_instance_valid(bar):
 		return _error("Shared library not loaded")
-	
-	#---------------------------------------------------------------------------
+		
 	var cmake_exec = yield(_download_cmake(), "completed")
 	if ! cmake_exec:
-		print("cmake not found")
 		return _error("Failed to retrieve cmake")
-	#---------------------------------------------------------------------------
 	
-	#var res = bar.init(Global.user_dir)
-	#if ! res.ok():
-	#	return _error("Unsuitable environment: %s" % res.error())
-	#print(bar.resource_dir())
-	#bar.free()
+	var res = bar.init(Global.user_dir)
+	if ! res.ok():
+		return _error("Unsuitable environment: %s" % res.error())
+	print(bar.resource_dir())
+	bar.free()
 	
 	Global.scan_named_classes("res://src")
 	
@@ -117,8 +107,6 @@ func _error(message: String) -> void:
 
 func _on_clipboard_copy() -> void:
 	OS.clipboard = error
-
-#-------------------------------------------------------------------------------
 var cmakeVersion = "3.19.6" 
 var osi = {
 	"X11": ["cmake-%s-Linux-x86_64.tar.gz"%cmakeVersion, "cmake-%s-Linux-x86_64.tar"%cmakeVersion, "/bin/cmake"],
@@ -129,17 +117,17 @@ var osi = {
 
 func _download_cmake():
 	yield(get_tree(), "idle_frame")
-	#var download_path = OS.get_system_dir(3, true)
-	#var download_path = OS.get_user_data_dir()
-	#var file_path: String = "user://%s" % file
-	var toolchain = Toolchain.new() #is it okay to use a new toolchain?
+	var toolchain = Toolchain.new()
 	toolchain.init(Global.user_dir)
 	print("Looking for CMake...")
 	if !toolchain.check_cmake_availability().ok():
+		toolchain.free()
 		print("CMake not found")
-		#prompt user here--------------------------------------
-		# NO CMAKE VERSION FOUND. DO YOU WANT TO INSTALL?
-		#var window  = WindowDialog.new() 
+		
+		# If you want to promt the user with a window asking if they want to 
+		# install cmake it could be added here. As it is now cmake will be installed
+		# without asking the user for permission. 
+		
 		print("Downloading CMake...")
 		
 		var da = osi.get(OS.get_name())
@@ -150,7 +138,6 @@ func _download_cmake():
 		var url: String = "https://github.com/Kitware/CMake/releases/download/v%s/%s" % [cmakeVersion, file]
 		var res = _request.request(url)
 		var dir = Directory.new()
-		
 		if ! res:
 			var ret = yield(_request, "request_completed")
 			dir.copy(_request.download_file, file_path)
@@ -160,12 +147,6 @@ func _download_cmake():
 			print("Download Failed")
 			return null
 		print("Installing CMake...")
-		#file = da[1]
-		#file_path = OS.get_user_data_dir() + ("\\%s" % file)
-		
-		#dir.open(Global.usr_dir_plus("RtResources"))
-		#if dir.dir_exists("CMake"):
-		#	dir.remove("CMake")
 			
 		var cmake_installation_path: String = Global.usr_dir_plus("RtResources")
 		if ! Util.unzip(Util.user2abs(file_path), cmake_installation_path):
@@ -176,8 +157,6 @@ func _download_cmake():
 		dir.rename (da[1], "CMake")
 		
 		var cmake_exec = cmake_installation_path + "/CMake" + da[2]
-		print(cmake_installation_path)
-		print(cmake_exec)
 		var cmake_ver = []
 		var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
 		if cmake_res != 0:
@@ -186,13 +165,8 @@ func _download_cmake():
 			
 		print("--\n%s--" % cmake_ver.front())
 		print("CMake Installed")
-		
-		print("Does cmake exist after installation?")
-		print(toolchain.check_cmake_availability().ok())
-		
 		return cmake_exec
 	else:
 		print("CMake Found")
+		toolchain.free()
 		return true
-	
-#-------------------------------------------------------------------------------
