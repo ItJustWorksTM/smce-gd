@@ -133,6 +133,7 @@ func _download_cmake():
 	#var download_path = OS.get_user_data_dir()
 	#var file_path: String = "user://%s" % file
 	var toolchain = Toolchain.new() #is it okay to use a new toolchain?
+	toolchain.init(Global.user_dir)
 	print("Looking for CMake...")
 	if !toolchain.check_cmake_availability().ok():
 		print("CMake not found")
@@ -170,7 +171,7 @@ func _download_cmake():
 		if ! Util.unzip(Util.user2abs(file_path), cmake_installation_path):
 			print("unzip failed")
 			return null
-			
+		dir.remove(file_path)
 		dir.open(cmake_installation_path)
 		dir.rename (da[1], "CMake")
 		
