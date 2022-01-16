@@ -6,6 +6,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: jidicula/clang-format-action@v3.4.0
-        with:
-          clang-format-version: '11'
+      - uses: jidicula/clang-format-action@v4.5.0
