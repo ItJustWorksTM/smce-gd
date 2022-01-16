@@ -22,7 +22,7 @@ var world: Spatial = null
 
 var debug_car: Spatial = null
 
-onready var cam_ctl: CamCtl = $Camera
+onready var ctl_cam: ControllableCamera = $Camera
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_car_spawn"):
@@ -33,21 +33,14 @@ func _input(event: InputEvent) -> void:
 		debug_car.global_transform.origin = Vector3(0,3,0)
 	
 	if event.is_action_pressed("debug_car_cam") and debug_car:
-		if cam_ctl.locked == debug_car:
-			cam_ctl.free_cam()
+		if ctl_cam.locked == debug_car:
+			ctl_cam.free_cam()
 		else:
-			cam_ctl.lock_cam(debug_car)
+			ctl_cam.lock_cam(debug_car)
 
 
 func _ready() -> void:
 	DebugCanvas.disabled = true
-	_setup_cams()
-
-
-func _setup_cams() -> void:
-	cam_ctl.locked_cam = $Camera/LockedCam
-	cam_ctl.free_cam = $Camera/FreeCam
-	cam_ctl.interp_cam = $Camera/InterpolatedCamera
 
 
 func load_world(scene: PackedScene) -> bool:
@@ -60,9 +53,9 @@ func load_world(scene: PackedScene) -> bool:
 		world = instance
 		
 		if world.has_method("init_cam_pos"):
-			cam_ctl.set_cam_position(world.init_cam_pos())
+			ctl_cam.set_cam_position(world.init_cam_pos())
 		else:
-			cam_ctl.set_cam_position()
+			ctl_cam.set_cam_position()
 		
 		return true
 	return false
