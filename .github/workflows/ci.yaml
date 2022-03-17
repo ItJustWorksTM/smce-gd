@@ -300,10 +300,10 @@ jobs:
             codename: Hirsute
             image: ubuntu:hirsute
             slug: ubuntu2104
-          - name: Ubuntu
-            codename: Groovy
-            image: ubuntu:groovy
-            slug: ubuntu2010
+          # - name: Ubuntu
+          #   codename: Groovy
+          #   image: ubuntu:groovy
+          #   slug: ubuntu2010
           - name: Ubuntu
             codename: Focal
             image: ubuntu:focal
