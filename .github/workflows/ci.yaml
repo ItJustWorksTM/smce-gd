@@ -126,15 +126,15 @@ jobs:
       fail-fast: false
       matrix:
         compiler:
-          - name: GCC 10
+          - name: GCC 11
             slug: gcc
-            c: gcc-10
-            cxx: g++-10
+            c: gcc-11
+            cxx: g++-11
             smce_artifact: GNU
-          - name: Clang/LLVM 11
+          - name: Clang/LLVM 13
             slug: clang
-            c: clang-11
-            cxx: clang++-11
+            c: clang-13
+            cxx: clang++-13
             smce_artifact: AppleClang
           - name: AppleClang 12
             slug: appleclang
@@ -175,8 +175,8 @@ jobs:
           mv templates/osx* ~/Library/Application\ Support/Godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
       - name: CMake Configure
         run: |
-          [ "$CC" = "clang-11" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-          [ "$CXX" = "clang++-11" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          [ "$CC" = "clang-13" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          [ "$CXX" = "clang++-13" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           mkdir build
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSMCEGD_BUNDLE_DEPS=True -DSMCE_CPACK_PROFILE=DragNDrop -DFORCE_STRIP_CODESIGNING=On -S . -B build/
       - name: CMake Build
