@@ -15,4 +15,5 @@
 #  limitations under the License.
 #
 
+set (CPACK_GENERATOR DragNDrop)
 set (CPACK_DMG_BACKGROUND_IMAGE "${PROJECT_SOURCE_DIR}/project/media/images/icon.png")
