@@ -21,12 +21,14 @@ extends Control
 var button_t = preload("res://src/ui/hud/SketchButton.tscn")
 var control_pane_t = preload("res://src/ui/sketch_control/ControlPane.tscn")
 var sketch_select_t = preload("res://src/ui/sketch_select/SketchSelect.tscn")
+var help_viewer_t = preload("res://src/ui/help_viewer/HelpViewer.tscn")
 var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
 
 onready var lpane = $LeftPane
 onready var left_panel = $Panel/VBoxContainer/ScrollContainer/VBoxContainer
 onready var attach = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/Control
 onready var new_sketch_btn = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/ToolButton
+onready var help_btn = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/VBoxContainer/HelpToolButton
 onready var notification_display = $Notifications
 
 onready var profile_control = $ProfileControl
@@ -58,6 +60,7 @@ func _ready() -> void:
 	set_disabled()
 	button_group._init()
 	new_sketch_btn.connect("pressed", self, "_on_sketch_btn")
+	help_btn.connect("pressed", self, "_on_help_btn")
 	profile_control.connect("toggled", self, "_toggle_profile_control", [false])
 	profile_control_toggle.connect("pressed", self, "_toggle_profile_control", [true])
 	profile_screen_toggle.connect("button_down", self, "_toggle_profile_control", [false])
@@ -112,6 +115,14 @@ func _on_sketch_btn() -> void:
 	slot[1].pressed = true
 	
 	_add_pane(pane, slot)
+	
+func _on_help_btn() -> void:
+	get_focus_owner().release_focus()
+
+	_set_vis(false)
+
+	var help_viewer = help_viewer_t.instance()
+	get_tree().root.add_child(help_viewer)
 
 
 func _create_sketch_pane(sketch):

@@ -25,6 +25,8 @@ onready var _button: Button = $Button
 
 var error: String = ""
 
+const USER_DIR = "user://"
+
 
 func _ready():
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
@@ -32,7 +34,7 @@ func _ready():
 		print("Custom user directory set")
 		if !Global.set_user_dir(custom_dir):
 			return _error("Failed to setup custom user directory")
-	
+
 	_button.connect("pressed", self, "_on_clipboard_copy")
 	print("Reading version file..")
 	var file = File.new()
@@ -50,42 +52,43 @@ func _ready():
 	print("Mode: %s" % "Debug" if OS.is_debug_build() else "Release")
 	print("User dir: %s" % Global.user_dir)
 	print()
-	
+
 	var dir = Directory.new()
-	
+
 	if dir.open("res://share/RtResources") != OK:
 		return _error("Internal RtResources not found!")
-	
-	if ! Util.copy_dir("res://share/RtResources", Global.usr_dir_plus("RtResources")):
+
+	if !Util.copy_dir("res://share/RtResources", Global.usr_dir_plus("RtResources")):
 		return _error("Failed to copy in RtResources")
-	
-	if ! Util.copy_dir("res://share/library_patches", Global.usr_dir_plus("library_patches")):
+
+	if !Util.copy_dir("res://share/library_patches", Global.usr_dir_plus("library_patches")):
 		return _error("Failed to copy in library_patches")
-	
+
 	Util.mkdir(Global.usr_dir_plus("mods"))
 	Util.mkdir(Global.usr_dir_plus("config/profiles"), true)
-	
+
 	print("Copied RtResources")
 
 	var bar = Toolchain.new()
-	if ! is_instance_valid(bar):
+	if !is_instance_valid(bar):
 		return _error("Shared library not loaded")
-	
+
 	var res = bar.init(Global.user_dir)
-	if ! res.ok():
+	if !res.ok():
 		return _error("Unsuitable environment: %s" % res.error())
 	print(bar.resource_dir())
 	bar.free()
-	
+
 	Global.scan_named_classes("res://src")
-	
+
 	# somehow destroys res://
 	ModManager.load_mods()
-	
+
 	_continue()
 
+
 func _continue():
-	if ! main_scene:
+	if !main_scene:
 		return _error("No Main Scene")
 	get_tree().change_scene_to(main_scene)
 
