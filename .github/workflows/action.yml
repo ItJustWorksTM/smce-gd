@@ -1,0 +1,24 @@
+name: Duplicate code
+
+on: pull_request
+
+jobs:
+  duplicate-code-check:
+    name: Check for duplicate code
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check for duplicate code
+        uses: platisd/duplicate-code-detection-tool@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directories: "project/src"
+          # Only examine .h and .cpp files
+          file_extensions: "gd"
+          # Only report similarities above 5%
+          ignore_below: 5
+          # If a file is more than 70% similar to another, then the job fails
+          fail_above: 70
+          # If a file is more than 15% similar to another, show a warning symbol in the report
+          warn_above: 15
+          # Remove `src/` from the file paths when reporting similarities
+          project_root_dir: "project/src"    

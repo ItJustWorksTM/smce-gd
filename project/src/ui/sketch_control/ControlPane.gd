@@ -19,6 +19,7 @@ extends VBoxContainer
 
 var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
 var collapsable_t = preload("res://src/ui/collapsable/collapsable.tscn")
+var code_main_window_t = preload("res://src/ui/code_editor/MainWindow.tscn")
 
 signal notification_created
 signal grab_focus
@@ -26,6 +27,7 @@ signal grab_focus
 var _toolchain: Toolchain = null
 var _board = null
 
+onready var edit_sketch_btn = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/EditButton
 onready var compile_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Compile
 onready var compile_log_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/CompileLog
 onready var sketch_status: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchStatus
@@ -53,6 +55,8 @@ var sketch_path: String = ""
 var ctl_cam: ControllableCamera = null setget set_ctl_cam
 
 var vehicle = null
+
+var code_editor = null
 
 func init(sketch: Sketch, toolchain: Toolchain):
 	
@@ -109,6 +113,7 @@ func _ready():
 	
 	_board.connect("log", self, "_on_board_log")
 	
+	edit_sketch_btn.connect("pressed", self, "_on_edit_btn")
 	compile_btn.connect("pressed", self, "_on_compile")
 	compile_log_btn.connect("pressed", self, "_show_compile_log")
 	
@@ -132,6 +137,16 @@ func _ready():
 	if _board.get_sketch().is_compiled():
 		_built()
 
+func _on_edit_btn() -> void:
+	get_focus_owner().release_focus()
+	if (code_editor == null):
+		code_editor = code_main_window_t.instance()
+		code_editor.src_file = sketch_path
+		code_editor.sketch_owner = self
+		get_tree().root.add_child(code_editor)
+		code_editor.compile_btn.visible = true
+	else:
+		code_editor.enableEditor()
 
 func _on_board_cleaned() -> void:
 	sketch_status.text = " Not Compiled" if ! _toolchain.is_building() else " Compiling..."

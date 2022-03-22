@@ -14,5 +14,6 @@ project/.import
 project/gdnative/lib
 project/share/RtResources
 project/share/version.txt
+build/
 godot.log
 *.png~

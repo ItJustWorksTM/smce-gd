@@ -24,6 +24,16 @@ cmake -B build
 cmake --build build --target godot-smce
 ```
 
+### Building with new LIB_SMCE
+Get latest libSMCE Release
+Change environment variable to the correct version
+copy SMCE.dll from release to project
+```shell
+cmake --build build --config release
+```
+
+
+
 Packaging is done using _CPack_.  
 _note: we bundle the shared lib of SMCE on export_
 

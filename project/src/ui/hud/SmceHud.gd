@@ -22,19 +22,23 @@ var button_t = preload("res://src/ui/hud/SketchButton.tscn")
 var control_pane_t = preload("res://src/ui/sketch_control/ControlPane.tscn")
 var sketch_select_t = preload("res://src/ui/sketch_select/SketchSelect.tscn")
 var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
+var code_main_window_t = preload("res://src/ui/code_editor/MainWindow.tscn")
 
 onready var lpane = $LeftPane
 onready var left_panel = $Panel/VBoxContainer/ScrollContainer/VBoxContainer
 onready var attach = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/Control
 onready var new_sketch_btn = $Panel/VBoxContainer/ScrollContainer/VBoxContainer/ToolButton
+onready var edit_sketch_btn = $Panel/VBoxContainer/OpenEditor
 onready var notification_display = $Notifications
 
 onready var profile_control = $ProfileControl
 onready var profile_control_toggle = $Panel/VBoxContainer/MarginContainer/VBoxContainer/ProfileControlToggle
 onready var profile_screen_toggle = $ProfileScreentoggle
 
+
 var button_group: BButtonGroup = BButtonGroup.new()
 
+var code_editor = null
 
 var buttons: Array = []
 var paths: Dictionary = {}
@@ -58,6 +62,7 @@ func _ready() -> void:
 	set_disabled()
 	button_group._init()
 	new_sketch_btn.connect("pressed", self, "_on_sketch_btn")
+	edit_sketch_btn.connect("pressed", self, "_on_edit_btn")
 	profile_control.connect("toggled", self, "_toggle_profile_control", [false])
 	profile_control_toggle.connect("pressed", self, "_toggle_profile_control", [true])
 	profile_screen_toggle.connect("button_down", self, "_toggle_profile_control", [false])
@@ -87,6 +92,13 @@ func _set_vis(visible, node = null) -> void:
 	
 	tween.start()
 
+func _on_edit_btn() -> void:
+	get_focus_owner().release_focus()
+	if (code_editor == null):
+		code_editor = code_main_window_t.instance()
+		get_tree().root.add_child(code_editor)
+	else:
+		code_editor.enableEditor()
 
 func _on_sketch_btn() -> void:
 	get_focus_owner().release_focus()

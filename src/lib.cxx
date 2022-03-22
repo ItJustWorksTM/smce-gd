@@ -24,6 +24,7 @@
 #include "bind/UartSlurper.hxx"
 #include "gd/AnyTask.hxx"
 #include "gd/GDResult.hxx"
+#include "gd/BraceEnabler.hxx"
 
 using namespace godot;
 
@@ -40,5 +41,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void* handle) {
 
     register_classes<AnyTask, Board, Toolchain, Sketch, BoardView, UartSlurper, GDResult, FrameBuffer,
                      BoardConfig, BoardConfig::GpioDriverConfig, BoardConfig::UartChannelConfig,
-                     BoardConfig::FrameBufferConfig, BoardConfig::SecureDigitalStorage>();
+                     BoardConfig::FrameBufferConfig, BoardConfig::SecureDigitalStorage, BraceEnabler>();
 }

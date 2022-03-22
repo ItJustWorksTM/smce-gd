@@ -69,8 +69,8 @@ target_sources (godot-smce PRIVATE
         src/bind/BoardView.cxx
         src/bind/UartSlurper.cxx
         src/bind/BoardConfig.cxx
-        src/bind/FrameBuffer.cxx
-)
+        src/gd/BraceEnabler.cxx
+        src/bind/FrameBuffer.cxx)
 
 target_include_directories (godot-smce PUBLIC include)
 target_link_libraries (godot-smce PUBLIC godot-cpp ${SMCE_TARGET})

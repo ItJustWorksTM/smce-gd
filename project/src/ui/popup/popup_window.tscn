@@ -1,0 +1,89 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/ui/popup/popup_window.gd" type="Script" id=1]
+[ext_resource path="res://media/fonts/Open_Sans/OpenSasn-Regular-Popup.tres" type="DynamicFont" id=2]
+[ext_resource path="res://src/ui/themes/regular_button/regular_button.tres" type="Theme" id=3]
+
+[node name="Control" type="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -139.135
+margin_top = -42.3918
+margin_right = -138.171
+margin_bottom = -38.3918
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+margin_left = 502.0
+margin_top = 305.0
+margin_right = 793.0
+margin_bottom = 480.0
+size_flags_vertical = 0
+theme = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btnContainer" type="HBoxContainer" parent="Panel"]
+margin_left = 7.0
+margin_top = 148.0
+margin_right = 284.0
+margin_bottom = 168.0
+size_flags_vertical = 14
+theme = ExtResource( 3 )
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buttonYES" type="Button" parent="Panel/btnContainer"]
+margin_right = 23.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 97, 48 )
+size_flags_horizontal = 9
+theme = ExtResource( 3 )
+text = "Yes"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buttonOK" type="Button" parent="Panel/btnContainer"]
+margin_left = 27.0
+margin_right = 47.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+theme = ExtResource( 3 )
+text = "OK"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buttonNO" type="Button" parent="Panel/btnContainer"]
+margin_left = 258.0
+margin_right = 277.0
+margin_bottom = 20.0
+size_flags_horizontal = 10
+theme = ExtResource( 3 )
+text = "No"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="messageLabel" type="Label" parent="Panel"]
+margin_left = 7.0
+margin_top = 63.0
+margin_right = 284.0
+margin_bottom = 112.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+text = "\"default\"
+"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
