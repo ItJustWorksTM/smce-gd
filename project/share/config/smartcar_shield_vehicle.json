@@ -54,7 +54,7 @@
          "enable_pin": 27
       },
       "Gyroscope" : {
-         "pin": 255
+         "pin": 205
       },
       "Left Odometer": {
          "distance_pin": 35,
