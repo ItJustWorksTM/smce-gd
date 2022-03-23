@@ -75,10 +75,20 @@ jobs:
       - name: Check deps
         id: deps
         run: |
-          sudo apt install godot3-server ninja-build
-          godot3-server --version || true
+          sudo apt install ninja-build libxrandr2 libxinerama1 libxrender1 libxi6 libgl1 libxcursor1
+          
+          wget -c https://downloads.tuxfamily.org/godotengine/${GODOT_EXPORT_TEMPLATE_VERSION}/Godot_v${GODOT_EXPORT_TEMPLATE_VERSION}-stable_linux_headless.64.zip -O godot.zip
+          mkdir bin
+          unzip godot.zip -d bin
+
+          mv bin/Godot_v${GODOT_EXPORT_TEMPLATE_VERSION}-stable_linux_headless.64 bin/godot
+          
+          export PATH="$(realpath bin):$PATH"
+
+          godot--version || true
           ninja --version
-          echo "::set-output name=GODOT_VERSION::$(godot3-server --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
+          
+          echo "::set-output name=GODOT_VERSION::$(godot --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
           wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Linux-x86_64-GNU.sh"
           chmod +x libsmce.sh
@@ -99,12 +109,14 @@ jobs:
           mv templates/linux_x11_64* ~/.local/share/godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
       - name: CMake Configure
         run: |
+          export PATH="$(realpath bin):$PATH"
           mkdir build
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSMCEGD_BUNDLE_DEPS=True -S . -B build/
       - name: CMake Build
         run: cmake --build build/
       - name: CPack
         run: |
+          export PATH="$(realpath bin):$PATH"
           mkdir build/packages
           cd build/
           cpack -B packages
@@ -322,10 +334,19 @@ jobs:
         id: deps
         run: |
           apt-get update -y
-          apt-get install -y godot3-server godot3 unzip python3 file dpkg-dev wget # CMake's dpkg-shlibdeps support needs 'file'
+          apt-get install -y unzip python3 file dpkg-dev wget libxrandr2 libxinerama1 libxrender1 libxi6 libgl1 libxcursor1 # CMake's dpkg-shlibdeps support needs 'file'
           git --version || apt-get install -y git
           ninja --version || apt-get install -y ninja-build
-          echo "::set-output name=GODOT_VERSION::$(godot3-server --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
+
+          wget -c https://downloads.tuxfamily.org/godotengine/${GODOT_EXPORT_TEMPLATE_VERSION}/Godot_v${GODOT_EXPORT_TEMPLATE_VERSION}-stable_linux_headless.64.zip -O godot.zip
+          mkdir bin
+          unzip godot.zip -d bin
+
+          mv bin/Godot_v${GODOT_EXPORT_TEMPLATE_VERSION}-stable_linux_headless.64 bin/godot
+
+          export PATH="$(realpath bin):$PATH"
+
+          echo "::set-output name=GODOT_VERSION::$(godot --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
           wget https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-x86_64.sh
           chmod +x cmake-$CMAKE_VERSION-linux-x86_64.sh
@@ -353,7 +374,10 @@ jobs:
       - name: CMake Build
         run: cmake --build ./build
       - name: CPack
-        run: (cd build; cpack)
+        run: |
+          export PATH="$(realpath bin):$PATH"
+          cd build
+          cpack
       - name: Test installation
         uses: addnab/docker-run-action@v3
         with:
