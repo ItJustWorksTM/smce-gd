@@ -37,7 +37,7 @@ void Toolchain::_register_methods() {
 void Toolchain::_init() { set_physics_process(false); }
 
 Ref<GDResult> Toolchain::init(String resource_dir) {
-    tc.emplace(std_str(resource_dir));
+    tc.emplace(std_view(resource_dir));
     auto res = tc->check_suitable_environment();
     return GDResult::from(res);
 }

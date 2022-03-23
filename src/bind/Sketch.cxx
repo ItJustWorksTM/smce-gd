@@ -35,7 +35,7 @@ void Sketch::_register_methods() {
 
 void Sketch::init(String src, String home_dir) {
     sketch =
-        smce::Sketch{std_str(src),
+        smce::Sketch{std_view(src),
                      {.fqbn = "arduino:sam:arduino_due_x",
                       .legacy_preproc_libs = {smce::SketchConfig::ArduinoLibrary{"MQTT@2.5.0"},
                                               smce::SketchConfig::ArduinoLibrary{"WiFi@1.2.7"},
@@ -45,7 +45,7 @@ void Sketch::init(String src, String home_dir) {
                           .name = "Smartcar_shield",
                           .version = "7.0.1",
                           .uri = "https://github.com/platisd/smartcar_shield/archive/refs/tags/7.0.1.tar.gz",
-                          .patch_uri = "file://" + (std::filesystem::absolute(std_str(home_dir)) /
+                          .patch_uri = "file://" + (std::filesystem::absolute(std_view(home_dir)) /
                                                     "library_patches" / "smartcar_shield")
                                                        .generic_string(),
                           .defaults = smce::PluginManifest::Defaults::arduino}}}};

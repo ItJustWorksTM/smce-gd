@@ -76,7 +76,7 @@ void BoardConfig::SecureDigitalStorage::_register_methods() {
 }
 
 smce::BoardConfig::SecureDigitalStorage BoardConfig::SecureDigitalStorage::to_native() const {
-    return {.cspin = static_cast<uint16_t>(cspin), .root_dir = std_str(root_dir)};
+    return {.cspin = static_cast<uint16_t>(cspin), .root_dir = std_view(root_dir)};
 }
 
 void BoardConfig::_register_methods() {

@@ -38,8 +38,8 @@ template <class... T> constexpr auto register_props(T... prop) {
     (register_property(std::get<0>(prop), std::get<1>(prop), std::get<2>(prop)), ...);
 };
 
-inline std::string std_str(const godot::String& str) {
-    return {str.alloc_c_string(), static_cast<size_t>(str.length())};
+inline std::wstring_view std_view(const godot::String& str) {
+    return {str.unicode_str(), static_cast<std::size_t>(str.length())};
 }
 
 #endif // GODOT_SMCE_UTIL_HXX
