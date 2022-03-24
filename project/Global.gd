@@ -26,8 +26,8 @@ var environments: Dictionary = {
 }
 
 var vehicles: Dictionary = {
-	"RayCar": preload("res://src/objects/ray_car/RayCar.tscn"),
-	"RayTank": preload("res://src/objects/ray_car/RayTank.tscn")
+	"RayCar": load("res://src/objects/ray_car/RayCar.tscn"),
+	"RayTank": load("res://src/objects/ray_car/RayTank.tscn")
 }
 
 var user_dir: String = OS.get_user_data_dir() setget set_user_dir
@@ -35,11 +35,11 @@ var version: String = "unknown"
 
 var _classes: Array = [
 	AnalogRaycast, BrushedMotor,
-	preload("res://src/attachments/Camera.gd"),
-	preload("res://src/attachments/Gyroscope.gd"),
-	preload("res://src/utilities/sensors/odometer/Odometer.gd"),
+	load("res://src/attachments/Camera.gd"),
+	load("res://src/attachments/Gyroscope.gd"),
+	load("res://src/utilities/sensors/odometer/Odometer.gd"),
 	RayCar, RayWheel, UltraSonic,
-	preload("res://src/attachments/Odometer.gd")]
+	load("res://src/attachments/Odometer.gd")]
 
 var classes: Dictionary = {}
 

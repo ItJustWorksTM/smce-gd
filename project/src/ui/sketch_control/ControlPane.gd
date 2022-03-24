@@ -17,8 +17,8 @@
 
 extends VBoxContainer
 
-var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
-var collapsable_t = preload("res://src/ui/collapsable/collapsable.tscn")
+var notification_t = load("res://src/ui/simple_notification/SimpleNotification.tscn")
+var collapsable_t = load("res://src/ui/collapsable/collapsable.tscn")
 
 signal notification_created
 signal grab_focus
@@ -283,7 +283,7 @@ func _create_notification(text: String, timeout: float = -1, progress: bool = fa
 
 var compile_log_text_field = null
 func _show_compile_log() -> void:
-	var window = preload("res://src/ui/sketch_control/LogPopout.tscn").instance()
+	var window = load("res://src/ui/sketch_control/LogPopout.tscn").instance()
 	get_tree().root.add_child(window)
 	compile_log_text_field = RichTextLabel.new()
 	compile_log_text_field.scroll_following = true

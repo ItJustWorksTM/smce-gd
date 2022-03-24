@@ -68,7 +68,7 @@ func _ready():
 	viewport_root.add_child(backbuffer)
 	
 	effect.material = ShaderMaterial.new()
-	effect.material.shader = preload("res://src/shaders/LensDistort.shader")
+	effect.material.shader = load("res://src/shaders/LensDistort.shader")
 	viewport_root.add_child(effect)
 	
 	viewport.add_child(viewport_root)

@@ -18,10 +18,10 @@
 class_name SmceHud
 extends Control
 
-var button_t = preload("res://src/ui/hud/SketchButton.tscn")
-var control_pane_t = preload("res://src/ui/sketch_control/ControlPane.tscn")
-var sketch_select_t = preload("res://src/ui/sketch_select/SketchSelect.tscn")
-var notification_t = preload("res://src/ui/simple_notification/SimpleNotification.tscn")
+var button_t = load("res://src/ui/hud/SketchButton.tscn")
+var control_pane_t = load("res://src/ui/sketch_control/ControlPane.tscn")
+var sketch_select_t = load("res://src/ui/sketch_select/SketchSelect.tscn")
+var notification_t = load("res://src/ui/simple_notification/SimpleNotification.tscn")
 
 onready var lpane = $LeftPane
 onready var left_panel = $Panel/VBoxContainer/ScrollContainer/VBoxContainer

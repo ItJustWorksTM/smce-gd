@@ -31,7 +31,7 @@ func _on_copy_pressed() -> void:
 
 
 func _on_popout_pressed() -> void:
-	var window = preload("res://src/ui/sketch_control/LogPopout.tscn").instance()
+	var window = load("res://src/ui/sketch_control/LogPopout.tscn").instance()
 	get_tree().root.add_child(window)
 	$VBoxContainer.remove_child(log_box)
 	window.text_field = log_box

@@ -28,7 +28,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_car_spawn"):
 		if debug_car:
 			debug_car.queue_free()
-		debug_car = preload("res://src/objects/ray_car/RayCar.tscn").instance()
+		debug_car = load("res://src/objects/ray_car/RayCar.tscn").instance()
 		add_child(debug_car)
 		debug_car.global_transform.origin = Vector3(0,3,0)
 	

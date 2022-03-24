@@ -51,7 +51,7 @@ func name() -> String:
 
 func visualize() -> Control:
 	var visualizer: Button = ShootyVisualizer.new()
-	visualizer.theme = preload("res://src/ui/themes/regular_button/regular_button.tres")
+	visualizer.theme = load("res://src/ui/themes/regular_button/regular_button.tres")
 	visualizer.rect_min_size.y = 30
 	visualizer.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	visualizer.display_shooty(self)
@@ -62,7 +62,7 @@ func shoot() -> void:
 	timer = get_tree().create_timer(5)
 	var car = get_parent().get_parent()
 	car.add_force(car.transform.basis.xform(Vector3.BACK) * 64,  global_transform.origin - car.global_transform.origin + Vector3.UP)
-	var shell: RigidBody = preload("res://src/objects/tank_shell/Ball.tscn").instance()
+	var shell: RigidBody = load("res://src/objects/tank_shell/Ball.tscn").instance()
 	get_parent().get_parent().get_parent().add_child(shell)
 	shell.global_transform.origin = global_transform.origin
 	shell.apply_central_impulse(car.transform.basis.xform(Vector3.FORWARD) * 100)

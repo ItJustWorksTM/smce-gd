@@ -17,7 +17,7 @@
 
 extends Control
 
-var profile_button_t = preload("res://src/ui/profile_selector/ProfileButton.tscn")
+var profile_button_t = load("res://src/ui/profile_selector/ProfileButton.tscn")
 
 signal profile_selected
 

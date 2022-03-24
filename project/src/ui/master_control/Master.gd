@@ -17,7 +17,7 @@
 
 extends Node
 
-var hud_t = preload("res://src/ui/hud/SmceHud.tscn")
+var hud_t = load("res://src/ui/hud/SmceHud.tscn")
 
 onready var world = $World
 onready var profile_select = $ProfileSelect
