@@ -2,8 +2,8 @@ name: CI
 on: [ push, pull_request ]
 env:
   GODOT_EXPORT_TEMPLATE_VERSION: 3.4.4
-  LIBSMCE_TAG: v1.5.3
-  LIBSMCE_VERSION: 1.5.3
+  LIBSMCE_TAG: v1.5.4
+  LIBSMCE_VERSION: 1.5.4
 jobs:
   rules:
     name: Compute job rules
