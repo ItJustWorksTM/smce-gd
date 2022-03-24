@@ -22,7 +22,7 @@ onready var focus_owner = FocusOwner
 onready var mod_manager = ModManager
 
 var environments: Dictionary = {
-	"playground/Playground": preload("res://src/environments/playground/Playground.tscn"),
+	"playground/Playground": load("res://src/environments/playground/Playground.tscn"),
 }
 
 var vehicles: Dictionary = {
