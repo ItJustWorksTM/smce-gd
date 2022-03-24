@@ -1,10 +1,10 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/objects/ray_car/RayCar.gd" type="Script" id=1]
+[ext_resource path="res://media/models/car_parts/SMCE-hull.tscn" type="PackedScene" id=2]
 [ext_resource path="res://media/images/icon.png" type="Texture" id=3]
 [ext_resource path="res://media/models/car_parts/SMCE-wheel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/utilities/ray_wheel/RayWheel.gd" type="Script" id=5]
-[ext_resource path="res://media/models/car_parts/SMCE-hull.glb" type="PackedScene" id=6]
 [ext_resource path="res://src/attachments/BrushedMotor.gd" type="Script" id=7]
 [ext_resource path="res://src/attachments/Gyroscope.gd" type="Script" id=8]
 [ext_resource path="res://src/attachments/Odometer.gd" type="Script" id=9]
@@ -28,8 +28,8 @@ left_wheels = [ NodePath("LeftBack"), NodePath("LeftFront") ]
 left_motor = NodePath("BuiltinAttachments/Left BrushedMotor")
 right_motor = NodePath("BuiltinAttachments/Right BrushedMotor")
 
-[node name="Hull" parent="." instance=ExtResource( 6 )]
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
+[node name="Hull" parent="." instance=ExtResource( 2 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0 )
 
 [node name="HullCollision" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14338, 0 )
