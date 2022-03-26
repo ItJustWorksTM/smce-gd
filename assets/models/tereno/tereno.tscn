@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8fsbr6n7n31n"]
+
+[ext_resource type="PackedScene" uid="uid://cdrbttmwiyheq" path="res://assets/models/tereno/tereno.glb" id="1_5ixwc"]
+
+[node name="Playground" instance=ExtResource( "1_5ixwc" )]

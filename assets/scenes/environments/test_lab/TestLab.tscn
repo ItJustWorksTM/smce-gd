@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://rsdupnfpri56"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wddcd"]
+size = Vector2(100, 100)
+
+[sub_resource type="OpenSimplexNoise" id="OpenSimplexNoise_ynwn1"]
+octaves = 9
+
+[sub_resource type="NoiseTexture" id="NoiseTexture_qyso1"]
+seamless = true
+noise = SubResource( "OpenSimplexNoise_ynwn1" )
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ajwgd"]
+albedo_color = Color(0.184314, 0.45098, 0.223529, 1)
+roughness_texture = SubResource( "NoiseTexture_qyso1" )
+emission_enabled = true
+emission = Color(0, 0.384314, 0, 1)
+normal_enabled = true
+normal_texture = SubResource( "NoiseTexture_qyso1" )
+clearcoat_enabled = true
+clearcoat = 0.2
+heightmap_scale = 0.071
+refraction_scale = -1.0
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_p4qjs"]
+data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0, -50, 50, 0, -50)
+
+[node name="TestLab" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource( "PlaneMesh_wddcd" )
+surface_material_override/0 = SubResource( "StandardMaterial3D_ajwgd" )
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="@@32707" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource( "ConcavePolygonShape3D_p4qjs" )
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.209619, 0.977783, 0, -0.977783, 0.209619, 0, 2.13109, 0)
+shadow_enabled = true

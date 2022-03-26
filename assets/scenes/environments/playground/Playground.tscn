@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://chdl2t8f86aj1"]
+
+[ext_resource type="PackedScene" uid="uid://c8fsbr6n7n31n" path="res://assets/models/tereno/tereno.tscn" id="1_u02vj"]
+[ext_resource type="Environment" uid="uid://y1ew1f7it423" path="res://assets/environments/sunny_day.tres" id="2_vv22m"]
+
+[node name="Playground" type="Node3D"]
+
+[node name="Playground" parent="." instance=ExtResource( "1_u02vj" )]
+transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.429881, 0.902886, 0, -0.902886, -0.429881, 0, 39.1505, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( "2_vv22m" )

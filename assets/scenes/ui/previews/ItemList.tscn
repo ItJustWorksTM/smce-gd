@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://brudshgp28v57"]
+
+[sub_resource type="GDScript" id="GDScript_7rc0c"]
+script/source = "@tool
+extends Control
+
+func _ready():
+	var items = [\"Left brushed-motor\", \"Right brushed-motor\", \"Gyroscope\", \"yeet\"]
+	var root = Ui.make_ui_root(func(ctx): ctx \\
+		.inherits(Widgets.item_list(TrackedVec.new(items), Ui.value(2), func(v, i): return func(ctx): 
+			ctx \\
+				.inherits(VBoxContainer) \\
+				.child(func(ctx): ctx \\
+					.inherits(Label) \\
+					.with(\"text\", v) \\
+					.with(\"vertical_alignment\", VERTICAL_ALIGNMENT_CENTER) \\
+					.with(\"size_flags_vertical\", SIZE_EXPAND_FILL)
+				)
+			
+#			if i.value == 2:
+			if true:
+				ctx.child(func(ctx): ctx \\
+					.inherits(Label) \\
+					.with(\"text\", \"Rotation: 0.0 degrees\") \\
+					.with(\"theme_override_colors/font_color\", Color.GRAY) \\
+					.with(\"vertical_alignment\", VERTICAL_ALIGNMENT_CENTER) \\
+					.with(\"size_flags_vertical\", SIZE_EXPAND_FILL)
+				)
+			pass \\
+		))
+	)
+	
+	add_child(root)
+	
+	root.set_anchors_preset(Control.PRESET_WIDE)
+"
+
+[node name="Control" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_bottom = 0
+script = SubResource( "GDScript_7rc0c" )

@@ -1,18 +1,4 @@
-# Intellij
-.idea
-
-# CMake
-cmake-build-*/
-build
-
-# SMCE
-.cmaw
-
-# Godot
-project/.import
-*.import
-project/gdnative/lib
-project/share/RtResources
-project/share/version.txt
-godot.log
-*.png~
+# Godot 4+ specific ignores
+.godot/
+build/
+*/build/

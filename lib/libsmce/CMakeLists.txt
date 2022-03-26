@@ -1,0 +1,75 @@
+#
+#  CMakeLists.txt
+#  Copyright 2021 ItJustWorksTM
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+cmake_minimum_required (VERSION 3.17)
+
+project (libSMCE-gd VERSION 0.1 LANGUAGES CXX)
+
+set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (CMAKE_CXX_EXTENSIONS OFF)
+set (CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+add_compile_definitions(DEBUG_METHODS_ENABLED)
+
+find_package(Threads REQUIRED)
+find_package(SMCE 1.5 REQUIRED)
+
+include (CheckIPOSupported)
+check_ipo_supported (RESULT CMAKE_IPO_SUPPORTED LANGUAGES CXX)
+set (CMAKE_INTERPROCEDURAL_OPTIMIZATION ${CMAKE_IPO_SUPPORTED})
+
+list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake/Modules")
+set (SMCE_AUTODOWNLOAD True)
+include (FetchContent)
+
+list (APPEND GDCPP_NEEDED_CLASSES RefCounted)
+include (SetupGodotCpp)
+
+add_library (SMCE-gd SHARED)
+target_sources (SMCE-gd PRIVATE
+    src/lib.cxx
+    src/PluginManifest.cxx
+    src/Toolchain.cxx
+    src/Board.cxx
+    src/BoardView.cxx
+    src/FrameBuffer.cxx
+    src/GpioPin.cxx
+    src/Result.cxx
+    src/UartChannel.cxx
+    src/BoardConfig.cxx
+)
+
+
+
+target_include_directories (SMCE-gd PUBLIC include/)
+target_link_libraries (SMCE-gd PUBLIC godot-cpp SMCE::SMCE)
+if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set_target_properties (SMCE-gd PROPERTIES LINK_FLAGS_RELEASE -s)
+    if (NOT APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_link_options (SMCE-gd PRIVATE -static-libstdc++ -static-libgcc)
+    endif ()
+endif ()
+
+get_target_property (SMCE_RT_RES SMCE::SMCE RESOURCES_ARCHIVE)
+
+# find_program (GODOT_EXECUTABLE NAMES godot3-headless godot3-server godot3 godot REQUIRED)
+# add_custom_command (TARGET smce-gd POST_BUILD
+#     COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:smce-gd>" "${PROJECT_SOURCE_DIR}/"
+#     # COMMAND "${CMAKE_COMMAND}" -E tar xf "${SMCE_RT_RES}"
+#     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/assets/smce_resources"
+# )

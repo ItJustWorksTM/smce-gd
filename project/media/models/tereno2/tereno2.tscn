@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://media/models/tereno2/tereno2.glb" type="PackedScene" id=1]
-
-[node name="tereno2" instance=ExtResource( 1 )]

@@ -1,0 +1,1 @@
+## GDExtension bindings for libSMCE

@@ -1,0 +1,303 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+_global_script_classes=[{
+"base": "OptionButton",
+"class": &"BetterOptionButton",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/widgets/BetterOptionButton.gd"
+}, {
+"base": "HardwareBase",
+"class": &"BrushedMotor",
+"language": &"GDScript",
+"path": "res://src/hardware/smartcar_shield/BrushedMotor.gd"
+}, {
+"base": "Observable",
+"class": &"Combined",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/Combined.gd"
+}, {
+"base": "Node",
+"class": &"Ctx",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/Ctx.gd"
+}, {
+"base": "Observable",
+"class": &"Dedup",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/Dedup.gd"
+}, {
+"base": "ObservableMut",
+"class": &"DedupMut",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/mutable/DedupMut.gd"
+}, {
+"base": "HardwareBase",
+"class": &"DigitalFS",
+"language": &"GDScript",
+"path": "res://src/hardware/misc/DigitalFS.gd"
+}, {
+"base": "Control",
+"class": &"FilePicker",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/widgets/FilePicker.gd"
+}, {
+"base": "RefCounted",
+"class": &"Fn",
+"language": &"GDScript",
+"path": "res://lib/fp/src/Fn.gd"
+}, {
+"base": "Camera3D",
+"class": &"FreeCamera",
+"language": &"GDScript",
+"path": "res://src/FreeCamera.gd"
+}, {
+"base": "RefCounted",
+"class": &"Fs",
+"language": &"GDScript",
+"path": "res://src/utility/Fs.gd"
+}, {
+"base": "HardwareBase",
+"class": &"GP2",
+"language": &"GDScript",
+"path": "res://src/hardware/smartcar_shield/GP2.gd"
+}, {
+"base": "HardwareBase",
+"class": &"GY50",
+"language": &"GDScript",
+"path": "res://src/hardware/smartcar_shield/GY50.gd"
+}, {
+"base": "Node",
+"class": &"HardwareBase",
+"language": &"GDScript",
+"path": "res://src/hardware/HardwareBase.gd"
+}, {
+"base": "ObservableMut",
+"class": &"InnerMut",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/mutable/InnerMut.gd"
+}, {
+"base": "Control",
+"class": &"InstanceControl",
+"language": &"GDScript",
+"path": "res://src/ui/InstanceControl.gd"
+}, {
+"base": "Control",
+"class": &"InstanceList",
+"language": &"GDScript",
+"path": "res://src/ui/InstanceList.gd"
+}, {
+"base": "Container",
+"class": &"ItemButton",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/widgets/ItemButton.gd"
+}, {
+"base": "ObservableMut",
+"class": &"LensMut",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/mutable/LensMut.gd"
+}, {
+"base": "Control",
+"class": &"LogWindow",
+"language": &"GDScript",
+"path": "res://src/ui/LogWindow.gd"
+}, {
+"base": "Control",
+"class": &"Main",
+"language": &"GDScript",
+"path": "res://src/Main.gd"
+}, {
+"base": "Observable",
+"class": &"Mapped",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/Mapped.gd"
+}, {
+"base": "Control",
+"class": &"MultiInstance",
+"language": &"GDScript",
+"path": "res://src/ui/MultiInstance.gd"
+}, {
+"base": "RefCounted",
+"class": &"MultiToolchain",
+"language": &"GDScript",
+"path": "res://lib/libsmce/src/MultiToolchain.gd"
+}, {
+"base": "HardwareBase",
+"class": &"OV767X",
+"language": &"GDScript",
+"path": "res://src/hardware/misc/OV767X.gd"
+}, {
+"base": "RefCounted",
+"class": &"Observable",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/Observable.gd"
+}, {
+"base": "Observable",
+"class": &"ObservableMut",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/mutable/ObservableMut.gd"
+}, {
+"base": "ObservableMut",
+"class": &"ObservableValue",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/ObservableValue.gd"
+}, {
+"base": "HardwareBase",
+"class": &"Odometer",
+"language": &"GDScript",
+"path": "res://src/hardware/smartcar_shield/Odometer.gd"
+}, {
+"base": "RefCounted",
+"class": &"ScopeGuard",
+"language": &"GDScript",
+"path": "res://src/utility/ScopeGuard.gd"
+}, {
+"base": "Control",
+"class": &"SerialWindow",
+"language": &"GDScript",
+"path": "res://src/ui/SerialWindow.gd"
+}, {
+"base": "RefCounted",
+"class": &"Task",
+"language": &"GDScript",
+"path": "res://src/utility/Task.gd"
+}, {
+"base": "Observable",
+"class": &"TrackedVec",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/TrackedVec.gd"
+}, {
+"base": "Observable",
+"class": &"Tweened",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/observable/Tweened.gd"
+}, {
+"base": "HardwareBase",
+"class": &"UartPuller",
+"language": &"GDScript",
+"path": "res://src/hardware/misc/UartPuller.gd"
+}, {
+"base": "Control",
+"class": &"Ui",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/Ui.gd"
+}, {
+"base": "RefCounted",
+"class": &"VehicleConfig",
+"language": &"GDScript",
+"path": "res://src/VehicleConfig.gd"
+}, {
+"base": "RefCounted",
+"class": &"Widgets",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/widgets/Widgets.gd"
+}]
+_global_script_class_icons={
+"BetterOptionButton": "",
+"BrushedMotor": "",
+"Combined": "",
+"Ctx": "",
+"Dedup": "",
+"DedupMut": "",
+"DigitalFS": "",
+"FilePicker": "",
+"Fn": "",
+"FreeCamera": "",
+"Fs": "",
+"GP2": "",
+"GY50": "",
+"HardwareBase": "",
+"InnerMut": "",
+"InstanceControl": "",
+"InstanceList": "",
+"ItemButton": "",
+"LensMut": "",
+"LogWindow": "",
+"Main": "",
+"Mapped": "",
+"MultiInstance": "",
+"MultiToolchain": "",
+"OV767X": "",
+"Observable": "",
+"ObservableMut": "",
+"ObservableValue": "",
+"Odometer": "",
+"ScopeGuard": "",
+"SerialWindow": "",
+"Task": "",
+"TrackedVec": "",
+"Tweened": "",
+"UartPuller": "",
+"Ui": "",
+"VehicleConfig": "",
+"Widgets": ""
+}
+
+[application]
+
+config/name="SMCE-gd"
+run/main_scene="res://assets/scenes/Main.tscn"
+config/icon="res://assets/icons/icon.png"
+config/features=PackedStringArray("4.0", "Vulkan Clustered")
+
+[debug]
+
+file_logging/log_path="user://.logs/godot.log"
+gdscript/warnings/assert_always_false=false
+
+[display]
+
+window/subwindows/embed_subwindows=false
+
+[gui]
+
+theme/custom="res://assets/themes/adwaita/adwaita.tres"
+
+[input]
+
+camera_forward={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"store_command":true,"alt_pressed":false,"shift_pressed":false,"meta_pressed":false,"command_pressed":false,"pressed":false,"keycode":87,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+camera_backward={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"store_command":true,"alt_pressed":false,"shift_pressed":false,"meta_pressed":false,"command_pressed":false,"pressed":false,"keycode":83,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+camera_left={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"store_command":true,"alt_pressed":false,"shift_pressed":false,"meta_pressed":false,"command_pressed":false,"pressed":false,"keycode":65,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+camera_right={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"store_command":true,"alt_pressed":false,"shift_pressed":false,"meta_pressed":false,"command_pressed":false,"pressed":false,"keycode":68,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+camera_down={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"store_command":true,"alt_pressed":false,"shift_pressed":false,"meta_pressed":false,"command_pressed":false,"pressed":false,"keycode":16777237,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+camera_up={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"store_command":true,"alt_pressed":false,"shift_pressed":false,"meta_pressed":false,"command_pressed":false,"pressed":false,"keycode":32,"physical_keycode":0,"unicode":0,"echo":false,"script":null)
+]
+}
+
+[rendering]
+
+global_illumination/gi/use_half_resolution=true
+camera/depth_of_field/depth_of_field_bokeh_quality=2
+global_illumination/sdfgi/probe_ray_count=0
+global_illumination/sdfgi/frames_to_converge=2
+global_illumination/sdfgi/frames_to_update_lights=3
+environment/defaults/default_clear_color=Color(0.188235, 0.188235, 0.188235, 0)

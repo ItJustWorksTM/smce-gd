@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://3lox2f5ntjdk"]
+
+[ext_resource type="PackedScene" uid="uid://dko14vkoqidrk" path="res://assets/models/smartcar/smartcar-hull.glb" id="1_rrf4d"]
+
+[node name="smartcar-hull" instance=ExtResource( "1_rrf4d" )]
