@@ -4,6 +4,7 @@
 #include <memory>
 #include "SMCE/Toolchain.hpp"
 #include "SMCE_gd/ManifestRegistry.hxx"
+#include "SMCE_gd/Result.hxx"
 #include "SMCE_gd/Sketch.hxx"
 #include "SMCE_gd/gd_class.hxx"
 
@@ -29,11 +30,11 @@ class Toolchain : public GdRef<"Toolchain", Toolchain> {
     Ref<ManifestRegistry> registry;
 
   public:
-    bool initialize(Ref<ManifestRegistry> _registry, String _resource_path);
+    Ref<Result> initialize(Ref<ManifestRegistry> _registry, String _resource_path);
 
-    bool is_initialized();
+    Ref<Result> is_initialized();
 
-    bool compile(Ref<Sketch> sketch);
+    Ref<Result> compile(Ref<Sketch> sketch);
 
     Ref<ToolchainLogReader> log_reader();
 

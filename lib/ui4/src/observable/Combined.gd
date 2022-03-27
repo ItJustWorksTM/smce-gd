@@ -21,5 +21,3 @@ func _update() -> void:
 func get_value() -> Variant:
 	return self._cache
 
-func set_value(v: Variant) -> void:
-	assert(not v is Object, "Combined values cannot be modified") # maybe also dicts / arrays?

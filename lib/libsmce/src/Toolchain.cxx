@@ -15,14 +15,12 @@ String ToolchainLogReader::read() {
 
 void ToolchainLogReader::_bind_methods() { bind_method("read", &This::read); }
 
-bool Toolchain::initialize(Ref<ManifestRegistry> _registry, String _resource_path) {
+Ref<Result> Toolchain::initialize(Ref<ManifestRegistry> _registry, String _resource_path) {
     resource_path = _resource_path;
     registry = _registry;
 
     tc = std::make_shared<smce::Toolchain>(as_view(_resource_path));
-    reader = Ref<ToolchainLogReader>();
-    reader.instantiate();
-
+    reader = make_ref<ToolchainLogReader>();
     reader->tc = tc;
 
     return is_initialized();
@@ -30,22 +28,23 @@ bool Toolchain::initialize(Ref<ManifestRegistry> _registry, String _resource_pat
 
 Ref<ToolchainLogReader> Toolchain::log_reader() { return reader; }
 
-bool Toolchain::is_initialized() {
-    const auto res = tc && !tc->check_suitable_environment();
-
-    return res;
+Ref<Result> Toolchain::is_initialized() {
+    if (!tc)
+        return Result::err(String{"Internal toolchain missing"});
+    return Result::from(tc->check_suitable_environment());
 }
 
-bool Toolchain::compile(Ref<Sketch> sketch) {
-    if (!is_initialized())
-        return false;
+Ref<Result> Toolchain::compile(Ref<Sketch> sketch) {
+    const auto early_ec = is_initialized();
+    if (early_ec->is_err())
+        return early_ec;
 
     sketch->resolve_config(registry);
     auto& native = sketch->as_native();
 
     const auto ec = tc->compile(native);
 
-    return !ec;
+    return Result::from(ec);
 }
 
 void Toolchain::_bind_methods() {

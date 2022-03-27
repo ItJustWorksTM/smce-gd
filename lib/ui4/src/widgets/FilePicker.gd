@@ -17,6 +17,7 @@ static func filepicker(mode = Ui.value(SELECT_FILE), user_filters = Ui.value([["
 	var save_name = Ui.value("my_file.ino")
 	
 #	var selected_item = Ui.map(selected_index, func(i): return fs_items.index(i) if i > -1 else "")
+	# TODO you also need to map fs_items for this to work
 	var selected_path = Ui.combine_map([selected_index, path], func(si, p):
 		if si > -1 && si < fs_items.size():
 			return p.plus_file(fs_items.index(si))

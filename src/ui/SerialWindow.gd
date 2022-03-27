@@ -2,12 +2,14 @@ class_name SerialWindow
 extends Control
 
 
-static func serial_window(in_buffer: Observable, out_buffer: ObservableMut) -> Callable: return func(ctx: Ctx):
+static func serial_window(in_buffer: Observable) -> Callable: return func(ctx: Ctx):
+	ctx.inherits(VBoxContainer)
 
 	var text_input = Ui.value("")
+	
+	var write := ctx.user_signal("write")
 
 	ctx \
-	.inherits(VBoxContainer) \
 	.child(func(ctx): ctx \
 		.inherits(PanelContainer) \
 		.with("size_flags_vertical", SIZE_EXPAND_FILL) \
@@ -25,7 +27,7 @@ static func serial_window(in_buffer: Observable, out_buffer: ObservableMut) -> C
 		) \
 		.child(func(ctx): ctx \
 			.inherits(Label) \
-			.with("text", out_buffer)
+			.with("text", "too hard")
 		)
 	) \
 	.child(func(ctx): ctx \
@@ -42,7 +44,7 @@ static func serial_window(in_buffer: Observable, out_buffer: ObservableMut) -> C
 			.on("pressed", func():
 				var send = text_input.value
 				text_input.value = ""
-				out_buffer.value += send \
+				write.emit(send) \
 			)
 		)
 	)

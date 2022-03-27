@@ -1,3 +1,4 @@
+class_name SR04
 extends HardwareBase
 
 var echo_pin: int = 0
@@ -10,6 +11,7 @@ var layers: Array[int] = [16, 4, 1]
 
 @onready
 var _echo_pin: GpioPin = _rec[0]
+@onready
 var _trigger_pin: GpioPin = _rec[1]
 
 func requires() -> Array:

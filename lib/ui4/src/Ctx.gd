@@ -4,21 +4,29 @@ extends Node
 var current: Node
 var recreate: Callable
 
+var _state: Dictionary = {}
+var _owned_state: Array = []
+
 func _init(_current):
 	self.current = _current
 	self.recreate = Callable()
 
-func inherits(script) -> Ctx:
+func inherits(script, args = []) -> Ctx:
 	if script is Callable:
 		script.call(self)
-		return self
-
-	var new = script.new()
-	self.current = new
-	
-#	self.current.set_meta("guard", ScopeGuard.new(func(): if is_instance_valid(new): new.free()))
-	self.current.set_meta("ctx", self)
-	
+	elif script is Script && script.get_base_script() == load("res://lib/ui4/src/CtxExt.gd"):
+		var restore = func(this):
+			this.current = current
+			this.recreate = recreate
+			this._state = _state
+		
+		self.script = script
+		restore.call()
+		self.inherited()
+	else:
+		var new = Fn.spread(script.new).call(args)
+		self.current = new
+		self.current.set_meta("ctx", self)
 	return self
 
 func object() -> Control:
@@ -28,11 +36,14 @@ func child(cb) -> Ctx:
 	if cb is Callable:
 		var ctx = Ctx.new(null)
 		ctx.recreate = cb
-		
+		ctx._state = self._state
 		cb.call(ctx)
 		
 		self.current.add_child(ctx.current)
 		
+		return self
+	elif cb is Observable:
+		pass
 		return self
 	else:
 		Fn.unreachable()
@@ -40,17 +51,21 @@ func child(cb) -> Ctx:
 
 static func recr(this: Ctx) -> void:
 	var ctx = Ctx.new(null)
+	ctx._state = this._state
 	ctx.recreate = this.recreate
+	ctx._state = this._state
 	ctx.recreate.call(ctx)
 	
 	if is_instance_valid(this.current):
 		this.current.add_sibling(ctx.current)
 		this.current.get_parent().remove_child(this.current)
+		for type in this._owned_state:
+			this._state[type].value = null
+			this._state.erase(type)
 		# TODO: all our children's CTX's wont be freed
 		this.current.queue_free()
 		this.free()
 
-# this needs to be baked further to be generic over what this does, e.g. the generic part is providing a manager hook
 func children(ch: Callable) -> Ctx:
 	var manager = Node.new()
 	self.current.add_child(manager)
@@ -81,6 +96,7 @@ func on(signal_name: String, callable: Callable) -> Ctx:
 	))
 	return self
 
+# TODO: make Observable
 func use(ob, cb: Callable) -> Ctx:
 	if !(ob is Array):
 		ob = [ob]
@@ -109,3 +125,22 @@ func user_signal(signal_name: String) -> Signal:
 	if !self.current.has_user_signal(signal_name):
 		self.current.add_user_signal(signal_name)
 	return Signal(self.current, signal_name)
+
+func register_state(type: Script, initial = null) -> Ctx:
+	if initial == null: initial = type.new()
+	if type in self._state && self._state[type].value != null:
+		assert(false, "Already registered")
+	self._state[type] = ObservableValue.new(initial)
+	_owned_state.push_back(type)
+	return self
+
+func get_state(type: Script) -> Observable:
+	return self._state.get(type)
+
+func use_state(type: Script) -> Object:
+	var state = get_state(type)
+	if state == null: return null
+	var this = self
+	self.use(state, func(): Ctx.recr(this))
+	return state.value
+

@@ -9,6 +9,18 @@ static func find_index(iterable, cb) -> int:
 			return v
 	return -1
 
+static func find_value(storage: Array, value: Variant) -> Variant:
+	for v in storage:
+		if Reflect.value_compare(v, value):
+			return v
+	return null
+
+static func find(storage: Array, cb: Callable) -> Variant:
+	for v in storage:
+		if cb.call(v):
+			return v
+	return null
+
 static func make_signal(obj: Object, name: String) -> Signal:
 	obj.add_user_signal(name)
 	return Signal(obj, name)
@@ -68,7 +80,6 @@ class _Bridge:
 static func connect_with_bail(sig: Signal, cb: Callable) -> void:
 	var bridge = _Bridge.new()
 	var cb2 = cb.bind(func():
-		print("DISCONNECTING!")
 		sig.disconnect(bridge.value)
 	)
 	

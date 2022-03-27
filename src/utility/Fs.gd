@@ -31,3 +31,12 @@ static func trim_trailing(path: String) -> String:
 static func dir_exists(path: String) -> bool: return Directory.new().dir_exists(path)
 
 static func file_exists(path: String) -> bool: return Directory.new().file_exists(path)
+
+static func read_file_as_string(path: String) -> String:
+	var file: File = File.new()
+	var result = file.open(path, File.READ)
+	var content = ""
+	if result == 0:
+		content = file.get_as_text()
+	file.close()
+	return content

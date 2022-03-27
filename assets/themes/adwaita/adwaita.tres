@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=29 format=3 uid="uid://d38u2nbmnnpq4"]
+[gd_resource type="Theme" load_steps=31 format=3 uid="uid://d38u2nbmnnpq4"]
 
 [ext_resource type="StyleBox" uid="uid://b6pnu5tgaiwcs" path="res://assets/themes/adwaita/generic_focus.tres" id="1_8nc66"]
 
@@ -244,6 +244,22 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 corner_detail = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbqxg"]
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_87s5f"]
+bg_color = Color(0.352941, 0.607843, 0.913725, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4ior"]
 content_margin_left = 4.0
 content_margin_right = 4.0
@@ -353,6 +369,8 @@ PopupMenu/styles/labeled_separator_right = SubResource( "StyleBoxLine_jg05o" )
 PopupMenu/styles/panel = SubResource( "StyleBoxFlat_lmyx6" )
 PopupMenu/styles/panel_disabled = SubResource( "StyleBoxFlat_5r00g" )
 PopupMenu/styles/separator = SubResource( "StyleBoxLine_jg05o" )
+ProgressBar/styles/bg = SubResource( "StyleBoxFlat_vbqxg" )
+ProgressBar/styles/fg = SubResource( "StyleBoxFlat_87s5f" )
 RichTextLabel/styles/focus = SubResource( "StyleBoxFlat_t4ior" )
 RichTextLabel/styles/normal = SubResource( "StyleBoxEmpty_evp6w" )
 VScrollBar/styles/grabber = SubResource( "StyleBoxFlat_0a2ld" )

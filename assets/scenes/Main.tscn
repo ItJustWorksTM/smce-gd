@@ -1,34 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://barti26turtey"]
+[gd_scene load_steps=6 format=3 uid="uid://dome8ixsjh48i"]
 
-[ext_resource type="Theme" uid="uid://d38u2nbmnnpq4" path="res://assets/themes/adwaita/adwaita.tres" id="1_sso3b"]
 [ext_resource type="Script" path="res://src/Main.gd" id="2_0rcig"]
-[ext_resource type="PackedScene" uid="uid://rsdupnfpri56" path="res://assets/scenes/environments/test_lab/TestLab.tscn" id="3_j2e5j"]
-[ext_resource type="Script" path="res://src/FreeCamera.gd" id="4_6uepk"]
 [ext_resource type="PackedScene" uid="uid://br0vb5hyy832y" path="res://assets/models/smartcar/smartcar.tscn" id="5_24sle"]
-[ext_resource type="Environment" uid="uid://y1ew1f7it423" path="res://assets/environments/sunny_day.tres" id="6_u7rwh"]
+[ext_resource type="Environment" uid="uid://c8vfq6sfdpb2g" path="res://assets/environments/sunny_day.tres" id="6_u7rwh"]
+[ext_resource type="Script" path="res://lib/ui4/src/widgets/ItemButton.gd" id="7_fc4wc"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k38qv"]
 points = PackedVector3Array(2.20577, 0.329999, 1.12091, -1.66638, -0.209, -1.84268, -1.79447, -0.209, -1.58626, 0.9759, -0.797275, 1.05761, -1.79208, 0.329999, 1.94855, 1.79164, 0.329999, -1.98047, -0.840145, 0.69464, -0.63, -0.9759, -0.797588, -1.02495, 0.9759, -0.797275, -1.02453, -0.9759, -0.797588, 1.05806, -1.79208, 0.329999, -1.98047, 1.79164, 0.329999, 1.94855, 0.840778, 0.6952, 0.598551, 2.04921, -0.209, -1.00817, -2.05106, -0.209, 1.04153, 1.66598, -0.209, 1.81077, -2.20577, 0.329999, -1.08436, 1.66598, -0.209, -1.84268, -1.66638, -0.209, 1.81077, -0.840778, 0.6952, 0.598551, 0.840145, 0.69464, -0.63, 2.04921, -0.209, 1.04022, 2.20577, 0.329999, -1.08397, -2.20577, 0.329999, 1.12129, -2.05106, -0.209, -1.00942, 1.85872, -0.209, -1.45788, -1.99849, 0.329999, -1.56664, 1.99892, 0.329999, -1.56664, -1.85832, -0.209, -1.45788)
 
-[node name="Control" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = ExtResource( "1_sso3b" )
+[node name="Control" type="Node"]
 script = ExtResource( "2_0rcig" )
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_layout_mode": 1,
-"_edit_use_custom_anchors": false
-}
-
-[node name="ControllableCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.803441, 0.595384, 0, -0.595384, 0.803441, 0, 7.75043, 11.135)
-script = ExtResource( "4_6uepk" )
-
-[node name="Node3D" parent="." instance=ExtResource( "3_j2e5j" )]
 
 [node name="RigidDynamicBody3D" type="RigidDynamicBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.8305, 0)
@@ -40,3 +21,261 @@ shape = SubResource( "ConvexPolygonShape3D_k38qv" )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( "6_u7rwh" )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+offset_right = 1024.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+__meta__ = {
+"_edit_layout_mode": 1,
+"_edit_use_custom_anchors": false
+}
+
+[node name="VBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 1016.0
+offset_bottom = 592.0
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+minimum_size = Vector2(256, 0)
+offset_right = 256.0
+offset_bottom = 584.0
+
+[node name="ItemButton" type="Container" parent="PanelContainer/VBoxContainer/PanelContainer"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 248.0
+offset_bottom = 194.0
+size_flags_vertical = 0
+focus_mode = 2
+mouse_filter = 0
+script = ExtResource( "7_fc4wc" )
+active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 236.0
+offset_bottom = 182.0
+theme_override_constants/margin_left = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer"]
+offset_left = 20.0
+offset_right = 232.0
+offset_bottom = 178.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer"]
+offset_right = 212.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "fullserial/"
+
+[node name="ItemButton2" type="Container" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer"]
+offset_top = 30.0
+offset_right = 212.0
+offset_bottom = 64.0
+size_flags_vertical = 0
+focus_mode = 2
+mouse_filter = 0
+script = ExtResource( "7_fc4wc" )
+active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton2"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 208.0
+offset_bottom = 30.0
+theme_override_constants/margin_left = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton2/MarginContainer"]
+offset_left = 20.0
+offset_right = 204.0
+offset_bottom = 26.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton2/MarginContainer/VBoxContainer"]
+offset_right = 184.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "fullserial.ino"
+
+[node name="ItemButton3" type="Container" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer"]
+offset_top = 68.0
+offset_right = 212.0
+offset_bottom = 178.0
+size_flags_vertical = 0
+focus_mode = 2
+mouse_filter = 0
+script = ExtResource( "7_fc4wc" )
+active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 208.0
+offset_bottom = 106.0
+theme_override_constants/margin_left = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer"]
+offset_left = 20.0
+offset_right = 204.0
+offset_bottom = 102.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer"]
+offset_right = 184.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "include/"
+
+[node name="ItemButton4" type="Container" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer"]
+offset_top = 30.0
+offset_right = 184.0
+offset_bottom = 64.0
+size_flags_vertical = 0
+focus_mode = 2
+mouse_filter = 0
+script = ExtResource( "7_fc4wc" )
+active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer/ItemButton4"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 180.0
+offset_bottom = 30.0
+theme_override_constants/margin_left = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer/ItemButton4/MarginContainer"]
+offset_left = 20.0
+offset_right = 176.0
+offset_bottom = 26.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer/ItemButton4/MarginContainer/VBoxContainer"]
+offset_right = 156.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "support.hxx"
+
+[node name="ItemButton5" type="Container" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer"]
+offset_top = 68.0
+offset_right = 184.0
+offset_bottom = 102.0
+size_flags_vertical = 0
+focus_mode = 2
+mouse_filter = 0
+script = ExtResource( "7_fc4wc" )
+active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer/ItemButton5"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 180.0
+offset_bottom = 30.0
+theme_override_constants/margin_left = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer/ItemButton5/MarginContainer"]
+offset_left = 20.0
+offset_right = 176.0
+offset_bottom = 26.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/ItemButton/MarginContainer/VBoxContainer/ItemButton3/MarginContainer/VBoxContainer/ItemButton5/MarginContainer/VBoxContainer"]
+offset_right = 156.0
+offset_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "magic.gxx"
+
+[node name="HBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
+offset_left = 260.0
+offset_right = 1008.0
+offset_bottom = 584.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+offset_right = 748.0
+offset_bottom = 35.0
+
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+offset_right = 108.0
+offset_bottom = 35.0
+size_flags_horizontal = 0
+text = "fullserial.ino"
+
+[node name="Button2" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+offset_left = 112.0
+offset_right = 218.0
+offset_bottom = 35.0
+size_flags_horizontal = 0
+theme_type_variation = &"ButtonClear"
+text = "support.hxx"
+
+[node name="Button3" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+offset_left = 222.0
+offset_right = 313.0
+offset_bottom = 35.0
+size_flags_horizontal = 0
+theme_type_variation = &"ButtonClear"
+text = "magic.hxx"
+
+[node name="CodeEdit" type="CodeEdit" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+offset_top = 39.0
+offset_right = 748.0
+offset_bottom = 584.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "#include <Smartcar.h>
+
+ArduinoRuntime arduinoRuntime;
+BrushedMotor leftMotor(arduinoRuntime, smartcarlib::pins::v2::leftMotorPins);
+BrushedMotor rightMotor(arduinoRuntime, smartcarlib::pins::v2::rightMotorPins);
+DifferentialControl control(leftMotor, rightMotor);
+
+SimpleCar car(control);
+
+void handleInput()
+{
+    // handle serial input if there is any
+    if (Serial.available())
+    {
+        String input = Serial.readStringUntil('\\n');
+        if (input.startsWith(\"m\"))
+        {
+            int throttle = input.substring(1).toInt();
+            car.setSpeed(throttle);
+        }
+        else if (input.startsWith(\"t\"))
+        {
+            int deg = input.substring(1).toInt();
+            car.setAngle(deg);
+        }
+    }
+}
+
+void setup()
+{
+    Serial.begin(9600);
+    Serial.setTimeout(200);
+}
+
+void loop()
+{
+    handleInput();
+}"
+gutters_draw_line_numbers = true
+code_completion_enabled = true
+code_completion_prefixes = ["n"]
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+__meta__ = {
+"_edit_layout_mode": 0,
+"_edit_use_custom_anchors": false
+}
+
+[node name="Ui" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0

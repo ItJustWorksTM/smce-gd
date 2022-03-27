@@ -1,32 +1,40 @@
 class_name InstanceControl
 extends Control
 
-enum { BOARD_READY, BOARD_RUNNING, BOARD_SUSPENDED, BOARD_UNAVAILABLE }
-enum { BUILD_PENDING, BUILD_SUCCEEDED, BUILD_FAILED, BUILD_UNKNOWN }
-enum { VEHICLE_ACTIVE, VEHICLE_FROZEN, VEHICLE_UNAVAILABLE }
-enum { CAMERA_ORBITING, CAMERA_FREE }
-
 static func instance_control(
-	sketch_path, board_state, build_state, build_log, vehicle_state, camera_state, attachments,
+	board_id, sketch_path, board_state, build_state, build_log, vehicle_state, camera_state, attachments,
 ) -> Callable: return func(ctx: Ctx):
 	
 	var active_attachment = Ui.value(-1)
 	var log_window_open = Ui.value(false)
 	
 	# TODO: make real..
-	var serial_in = Ui.value("hello world")
-	var serial_out = Ui.value("q")
+	
+	var hardware_state: HardwareState = ctx.use_state(HardwareState)
+	
+	var uart_puller = Ui.combine_map([hardware_state.hardware, board_id], func(hardware, id):
+		var board_hardware = hardware.find_item(func(vk): return vk.v.value.id == id)
+		if board_hardware != null:
+			return board_hardware.v.value.by_label.get("Gui Uart")
+	)
+	
+	var uart_in = Ui.inner(Ui.map(uart_puller, func(hw):
+		var ret = Ui.value("")
+		if hw: Fn.connect_lifetime(hw, hw.read, func(txt): ret.value += txt)
+		return ret
+	))
+	
 	
 	var serial_window_open = Ui.value(false)
 	
-	var board_available = Ui.map(board_state, func(state): return state != BOARD_UNAVAILABLE)
-	var board_active = Ui.map(board_state, func(state): return state == BOARD_RUNNING || state == BOARD_SUSPENDED)
+	var board_available = Ui.map(board_state, func(state): return state != BoardState.BOARD_UNAVAILABLE)
+	var board_active = Ui.map(board_state, func(state): return state == BoardState.BOARD_RUNNING || state == BoardState.BOARD_SUSPENDED)
 	
-	var vehicle_available = Ui.map(vehicle_state, func(state): return state != VEHICLE_UNAVAILABLE)
+	var vehicle_available = Ui.map(vehicle_state, func(state): return true)
 
 	var has_attachments = Ui.dedup(Ui.map(attachments, func(vec): return !vec.is_empty()))
 	
-	var is_building = Ui.map(build_state, func(state): return state == BUILD_PENDING)
+	var is_building = Ui.map(build_state, func(state): return state == BoardState.BUILD_PENDING)
 	var has_build_log = Ui.map(build_log, func(log): return !log.is_empty())
 	
 	
@@ -41,7 +49,7 @@ static func instance_control(
 	ctx \
 	.child(func(ctx): ctx \
 		.inherits(Widgets.button()) \
-		.with("text", sketch_path)
+		.with("text", Ui.map(sketch_path, func(p): return p.get_file()))
 	) \
 	.child(func(ctx): ctx \
 		.inherits(VBoxContainer) \
@@ -55,8 +63,8 @@ static func instance_control(
 				.inherits(Widgets.button()) \
 				.with("text", Ui.map(board_state, func(state):
 					match state:
-						BOARD_READY, BOARD_UNAVAILABLE: return "Start"
-						BOARD_RUNNING, BOARD_SUSPENDED: return "Stop"
+						BoardState.BOARD_READY, BoardState.BOARD_STAGING, BoardState.BOARD_UNAVAILABLE: return "Start"
+						BoardState.BOARD_RUNNING, BoardState.BOARD_SUSPENDED: return "Stop"
 					pass \
 				)) \
 				.with("disabled", Ui.invert(board_available)) \
@@ -69,7 +77,7 @@ static func instance_control(
 				.inherits(Widgets.button()) \
 				.with("text", Ui.map(board_state, func(state):
 					match state:
-						BOARD_SUSPENDED: return "Resume"
+						BoardState.BOARD_SUSPENDED: return "Resume"
 						_: return "Suspend"
 					pass \
 				)) \
@@ -83,7 +91,7 @@ static func instance_control(
 		.inherits(VBoxContainer) \
 		.child(func(ctx): ctx \
 			.inherits(Label) \
-			.with("text", Ui.map(vehicle_state, func(state): return "Vehicle Control" + (" (Frozen)" if state == VEHICLE_FROZEN else "")))
+			.with("text", Ui.map(vehicle_state, func(state): return "Vehicle Control" + (" (Frozen)" if state == WorldEnvState.VEHICLE_FROZEN else "")))
 		) \
 		.child(func(ctx): ctx \
 			.inherits(HBoxContainer) \
@@ -95,7 +103,7 @@ static func instance_control(
 				.on("pressed", func(): reset_vehicle.emit())
 			) \
 			.child(func(ctx):
-				var is_orbitting = Ui.map(camera_state, func(state): return state == CAMERA_ORBITING)
+				var is_orbitting = Ui.map(camera_state, func(state): return state == WorldEnvState.CAMERA_ORBITING)
 				ctx \
 				.inherits(Widgets.button()) \
 				.with("toggle_mode", true) \
@@ -193,7 +201,7 @@ static func instance_control(
 		var minimum_size := Vector2(640, 360)
 		ctx \
 		.inherits(Widgets.window(log_window_open)) \
-		.with("title", Ui.map(sketch_path, func(p): return "\"%s\" Logs" % p)) \
+		.with("title", Ui.map(sketch_path, func(p): return "\"%s\" Logs" % p.get_file())) \
 		.with("min_size",minimum_size) \
 		.child(func(ctx): ctx \
 			.inherits(PanelContainer) \
@@ -212,7 +220,13 @@ static func instance_control(
 			.inherits(PanelContainer) \
 			.with("size", minimum_size) \
 			.on("tree_entered", func(): ctx.object().set_anchors_preset(Control.PRESET_WIDE)) \
-			.child(SerialWindow.serial_window(serial_in, serial_out))
+			.child(func(ctx): ctx \
+				.inherits(SerialWindow.serial_window(uart_in)) \
+				.on("write", func(st):
+					print(hardware_state.hardware)
+					uart_puller.value.write(st) \
+				)
+			)
 		)
 	))
 

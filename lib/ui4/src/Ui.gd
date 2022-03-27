@@ -34,46 +34,47 @@ static func tween(obs: Observable, time: float, trans = Tween.TRANS_LINEAR) -> T
 static func invert(obs: Observable) -> Mapped:
 	return map(obs, func(v): return !v)
 
-static func inner(obs: ObservableMut) -> InnerMut:
-	return InnerMut.new(obs)
+static func inner(obs: Observable) -> Inner:
+	return Inner.new(obs)
 
-static func lens(obs: ObservableMut, prop: String) -> LensMut:
+static func lens_mut(obs: ObservableMut, prop: String) -> LensMut:
 	return LensMut.new(obs, prop)
 
-static func inner_lens(ob, prop: String) -> InnerMut:
-	return inner(lens(ob, prop))
+static func lens(obs: Observable, prop: String) -> Lens:
+	return Lens.new(obs, prop)
 
-class TrackedEach:
-	
-	var cb: Callable
-	var f: TrackedVec
-	
+static func lens_dedup(ob: Observable, prop: String) -> Dedup:
+	return dedup(lens(ob, prop))
 
+static func poll(obj: Object, prop: String) -> Polled:
+	return Polled.new(obj, prop)
 
+static func tracked_map(tr: Tracked, cb: Callable) -> TrackedMapped:
+	return TrackedMapped.new(tr, cb)
 
-# so for this to make sense, the index passed in should also be an observable hmm
-static func tracked_each(f: TrackedVec, cb: Callable) -> Callable:
+static func map_each_child(f: TrackedContainer, cb: Callable) -> Callable:
 	return func(this: Ctx, manager: Node) -> void:
-		Fn.connect_lifetime(manager, f.vec_changed, func(t, i):
-			if !is_instance_valid(manager) || manager.is_queued_for_deletion(): return
+		Fn.connect_lifetime(manager, f.item_changed, func(t, i):
+			if !is_instance_valid(manager) || manager.is_queued_for_deletion() || t == TrackedContainer.MODIFIED: return
 			var parent = manager.get_parent()
 			var child_n = parent.get_children().find(manager)
 			match t:
-				TrackedVec.INSERT:
+				TrackedContainer.INSERTED:
 					var pos = parent.get_child(child_n + i)
-					var tmp = f.index_r(i)
 					var ctx = Ctx.new(null)
-					ctx.recreate = cb.call(tmp[0], tmp[1])
+					ctx._state = this._state
+					var kv = f.index_item(i)
+					ctx.recreate = cb.call(kv.k, kv.v)
 					ctx.recreate.call(ctx)
 					pos.add_sibling(ctx.current)
-				TrackedVec.REMOVED:
+				TrackedContainer.ERASED:
 					parent.remove_child(parent.get_child(child_n + i + 1))
-				TrackedVec.CLEAR:
+				TrackedContainer.CLEARED:
 					for j in i:
 						parent.remove_child(parent.get_child(child_n + i - j))
 		)
 		
-		f.each_r(func(v, i): this.child(cb.call(v,i)))
+		f.for_each_item(func(vi): this.child(cb.call(vi.k, vi.v)))
 
 static func map_child(ob: Observable, cb: Callable) -> Callable:
 	return func(this: Ctx, manager: Node) -> void:

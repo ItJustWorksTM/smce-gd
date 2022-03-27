@@ -6,7 +6,9 @@ var velocity2: Vector3 = Vector3()
 var dragging: bool = false
 var last_mouse_pos = Vector2(-1, -1)
 
+@onready
 var target_position: Vector3 = self.position
+@onready
 var target_rotation: Vector3 = self.rotation
 
 func _input(event: InputEvent) -> void:
@@ -40,6 +42,6 @@ func _process(delta: float) -> void:
 	self.target_rotation.x = clamp(self.target_rotation.x, - PI / 2, PI / 2)
 	self.velocity2 = Vector3()
 	
-	self.position = self.position.lerp(self.target_position, delta * 10)
-	self.rotation = self.rotation.lerp(self.target_rotation, delta * 30)
+	self.position = self.position.lerp(self.target_position, delta * 5)
+	self.rotation = self.rotation.lerp(self.target_rotation, delta * 5)
 	self.rotation.z = 0

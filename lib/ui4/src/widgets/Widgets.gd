@@ -1,7 +1,7 @@
 class_name Widgets
 
 
-static func item_list(items: TrackedVec, selected: ObservableMut, item_child: Callable): return func(ctx: Ctx): 
+static func item_list(items: TrackedContainer, selected: ObservableMut, item_child: Callable): return func(ctx: Ctx): 
 	var this := ctx.inherits(VBoxContainer).object()
 	this.add_user_signal("selected")
 	this.add_user_signal("activated")
@@ -11,17 +11,17 @@ static func item_list(items: TrackedVec, selected: ObservableMut, item_child: Ca
 		.with("rect_min_size", Vector2(100,50)) \
 		.use(items, func(t, i):
 			match t:
-				TrackedVec.CLEAR:
+				TrackedContainer.CLEARED:
 					selected.value = -1
-				TrackedVec.REMOVED:
+				TrackedContainer.ERASED:
 					if i == items.size():
 						selected.value = -1
-				TrackedVec.INSERT:
+				TrackedContainer.INSERTED:
 					if i == selected.value: # TODO: untested :O
 						selected.value += 1
 			pass \
 		) \
-		.children(Ui.tracked_each(items, func(item, i):
+		.children(Ui.map_each_child(items, func(i, item):
 			return func(ctx: Ctx):
 				ctx \
 					.inherits(ItemButton) \
