@@ -13,27 +13,27 @@ var _bwd_pin: GpioPin = _rec[1]
 var _enable_pin: GpioPin = _rec[2]
 
 func requires() -> Array:
-	return [
-		{c = gpio_pin(fwd_pin), ex=true},
-		{c = gpio_pin(bwd_pin), ex=true},
-		{c = gpio_pin(enable_pin), ex=true},
-	]
+    return [
+        {c = gpio_pin(fwd_pin), ex=true},
+        {c = gpio_pin(bwd_pin), ex=true},
+        {c = gpio_pin(enable_pin), ex=true},
+    ]
 
 var _speed: float = 0.0
 var speed: float:
-	get: return _speed
+    get: return _speed
 
 func _ready():
-	_fwd_pin.digital_write(false)
-	_bwd_pin.digital_write(false)
-	_enable_pin.digital_write(false)
+    _fwd_pin.digital_write(false)
+    _bwd_pin.digital_write(false)
+    _enable_pin.digital_write(false)
 
 func _process(_delta: float) -> void:
-	var abs_speed := _enable_pin.analog_read()
-	var direction := int(_fwd_pin.digital_read()) - int(_bwd_pin.digital_read())
-	
-	_speed = (abs_speed / 255.0) * direction
+    var abs_speed := _enable_pin.analog_read()
+    var direction := int(_fwd_pin.digital_read()) - int(_bwd_pin.digital_read())
+    
+    _speed = (abs_speed / 255.0) * direction
 
 func _to_string() -> String:
-	
-	return Reflect.stringify_struct("BrushedMotor", self, Node)
+    
+    return Reflect.stringify_struct("BrushedMotor", self, Node)

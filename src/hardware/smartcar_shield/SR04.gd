@@ -15,18 +15,18 @@ var _echo_pin: GpioPin = _rec[0]
 var _trigger_pin: GpioPin = _rec[1]
 
 func requires() -> Array:
-	return [
-		{c = gpio_pin(echo_pin), ex=true},
-		{c = gpio_pin(trigger_pin), ex=true}
-	]
+    return [
+        {c = gpio_pin(echo_pin), ex=true},
+        {c = gpio_pin(trigger_pin), ex=true}
+    ]
 
 var _distance: float = 0.0
 var distance: float:
-	set(dist):
-		if dist > 0: dist = clamp(dist, min_distance, max_distance)
-		_echo_pin.analog_write(int(dist * 10))
-	get:
-		return _distance
+    set(dist):
+        if dist > 0: dist = clamp(dist, min_distance, max_distance)
+        _echo_pin.analog_write(int(dist * 10))
+    get:
+        return _distance
 
 func _to_string():
-	return Reflect.stringify_struct("SR04", self, Node)
+    return Reflect.stringify_struct("SR04", self, Node)
