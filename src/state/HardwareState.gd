@@ -16,6 +16,7 @@ func _init(sketch_state: BoardState, config_state: UserConfigState) -> void:
 	register_hardware("BrushedMotor", BrushedMotor)
 	register_hardware("SR04", SR04)
 	register_hardware("UartPuller", UartPuller)
+	register_hardware("GY50", GY50)
 
 func _updoot(w,h):
 	match w:
@@ -47,7 +48,6 @@ func _update(vk):
 		BoardState.BOARD_RUNNING, BoardState.BOARD_SUSPENDED, BoardState.BOARD_READY:
 			return
 		BoardState.BOARD_STAGING:
-			print("staging...")
 			if self.hardware.has(v.id):
 				assert(false, "free....")
 			
@@ -78,8 +78,6 @@ func _update(vk):
 			existing.v.value.by_label = ret
 			pass
 		_: assert(false)
-	print(existing.v)
-	pass
 
 func register_hardware(hardware_name, script) -> void:
 	register.value[hardware_name] = script

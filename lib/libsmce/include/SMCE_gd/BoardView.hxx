@@ -33,7 +33,7 @@ class BoardView : public GdRef<"BoardView", BoardView> {
 
     smce::BoardView native();
 
-    static Ref<BoardView> from_native(Ref<BoardConfig> info, smce::BoardView viw);
+    static Ref<BoardView> from_native(smce::BoardConfig board_config, smce::BoardView bv);
 
     void poll();
 

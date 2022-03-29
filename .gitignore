@@ -2,3 +2,6 @@
 .godot/
 build/
 */build/
+.cache
+.vscode/
+.idea/

@@ -1,11 +1,13 @@
 #include "SMCE_gd/Toolchain.hxx"
 #include "SMCE_gd/utility.hxx"
+#include "godot_cpp/variant/utility_functions.hpp"
 
 String ToolchainLogReader::read() {
     if (!tc)
         return String();
     if (auto [_, str] = tc->build_log(); !str.empty()) {
-        auto ret = String{str.c_str()};
+        auto ret = String{};
+        ret.parse_utf8(str.c_str());
         str.clear();
 
         return ret;

@@ -5,7 +5,8 @@ var default_config := Ui.value({})
 
 var user_config_name = Ui.value("smce.json")
 
-func get_config_for(path) -> Dictionary:
+# get whatever config we say we give from this directory
+func get_config_for(path, key = "") -> Dictionary:
 	path = str(path)
 	var config_path = Fs.trim_trailing(path).plus_file(user_config_name.value)
 	

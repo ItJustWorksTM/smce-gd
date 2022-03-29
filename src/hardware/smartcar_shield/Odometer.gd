@@ -8,7 +8,6 @@ var directionless: bool = false
 static func smartcar_odometer() -> BoardDeviceSpecification:
 	var ret := BoardDeviceSpecification.new()
 	ret.name = "SmartcarOdometer"
-	ret.version = "1.0"
 	ret.fields = {
 		total_distance = BoardDeviceSpecification.af64,
 		speed = BoardDeviceSpecification.af64,
@@ -22,7 +21,7 @@ var _device = _rec[0]
 
 func requires() -> Array:
 	return [
-		{c = board_device("SmartcarOdometer", "1.0"), ex=true},
+		{c = board_device("SmartcarOdometer"), ex=true},
 		{c = gpio_pin(pulse_pin), ex=false},
 		{c = gpio_pin(forward_pin), ex=false},
 	]

@@ -12,6 +12,8 @@ func _init(obj: Object, prop: String, period: float = 0.2):
 	_period = period
 	_obj = obj
 	_prop = prop
+	
+	_update()
 
 func _update():
 	

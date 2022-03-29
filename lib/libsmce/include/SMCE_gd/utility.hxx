@@ -2,12 +2,14 @@
 #ifndef SMCE_GD_UTILITY_HXX
 #define SMCE_GD_UTILITY_HXX
 
+#include <concepts>
 #include <cstddef>
+#include <span>
 #include <string_view>
 #include <type_traits>
+#include "godot_cpp/classes/ref.hpp"
 #include "godot_cpp/godot.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
-
 using namespace godot;
 
 template <class... Base> struct Visitor : Base... {
@@ -57,16 +59,36 @@ inline std::u32string_view as_view(const String& string) {
 }
 
 inline std::string to_utf8(const String& string) {
-    const auto buffer = string.to_utf8_buffer();
+    if (string.length() == 0)
+        return std::string{};
 
+    const auto buffer = string.to_utf8_buffer();
     return std::string{std::string_view{reinterpret_cast<const char*>(buffer.ptr()),
                                         static_cast<std::size_t>(buffer.size())}};
 }
 
-template <class T> inline Ref<T> make_ref() {
+template <std::derived_from<RefCounted> T> inline Ref<T> make_ref() {
     auto ref = Ref<T>();
     ref.instantiate();
     return ref;
 }
+
+template <class T>
+auto as_span(const T& arr) -> std::span<std::remove_pointer_t<decltype(std::declval<T>().ptr())>> {
+    const auto size = static_cast<size_t>(arr.size());
+    if (size == 0) // .ptr() dies on 0 size
+        return {};
+    const auto ptr = arr.ptr();
+    return std::span{ptr, ptr + size};
+};
+
+template <class T>
+auto as_span_mut(T& arr) -> std::span<std::remove_pointer_t<decltype(std::declval<T>().ptrw())>> {
+    const auto size = static_cast<size_t>(arr.size());
+    if (size == 0) // .ptr() dies on 0 size
+        return {};
+    const auto ptr = arr.ptrw();
+    return std::span{ptr, ptr + size};
+};
 
 #endif

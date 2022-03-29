@@ -41,10 +41,10 @@ static func get_unique_props(t: Object, base = _ref.new()):
 	return c.keys()
 
 static func stringify_struct(name, t: Object, base = RefCounted):
-	var s = "%s {\n" % name
+	var s = "%s { " % name
 	for prop in get_unique_props(t, base.new()):
-		if !prop.begins_with("_"):
-			s += "	%s: %s\n" % [prop, t.get(prop)]
+		if !prop.begins_with("_") && prop != "Script Variables":
+			s += "%s: %s, " % [prop, t.get(prop)]
 	s += "}"
 	return s
 

@@ -21,10 +21,10 @@ static func framebuffer(key: int) -> FrameBufferConfig:
 	ret.key = key
 	return ret
 
-static func board_device(device_name: String, version: String) -> BoardDeviceConfig:
+static func board_device(device_name: String) -> BoardDeviceConfig:
 	var ret := BoardDeviceConfig.new()
 	ret.device_name = device_name
-	ret.version = version
+	ret.count = 1
 	return ret
 
 static func digital_storage(path: String, cspin: int) -> SecureDigitalStorageConfig:

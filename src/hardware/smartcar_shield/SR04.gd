@@ -27,3 +27,6 @@ var distance: float:
 		_echo_pin.analog_write(int(dist * 10))
 	get:
 		return _distance
+
+func _to_string():
+	return Reflect.stringify_struct("SR04", self, Node)

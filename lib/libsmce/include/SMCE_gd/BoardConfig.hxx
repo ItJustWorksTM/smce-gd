@@ -2,7 +2,6 @@
 #define SMCE_GD_BOARDCONFIG_HXX
 
 #include "SMCE/BoardConf.hpp"
-#include "SMCE/PluginManifest.hpp"
 #include "SMCE_gd/ManifestRegistry.hxx"
 #include "SMCE_gd/gd_class.hxx"
 

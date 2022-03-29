@@ -19,11 +19,10 @@ class FrameBuffer : public GdRef<"FrameBuffer", FrameBuffer> {
     Ref<BoardConfig::FrameBufferConfig> m_info;
 
   public:
-    static Ref<FrameBuffer> from_native(Ref<BoardConfig::FrameBufferConfig> info, smce::FrameBuffer fb);
+    static Ref<FrameBuffer> from_native(smce::FrameBuffer fb);
 
     static void _bind_methods();
 
-    bool exists();
     bool needs_horizontal_flip() noexcept;
     bool needs_vertical_flip() noexcept;
     int get_width() noexcept;

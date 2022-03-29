@@ -3,11 +3,15 @@
 
 #include <algorithm>
 #include <memory>
+#include <ranges>
+#include <span>
+#include <unordered_set>
 #include "SMCE/Sketch.hpp"
 #include "SMCE_gd/BoardDeviceSpecification.hxx"
 #include "SMCE_gd/ManifestRegistry.hxx"
 #include "SMCE_gd/gd_class.hxx"
 #include "SMCE_gd/utility.hxx"
+#include "godot_cpp/variant/utility_functions.hpp"
 
 using namespace godot;
 
@@ -17,34 +21,42 @@ struct SketchConfig : public GdRef<"SketchConfig", SketchConfig> {
         bind_prop_rw<"extra_board_uris", Variant::Type::PACKED_STRING_ARRAY, &This::extra_board_uris>();
         bind_prop_rw<"legacy_preproc_libs", Variant::Type::PACKED_STRING_ARRAY, &This::legacy_preproc_libs>();
         bind_prop_rw<"plugins", Variant::Type::PACKED_STRING_ARRAY, &This::plugins>();
-        bind_prop_rw<"board_devices", Variant::Type::PACKED_STRING_ARRAY, &This::board_devices>();
     }
 
     PackedStringArray legacy_preproc_libs;
     PackedStringArray extra_board_uris;
     PackedStringArray plugins;
-    PackedStringArray board_devices;
 
     smce::SketchConfig resolve_config(Ref<ManifestRegistry> registry) {
         auto config = smce::SketchConfig{
             .fqbn = "FQBN",
         };
 
-        const auto insert_transform = [](auto& in, auto& out, auto fun) {
-            if (in.size())
-                std::transform(in.ptr(), in.ptr() + in.size(), std::back_inserter(out), fun);
-        };
+        for (const auto& lib : as_span(legacy_preproc_libs))
+            config.legacy_preproc_libs.emplace_back(smce::SketchConfig::ArduinoLibrary{.name = to_utf8(lib)});
 
-        insert_transform(legacy_preproc_libs, config.legacy_preproc_libs, [&](const auto& str) {
-            return smce::SketchConfig::ArduinoLibrary{.name = to_utf8(str)};
-        });
-        insert_transform(extra_board_uris, config.extra_board_uris, to_utf8);
+        for (const auto& uris : as_span(extra_board_uris))
+            config.extra_board_uris.emplace_back(to_utf8(uris));
 
-        insert_transform(plugins, config.plugins,
-                         [&](const auto& str) { return registry->get_plugin(str)->to_native(); });
+        auto exist_devices = std::unordered_set<std::string>{};
 
-        insert_transform(board_devices, config.genbind_devices,
-                         [&](const auto& str) { return registry->get_board_device(str)->to_native(); });
+        for (const auto& name : as_span(plugins))
+            if (auto plugin = registry->get_plugin(name); plugin.is_valid()) {
+                auto native_plugin = plugin->to_native();
+
+                for (const auto& dev_name : as_span(plugin->needs_devices))
+                    if (auto device = registry->get_board_device(dev_name); device.is_valid()) {
+                        auto native_device = device->to_native();
+                        auto name = std::string{native_device.name()};
+                        if (!exist_devices.contains(name)) {
+                            exist_devices.insert(name);
+                            config.genbind_devices.emplace_back(std::move(native_device));
+                        }
+                    } else
+                        UtilityFunctions::printerr("Plugin required non existing board device.");
+
+                config.plugins.emplace_back(std::move(native_plugin));
+            }
 
         return config;
     }

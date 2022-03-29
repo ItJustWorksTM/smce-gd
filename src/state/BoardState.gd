@@ -11,10 +11,19 @@ var sketches := TrackedVec.new([])
 var _sketches := []
 var _boards := {}
 
-func _ready():
-	add_sketch("/home/ruthgerd/demo/demo.ino")
+var _sketch_state: SketchState
 
-func add_sketch(path: String):
+func _init(sketch_state):
+	self._sketch_state = sketch_state
+
+
+func _ready():
+#	add_sketch("/home/ruthgerd/Documents/demo/demo.ino")
+	pass
+
+func add_board(sketch_id: int):
+	var sketch: Sketch = self._sketch_state.sketches.index_item(sketch_id).v.value
+	
 #	var cached_index = cached_sketches.find_index(func(v): return v == path)
 #
 #	if cached_index >= 0:
@@ -23,24 +32,31 @@ func add_sketch(path: String):
 	var board = Board.new()
 	_boards[board.get_instance_id()] = {"board": board, "requests": []}
 	
-	var sketch = Sketch.new()
-	sketch.source = path
 	_sketches.push_back(sketch)
 	sketches.push({
 		"id": board.get_instance_id(),
-		"path": path, 
+		"sketch_id": sketch_id, 
 		"compiled": false, 
 		"board": BOARD_UNAVAILABLE,
 		"board_log": "",
 		"build": BUILD_UNKNOWN, 
 		"build_log": ""
 	})
-
-func compile_sketch(i: int):
-	var pub_index = sketches.find_item(func(kv): return kv.v.value.id == i).k.value
+#  no
+func start_board(board_id: int):
+	var pub_index = sketches.find_item(func(kv): return kv.v.value.id == board_id).k.value
 	assert(pub_index != -1)
 	
-	_boards[i].requests = []
+	_boards[board_id].requests = []
+	
+	var sketch = _sketch_state.get_sketch(_boards[board_id].sketch_id)
+	
+	# if the sketch is not compiled then we just fail
+	
+	
+	var registry: ManifestRegistry = sketch.v.value.registry
+	
+	
 	
 	var sketch_mut = sketches.index_item_mut(pub_index).v
 	
@@ -48,13 +64,12 @@ func compile_sketch(i: int):
 	
 	# people request hardware
 	
-	var board: Board = _boards[i].board
+	var board: Board = _boards[board_id].board
 	
-	var registry := ManifestRegistry.new()
 	var config := BoardConfig.new()
 	
 	var give_out := []
-	for request in _boards[i].requests:
+	for request in _boards[board_id].requests:
 		assert(request is HardwareBase)
 		var demands = request.requires()
 		
@@ -83,7 +98,8 @@ func compile_sketch(i: int):
 				else:
 					bd.count += 1
 					size = bd.count -1
-				getters.append(func(view: BoardView): return view.board_devices[demand.name][size])
+				getters.append(func(view: BoardView):
+					return view.board_devices[demand.device_name][size])
 			elif demand is SecureDigitalStorageConfig:
 				if Fn.find_value(config.sd_cards, demand) == null:
 					config.sd_cards.append(demand)
@@ -94,14 +110,14 @@ func compile_sketch(i: int):
 		# do not forget that hardware needs to be childed to us :)
 		pass
 	
-	
+	var devices = config.board_devices
 	var res: Result = board.initialize(registry, config)
 	assert(res.is_ok())
 	var view = board.get_view()
-	for j in _boards[i].requests.size():
+	for j in _boards[board_id].requests.size():
 		var collect = []
 		
-		var obj: HardwareBase = _boards[i].requests[j]
+		var obj: HardwareBase = _boards[board_id].requests[j]
 		
 		for z in give_out[j]:
 			collect.append(z.call(board.get_view()))
@@ -109,27 +125,25 @@ func compile_sketch(i: int):
 		
 		add_child(obj)
 	
-	var tc = Toolchain.new()
-	var tcres: Result = tc.initialize(registry, "/home/ruthgerd/.local/share/godot/app_userdata/SMCE-gd")
-	
-	assert(tcres.is_ok())
-	
-	var tc_log_reader = tc.log_reader()
-	
-	var sketch: Sketch = _sketches[pub_index]
-	
-	var cpres = tc.compile(sketch)
-	var r = cpres.get_value()
-	assert(cpres.is_ok())
-	
-	_boards[i].requests = []
+	_boards[board_id].requests = []
 
 	sketch_mut.mut_scope(func(v):
 		v.compiled = true
 		v.board = BOARD_READY
-		v.build_log = tc_log_reader.read()
+		v.build_log = "tc_log_reader.read()"
 		return v
 	)
+
+func _process(delta):
+	
+	for bd in _boards.values():
+		var res = bd.board.poll()
+		var log = bd.board.log_reader().read()
+		if log != "" && log != null:
+			print("board log: ", log)
+		if res.is_err():
+			print("board error!: ", res.get_value)
+			assert(false)
 
 func request_hardware(i: int, node: HardwareBase):
 	assert(i in _boards)

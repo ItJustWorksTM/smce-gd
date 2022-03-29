@@ -4,15 +4,13 @@
 
 using namespace godot;
 
-Ref<FrameBuffer> FrameBuffer::from_native(Ref<BoardConfig::FrameBufferConfig> info, smce::FrameBuffer fb) {
+Ref<FrameBuffer> FrameBuffer::from_native(smce::FrameBuffer fb) {
     auto ret = make_ref<This>();
     ret->frame_buf = fb;
-    ret->m_info = info;
     return ret;
 }
 
 void FrameBuffer::_bind_methods() {
-    bind_method("exists", &This::exists);
     bind_method("needs_horizontal_flip", &This::needs_horizontal_flip);
     bind_method("needs_vertical_flip", &This::needs_vertical_flip);
     bind_method("get_width", &This::get_width);
@@ -20,10 +18,8 @@ void FrameBuffer::_bind_methods() {
     bind_method("get_freq", &This::get_freq);
     bind_method("write_rgb888", &This::write_rgb888);
     bind_method("read_rgb888", &This::read_rgb888);
-    bind_method("info", &This::info);
 }
 
-bool FrameBuffer::exists() { return frame_buf.exists(); }
 bool FrameBuffer::needs_horizontal_flip() noexcept { return frame_buf.needs_vertical_flip(); }
 bool FrameBuffer::needs_vertical_flip() noexcept { return frame_buf.needs_horizontal_flip(); }
 int FrameBuffer::get_width() noexcept { return frame_buf.get_width(); }

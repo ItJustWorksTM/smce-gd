@@ -75,7 +75,13 @@ smce::BoardConfig BoardConfig::resolve_native(Ref<ManifestRegistry> registry) co
     rep.operator()<UartChannelConfig>(uart_channels, ret.uart_channels);
     rep.operator()<FrameBufferConfig>(frame_buffers, ret.frame_buffers);
     rep.operator()<SecureDigitalStorageConfig>(sd_cards, ret.sd_cards);
-    // rep.operator()<BoardDeviceConfig>(board_devices, ret.board_devices);
+
+    for (size_t i = 0; i < board_devices.size(); ++i)
+        if (const auto obj = Object::cast_to<BoardDeviceConfig>(board_devices[i])) {
+            auto sp = registry->get_board_device(obj->device_name);
+            if (sp.is_valid())
+                ret.board_devices.push_back({.spec = sp->to_native(), .count = obj->count});
+        }
 
     for (const auto& driver : ret.gpio_drivers)
         ret.pins.push_back(driver.pin_id);

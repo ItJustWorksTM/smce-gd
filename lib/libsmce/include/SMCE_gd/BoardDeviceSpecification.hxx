@@ -2,7 +2,6 @@
 #define SMCE_GD_BOARDDEVICESPECIFICATION_HXX
 
 #include "SMCE/BoardDeviceSpecification.hpp"
-#include "SMCE/PluginManifest.hpp"
 #include "SMCE_gd/gd_class.hxx"
 #include "godot_cpp/classes/ref_counted.hpp"
 using namespace godot;
@@ -10,7 +9,6 @@ using namespace godot;
 struct BoardDeviceSpecification : public GdRef<"BoardDeviceSpecification", BoardDeviceSpecification> {
 
     String name;
-    String version;
     Dictionary fields;
 
     static void _bind_methods() {
@@ -19,14 +17,13 @@ struct BoardDeviceSpecification : public GdRef<"BoardDeviceSpecification", Board
                                           "as8", "as16", "as32", "as64", "af32", "af64", "mutex"});
 
         bind_prop_rw<"device_name", Variant::Type::STRING, &This::name>();
-        bind_prop_rw<"version", Variant::Type::STRING, &This::version>();
         bind_prop_rw<"fields", Variant::Type::DICTIONARY, &This::fields>();
     }
 
     smce::BoardDeviceSpecification to_native() {
         auto ret = smce::BoardDeviceSyntheticSpecification{
             .name = to_utf8(name),
-            .version = to_utf8(version),
+            .version = "1.0.0",
         };
 
         const auto keys = fields.keys();

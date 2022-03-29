@@ -4,4 +4,4 @@ entry_symbol = "example_library_init"
 
 [libraries]
 
-linux.64 = "res://lib/libsmce/build/libSMCE-gd.so"
+linux.64 = "res://build/libSMCE-gd.so"

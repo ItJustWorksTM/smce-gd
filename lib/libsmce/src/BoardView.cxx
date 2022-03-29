@@ -1,3 +1,7 @@
+#include <ranges>
+#include <Board.hpp>
+#include <BoardConf.hpp>
+#include "SMCE_gd/BoardDevice.hxx"
 #include "SMCE_gd/BoardView.hxx"
 #include "SMCE_gd/FrameBuffer.hxx"
 #include "SMCE_gd/GpioPin.hxx"
@@ -15,45 +19,35 @@ void BoardView::_bind_methods() {
     bind_method("is_valid", &This::is_valid);
 }
 
-Ref<BoardView> BoardView::from_native(Ref<BoardConfig> board_config, smce::BoardView bv) {
+Ref<BoardView> BoardView::from_native(smce::BoardConfig board_config, smce::BoardView bv) {
     auto gbv = make_ref<This>();
 
     gbv->valid = true;
     gbv->view = bv;
 
-    for (int i = 0; i < board_config->gpio_drivers.size(); ++i) {
-        auto info = static_cast<Ref<BoardConfig::GpioDriverConfig>>(board_config->gpio_drivers[i]);
-        gbv->pins[info->pin] = GpioPin::from_native(info, bv.pins[i]);
+    for (int i = 0; i < board_config.gpio_drivers.size(); ++i) {
+        gbv->pins[board_config.gpio_drivers[i].pin_id] = GpioPin::from_native(bv.pins[i]);
     }
 
-    for (int i = 0; i < board_config->uart_channels.size(); ++i) {
-        auto info = static_cast<Ref<BoardConfig::UartChannelConfig>>(board_config->uart_channels[i]);
-        gbv->uart_channels.append(UartChannel::from_native(info, bv.uart_channels[i]));
+    for (int i = 0; i < board_config.uart_channels.size(); ++i) {
+        gbv->uart_channels.append(UartChannel::from_native(bv.uart_channels[i]));
     }
 
-    for (int i = 0; i < board_config->frame_buffers.size(); ++i) {
-        auto info = static_cast<Ref<BoardConfig::FrameBufferConfig>>(board_config->frame_buffers[i]);
-        gbv->frame_buffers[info->key] = FrameBuffer::from_native(info, bv.frame_buffers[i]);
+    for (int i = 0; i < board_config.frame_buffers.size(); ++i) {
+        gbv->frame_buffers[board_config.frame_buffers[i].key] = FrameBuffer::from_native(bv.frame_buffers[i]);
     }
 
-    for (int i = 0; i < board_config->board_devices.size(); ++i) {
-        // auto info = static_cast<Ref<BoardConfig::BoardDeviceConfig>>(board_config->board_devices[i]);
-        // if (info.is_null()) {
-        //     continue;
-        // }
+    for (const auto& fml : board_config.board_devices) {
 
-        // auto key = String{info->spec->to_native().name.data()};
+        auto devices = Array{};
 
-        // if (gbv->board_devices.has(key))
-        //     continue;
+        auto bdv = smce::BoardDeviceView{bv}[fml.spec.name()];
 
-        // auto devices = Array{};
+        for (std::size_t i = 0; i < bdv.size(); ++i) {
+            devices.push_back(BoardDevice::from_native(bdv[i], fml.spec));
+        }
 
-        // for (size_t i = 0; i < info->amount + 1; ++i) {
-        //     devices.push_back(DynamicBoardDevice::create(info->spec, bv));
-        // }
-
-        // gbv->board_devices[key] = devices;
+        gbv->board_devices[String(std::string{fml.spec.name()}.c_str())] = devices;
     }
 
     return gbv;

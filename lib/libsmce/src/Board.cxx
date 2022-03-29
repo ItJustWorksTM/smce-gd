@@ -27,7 +27,7 @@ Ref<Result> Board::initialize(Ref<ManifestRegistry> registry, Ref<BoardConfig> b
         return Result::err("Failed to prepare board");
 
     auto bv = board->view();
-    m_view = BoardView::from_native(board_config, bv);
+    m_view = BoardView::from_native(native_config, bv);
 
     return Result::ok();
 }

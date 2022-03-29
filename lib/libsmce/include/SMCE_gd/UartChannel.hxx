@@ -17,20 +17,16 @@ class UartChannel : public GdRef<"UartChannel", UartChannel> {
     std::vector<char> read_buf{};
     std::vector<char> write_buf{};
 
-    Ref<BoardConfig::UartChannelConfig> m_info;
-
   public:
     static void _bind_methods();
 
-    static Ref<UartChannel> from_native(Ref<BoardConfig::UartChannelConfig> info, smce::VirtualUart vu);
+    static Ref<UartChannel> from_native(smce::VirtualUart vu);
 
     void poll();
 
     void write(String buf);
 
     String read();
-
-    Ref<BoardConfig::UartChannelConfig> info();
 };
 
 #endif // GODOT_SMCE_UARTSLURPER_HXX
