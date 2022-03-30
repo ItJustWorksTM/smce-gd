@@ -37,7 +37,9 @@ GDNativeBool GDN_EXPORT example_library_init(const GDNativeInterface* p_interfac
                        BoardConfig::SecureDigitalStorageConfig, BoardConfig::UartChannelConfig, Toolchain,
                        ToolchainLogReader, Board, BoardLogReader, BoardView, GpioPin, FrameBuffer,
                        UartChannel, BoardDevice, VirtualDeviceMutex>);
+
     init_obj.register_scene_terminator(+[] {});
+
     return init_obj.init();
 }
 }

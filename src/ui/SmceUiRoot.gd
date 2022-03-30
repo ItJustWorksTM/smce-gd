@@ -1,52 +1,65 @@
 class_name SmceUiRoot
 extends Control
 
-static func smce_ui_root() -> Callable: return func(ctx: Ctx): 
+static func smce_ui_root() -> Callable: return func(c: Ctx): 
 
-    var picking_file = Ui.value(false)
-    var context_open = Ui.value(false)
+    var picking_file = Track.value(false)
+    var context_open = Track.value(false)
     
-    var active_sketch = Ui.value(-1)
+    var active_sketch = Track.value(-1)
     
-    var file_mode = Ui.value(FilePicker.SELECT_FILE)
-    var filters = Ui.value([["Arduino", ["*.ino", "*.pde"]], ["C++", ["*.cpp", "*.hpp", "*.hxx", "*.cxx"]], ["Any", ["*"]]])
+    var file_mode = Track.value(FilePicker.SELECT_FILE)
+    var filters = Track.value([["Arduino", ["*.ino", "*.pde"]], ["C++", ["*.cpp", "*.hpp", "*.hxx", "*.cxx"]], ["Any", ["*"]]])
 
-    ctx \
-    .inherits(MarginContainer) \
-    .child(func(ctx: Ctx): ctx \
-        .inherits(MultiInstance.multi_instance(active_sketch)) \
-        .on("create_sketch", func():
-            picking_file.value = true \
-        ) \
-        .on("open_context", func(): context_open.value = true)
-    ) \
-    .children(Ui.child_if(picking_file, func(ctx): ctx \
-        .inherits(CenterContainer) \
-        .child(func(ctx): ctx \
-            .inherits(FilePicker.filepicker(file_mode, filters)) \
-            .on("completed", func(path: String):
-                picking_file.value = false
-                ctx.get_state(BoardState).value.add_sketch(path) \
-#				sketches.push(make.call(path.get_file()))
-#				active_sketch.value = sketches.size() - 1 \
-            ) \
-            .on("cancelled", func(): picking_file.value = false)
+    c.inherits(MarginContainer)
+    
+    var sketch_state: SketchState = c.use_state(SketchState)
+    var board_state: BoardState = c.use_state(BoardState)
+    
+    c.child(func(c: Ctx):
+        c.inherits(MultiInstance.multi_instance(active_sketch))
+        c.on("create_sketch", func():
+            picking_file.change(true)
         )
-    )) \
-    .children(Ui.child_if(context_open, func(ctx): ctx \
-        .inherits(CenterContainer) \
-        .child(func(ctx):
-            var world_state := ctx.use_state(WorldEnvState) as WorldEnvState 
-            ctx \
-            .inherits(PanelContainer) \
-            .with("minimum_size", Vector2(300,200)) \
-            .child(func(ctx): ctx \
-                .inherits(VBoxContainer) \
-                .children(Ui.for_each_child(world_state.worlds, func(i,v): return func(ctx): ctx \
-                    .inherits(Widgets.button()) \
-                    .with("text", v) \
-                    .on("pressed", func(): world_state.change_world(v.value))
-                )) \
-            ) \
-        ) \
-    )) \
+        c.on("open_context", func(): context_open.change(true))
+    )
+    c.child_opt(Ui.map_child(picking_file, func(v): return func(c: Ctx):
+        if v:
+            c.inherits(CenterContainer)
+            c.child(func(c: Ctx):
+                c.inherits(FilePicker.filepicker(file_mode, filters))
+                c.on("completed", func(path: String):
+                    picking_file.change(false)
+                    var res: Result = sketch_state.add_sketch(path)
+                    
+                    if !res.is_ok():
+                        return
+                    
+                    var bres = board_state.add_board(res.get_value())
+                    
+                    if !bres.is_ok():
+                        return
+                    
+                    print("board id: ", bres.get_value())
+
+                )
+                c.on("cancelled", func(): picking_file.change(false))
+            )
+    ))
+    c.child_opt(Ui.map_child(context_open, func(v): return func(c: Ctx):
+        if v:
+            c.inherits(CenterContainer)
+            c.child(func(c: Ctx):
+                var world_state := c.use_state(WorldEnvState) as WorldEnvState 
+                c.inherits(PanelContainer)
+                c.with("minimum_size", Vector2(300,200))
+                c.child(func(c: Ctx):
+                    c.inherits(VBoxContainer)
+                    c.child_opt(Ui.map_children(world_state.worlds, func(i,v): return func(c: Ctx):
+                        c.inherits(Widgets.button())
+                        c.with("text", v)
+                        c.on("pressed", func(): world_state.change_world(v.value))
+                    ))
+                )
+            )
+    ))

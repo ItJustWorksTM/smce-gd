@@ -4,14 +4,17 @@ extends Node3D
 enum { VEHICLE_ACTIVE, VEHICLE_FROZEN }
 enum { CAMERA_ORBITING, CAMERA_FREE }
 
-var worlds = TrackedVec.new([])
-var current_world = Ui.value(-1)
-var current_world_name = Ui.combine_map([worlds, current_world], func(w, c): return w.index_item(c).k.value if c >= 0 else "")
+var worlds := Track.array([])
+var current_world := Track.value(-1)
+var current_world_name := Track.combine_map(
+    [worlds as Tracked, current_world],
+    func(w, c): return w[c] if c >= 0 else ""
+)
 
-var camera_mode = Ui.value(CAMERA_FREE)
-var camera_following_label = Ui.value(null)
+var camera_mode := Track.value(CAMERA_FREE)
+var camera_following_label := Track.value(null)
 
-var vehicles = TrackedVec.new([{ label = "test.ino#1", state = VEHICLE_FROZEN }])
+var vehicles = Track.array([{ label = "test.ino#1", state = VEHICLE_FROZEN }])
 
 var _camera := FreeCamera.new()
 var _worlds := {
@@ -22,11 +25,11 @@ var _worlds := {
 var _current: Node3D
 
 func follow_vehicle(label) -> void:
-    camera_following_label.value = label
-    camera_mode.value = CAMERA_ORBITING
+    camera_following_label.change(label)
+    camera_mode.change(CAMERA_ORBITING)
 
 func free_camera() -> void:
-    camera_mode.value = CAMERA_FREE
+    camera_mode.change(CAMERA_FREE)
 
 func change_world(world: String) -> void:
     if !(world in _worlds):
@@ -41,8 +44,11 @@ func change_world(world: String) -> void:
     add_child(w)
     _current = w
 
-func _ready() -> void:
+func _init():
     worlds.append_array(_worlds.keys())
+
+func _ready() -> void:
+    
     
     change_world("playground/Playground")
     

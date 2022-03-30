@@ -1,69 +1,65 @@
 class_name Widgets
 
 
-static func item_list(items: TrackedContainer, selected: ObservableMut, item_child: Callable): return func(ctx: Ctx): 
-    var this := ctx.inherits(VBoxContainer).object()
-    this.add_user_signal("selected")
-    this.add_user_signal("activated")
+static func item_list(items: TrackedArrayBase, selected: Tracked, item_child: Callable): return func(c: Ctx): 
+    c.inherits(VBoxContainer)
+    c.with("name", "ItemList")
+    c.with("rect_min_size", Vector2(100,50))
     
-    ctx \
-        .label("ItemList") \
-        .with("rect_min_size", Vector2(100,50)) \
-        .use(items, func(t, i):
-            match t:
-                TrackedContainer.CLEARED:
-                    selected.value = -1
-                TrackedContainer.ERASED:
-                    if i == items.size():
-                        selected.value = -1
-                TrackedContainer.INSERTED:
-                    if i == selected.value: # TODO: untested :O
-                        selected.value += 1
-            pass \
-        ) \
-        .children(Ui.map_each_child(items, func(i, item):
-            return func(ctx: Ctx):
-                ctx \
-                    .inherits(ItemButton) \
-                    .with("mouse_default_cursor_shape", Control.CURSOR_POINTING_HAND) \
-                    .with("active", Ui.map(Ui.combined([selected, i]), func(args): return args[0] == args[1])) \
-                    .on("selected", func():
-                        this.emit_signal("selected", i.value)
-                        selected.value = i.value \
-                    ) \
-                    .use(item, func(item): pass) \
-                    .on("activated", func():
-                        this.emit_signal("activated", i.value) \
-                    ) \
-                    .child(item_child.call(item, i)) \
-        ))
+    c.on(items.changed, func(w,h):
+        match h:
+            Tracked.SET:
+                selected.change.bind(-1)
+            Tracked.REMOVED:
+                if h >= items.size(): selected.change(-1)
+            Tracked.INSERTED:
+                if h == selected.value(): selected.change(selected.value() +1)
+    )
 
-static func label(text): return func(ctx: Ctx):
-    ctx \
-        .inherits(Label) \
-        .with("text", text)
-
-static func button(): return func(ctx: Ctx):
-    ctx \
-        .inherits(Button) \
-        # TODO: implement proxy to intercept property setter
-        .with("mouse_default_cursor_shape", Control.CURSOR_POINTING_HAND)
-
-static func line_edit(text: ObservableValue): return func(ctx: Ctx):
-    ctx \
-        .inherits(LineEdit) \
-        .with("text", text) \
-        .on("text_changed", func(new_text):
-            text.value = new_text
-            ctx.object().caret_column = text.value.length() \
+    
+    var on_selected := c.user_signal("selected")
+    var on_activated := c.user_signal("activated")
+    
+    c.child_opt(Ui.map_children(items, func(i, item): return func(c: Ctx):
+        c.inherits(ItemButton)
+        c.with("mouse_default_cursor_shape", Control.CURSOR_POINTING_HAND)
+        c.with("active", Track.combine_map(
+                [selected as Tracked, i as Tracked],
+                func(s, i): return s == i
+            )
         )
-
-static func window(open: ObservableMut): return func(ctx: Ctx):
-    ctx \
-        .inherits(Window) \
-        .with("visible", false) \
-        .on("tree_entered", func(): ctx.object().popup_centered()) \
-        .on("close_requested", func():
-            print("close??")
-            open.value = false \
+        c.on("selected", func():
+            on_selected.emit(i.value())
+            selected.change(i.value()) \
         )
+        c.on("activated", func():
+            on_activated.emit(i.value())
+        )
+#        print("childing")
+        c.child(item_child.call(i, item))
+    ))
+
+static func label(text): return func(c: Ctx):
+    c.inherits(Label)
+    c.with("text", text)
+
+static func button(): return func(c: Ctx):
+    c.inherits(Button)
+    c.with("mouse_default_cursor_shape", Control.CURSOR_POINTING_HAND)
+
+static func line_edit(text: Tracked): return func(c: Ctx):
+    c.inherits(LineEdit)
+    c.with("text", text)
+    c.on("text_changed", func(new_text):
+        text.change(new_text)
+        c.node().caret_column = text.value().length()
+    )
+
+static func window(open: Tracked): return func(c: Ctx):
+    c.inherits(Window)
+    c.with("visible", false)
+    c.on("tree_entered", func(): c.node().popup_centered())
+    c.on("close_requested", func():
+        print("close??")
+        open.change(false)
+    )

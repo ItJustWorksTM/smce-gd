@@ -9,7 +9,7 @@ static func user_config(): return {
             "SmartcarGyroPlugin": {
                 defaults = 0,
                 requires_devices = ["SmartcarGyro"],
-                uri = "file://./the/place/to/be"
+                uri = "file:///home/ruthgerd/Documents/demo/plugins/TotallyOOP"
             },
             "Smartcar_shield": {
                 defaults = 0,

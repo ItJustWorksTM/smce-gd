@@ -21,9 +21,11 @@ static func find(storage: Array, cb: Callable) -> Variant:
             return v
     return null
 
-static func make_signal(obj: Object, name: String) -> Signal:
-    obj.add_user_signal(name)
-    return Signal(obj, name)
+static func invert(v: bool): return !v
+
+#static func make_signal(obj: Object, name: String) -> Signal:
+#    obj.add_user_signal(name)
+#    return Signal(obj, name)
 
 
 static func _gen_vararg(count: int = 32):
@@ -33,7 +35,7 @@ static func _gen_vararg(count: int = 32):
         arg_string += "_%d = Dummy" % v
         if v < count - 1:
             arg_string += ", "
-        
+
         convert_string += """
         if !(_%d is Object && _%d == Dummy):
             ret.append(_%d)
@@ -41,7 +43,7 @@ static func _gen_vararg(count: int = 32):
             var cb = ret.pop_back()
             cb.call(ret)
             return""" % [v,v, v]
-    
+
     var script = GDScript.new()
     script.source_code = """
 class Dummy:
@@ -53,7 +55,7 @@ static func make_vararg():
         %s
     """ % [arg_string, convert_string]
     script.reload()
-    
+
     return script
 
 class _Ref:
@@ -64,38 +66,25 @@ static func squash(cb: Callable):
     if !sc.has_meta("gen"):
         sc.set_meta("gen", _gen_vararg())
     var obj = sc.get_meta("gen")
-    
+
     return obj.make_vararg().bind(cb)
 
 static func spread(cb: Callable) -> Callable:
     return func(args: Array):
-        args.reverse()
-        for arg in args:
-            cb = cb.bind(arg)
+        for i in args.size():
+            cb = cb.bind(args[args.size() - i - 1])
         return cb.call()
 
-class _Bridge:
-    var value
-
 static func connect_with_bail(sig: Signal, cb: Callable) -> void:
-    var bridge = _Bridge.new()
+    var bridge = RefCountedValue.new()
     var cb2 = cb.bind(func():
         sig.disconnect(bridge.value)
     )
-    
+
     bridge.value = cb2
-    
+
     assert(sig.connect(cb2) == OK)
 
-static func connect_lifetime(obj: Object, sig: Signal, cb: Callable) -> void:
-    var stupid = obj
-    Fn.connect_with_bail(sig, Fn.squash(func(args: Array):
-        var bail = args.pop_back()
-        if is_instance_valid(stupid):
-            Fn.spread(cb).call(args)
-        else:
-            bail.call()
-    ))
 
 static func unreachable() -> void:
     assert(false, "unreachable")

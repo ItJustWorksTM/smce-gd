@@ -26,6 +26,7 @@ class ManifestRegistry : public GdRef<"ManifestRegistry", ManifestRegistry> {
     void add_plugin(Ref<PluginManifest> plugin) { plugins[plugin->plugin_name] = plugin; }
 
     void add_board_device(Ref<BoardDeviceSpecification> spec) { board_devices[spec->name] = spec; }
+
     Ref<BoardDeviceSpecification> get_board_device(String name) const {
         return board_devices.get(name, Ref<BoardDeviceSpecification>{});
     }

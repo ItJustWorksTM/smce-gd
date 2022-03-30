@@ -1,5 +1,26 @@
 class_name Fs
 
+static func list_directory_items(path: String, filters: Array = ["*"]):
+    var ret = [[], []]
+    var dir = Directory.new()
+    if dir.open(path) != OK:
+        return ret
+    dir.list_dir_begin()
+    var file_name: String = dir.get_next()
+    while file_name != "":
+        if dir.current_is_dir():
+            ret[1].append(file_name)
+        else:
+            var matched = false
+            for pattern in filters:
+                if file_name.matchn(pattern):
+                    matched = true
+                    break
+            if matched:
+                ret[0].append(file_name)
+        file_name = dir.get_next()
+    return ret
+
 static func list_files(path: String, omit_base: bool = false, include_files: bool = true, include_dirs: bool = true, filters: Array = ["*"]) -> Array:
     var ret := []
     var dir = Directory.new()

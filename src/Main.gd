@@ -1,10 +1,23 @@
-extends Node
 class_name Main
+extends Node
+
+#
+#static func line_edit(value: Observable): return func(c: Ctx):
+#    var this = c.inherits(LineEdit).object() as LineEdit
+#    var input = c.user_signal("input")
+#
+#    c.on("text_changed", func(t): input.emit(t))
+#    c.use(value, func(v):
+#        this.text = v
+#        this.caret_column = v.length()
+#    )
+#
 
 func _ready():
-    var version := Ui.dedup_value("???")
-    version.changed.connect(func(): DisplayServer.window_set_title("SMCE-gd %s" % version.value))
-    version.value = "2.0.0-dev"
+    
+    var version := Track.value_dedup("???")
+    version.changed.connect(func(w,h): DisplayServer.window_set_title("SMCE-gd %s" % version.value))
+    version.change("2.0.0-dev")
 
 #	var resource_directory := Ui.dedup_value("")
 #	resource_directory.changed.connect(func():
@@ -24,55 +37,56 @@ func _ready():
 #
     
     var visualizers = {
-        GY50: func(gy: GY50): return func(ctx: Ctx): 
-            ctx \
-                .inherits(Widgets.label(Ui.poll(gy, "rotation")))
+        GY50: func(gy: GY50): return func(c: Ctx): c.inherits(Widgets.label(Track.poll(gy, "rotation")))
     }
 
-    var root = Ui.make_ui_root(func(ctx: Ctx): ctx \
-        .inherits(MarginContainer) \
-        .child(func(ctx): 
-            ctx.inherits(BoardState)
-            ctx.register_state(BoardState, ctx.object()) \
-        ) \
-        .child(func(ctx):
-            ctx.inherits(UserConfigState)
-            ctx.object().set_default_config(Defaults.user_config())
-            ctx.register_state(UserConfigState, ctx.object()) \
-        ) \
-        .child(func(ctx):
-            ctx.inherits(HardwareState, [ctx.use_state(BoardState), ctx.use_state(UserConfigState)])
-            ctx.register_state(HardwareState, ctx.object()) \
-        ) \
-        .child(func(ctx): 
-            ctx.inherits(WorldEnvState)
-            ctx.register_state(WorldEnvState, ctx.object())
-            var sketch_state: BoardState = ctx.use_state(BoardState)
-            var hardware_state: HardwareState = ctx.use_state(HardwareState)
-            var world_state: WorldEnvState = ctx.object()
+    var root = CtxExt.create(func(c: Ctx):
+        c.inherits(MarginContainer)
+        c.child(func(c: Ctx):
+            c.inherits(UserConfigState)
+            c.node().set_default_config(Defaults.user_config())
+            c.register_state(UserConfigState, c.node())
+        )
+        c.child(func(c: Ctx): 
+            c.inherits(SketchState, [c.use_state(UserConfigState)])
+            c.register_state(SketchState, c.node())
+        )
+        c.child(func(c: Ctx): 
+            c.inherits(BoardState, [c.use_state(SketchState)])
+            c.register_state(BoardState, c.node())
+        )
+        c.child(func(c: Ctx):
+            c.inherits(HardwareState, [c.use_state(BoardState), c.use_state(UserConfigState)])
+            c.register_state(HardwareState, c.node())
+        )
+        c.child(func(c: Ctx): 
+            c.inherits(WorldEnvState)
+            c.register_state(WorldEnvState, c.node())
+            var sketch_state: BoardState = c.use_state(BoardState)
+            var hardware_state: HardwareState = c.use_state(HardwareState)
+            var world_state: WorldEnvState = c.node()
             
             print(hardware_state.hardware.size())
-#			var gui_uart = TrackedMapped.new(hardware_state.hardware, func(vk):
-#				var ret = vk.by_label.get("Gui Uart")
-#				if ret != null:
-#					print("something not null!")
-#				return ret
-#			)
-#
-#
-#			gui_uart.changed.connect(func():
-#				print("gui_uart changed: ", gui_uart)
-#				gui_uart.for_each_item(func(vk):
-#					if vk.v.value != null:
-#						pass
-#				)
-#			)
+        )
+        c.child(func(c: Ctx):
+            c.inherits(SmceUiRoot.smce_ui_root())
+        )
+        c.child(func(c: Ctx):
+            c.inherits(Node)
+            var print_change = func(prefix, v):
+                v.changed.connect(func(_w, _h): print(prefix,": ", v))
+                print(prefix,": ",  v)
+                
+            print_change.call("Boards", c.use_state(BoardState).boards)
+            print_change.call("Sketches", c.use_state(SketchState).sketches) 
+            var hw = c.use_state(HardwareState)
+            print_change.call("Hardware", hw.hardware)
+            print_change.call("Registry", hw.register)
             
-            pass \
-        ) \
-        .child(func(ctx): ctx \
-            .inherits(SmceUiRoot.smce_ui_root()) \
-        ) \
+            print(Reflect.stringify_struct("WorldEnvState", c.use_state(WorldEnvState), Node3D))
+            
+            pass
+        )
     )
     
     $Ui.add_child(root)

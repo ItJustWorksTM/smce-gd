@@ -1,94 +1,79 @@
 class_name Ui
-extends Control
 
-static func make_ui_root(root: Callable) -> Node:
-    var ctx = Ctx.new(null)
-    ctx.recreate = root
-    root.call(ctx)
-    return ctx.current
+static func map_child(tracked: Tracked, widget_fn: Callable): return func(placeholder: Ctx):
+    var hook: Node = placeholder.node()
+    var parent: Node = hook.get_parent()
+    
+    var previous := RefCountedValue.new()
+    var reset = func():
+        if is_instance_valid(previous.value):
+            parent.remove_child(previous.value)
+            previous.value.queue_free()
 
-static func value(val: Variant) -> ObservableValue:
-    return ObservableValue.new(val)
+        var widget: Callable = widget_fn.call(tracked.value())
+        var ctx := Ctx.new(widget, placeholder._shared_state)
+        
+        if !ctx.is_initialized():
+            ctx.free()
+            return
+        
+        hook.add_sibling(ctx.node())
+        previous.value = ctx.node()
+    
+    placeholder.on(tracked.changed, func(_h,_w): reset.call())
+    
+    reset.call()
 
-static func dedup(obs: Observable) -> Dedup:
-    return Dedup.new(obs)
-
-static func dedup_value(val: Variant) -> DedupMut:
-    return DedupMut.new(value(val))
-
-static func map(obs: Observable, fun: Callable) -> Mapped:
-    return Mapped.new(obs, fun)
-
-static func map_dedup(obs: Observable, fun: Callable) -> Dedup:
-    return dedup(map(obs, fun))
-
-static func combined(obs: Array) -> Combined:
-    return Combined.new(obs)
-
-static func combine_map(obss: Array, fun: Callable) -> Mapped:
-    return map(combined(obss), Fn.spread(fun))
-
-static func tween(obs: Observable, time: float, trans = Tween.TRANS_LINEAR) -> Tweened:
-    return Tweened.new(obs, time, trans)
-
-static func invert(obs: Observable) -> Mapped:
-    return map(obs, func(v): return !v)
-
-static func inner(obs: Observable) -> Inner:
-    return Inner.new(obs)
-
-static func lens_mut(obs: ObservableMut, prop: String) -> LensMut:
-    return LensMut.new(obs, prop)
-
-static func lens(obs: Observable, prop: String) -> Lens:
-    return Lens.new(obs, prop)
-
-static func lens_dedup(ob: Observable, prop: String) -> Dedup:
-    return dedup(lens(ob, prop))
-
-static func poll(obj: Object, prop: String) -> Polled:
-    return Polled.new(obj, prop)
-
-static func tracked_map(tr: Tracked, cb: Callable) -> TrackedMapped:
-    return TrackedMapped.new(tr, cb)
-
-static func map_each_child(f: TrackedContainer, cb: Callable) -> Callable:
-    return func(this: Ctx, manager: Node) -> void:
-        Fn.connect_lifetime(manager, f.item_changed, func(t, i):
-            if !is_instance_valid(manager) || manager.is_queued_for_deletion() || t == TrackedContainer.MODIFIED: return
-            var parent = manager.get_parent()
-            var child_n = parent.get_children().find(manager)
-            match t:
-                TrackedContainer.INSERTED:
-                    var pos = parent.get_child(child_n + i)
-                    var ctx = Ctx.new(null)
-                    ctx._state = this._state
-                    var kv = f.index_item(i)
-                    ctx.recreate = cb.call(kv.k, kv.v)
-                    ctx.recreate.call(ctx)
-                    pos.add_sibling(ctx.current)
-                TrackedContainer.ERASED:
-                    parent.remove_child(parent.get_child(child_n + i + 1))
-                TrackedContainer.CLEARED:
-                    for j in i:
-                        parent.remove_child(parent.get_child(child_n + i - j))
+static func map_children(arr: TrackedArrayBase, widget_fn: Callable): return func(placeholder: Ctx):
+    var hook: Node = placeholder.node()
+    var parent: Node = hook.get_parent()
+    
+    var make_new = func(k):
+        var container_index = Track.container_index(arr, k)
+        var value = Track.map(
+            container_index,
+            func(v): 
+                var ret = arr.value_at(v) if v >= 0 else null
+                if ret == null:
+                    pass
+                return ret
         )
         
-        f.for_each_item(func(vi): this.child(cb.call(vi.k, vi.v)))
-
-static func map_child(ob: Observable, cb: Callable) -> Callable:
-    return func(this: Ctx, manager: Node) -> void:
-        Fn.connect_lifetime(manager, ob.changed, func():
-            var parent = manager.get_parent()
-            var child_n = parent.get_children().find(manager)
-            var ct = parent.get_child(child_n + 1).get_meta("ctx")
-            ct.recreate = cb.call(ob.value)
-            Ctx.recr(ct)
-        )
-        this.child(cb.call(ob.value))
-
-static func child_if(ob: Observable, cb: Callable) -> Callable:
-    return Ui.map_child(ob, func(v): return func(ctx):
-        if v: ctx.inherits(cb)
-        else: ctx.inherits(Control).with("visible", false)
+        var ret := Ctx.new(widget_fn.call(container_index, value), placeholder._shared_state)
+        
+        if !ret.is_initialized():
+            ret.free()
+            assert(false, "Each item needs to map to a valid child")
+        
+        return ret
+    
+    var remove_child = func(at):
+        var to_delete = parent.get_child(at)
+        parent.remove_child(to_delete)
+        if is_instance_valid(to_delete):
+            to_delete.queue_free()
+    
+    var reset = func():
+        for k in arr.size():
+            var node = make_new.call(arr.size() - k - 1)
+            hook.add_sibling(node.node(), true)
+    
+    reset.call()
+    
+    placeholder.on(arr.changed, func(what, how):
+        var at = how
+        var base_index: int = hook.get_index()
+        match what:
+            Tracked.INSERTED:
+                var node = make_new.call(at)
+                assert(!node.assert_init())
+                parent.get_child(base_index + at).add_sibling(node.node(), true)
+            Tracked.REMOVED:
+                remove_child.call(base_index + at + 1)
+            Tracked.SET:
+                for c in how:
+                    remove_child.call(base_index + 1)
+                reset.call()
     )
+    
+

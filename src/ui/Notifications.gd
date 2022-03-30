@@ -1,45 +1,46 @@
 class_name Notifications
 extends Control
 
-static func notifications() -> Callable: return func(ctx: Ctx):
+static func notifications() -> Callable: return func(c: Ctx):
     
     
     
     pass
 
-static func notif(content: Callable, duration) -> Callable: return func(ctx: Ctx):
-    var init = Ui.value(100.0)
-    var doom = Ui.tween(init, duration.value)
-    var modul = Ui.tween(Ui.map_dedup(doom, func(i): return 0.0 if i == 0.0 else 1.0), 1.0)
-    var vis = Ui.map_dedup(modul, func(i): return i != 0)
+static func notif(content: Callable, duration: Tracked) -> Callable: return func(c: Ctx):
+    var init = Track.value(100.0)
+    var doom = Track.tween(init, duration.value())
+    var modul = Track.tween(Track.map_dedup(doom, func(i): return 0.0 if i == 0.0 else 1.0), 1.0)
+    var vis = Track.map_dedup(modul, func(i): return i != 0)
     
-    var prox = Ui.value(Vector2(256, 70))
-    var siz = Ui.tween(prox, 0.1)
+    var prox = Track.value(Vector2(256, 70))
+    var siz = Track.tween(prox, 0.1)
     
-    
-    ctx \
-        .inherits(MarginContainer) \
-        .with("minimum_size", siz) \
-        .use(siz, func(): print("siz: ", siz)) \
-        .with("visible", Ui.map_dedup(siz, func(s): return s.y != 0)) \
-        .child(func(ctx): ctx \
-            .inherits(PanelContainer) \
-            .with("modulate:a", modul) \
-            .with("visible", vis) \
-            .on("tree_entered", func(): init.value = 0.0) \
-            .use(vis, func():
-                if !vis.value:
-                    ctx.object().minimum_size = ctx.object().size
-                    prox.value.y = 0 \
-            ) \
-            .child(func(ctx: Ctx): ctx \
-                .inherits(VBoxContainer) \
-                .child(content) \
-                .child(func(ctx): ctx \
-                    .inherits(ProgressBar) \
-                    .with("minimum_size", Vector2(0, 4)) \
-                    .with("percent_visible", false) \
-                    .with("value", doom)
+    c.inherits(MarginContainer)
+    c.with("minimum_size", siz)
+    c.use(siz, func(): print("siz: ", siz))
+    c.with("visible", Track.map_dedup(siz, func(s): return s.y != 0))
+    c.child(func(c: Ctx):
+        c.inherits(PanelContainer)
+        c.with("modulate:a", modul)
+        c.with("visible", vis)
+        c.on("tree_entered", func(): init.change(0.0))
+        c.use(vis, func():
+            if !vis.value():
+                c.node().minimum_size = c.node().size
+                prox.mutate(func(v):
+                    v.y = 0
+                    return v
                 )
+        )
+        c.child(func(c: Ctx):
+            c.inherits(VBoxContainer)
+            c.child(content)
+            c.child(func(c: Ctx):
+                c.inherits(ProgressBar)
+                c.with("minimum_size", Vector2(0, 4))
+                c.with("percent_visible", false)
+                c.with("value", doom)
             )
-        ) \
+        )
+    )

@@ -1,60 +1,61 @@
 class_name LogWindow
 extends Control
 
-static func log_window(build_log: Observable, board_log: Observable): return func(ctx):
+static func log_window(build_log: Tracked, board_log: Tracked): return func(c: Ctx):
     
-    var mode = Ui.dedup_value(0)
+    var mode := Track.value_dedup(0)
     
-    var text = Ui.combine_map([build_log, board_log, mode], func(a,b,m):
+    var text := Track.combine_map([build_log, board_log, mode], func(a,b,m):
         match m:
             0: return a
             1: return b
     )
     
-    var btn = func(no): return func(ctx): ctx \
-        .inherits(Widgets.button()) \
-        .with("text", "Build") \
-        .with("minimum_size", Vector2(128, 0)) \
-        .with("toggle_mode", true) \
-        .with("theme_type_variation", "ButtonClear") \
-        .use_now(mode, func():
-            ctx.object().set_pressed_no_signal(no == mode.value) \
-        ) \
-        .on("pressed", func():
-            mode.value = no \
+    var btn = func(no): return func(c: Ctx):
+        c.inherits(Widgets.button())
+        c.with("text", "Build")
+        c.with("minimum_size", Vector2(128, 0))
+        c.with("toggle_mode", true)
+        c.with("theme_type_variation", "ButtonClear")
+        c.on(mode.changed, func(w,h):
+            c.node().set_pressed_no_signal(no == mode.value())
+        )
+        c.node().set_pressed_no_signal(no == mode.value())
+        c.on("pressed", func():
+            mode.change(no)
         )
     
-    ctx \
-    .inherits(VBoxContainer) \
-    .child(func(ctx): ctx \
-        .inherits(MarginContainer) \
-        .child(func(ctx): ctx \
-            .inherits(HBoxContainer) \
-            .with("alignment", HBoxContainer.ALIGNMENT_CENTER) \
-            .child(func(ctx): ctx \
-                .inherits(btn.call(0)) \
-                .with("text", "Build")
-            ) \
-            .child(func(ctx): ctx \
-                .inherits(btn.call(1)) \
-                .with("text", "Board")
+    c
+    c.inherits(VBoxContainer)
+    c.child(func(c: Ctx):
+        c.inherits(MarginContainer)
+        c.child(func(c: Ctx):
+            c.inherits(HBoxContainer)
+            c.with("alignment", HBoxContainer.ALIGNMENT_CENTER)
+            c.child(func(c: Ctx):
+                c.inherits(btn.call(0))
+                c.with("text", "Build")
             )
-        ) \
-        .child(func(ctx): ctx \
-            .inherits(Widgets.button()) \
-            .with("text", "To Clipboard") \
-            .with("size_flags_horizontal", Control.SIZE_SHRINK_BEGIN) \
-            .with("theme_type_variation", "ButtonClear") \
-            .on("pressed", func(): DisplayServer.clipboard_set(text.value))
-        ) \
-    ) \
-    .child(func(ctx): ctx \
-        .inherits(PanelContainer) \
-        .with("size_flags_vertical", SIZE_EXPAND_FILL) \
-        .child(func(ctx): ctx \
-            .inherits(RichTextLabel) \
-            .with("scroll_following", true) \
-            .with("selection_enabled", true) \
-            .with("text", text)
+            c.child(func(c: Ctx):
+                c.inherits(btn.call(1))
+                c.with("text", "Board")
+            )
+        )
+        c.child(func(c: Ctx):
+            c.inherits(Widgets.button())
+            c.with("text", "To Clipboard")
+            c.with("size_flags_horizontal", Control.SIZE_SHRINK_BEGIN)
+            c.with("theme_type_variation", "ButtonClear")
+            c.on("pressed", func(): DisplayServer.clipboard_set(text.value()))
+        )
+    )
+    c.child(func(c: Ctx):
+        c.inherits(PanelContainer)
+        c.with("size_flags_vertical", SIZE_EXPAND_FILL)
+        c.child(func(c: Ctx):
+            c.inherits(RichTextLabel)
+            c.with("scroll_following", true)
+            c.with("selection_enabled", true)
+            c.with("text", text)
         )
     )

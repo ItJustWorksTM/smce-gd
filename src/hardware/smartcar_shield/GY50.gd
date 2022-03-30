@@ -23,11 +23,11 @@ var rotation: float:
     get: return _device.get("rotation") if _device else 0.0
     set(r): _device.set("rotation", clamp(r, 0.0, 360.0))
 
-@onready
-var _poll = Polled.new(self, "rotation")
-
-func _ready():
-    _poll.changed.connect(func(): print("rotation: ", _poll.value))
+#@onready
+#var _poll = Polled.new(self, "rotation")
+#
+#func _ready():
+#    _poll.changed.connect(func(): print("rotation: ", _poll.value))
 
 func _to_string():
     return Reflect.stringify_struct("GY50", self, Node)
