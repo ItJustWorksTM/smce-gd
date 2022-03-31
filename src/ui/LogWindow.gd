@@ -3,9 +3,9 @@ extends Control
 
 static func log_window(build_log: Tracked, board_log: Tracked): return func(c: Ctx):
     
-    var mode := Track.value_dedup(0)
+    var mode := Cx.value_dedup(0)
     
-    var text := Track.combine_map([build_log, board_log, mode], func(a,b,m):
+    var text := Cx.combine_map([build_log, board_log, mode], func(a,b,m):
         match m:
             0: return a
             1: return b

@@ -10,7 +10,7 @@ func _init(ob: Tracked, speed: float, trans: Tween.TransitionType = 0) -> void:
     self._tracked = ob
     self._speed = speed
     self._trans = trans
-    self._value = ob.value
+    self._value = ob.value()
     
     ob.changed.connect(self._update)
     
@@ -20,13 +20,13 @@ func _update(w,h):
     if is_instance_valid(_tween):
         _tween.stop()
         _tween = null
-    elif self.value == self._tracked.value:
+    elif self.value() == self._tracked.value():
         return
     
     var tree := Engine.get_main_loop() as SceneTree
     assert(tree)
     
-    var new_target = self._tracked.value
+    var new_target = self._tracked.value()
 
     _tween = tree.create_tween()
     _tween.tween_property(self, "_value", new_target, self._speed)

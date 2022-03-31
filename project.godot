@@ -15,6 +15,16 @@ _global_script_classes=[{
 "path": "res://lib/ui4/src/widgets/BetterOptionButton.gd"
 }, {
 "base": "Node",
+"class": &"BoardImpl",
+"language": &"GDScript",
+"path": "res://src/state/BoardImpl.gd"
+}, {
+"base": "Node",
+"class": &"BoardPoller",
+"language": &"GDScript",
+"path": "res://lib/libsmce/src/BoardPoller.gd"
+}, {
+"base": "Node",
 "class": &"BoardState",
 "language": &"GDScript",
 "path": "res://src/state/BoardState.gd"
@@ -33,6 +43,11 @@ _global_script_classes=[{
 "class": &"CtxExt",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/CtxExt.gd"
+}, {
+"base": "RefCounted",
+"class": &"Cx",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/tracked/Track.gd"
 }, {
 "base": "RefCounted",
 "class": &"Defaults",
@@ -80,6 +95,11 @@ _global_script_classes=[{
 "path": "res://src/hardware/HardwareBase.gd"
 }, {
 "base": "Node",
+"class": &"HardwareImpl",
+"language": &"GDScript",
+"path": "res://src/state/HardwareImpl.gd"
+}, {
+"base": "Object",
 "class": &"HardwareState",
 "language": &"GDScript",
 "path": "res://src/state/HardwareState.gd"
@@ -180,11 +200,6 @@ _global_script_classes=[{
 "path": "res://src/TestClass.gd"
 }, {
 "base": "RefCounted",
-"class": &"Track",
-"language": &"GDScript",
-"path": "res://lib/ui4/src/tracked/Track.gd"
-}, {
-"base": "RefCounted",
 "class": &"Tracked",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/tracked/Tracked.gd"
@@ -259,12 +274,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/hardware/misc/UartPuller.gd"
 }, {
-"base": "RefCounted",
-"class": &"Ui",
-"language": &"GDScript",
-"path": "res://lib/ui4/src/Ui.gd"
-}, {
-"base": "Node",
+"base": "Object",
 "class": &"UserConfigState",
 "language": &"GDScript",
 "path": "res://src/state/UserConfigState.gd"
@@ -274,22 +284,35 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/VehicleConfig.gd"
 }, {
+"base": "Node",
+"class": &"VehicleState",
+"language": &"GDScript",
+"path": "res://src/state/VehicleState.gd"
+}, {
 "base": "RefCounted",
 "class": &"Widgets",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/widgets/Widgets.gd"
 }, {
 "base": "Node3D",
+"class": &"WorldEnv",
+"language": &"GDScript",
+"path": "res://src/state/WorldEnv.gd"
+}, {
+"base": "Object",
 "class": &"WorldEnvState",
 "language": &"GDScript",
 "path": "res://src/state/WorldEnvState.gd"
 }]
 _global_script_class_icons={
 "BetterOptionButton": "",
+"BoardImpl": "",
+"BoardPoller": "",
 "BoardState": "",
 "BrushedMotor": "",
 "Ctx": "",
 "CtxExt": "",
+"Cx": "",
 "Defaults": "",
 "DigitalFS": "",
 "FilePicker": "",
@@ -299,6 +322,7 @@ _global_script_class_icons={
 "GP2": "",
 "GY50": "",
 "HardwareBase": "",
+"HardwareImpl": "",
 "HardwareState": "",
 "InstanceControl": "",
 "InstanceList": "",
@@ -319,7 +343,6 @@ _global_script_class_icons={
 "SmceUiRoot": "",
 "Task": "",
 "TestClass": "",
-"Track": "",
 "Tracked": "",
 "TrackedArray": "",
 "TrackedArrayBase": "",
@@ -335,10 +358,11 @@ _global_script_class_icons={
 "TrackedTween": "",
 "TrackedValue": "",
 "UartPuller": "",
-"Ui": "",
 "UserConfigState": "",
 "VehicleConfig": "",
+"VehicleState": "",
 "Widgets": "",
+"WorldEnv": "",
 "WorldEnvState": ""
 }
 

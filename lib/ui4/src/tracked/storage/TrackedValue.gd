@@ -19,7 +19,7 @@ func _init(value: Variant):
 func value(): return self._value
 
 func change(v):
-    assert(typeof(v) == self.type(), "type mismatch")
+#    assert(typeof(v) == self.type() || v == null, "type mismatch")
     self._value = v
 
 func _get_class(): return "TrackedValue"

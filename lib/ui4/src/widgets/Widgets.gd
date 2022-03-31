@@ -20,10 +20,10 @@ static func item_list(items: TrackedArrayBase, selected: Tracked, item_child: Ca
     var on_selected := c.user_signal("selected")
     var on_activated := c.user_signal("activated")
     
-    c.child_opt(Ui.map_children(items, func(i, item): return func(c: Ctx):
+    c.child_opt(Cx.map_children(items, func(i, item): return func(c: Ctx):
         c.inherits(ItemButton)
         c.with("mouse_default_cursor_shape", Control.CURSOR_POINTING_HAND)
-        c.with("active", Track.combine_map(
+        c.with("active", Cx.combine_map(
                 [selected as Tracked, i as Tracked],
                 func(s, i): return s == i
             )

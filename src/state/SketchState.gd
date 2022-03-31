@@ -3,7 +3,13 @@ extends Node
 
 enum { BUILD_PENDING, BUILD_SUCCEEDED, BUILD_FAILED, BUILD_UNKNOWN }
 
-var sketches := Track.array([])
+class StateObj:
+    var sketch: Sketch
+    var registry: ManifestRegistry
+    var build_log: String = ""
+    var build_state = BUILD_UNKNOWN
+
+var sketches := Cx.array([])
 
 var _user_config: UserConfigState
 
@@ -12,7 +18,7 @@ func _init(user_config: UserConfigState):
     
 func add_sketch(path: String):
     
-    var config = self._user_config.get_config_for(path, "sketch")
+    var config = self._user_config.get_config_for.call(path, "sketch")
     # TODO: ^^ observable?
     
     var plugin_defs = config["plugin_defs"]
@@ -41,12 +47,11 @@ func add_sketch(path: String):
     
     manifest.add_board_device(GY50.smartcar_gyroscope())
     
-    var state_obj = {
-        sketch = sketch,
-        registry = manifest,
-        build_log = "",
-        build_state = BUILD_UNKNOWN
-    }
+    var state_obj = StateObj.new()
+    state_obj.sketch = sketch
+    state_obj.registry = manifest
+    state_obj.build_log = ""
+    state_obj.build_state = BUILD_UNKNOWN
     sketches.push(state_obj)
     
     # might have changed since the announce LMAO

@@ -2,11 +2,9 @@ class_name SerialWindow
 extends Control
 
 
-static func serial_window(in_buffer: Tracked) -> Callable: return func(c: Ctx):
+static func serial_window(in_buffer: Tracked, out_buffer: Tracked) -> Callable: return func(c: Ctx):
     c.inherits(VBoxContainer)
 
-    var text_input = Track.value("")
-    
     var write = c.user_signal("write")
 
     c.child(func(c: Ctx):
@@ -21,31 +19,14 @@ static func serial_window(in_buffer: Tracked) -> Callable: return func(c: Ctx):
     c.child(func(c: Ctx):
         c.inherits(HBoxContainer)
         c.child(func(c: Ctx):
-            c.inherits(Label)
-            c.with("text", "Queued: ")
-        )
-        c.child(func(c: Ctx):
-            c.inherits(Label)
-            c.with("text", "too hard")
-        )
-    )
-    c.child(func(c: Ctx):
-        c.inherits(HBoxContainer)
-        c.child(func(c: Ctx):
-            c.inherits(Widgets.line_edit(text_input))
+            c.inherits(Widgets.line_edit(out_buffer))
             c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
         )
         c.child(func(c: Ctx):
             c.inherits(Widgets.button())
             c.with("text", "Submit")
-            c.with("disabled", Track.map(text_input, func(input): return input.length() == 0))
+            c.with("disabled", Cx.map(out_buffer, func(input): return input.length() == 0))
             c.with("theme_type_variation", "ButtonPrimary")
-            c.on("pressed", func():
-                var send = text_input.value
-                text_input.value = ""
-                write.emit(send)
-            )
+            c.on("pressed", func(): write.emit())
         )
     )
-
-    pass

@@ -1,66 +1,48 @@
 class_name InstanceControl
 extends Control
 
-static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
+static func instance_control(
+        board: Tracked, sketch: Tracked, uart_in: Tracked, uart_out: Tracked
+    ) -> Callable: return func(c: Ctx):
     
-    var active_attachment = Track.value(-1)
-    var log_window_open = Track.value(false)
+    var active_attachment = Cx.value(-1)
+    var log_window_open = Cx.value(false)
     
-    # TODO: make real..
-#
-#    var hardware_state: HardwareState = c.use_state(HardwareState)
-#
-#    var uart_puller = Ui.combine_map([hardware_state.hardware, board_id], func(hardware, id):
-#        var board_hardware = hardware.find_item(func(vk): return vk.v.value.id == id)
-#        if board_hardware != null:
-#            return board_hardware.v.value.by_label.get("Gui Uart")
-#    )
-#
-#    var uart_in = Ui.inner(Ui.map(uart_puller, func(hw):
-#        var ret = Ui.value("")
-#        if hw: Fn.connect_lifetime(hw, hw.read, func(txt): ret.value += txt)
-#        return ret
-#    ))
-#
-#
-#    var serial_window_open = Ui.value(false)
+    var serial_window_open = Cx.value(false)
     
-    var _sketch_state: SketchState = c.use_state(SketchState)
+    var board_state = Cx.lens(board, "state")
+    var board_log = Cx.lens(board, "board_log")
     
-    var sketch_id = Track.inner(Track.lens(board, "attached_sketch"))
-    var sketch_state = Track.map(sketch_id, func(id):
-        if id >= 0:
-            return _sketch_state.sketches.value_at(id)
-    )
-    var board_state = Track.lens(board, "state")
+    var board_available = Cx.map(board_state, func(state): return state != BoardState.BOARD_UNAVAILABLE)
+    var board_active = Cx.map(board_state, func(state): return state == BoardState.BOARD_RUNNING || state == BoardState.BOARD_SUSPENDED)
     
-    var board_available = Track.map(board_state, func(state): return state != BoardState.BOARD_UNAVAILABLE)
-    var board_active = Track.map(board_state, func(state): return state == BoardState.BOARD_RUNNING || state == BoardState.BOARD_SUSPENDED)
+#    var vehicle_available = Cx.map(vehicle_state, func(state): return true)
+#    var has_attachments = Cx.dedup(Cx.map(attachments, func(vec): return !vec.is_empty()))
     
-#    var vehicle_available = Track.map(vehicle_state, func(state): return true)
-
-#    var has_attachments = Track.dedup(Track.map(attachments, func(vec): return !vec.is_empty()))
-    var build_state: Tracked = Track.lens(sketch_state, "build_state")
-    var build_log: Tracked = Track.lens(sketch_state, "build_log")
+    var build_state: Tracked = Cx.lens(sketch, "build_state")
+    var is_building: Tracked = Cx.map(build_state, func(state): return state == SketchState.BUILD_PENDING)
+    var build_log: Tracked = Cx.lens(sketch, "build_log")
+    var has_build_log: Tracked = Cx.map(build_log, func(s): return !s.is_empty())
     
-    var is_building: Tracked = Track.map(build_state, func(state): return state == SketchState.BUILD_PENDING)
-#    var has_build_log = Track.map(build_log, func(log): return !log.is_empty())
-    
-    var sketch_path: Tracked = Track.map(sketch_state, func(s): return s.sketch.source)
-    
-    var has_build_log: Tracked = Track.map(build_log, func(s): return !s.is_empty())
+    var sketch_path: Tracked = Cx.map(sketch, func(s): return s.sketch.source)
     
     c.inherits(VBoxContainer)
     
     var remove_self := c.user_signal("remove_pressed")
     var compile_sketch := c.user_signal("compile_sketch")
     var toggle_orbit := c.user_signal("toggle_orbit")
-    var toggle_suspend := c.user_signal("toggle_suspend")
-    var toggle_board := c.user_signal("toggle_board")
+    
+    var stop_board := c.user_signal("stop_board")
+    var start_board := c.user_signal("start_board")
+    var suspend_board := c.user_signal("suspend_board")
+    var resume_board := c.user_signal("resume_board")
+    
+    
     var reset_vehicle := c.user_signal("reset_vehicle")
+    var submit_uart := c.user_signal("submit_uart")
     
-    var sketch_file = Track.map(sketch_state, func(p): return p.sketch.source.get_file())
-    
+    var sketch_file = Cx.map(sketch, func(p): return p.sketch.source.get_file())
+
     c.child(func(c: Ctx):
         c.inherits(Widgets.button())
         c.with("text", sketch_file)
@@ -75,26 +57,23 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
             c.inherits(HBoxContainer)
             c.child(func(c: Ctx):
                 c.inherits(Widgets.button())
-                c.with("text", Track.combine_map([build_state as Tracked, board_state as Tracked], func(sk, bd):
-                    match [sk, bd]:
-                        [_, BoardState.BOARD_RUNNING]: return "Stop"
-                        _: return "Start"
-                ))
-                c.with("disabled", Track.map(build_state, func(v): return v != SketchState.BUILD_SUCCEEDED))
+                c.with("text", Cx.map(board_active, func(s): return "Stop" if s else "Start" ))
+                c.with("disabled", Cx.map(build_state, func(v): return v != SketchState.BUILD_SUCCEEDED))
                 c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
-                c.with("theme_type_variation", Track.map(board_active, func(v): return "ButtonWarn" if v else "ButtonPrimary"))
-                c.on("pressed", func(): toggle_board.emit())
+                c.with("theme_type_variation", Cx.map(board_active, func(v): return "ButtonWarn" if v else "ButtonPrimary"))
+                c.on("pressed", func():
+                    (stop_board if board_active.value() else start_board).emit()
+                )
             )
+            var can_resume = Cx.map(board_state, func(bs): return bs == BoardState.BOARD_SUSPENDED)
             c.child(func(c: Ctx):
                 c.inherits(Widgets.button())
-                c.with("text", Track.map(board_state, func(state):
-                    match state:
-                        BoardState.BOARD_SUSPENDED: return "Resume"
-                        _: return "Suspend"
-                ))
-                c.with("disabled", Track.map(board_active, func(v): return !v))
+                c.with("text", Cx.map(can_resume, func(s): return "Resume" if s else "Suspend"))
+                c.with("disabled", Cx.map(board_active, func(v): return !v))
                 c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
-                c.on("pressed", func(): toggle_suspend.emit())
+                c.on("pressed", func(): 
+                    (resume_board if can_resume.value() else suspend_board).emit()
+                )
             )
         )
     )
@@ -102,7 +81,7 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
         c.inherits(VBoxContainer)
         c.child(func(c: Ctx):
             c.inherits(Label)
-#            c.with("text", Track.map(vehicle_state, func(state): return "Vehicle Control" + (" (Frozen)" if state == WorldEnvState.VEHICLE_FROZEN else "")))
+#            c.with("text", Cx.map(vehicle_state, func(state): return "Vehicle Control" + (" (Frozen)" if state == WorldEnvState.VEHICLE_FROZEN else "")))
         )
         c.child(func(c: Ctx):
             c.inherits(HBoxContainer)
@@ -110,15 +89,15 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
                 c.inherits(Widgets.button())
                 c.with("text", "Reset Position")
                 c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
-#                c.with("disabled", Track.map(vehicle_available, func(v): return !v))
+#                c.with("disabled", Cx.map(vehicle_available, func(v): return !v))
                 c.on("pressed", func(): reset_vehicle.emit())
             )
             c.child(func(c: Ctx):
-#                var is_orbitting = Track.map(camera_state, func(state): return state == WorldEnvState.CAMERA_ORBITING)
+#                var is_orbitting = Cx.map(camera_state, func(state): return state == WorldEnvState.CAMERA_ORBITING)
                 c.inherits(Widgets.button())
                 c.with("toggle_mode", true)
                 c.with("text", "Follow")
-#                c.with("disabled",  Track.map(vehicle_available, func(v): return !v))
+#                c.with("disabled",  Cx.map(vehicle_available, func(v): return !v))
                 c.with("theme_type_variation", "ButtonPrimaryActive")
 #                c.with("button_pressed", is_orbitting)
                 c.on("toggled", func(toggled):
@@ -135,10 +114,10 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
             c.inherits(Label)
             c.with("text", "Attachments")
         )
-        c.child_opt(Ui.map_child(Track.value(false), func(has_attachments): return func(c: Ctx):
+        c.child_opt(Cx.map_child(Cx.value(false), func(has_attachments): return func(c: Ctx):
             if has_attachments:
-                c.inherits(Widgets.item_list(Track.array([]), active_attachment, func(v, i): return func(c: Ctx): 
-                    var is_active = Track.combine_map([i, active_attachment], func(i, active): return i == active)
+                c.inherits(Widgets.item_list(Cx.array([]), active_attachment, func(v, i): return func(c: Ctx): 
+                    var is_active = Cx.combine_map([i, active_attachment], func(i, active): return i == active)
                     c.inherits(VBoxContainer)
                     c.child(func(c: Ctx):
                         c.inherits(Label)
@@ -146,8 +125,8 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
                         c.with("vertical_alignment", VERTICAL_ALIGNMENT_CENTER)
                         c.with("size_flags_vertical", SIZE_EXPAND_FILL)
                     )
-                    c.child_opt(Ui.map_child(is_active, func(v): return func(c: Ctx):
-                        if v: c.inherits(func(c: Ctx): assert(false, "TODO"))
+                    c.child_opt(Cx.child_if(is_active, func(c: Ctx):
+                        c.inherits(func(c: Ctx): assert(false, "TODO"))
                     ))
                 ))
             else:
@@ -173,7 +152,7 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
         c.child(func(c: Ctx):
             c.inherits(Widgets.button())
             c.with("text", "Log")
-            c.with("disabled", Track.combine_map([is_building, has_build_log], func(a,b): return !(a || b)))
+            c.with("disabled", Cx.combine_map([is_building, has_build_log], func(a,b): return !(a || b)))
             c.with("toggle_mode", true)
             c.with("theme_type_variation", "ButtonPrimaryActive")
             c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
@@ -190,15 +169,15 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
         c.child(func(c: Ctx):
             c.inherits(Widgets.button())
             c.with("text", "Serial")
-            c.with("disabled", Track.map(board_active, func(v): return !v))
+            c.with("disabled", Cx.map(board_active, func(v): return !v))
             c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
             c.with("toggle_mode", true)
             c.with("theme_type_variation", "ButtonPrimaryActive")
-#            c.use_now(serial_window_open, func():.node().set_pressed_no_signal(serial_window_open.value))
+            c.on(serial_window_open.changed, func(_w,_h): c.node().set_pressed_no_signal(serial_window_open.value()))
             c.on("pressed", func():
                 # trigger a respawn
-#                serial_window_open.value = false
-#                serial_window_open.value = true
+                serial_window_open.change(false)
+                serial_window_open.change(true)
                 c.node().set_pressed_no_signal(true)
             )
         )
@@ -210,37 +189,33 @@ static func instance_control(board: Tracked) -> Callable: return func(c: Ctx):
             c.on("pressed", func(): remove_self.emit())
         )
     )
-    c.child_opt(Ui.map_child(Track.dedup(log_window_open), func(v): return func(c: Ctx):
-        if v:
-            var minimum_size := Vector2(640, 360)
-            c.inherits(Widgets.window(log_window_open))
-            c.with("title", Track.map(sketch_path, func(p): return "\"%s\" Logs" % p.get_file()))
-            c.with("min_size",minimum_size)
-            c.child(func(c: Ctx):
-                c.inherits(PanelContainer)
-                c.with("size", minimum_size)
-                c.on("tree_entered", func(): c.node().set_anchors_preset(Control.PRESET_WIDE))
-                c.child(LogWindow.log_window(build_log, Track.value("do the log")))
-            )
+    c.child_opt(Cx.child_if(Cx.dedup(log_window_open), func(c: Ctx):
+        var minimum_size := Vector2(640, 360)
+        c.inherits(Widgets.window(log_window_open))
+        c.with("title", Cx.map(sketch_path, func(p): return "\"%s\" Logs" % p.get_file()))
+        c.with("min_size",minimum_size)
+        c.child(func(c: Ctx):
+            c.inherits(PanelContainer)
+            c.with("size", minimum_size)
+            c.on("tree_entered", func(): c.node().set_anchors_preset(Control.PRESET_WIDE))
+            c.child(LogWindow.log_window(build_log, board_log))
+        )
     ))
-#    c.children(Ui.child_if(Track.dedup(serial_window_open), func(c: Ctx):
-#        var minimum_size := Vector2(640, 360)
-#        c.inherits(Widgets.window(serial_window_open))
-#        c.with("title", "Serial IO")
-#        c.with("min_size", minimum_size)
-#        c.child(func(c: Ctx):
-#            c.inherits(PanelContainer)
-#            c.with("size", minimum_size)
-#            c.on("tree_entered", func():.node().set_anchors_preset(Control.PRESET_WIDE))
-#            c.child(func(c: Ctx):
-#                c.inherits(SerialWindow.serial_window(uart_in))
-#                c.on("write", func(st):
-#                    print(hardware_state.hardware)
-#                    uart_puller.value.write(st)
-#                )
-#            )
-#        )
-#    ))
+    c.child_opt(Cx.child_if(Cx.dedup(serial_window_open), func(c: Ctx):
+        var minimum_size := Vector2(640, 360)
+        c.inherits(Widgets.window(serial_window_open))
+        c.with("title", "Serial IO")
+        c.with("min_size", minimum_size)
+        c.child(func(c: Ctx):
+            c.inherits(PanelContainer)
+            c.with("size", minimum_size)
+            c.on("tree_entered", func(): c.node().set_anchors_preset(Control.PRESET_WIDE))
+            c.child(func(c: Ctx):
+                c.inherits(SerialWindow.serial_window(uart_in, uart_out))
+                c.on("write", func(): submit_uart.emit())
+            )
+        )
+    ))
 
 
 

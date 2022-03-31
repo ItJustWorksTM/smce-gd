@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=31 format=3 uid="uid://d38u2nbmnnpq4"]
+[gd_resource type="Theme" load_steps=29 format=3 uid="uid://d38u2nbmnnpq4"]
 
 [ext_resource type="StyleBox" uid="uid://b6pnu5tgaiwcs" path="res://assets/themes/adwaita/generic_focus.tres" id="1_8nc66"]
 
@@ -260,33 +260,6 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4ior"]
-content_margin_left = 4.0
-content_margin_right = 4.0
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 1, 1, 0.75)
-draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-expand_margin_left = 2.0
-expand_margin_right = 2.0
-expand_margin_top = 2.0
-expand_margin_bottom = 2.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_evp6w"]
-content_margin_left = 0.0
-content_margin_right = 0.0
-content_margin_top = 0.0
-content_margin_bottom = 0.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0a2ld"]
 content_margin_left = 4.0
 content_margin_right = 4.0
@@ -371,8 +344,7 @@ PopupMenu/styles/panel_disabled = SubResource( "StyleBoxFlat_5r00g" )
 PopupMenu/styles/separator = SubResource( "StyleBoxLine_jg05o" )
 ProgressBar/styles/bg = SubResource( "StyleBoxFlat_vbqxg" )
 ProgressBar/styles/fg = SubResource( "StyleBoxFlat_87s5f" )
-RichTextLabel/styles/focus = SubResource( "StyleBoxFlat_t4ior" )
-RichTextLabel/styles/normal = SubResource( "StyleBoxEmpty_evp6w" )
+RichTextLabel/styles/focus = ExtResource( "1_8nc66" )
 VScrollBar/styles/grabber = SubResource( "StyleBoxFlat_0a2ld" )
 VScrollBar/styles/grabber_highlight = SubResource( "StyleBoxFlat_yrgfm" )
 VScrollBar/styles/grabber_pressed = SubResource( "StyleBoxFlat_yrgfm" )

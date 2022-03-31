@@ -6,48 +6,48 @@ enum { SELECT_FILE, SELECT_DIR, SELECT_ANY, SAVE_FILE }
 enum { KIND_FILE, KIND_DIR, KIND_NONE }
 
 static func filepicker(
-        mode = Track.value(SELECT_FILE),
-        user_filters = Track.value([["Any", ["*.*"]]]),
-        path = Track.value("/home/ruthgerd/Documents/demo")
+        mode = Cx.value(SELECT_FILE),
+        user_filters = Cx.value([["Any", ["*.*"]]]),
+        path = Cx.value("/home/ruthgerd/Documents/demo")
     ): return func(c: Ctx):
     
     var object := c.inherits(PanelContainer).node() as PanelContainer
     var completed := c.user_signal("completed")
     var cancelled := c.user_signal("cancelled")
     
-    var selected_index := Track.value_dedup(-1)
+    var selected_index := Cx.value_dedup(-1)
     
-    var save_name := Track.value("my_file.ino")
+    var save_name := Cx.value("my_file.ino")
     
-    var active_filter = Track.value(0)
-    var filter = Track.combine_map([user_filters as Tracked, active_filter as Tracked], func(uf, a):
+    var active_filter = Cx.value(0)
+    var filter = Cx.combine_map([user_filters as Tracked, active_filter as Tracked], func(uf, a):
         return uf[a][1] if a >= 0 else []
     )
 
-    var fs_items = Track.combine_map([path as Tracked, filter as Tracked], func(p, f):
+    var fs_items = Cx.combine_map([path as Tracked, filter as Tracked], func(p, f):
         var items = Fs.list_directory_items(p, f)
         var ret = items[0] + items[1]
         return ret
     )
-    var selected_path = Track.combine_map([selected_index as Tracked, path as Tracked, fs_items as Tracked], func(si, p, items):
+    var selected_path = Cx.combine_map([selected_index as Tracked, path as Tracked, fs_items as Tracked], func(si, p, items):
         if si > -1 && si < items.size():
             return p.plus_file(items[si])
     )
     
     
-    var filters = Track.map(user_filters, func(f):
+    var filters = Cx.map(user_filters, func(f):
         var ret = []
         for v in f: ret.append(v[0] + " " + str(v[1]))
         return ret
     )
     
-    var selected_kind = Track.map(selected_path, func(p):
+    var selected_kind = Cx.map(selected_path, func(p):
         if p == null:
             return KIND_NONE
         else: return KIND_DIR if Fs.dir_exists(p) else KIND_FILE
     )
 
-    var open_disabled = Track.combine_map([selected_kind as Tracked, mode as Tracked], func(v, mode):
+    var open_disabled = Cx.combine_map([selected_kind as Tracked, mode as Tracked], func(v, mode):
         if v == KIND_NONE: 
             return true
         match [mode, v]:
@@ -60,7 +60,7 @@ static func filepicker(
             _: return true
     )
     
-    var at_root = Track.map(path, func(path): return path == path.get_base_dir())
+    var at_root = Cx.map(path, func(path): return path == path.get_base_dir())
     
     
     var activate_item = func(i):
@@ -75,7 +75,7 @@ static func filepicker(
         )
     
     
-    var fu := Track.array(fs_items.value())
+    var fu := Cx.array(fs_items.value())
     
 #    c.on("ready", func():
 #        c.node().get_tree().process_frame.connect(func():
@@ -99,7 +99,7 @@ static func filepicker(
                 c.with("text", "Cancel")
                 c.on("pressed", func(): cancelled.emit())
             )
-            c.child_opt(Ui.map_child(mode, func(mode): return func(c: Ctx):
+            c.child_opt(Cx.map_child(mode, func(mode): return func(c: Ctx):
                 if mode != SAVE_FILE:
                     c.inherits(Widgets.label((func():
                         match mode:
@@ -125,7 +125,7 @@ static func filepicker(
             ))
             c.child(func(c: Ctx):
                 c.inherits(Widgets.button())
-                c.with("text", Track.map(mode, func(mode):
+                c.with("text", Cx.map(mode, func(mode):
                     return "Save" if mode == SAVE_FILE else "Open"
                 ))
                 c.with("theme_type_variation", "ButtonPrimary")

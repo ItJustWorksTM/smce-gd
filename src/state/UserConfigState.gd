@@ -1,12 +1,12 @@
 class_name UserConfigState
-extends Node
+extends Object
 
-var default_config := Track.value({})
+var default_config := Cx.value({})
 
-var user_config_name = Track.value("smce.json")
+var user_config_name = Cx.value("smce.json")
 
-# get whatever config we say we give from this directory
-func get_config_for(path, key = "") -> Dictionary:
+var get_config_for := func(path, key = "") -> Dictionary:
+    return default_config.value()[key]
     path = str(path)
     var config_path = Fs.trim_trailing(path).plus_file(user_config_name.value())
     
@@ -21,8 +21,8 @@ func get_config_for(path, key = "") -> Dictionary:
     
     return json.get_data()[key]
 
-func set_default_config(conf: Dictionary):
+var set_default_config := func(conf: Dictionary):
     default_config.change(conf)
 
-func override_config(path: String):
+var override_config := func(path: String):
     pass

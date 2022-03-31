@@ -11,6 +11,8 @@ func requires() -> Array:
         {c = uartchannel(), ex=false}
     ]
 
+var history_in: String = ""
+
 func write(text: String) -> void:
     _channel.write(text)
 
@@ -18,3 +20,4 @@ func _process(_delta: float) -> void:
     var txt = _channel.read()
     if txt != "" && txt != null:
         read.emit(txt)
+        history_in += txt

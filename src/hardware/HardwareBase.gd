@@ -1,7 +1,7 @@
 class_name HardwareBase
 extends Node
 
-var _rec
+var _rec = []
 
 func requires() -> Array:
     return []

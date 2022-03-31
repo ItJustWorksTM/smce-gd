@@ -4,8 +4,11 @@ extends Object
 var _managed_node: Node = null
 var _recreate
 var _shared_state: Dictionary
+var _registered_state: Array[Script]
 
 var _to_disconnect: Array = []
+
+signal pre_delete
 
 func _init(recreate, shared_state: Dictionary = {}) -> void:
     self._recreate = recreate
@@ -33,10 +36,16 @@ func inherits(widget, args := []):
         widget.call(self)
         return
     
-    if widget is Object && widget.has_method("new"):
-        var vanilla_node = Fn.spread(widget.new).call(args)
+    if widget is Object:
+        var vanilla_node = null
         
-        if !(vanilla_node is Node):
+        if (widget as Node) != null:
+            vanilla_node = widget as Node
+        elif widget.has_method("new"):
+            vanilla_node = Fn.spread(widget.new).call(args)
+        elif widget is PackedScene:
+            vanilla_node = widget.instantiate()
+        elif !(vanilla_node is Node):
             vanilla_node.free()
             return
         
@@ -104,16 +113,34 @@ func on(signal_like, cb: Callable):
 func _property_changed(w,h,property: String, value: Tracked):
     if !is_initialized(): return
     var new_value = value.value()
-    print("Ctx: %s::%s changed to \"%s\"" % [self.node(), property, new_value])
+#    print("Ctx: %s::%s changed to \"%s\"" % [self.node(), property, new_value])
     self.node().set_indexed(property, new_value)
 
 func register_state(script, node):
-    if _shared_state.has(script):
+    var existing = _shared_state.get(script)
+    if existing == null:
+        existing = TrackedValue.new(node)
+        _shared_state[script] = existing
+    elif existing.value() == null:
+        existing.change(node)
+    else:
         printerr("Ctx: State already exists, cannot register.")
-    _shared_state[script] = node
+        return
+    _registered_state.append(script)
+    return existing.value()
 
-func use_state(script) -> Object:
-    return _shared_state.get(script)
+#func unregister_state(script):
+#    if _registered_state.has(script):
+#        _shared_state[script].change(null)
+#    else:
+#        printerr("Ctx: trying to unregister non owned state")
+
+func get_state(script) -> Tracked:
+    var existing = _shared_state.get(script)
+    if existing == null:
+        existing = TrackedValue.new(null)
+        _shared_state[script] = existing
+    return existing
 
 func assert_init():
     if !self.is_initialized():
@@ -130,4 +157,10 @@ func _disconnect_signals():
 func _notification(what):
     if what == NOTIFICATION_PREDELETE:
         _disconnect_signals()
+        pre_delete.emit()
+        for scr in self._registered_state:
+            var ex = self._shared_state[scr]
+            if is_instance_valid(ex.__value) && !(ex.__value is RefCounted):
+                ex.__value.free()
+            ex.change(null)
 #        print("Ctx: freed (%s) with %s" % [self, self._managed_node])
