@@ -17,7 +17,7 @@ _global_script_classes=[{
 "base": "Node",
 "class": &"BoardImpl",
 "language": &"GDScript",
-"path": "res://src/state/BoardImpl.gd"
+"path": "res://src/state_impl/BoardImpl.gd"
 }, {
 "base": "Node",
 "class": &"BoardPoller",
@@ -97,7 +97,7 @@ _global_script_classes=[{
 "base": "Node",
 "class": &"HardwareImpl",
 "language": &"GDScript",
-"path": "res://src/state/HardwareImpl.gd"
+"path": "res://src/state_impl/HardwareImpl.gd"
 }, {
 "base": "Object",
 "class": &"HardwareState",
@@ -179,7 +179,12 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/ui/SerialWindow.gd"
 }, {
-"base": "Node",
+"base": "RefCounted",
+"class": &"SketchImpl",
+"language": &"GDScript",
+"path": "res://src/state_impl/SketchImpl.gd"
+}, {
+"base": "Object",
 "class": &"SketchState",
 "language": &"GDScript",
 "path": "res://src/state/SketchState.gd"
@@ -274,6 +279,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/hardware/misc/UartPuller.gd"
 }, {
+"base": "RefCounted",
+"class": &"UserConfigImpl",
+"language": &"GDScript",
+"path": "res://src/state_impl/UserConfigImpl.gd"
+}, {
 "base": "Object",
 "class": &"UserConfigState",
 "language": &"GDScript",
@@ -295,9 +305,9 @@ _global_script_classes=[{
 "path": "res://lib/ui4/src/widgets/Widgets.gd"
 }, {
 "base": "Node3D",
-"class": &"WorldEnv",
+"class": &"WorldEnvImpl",
 "language": &"GDScript",
-"path": "res://src/state/WorldEnv.gd"
+"path": "res://src/state_impl/WorldEnvImpl.gd"
 }, {
 "base": "Object",
 "class": &"WorldEnvState",
@@ -339,6 +349,7 @@ _global_script_class_icons={
 "SR04": "",
 "ScopeGuard": "",
 "SerialWindow": "",
+"SketchImpl": "",
 "SketchState": "",
 "SmceUiRoot": "",
 "Task": "",
@@ -358,11 +369,12 @@ _global_script_class_icons={
 "TrackedTween": "",
 "TrackedValue": "",
 "UartPuller": "",
+"UserConfigImpl": "",
 "UserConfigState": "",
 "VehicleConfig": "",
 "VehicleState": "",
 "Widgets": "",
-"WorldEnv": "",
+"WorldEnvImpl": "",
 "WorldEnvState": ""
 }
 

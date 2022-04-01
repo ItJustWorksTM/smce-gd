@@ -1,8 +1,7 @@
-class_name WorldEnv
+class_name WorldEnvImpl
 extends Node3D
 
-
-static func world_env(): return func(c: Ctx):
+static func world_env_impl(): return func(c: Ctx):
     c.inherits(Node3D)
     
     var state: WorldEnvState = c.register_state(WorldEnvState, WorldEnvState.new())

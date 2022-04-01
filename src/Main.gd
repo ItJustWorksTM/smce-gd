@@ -13,16 +13,12 @@ func _ready():
         c.on(version.changed, func(w,h): DisplayServer.window_set_title("SMCE-gd %s" % version.value()))
         version.change("2.0.0-dev")
     
-        c.child(func(c: Ctx):
-            c.inherits(Node)
-            var state = c.register_state(UserConfigState, UserConfigState.new())
-            state.set_default_config.call(Defaults.user_config())
-        )
-        c.child(WorldEnv.world_env())
+        c.child(UserConfigImpl.user_config_impl())
+        c.child(WorldEnvImpl.world_env_impl())
+        
         c.child_opt(Cx.use_states([UserConfigState], func(usr): return func(c: Ctx): 
             if !usr: return
-            c.inherits(SketchState, [usr])
-            c.register_state(SketchState, c.node())
+            c.inherits(SketchImpl.sketch_impl(usr))
         ))
         c.child_opt(Cx.use_states([SketchState], func(sk): return func(c: Ctx): 
             if !sk: return

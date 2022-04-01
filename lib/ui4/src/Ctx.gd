@@ -48,7 +48,9 @@ func inherits(widget, args := []):
         elif !(vanilla_node is Node):
             vanilla_node.free()
             return
-        
+        else:
+            assert(false)
+            return
         self._managed_node = vanilla_node
         self._managed_node.set_meta("_kill", RefKill.new(self))
     

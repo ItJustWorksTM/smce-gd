@@ -18,6 +18,7 @@ static func hardware_impl(
             BoardState.BOARD_RUNNING, BoardState.BOARD_SUSPENDED:
                 return keep.keep()
             BoardState.BOARD_STAGING:
+                # TODO: find a way to not depend on the sketch path?
                 var sk = sketch_state.sketches.value_at(v.attached_sketch.value())
                 var config = config_state.get_config_for.call(
                     sk.sketch.source, 

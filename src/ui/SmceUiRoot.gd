@@ -29,7 +29,7 @@ static func smce_ui_root() -> Callable: return func(c: Ctx):
             c.inherits(FilePicker.filepicker(file_mode, filters))
             c.on("completed", func(path: String):
                 picking_file.change(false)
-                var res: Result = sketch_state.add_sketch(path)
+                var res: Result = sketch_state.add_sketch.call(path)
                 
                 if !res.is_ok():
                     return

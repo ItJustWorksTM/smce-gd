@@ -68,7 +68,7 @@ static func multi_instance(active_sketch: Tracked) -> Callable: return func(c: C
                         uart.write(uart_out.value())
                         uart_out.change("")                        
                     )
-                    c.on("compile_sketch", func(): sketch_state.compile_sketch(i.value()))
+                    c.on("compile_sketch", func(): sketch_state.compile_sketch.call(i.value()))
                     c.on("start_board", func(): board_state.start_board.call(i.value()))
                     c.on("stop_board", func(): board_state.stop_board.call(i.value()))
                     c.on("suspend_board", func(): board_state.suspend_board.call(i.value()))
