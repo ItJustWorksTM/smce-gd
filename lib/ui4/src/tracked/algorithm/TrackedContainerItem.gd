@@ -10,7 +10,7 @@ func _init(ob: TrackedContainer, at):
 func _update(w,h):
     match w:
         SET:
-            self._value = -1
+            self._value = null
             print("TRACKED INDEX DIED")
         MOVED:
             if self._value == h[0]:
@@ -19,7 +19,7 @@ func _update(w,h):
         REMOVED:
             if self._value == h:
 #                print("index removed")
-                self._value = -1
+                self._value = null
                 print("TRACKED INDEX DIED 2")
         MODIFIED:
             emit_set() # TODO wooops

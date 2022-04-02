@@ -1,5 +1,4 @@
-class_name WorldEnvState
-extends Object
+class_name WorldEnvState extends Object
 
 enum { CAMERA_ORBITING, CAMERA_FREE }
 
@@ -11,7 +10,7 @@ var current_world_name := Cx.combine_map(
     func(w, c): return w[c] if c >= 0 else ""
 )
 
-var current_world_node := Cx.value(null)
+var world_node := Cx.value(null)
 
 var camera_following_node := Cx.value(null)
 var camera_mode := Cx.map(camera_following_node, func(f): CAMERA_FREE if f == null else CAMERA_ORBITING)

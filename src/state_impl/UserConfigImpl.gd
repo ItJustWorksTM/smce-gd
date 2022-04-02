@@ -6,7 +6,7 @@ static func user_config_impl(): return func(c: Ctx):
     
     var state = c.register_state(UserConfigState, UserConfigState.new())
 
-    var get_config_for := func(path, key = "") -> Dictionary:
+    state.get_config_for = func(path, key = "") -> Dictionary:
         return state.default_config.value()[key]
         path = str(path)
         var config_path = Fs.trim_trailing(path).plus_file(state.user_config_name.value())
@@ -22,8 +22,8 @@ static func user_config_impl(): return func(c: Ctx):
         
         return json.get_data()[key]
 
-    var set_default_config := func(conf: Dictionary):
+    state.set_default_config = func(conf: Dictionary):
         state.default_config.change(conf)
 
-    var override_config := func(path: String):
+    state.override_config = func(path: String):
         pass

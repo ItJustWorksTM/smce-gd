@@ -25,7 +25,7 @@ static func combine(tracked: Array[Tracked]) -> TrackedCombine:
 static func combine_map(tracked: Array[Tracked], transform: Callable) -> TrackedMap:
     return map(combine(tracked), Fn.spread(transform))
 
-static func transform(tracked: TrackedArrayBase, transform: Callable) -> TrackedTransform:
+static func transform(tracked: TrackedContainer, transform: Callable) -> TrackedTransform:
     return TrackedTransform.new(tracked, transform)
 
 static func buffer(tracked: Tracked, amount: int) -> TrackedBuffer:
@@ -83,15 +83,7 @@ static func map_children(arr: TrackedArrayBase, widget_fn: Callable): return fun
     
     var make_new = func(k):
         var container_index = container_index(arr, k)
-        var value = map(
-            container_index,
-            func(v): 
-                var ret = arr.value_at(v) if v >= 0 else null
-                if ret == null:
-                    pass
-                return ret
-        )
-        
+        var value = map(container_index, func(v): if v != null: return arr.value_at(v))
         var ret := Ctx.new(widget_fn.call(container_index, value), placeholder._shared_state)
         
         if !ret.is_initialized():
@@ -115,11 +107,11 @@ static func map_children(arr: TrackedArrayBase, widget_fn: Callable): return fun
     
     placeholder.on(arr.changed, func(what, how):
         var at = how
+
         var base_index: int = hook.get_index()
         match what:
             Tracked.INSERTED:
                 var node = make_new.call(at)
-                assert(!node.assert_init())
                 parent.get_child(base_index + at).add_sibling(node.node(), true)
             Tracked.REMOVED:
                 remove_child.call(base_index + at + 1)
@@ -128,11 +120,56 @@ static func map_children(arr: TrackedArrayBase, widget_fn: Callable): return fun
                     remove_child.call(base_index + 1)
                 reset.call()
     )
+
+static func map_children_dict(dict: TrackedContainer, widget_fn: Callable): return func(placeholder: Ctx):
+    var hook: Node = placeholder.node()
+    var parent: Node = hook.get_parent()
     
+    var node_map = {}
+    
+    var make_new = func(k):
+        var container_index = container_index(dict, k)
+        var value = map(container_index, func(v): if v != null: return dict.value_at(v))
+        
+        var ret := Ctx.new(widget_fn.call(container_index, value), placeholder._shared_state)
+        
+        if !ret.is_initialized(): ret.free()
+        return ret
+    
+    var remove_child = func(at):
+        var to_delete = node_map[at]
+        parent.remove_child(to_delete)
+        node_map.erase(at)
+        if is_instance_valid(to_delete):
+            to_delete.queue_free()
+    
+    var reset = func():
+        node_map.clear()
+        for k in dict.keys():
+            var node = make_new.call(k)
+            node_map[k] = node.node()
+            hook.add_sibling(node.node(), true)
+    
+    reset.call()
+    
+    placeholder.on(dict.changed, func(what, how):
+        var at = how
+
+        var base_index: int = hook.get_index()
+        match what:
+            Tracked.INSERTED:
+                var node = make_new.call(at)
+                node_map[at] = node.node()
+                parent.get_child(base_index + node_map.size() - 1).add_sibling(node.node(), true)
+            Tracked.REMOVED:
+                remove_child.call(at)
+            Tracked.SET:
+                for c in how: remove_child.call(c)
+                reset.call()
+    )
 
 static func use_states(scripts, widget): return func(placeholder: Ctx):
     var states: Array[Tracked] = []
     for script in scripts:
         states.append(placeholder.get_state(script) as Tracked)
     return map_child(combine(states), Fn.spread(widget)).call(placeholder)
-#    c.child_opt(map_child(combine(states), Fn.spread(widget)))

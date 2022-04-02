@@ -11,12 +11,12 @@ static func hardware_impl(
     
     var state = c.register_state(HardwareState, HardwareState.new())
        
-    state.hardware = Cx.transform(board_state.boards, func(v, keep):
+    state.hardware = Cx.transform(board_state.boards, func(v):
         match v.state:
             BoardState.BOARD_UNAVAILABLE:
                 return { by_label = {} }
             BoardState.BOARD_RUNNING, BoardState.BOARD_SUSPENDED:
-                return keep.keep()
+                return TrackedTransform.Keep
             BoardState.BOARD_STAGING:
                 # TODO: find a way to not depend on the sketch path?
                 var sk = sketch_state.sketches.value_at(v.attached_sketch.value())

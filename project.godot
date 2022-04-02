@@ -9,6 +9,16 @@
 config_version=5
 
 _global_script_classes=[{
+"base": "Node",
+"class": &"AttachmentImpl",
+"language": &"GDScript",
+"path": "res://src/state_impl/AttachmentImpl.gd"
+}, {
+"base": "Object",
+"class": &"AttachmentState",
+"language": &"GDScript",
+"path": "res://src/state/AttachmentState.gd"
+}, {
 "base": "OptionButton",
 "class": &"BetterOptionButton",
 "language": &"GDScript",
@@ -47,7 +57,7 @@ _global_script_classes=[{
 "base": "RefCounted",
 "class": &"Cx",
 "language": &"GDScript",
-"path": "res://lib/ui4/src/tracked/Track.gd"
+"path": "res://lib/ui4/src/Cx.gd"
 }, {
 "base": "RefCounted",
 "class": &"Defaults",
@@ -194,6 +204,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/ui/SmceUiRoot.gd"
 }, {
+"base": "RayCast3D",
+"class": &"StraightRaycaster",
+"language": &"GDScript",
+"path": "res://src/attachments/StraightRaycaster.gd"
+}, {
 "base": "RefCounted",
 "class": &"Task",
 "language": &"GDScript",
@@ -243,6 +258,11 @@ _global_script_classes=[{
 "class": &"TrackedDedup",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/tracked/algorithm/TrackedDedup.gd"
+}, {
+"base": "TrackedContainer",
+"class": &"TrackedDict",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/tracked/storage/TrackedDict.gd"
 }, {
 "base": "Tracked",
 "class": &"TrackedInner",
@@ -294,7 +314,12 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/VehicleConfig.gd"
 }, {
-"base": "Node",
+"base": "RefCounted",
+"class": &"VehicleImpl",
+"language": &"GDScript",
+"path": "res://src/state_impl/VehicleImpl.gd"
+}, {
+"base": "Object",
 "class": &"VehicleState",
 "language": &"GDScript",
 "path": "res://src/state/VehicleState.gd"
@@ -315,6 +340,8 @@ _global_script_classes=[{
 "path": "res://src/state/WorldEnvState.gd"
 }]
 _global_script_class_icons={
+"AttachmentImpl": "",
+"AttachmentState": "",
 "BetterOptionButton": "",
 "BoardImpl": "",
 "BoardPoller": "",
@@ -352,6 +379,7 @@ _global_script_class_icons={
 "SketchImpl": "",
 "SketchState": "",
 "SmceUiRoot": "",
+"StraightRaycaster": "",
 "Task": "",
 "TestClass": "",
 "Tracked": "",
@@ -362,6 +390,7 @@ _global_script_class_icons={
 "TrackedContainer": "",
 "TrackedContainerItem": "",
 "TrackedDedup": "",
+"TrackedDict": "",
 "TrackedInner": "",
 "TrackedLens": "",
 "TrackedMap": "",
@@ -372,6 +401,7 @@ _global_script_class_icons={
 "UserConfigImpl": "",
 "UserConfigState": "",
 "VehicleConfig": "",
+"VehicleImpl": "",
 "VehicleState": "",
 "Widgets": "",
 "WorldEnvImpl": "",

@@ -65,7 +65,7 @@ func child(widget):
     
     if ctx.is_initialized():
         self.node().add_child(ctx.node(), true)
-        return self
+        return ctx
     
     printerr("Ctx: child did not initialize, use child_opt if this is intended")
     ctx.free()
@@ -81,6 +81,31 @@ func child_opt(widget):
     self.node().add_child(placeholder.node(), true)
     
     widget.call(placeholder)
+    
+    return self
+
+func child_at(node_path: String, widget):
+    if assert_init(): return null
+    
+    if node_path.begins_with("/"):
+        printerr("Ctx: Can only place at children")
+        return
+    for c in ".:@":
+        if node_path.contains(c):
+            printerr("Ctx: invalid node")
+            return
+    
+    var node_at = self.node().get_node(node_path)
+    
+    if node_at == null:
+        printerr("Ctx: child_at node does not exist")
+        return
+    
+    var wnode = self.script.new(widget, self._shared_state)
+    if wnode.node() == null:
+        wnode.free()
+        return
+    node_at.add_child(wnode.node(), true)
     
     return self
 
@@ -158,8 +183,8 @@ func _disconnect_signals():
 
 func _notification(what):
     if what == NOTIFICATION_PREDELETE:
-        _disconnect_signals()
         pre_delete.emit()
+        _disconnect_signals()
         for scr in self._registered_state:
             var ex = self._shared_state[scr]
             if is_instance_valid(ex.__value) && !(ex.__value is RefCounted):

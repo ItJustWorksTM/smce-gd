@@ -5,19 +5,26 @@
 [ext_resource type="Environment" uid="uid://c8vfq6sfdpb2g" path="res://assets/environments/sunny_day.tres" id="6_u7rwh"]
 [ext_resource type="Script" path="res://lib/ui4/src/widgets/ItemButton.gd" id="7_fc4wc"]
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k38qv"]
-points = PackedVector3Array(2.20577, 0.329999, 1.12091, -1.66638, -0.209, -1.84268, -1.79447, -0.209, -1.58626, 0.9759, -0.797275, 1.05761, -1.79208, 0.329999, 1.94855, 1.79164, 0.329999, -1.98047, -0.840145, 0.69464, -0.63, -0.9759, -0.797588, -1.02495, 0.9759, -0.797275, -1.02453, -0.9759, -0.797588, 1.05806, -1.79208, 0.329999, -1.98047, 1.79164, 0.329999, 1.94855, 0.840778, 0.6952, 0.598551, 2.04921, -0.209, -1.00817, -2.05106, -0.209, 1.04153, 1.66598, -0.209, 1.81077, -2.20577, 0.329999, -1.08436, 1.66598, -0.209, -1.84268, -1.66638, -0.209, 1.81077, -0.840778, 0.6952, 0.598551, 0.840145, 0.69464, -0.63, 2.04921, -0.209, 1.04022, 2.20577, 0.329999, -1.08397, -2.20577, 0.329999, 1.12129, -2.05106, -0.209, -1.00942, 1.85872, -0.209, -1.45788, -1.99849, 0.329999, -1.56664, 1.99892, 0.329999, -1.56664, -1.85832, -0.209, -1.45788)
+[sub_resource type="BoxShape3D" id="BoxShape3D_153y7"]
+size = Vector3(1.18145, 1, 4.48176)
 
 [node name="Control" type="Node"]
 script = ExtResource( "2_0rcig" )
 
-[node name="RigidDynamicBody3D" type="RigidDynamicBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.8305, 0)
+[node name="VehicleBody3D" type="RigidDynamicBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.2603, 0)
 
-[node name="Node3D2" parent="RigidDynamicBody3D" instance=ExtResource( "5_24sle" )]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
+shape = SubResource( "BoxShape3D_153y7" )
 
-[node name="44866" type="CollisionShape3D" parent="RigidDynamicBody3D"]
-shape = SubResource( "ConvexPolygonShape3D_k38qv" )
+[node name="Node3D2" parent="VehicleBody3D" instance=ExtResource( "5_24sle" )]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
+
+[node name="Node3D" type="Node3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1224, 1.53204)
+
+[node name="Position3D" type="Position3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03102, 0.512054, 1.55532)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( "6_u7rwh" )
@@ -279,3 +286,5 @@ __meta__ = {
 [node name="Ui" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="Node3D" type="Node3D" parent="."]

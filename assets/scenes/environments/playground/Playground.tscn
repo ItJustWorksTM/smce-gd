@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://chdl2t8f86aj1"]
+[gd_scene load_steps=4 format=3 uid="uid://chdl2t8f86aj1"]
 
+[ext_resource type="Script" path="res://assets/scenes/environments/playground/Playground.gd" id="1_j1i13"]
 [ext_resource type="PackedScene" uid="uid://c8fsbr6n7n31n" path="res://assets/models/tereno/tereno.tscn" id="1_u02vj"]
-[ext_resource type="Environment" uid="uid://y1ew1f7it423" path="res://assets/environments/sunny_day.tres" id="2_vv22m"]
+[ext_resource type="Environment" uid="uid://c8vfq6sfdpb2g" path="res://assets/environments/sunny_day.tres" id="2_vv22m"]
 
 [node name="Playground" type="Node3D"]
+script = ExtResource( "1_j1i13" )
 
 [node name="Playground" parent="." instance=ExtResource( "1_u02vj" )]
 transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)
@@ -14,3 +16,6 @@ shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( "2_vv22m" )
+
+[node name="Position3D" type="Position3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.7726, 22.8666, 73.2905)

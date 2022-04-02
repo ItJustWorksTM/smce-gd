@@ -20,6 +20,10 @@ func _ready():
             if !usr: return
             c.inherits(SketchImpl.sketch_impl(usr))
         ))
+        
+        var conf = c.get_state(UserConfigState).value()
+        conf.set_default_config.call(Defaults.user_config())
+        
         c.child_opt(Cx.use_states([SketchState], func(sk): return func(c: Ctx): 
             if !sk: return
             c.inherits(BoardImpl.board_impl(sk))
@@ -27,6 +31,13 @@ func _ready():
         c.child_opt(Cx.use_states([BoardState, SketchState, UserConfigState], func(bd, sk, usr): return func(c: Ctx):
             if !(bd && usr && sk): return
             c.inherits(HardwareImpl.hardware_impl(bd, sk, usr))
+        ))
+        c.child(func(c: Ctx):
+            c.inherits(VehicleImpl.vehicle_impl(c.get_state(WorldEnvState)))
+        )
+        c.child_opt(Cx.use_states([UserConfigState, VehicleState, HardwareState], func(usr, veh, hw): return func(c: Ctx):
+            if !(usr && veh && usr): return
+            c.inherits(AttachmentImpl.attachment_impl(usr, hw, veh))
         ))
         c.child(func(c: Ctx):
             c.inherits(SmceUiRoot.smce_ui_root())
@@ -56,6 +67,31 @@ func _ready():
         hw.register_hardware.call("SR04", SR04)
         hw.register_hardware.call("UartPuller", UartPuller)
         hw.register_hardware.call("GY50", GY50)
+        
+        var veh: VehicleState = c.get_state(VehicleState).value() 
+        
+        var totally_a_vehicle = VehicleState.basic_vehicle(
+            "res://assets/models/smartcar/smartcar-rigid.tscn",
+            {
+                front_top =  "CollisionShape3D",
+                front_left = "Slots/FrontLeft",
+                front_right = "Slots/FrontRight",
+                mid_left = "Wheels/Mid"
+            }
+        )
+        
+        veh.register_vehicle.call("smartcar", totally_a_vehicle)
+        
+        var ez = {
+            front_top = func(vehicle): return func(c: Ctx):
+                c.inherits(Node3D)
+                c.with("name", "very cool attachment")
+                vehicle.apply_impulse(Vector3(randf_range(0.0,10.0), randf_range(0.0,60.0), randf_range(0,10.0)), Vector3(0,0,0))
+        }
+        
+        for i in 50:
+            veh.spawn_vehicle.call("smartcar", ez)
+
     ))
     
 #    $Cx.add_child(root)

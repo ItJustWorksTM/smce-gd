@@ -1,52 +1,53 @@
 class_name TrackedTransform extends TrackedContainer
 
-var _values: Array = []
+var _values = {}
 var _transform: Callable
-var _tracked_arr: TrackedArrayBase
+var _tracked_container: TrackedContainer
 
 func value(): return self._values
 func size(): return self._values.size()
-func keys(): return self._values.size()
+func keys(): return self._values.keys()
 
-func _init(tracked_arr: TrackedArrayBase, transform: Callable = func(v): return v):
+class Keep:
+    pass
+
+func _init(tracked_container: TrackedContainer, transform: Callable = func(v): return v):
     self._transform = transform
-    self._tracked_arr = tracked_arr
-    _values.resize(tracked_arr.size())
-    tracked_arr.connect("changed", self._on_change, [tracked_arr])
+    self._tracked_container = tracked_container
+
+    tracked_container.connect("changed", self._on_change)
     
-    for key in tracked_arr.keys():
+    for key in tracked_container.keys():
         _update_item(key)
 
-func _on_change(w: int, h, ob: TrackedArrayBase):
+func _on_change(w: int, h):
     
     match w:
         SET:
             _values.clear()
-            _values.resize(_tracked_arr.size())
-            for key in _tracked_arr.keys():
+            for key in self._tracked_container.keys():
                 _update_item(key)
-            _emit_change(SET, 0)
+            _emit_change(SET, h)
         MODIFIED:
             _update_item(h)
             _emit_change(MODIFIED, h)
         REMOVED:
-            self._values.remove_at(h)
+            self._values.erase(h)
+            _emit_change(REMOVED, h)
         INSERTED:
-            self._values.insert(h, null)
             _update_item(h)
             _emit_change(INSERTED, h)
-        MOVED:
+        MOVED: # TODO: figure out if this is legit?
             _emit_change(MOVED, h)
+            self._values.erase(h[0])            
+            _update_item(h[1])
+            _emit_change(MODIFIED, h[1])
+                        
 
-class Keep:
-    var _kept: = false
-    func keep(): self._kept = true
-
-var _keep = Keep.new()
 func _update_item(key):
-    _keep._kept = false
-    var new = self._transform.call(self._tracked_arr.value_at(key), _keep)
-    if !_keep._kept:
-        self._values[key] = new
+    var val = self._tracked_container.value_at(key)
+    var new = self._transform.call(key, val)
+    if new is Object && new == Keep: return
+    self._values[key] = new
 
 func _get_class(): return "TrackedTransform"

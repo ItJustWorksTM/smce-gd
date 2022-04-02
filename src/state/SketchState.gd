@@ -1,5 +1,4 @@
-class_name SketchState
-extends Object
+class_name SketchState extends Object
 
 enum { BUILD_PENDING, BUILD_SUCCEEDED, BUILD_FAILED, BUILD_UNKNOWN }
 

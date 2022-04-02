@@ -8,10 +8,9 @@ func keys(): return self.size()
 
 func change(v):
     assert(v is Array)
-    var size = self._arr.size()
+    var deleted_keys = self.keys()
     self._arr = v
-    print("change from ", size, " to ", v.size())
-    _emit_change(SET, size)
+    _emit_change(SET, deleted_keys)
 
 func _change_at(at, v):
     assert(at < self.size(), "out of bounds")
@@ -25,10 +24,8 @@ func _insert_at(at, v):
     var size = self.size() -1
     for j in size - at:
         var fromto = [size - j + at - 1, size - j + at]
-        print("MOVING ", fromto)
         _emit_change(MOVED, fromto)
 
-    print("INSERTING")
     _emit_change(INSERTED, at)
 
 func _remove_at(at):
@@ -39,7 +36,6 @@ func _remove_at(at):
 
     for j in self.size() - at:
         var fromto = [j + at + 1, j + at]
-        print("MOVING ", fromto)        
         _emit_change(MOVED, fromto)
 
 func append_array(arr: Array):

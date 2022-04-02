@@ -19,10 +19,19 @@ static func world_env_impl(): return func(c: Ctx):
         if index >= 0:
             state.current_world.change(index)
     
+    c.child(func(c: Ctx): 
+        c.inherits(FreeCamera)
+        c.with("position", Vector3(0,40,0))
+        c.with("rotation", Vector3(-PI/2,0,0))
+    )
     c.child_opt(Cx.map_child(state.current_world, func(i): return func(c: Ctx):
-        if i < 0: return
+        if i < 0:
+            state.world_node.change(null)
+            return
+        
         var node = world_fns[state.worlds.value_at(i)]
         c.inherits(node)
+        
+        state.world_node.change(c.node())
     ))
     
-    c.child(func(c: Ctx): c.inherits(FreeCamera))

@@ -1,5 +1,4 @@
-class_name BoardState
-extends Node
+class_name BoardState extends Node
 
 enum { BOARD_RUNNING, BOARD_CRASHED, BOARD_SUSPENDED, BOARD_STAGING, BOARD_UNAVAILABLE }
 
@@ -10,7 +9,6 @@ class StateObj:
     var board_log: String = ""
 
 var boards := Cx.array([])
-
 
 var add_board := func(sketch_id: int): pass
 var start_board := func(board_id: int): pass

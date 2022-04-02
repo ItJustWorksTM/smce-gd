@@ -35,7 +35,7 @@ func translate_local(offset: Vector3) -> Vector3:
     var ext = Transform3D().translated(offset)
     return (self.transform * ext).origin - self.transform.origin
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
     self.target_position += self.translate_local(40 * self.velocity * Vector3(1,0,1) * delta)
     self.target_position.y += 40 * self.velocity.y * delta
     self.target_rotation += velocity2 * delta
