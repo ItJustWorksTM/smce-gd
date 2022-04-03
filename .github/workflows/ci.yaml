@@ -2,8 +2,8 @@ name: CI
 on: [ push, pull_request ]
 env:
   GODOT_EXPORT_TEMPLATE_VERSION: 3.4.4
-  LIBSMCE_TAG: v1.5.4
-  LIBSMCE_VERSION: 1.5.4
+  LIBSMCE_TAG: v1.5.5
+  LIBSMCE_VERSION: 1.5.5
 jobs:
   rules:
     name: Compute job rules
@@ -142,16 +142,19 @@ jobs:
             slug: gcc
             c: gcc-11
             cxx: g++-11
+            arch: x86_64
             smce_artifact: GNU
           - name: Clang/LLVM 13
             slug: clang
             c: clang-13
             cxx: clang++-13
+            arch: universal
             smce_artifact: AppleClang
           - name: AppleClang 12
             slug: appleclang
             c: clang
             cxx: clang++
+            arch: universal
             smce_artifact: AppleClang
     env:
       CC: ${{ matrix.compiler.c }}
@@ -169,7 +172,7 @@ jobs:
           ninja --version
           echo "::set-output name=GODOT_VERSION::$(godot3 --version | egrep -o '^\d+\.\d+(\.\d+)?\.\w+')"
           echo "::set-output name=GODOT_TEMPLATE_CACHE_KEY::$(echo "$GODOT_EXPORT_TEMPLATE_VERSION" | sed 's/\.//g')"
-          wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Darwin-x86_64-${{ matrix.compiler.smce_artifact }}.sh"
+          wget -O libsmce.sh "https://github.com/ItJustWorksTM/libSMCE/releases/download/${LIBSMCE_TAG}/libSMCE-${LIBSMCE_VERSION}-Darwin-${{ matrix.compiler.arch }}-${{ matrix.compiler.smce_artifact }}.sh"
           chmod +x libsmce.sh
           sudo ./libsmce.sh --prefix=/usr/local --skip-license --exclude-subdir
       - name: Cache Godot export template
@@ -186,6 +189,17 @@ jobs:
           mkdir -p ~/Library/Application\ Support/Godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
           mv templates/osx* ~/Library/Application\ Support/Godot/templates/${{ steps.deps.outputs.GODOT_VERSION }}
       - name: CMake Configure
+        if: matrix.compiler.slug == 'appleclang'
+        run: |
+          cmake -G Ninja \
+            -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSMCEGD_BUNDLE_DEPS=True \
+            -DSMCE_CPACK_PROFILE=DragNDrop \
+            -DFORCE_STRIP_CODESIGNING=On \
+            -S . -B build
+      - name: CMake Configure
+        if: matrix.compiler.slug != 'appleclang'
         run: |
           [ "$CC" = "clang-13" ] && export CC="$(brew --prefix llvm)/bin/clang -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
           [ "$CXX" = "clang++-13" ] && export CXX="$(brew --prefix llvm)/bin/clang++ -stdlib=libc++ -nostdinc++ -I/usr/local/opt/llvm/include/c++/v1 -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
