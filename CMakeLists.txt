@@ -170,8 +170,8 @@ else ()
     if (SMCEGD_BUNDLE_DEPS)
         install (FILES "${SMCE_DYNLIB_FILE}" DESTINATION "${PROJECT_BINARY_DIR}/export/SMCE-Godot.app/Contents/Frameworks")
     endif()
-
     install (CODE "
+        execute_process (COMMAND \"${CODESIGN_EXECUTABLE}\" --force -s - \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\")
         file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\" USE_SOURCE_PERMISSIONS)
     ")
 endif ()
