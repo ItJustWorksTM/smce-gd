@@ -85,7 +85,7 @@ jobs:
           
           export PATH="$(realpath bin):$PATH"
 
-          godot--version || true
+          godot --version || true
           ninja --version
           
           echo "::set-output name=GODOT_VERSION::$(godot --version | grep -oP '^\d+\.\d+(\.\d+)?\.\w+')"
