@@ -81,6 +81,12 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_link_options (godot-smce PRIVATE -static-libstdc++ -static-libgcc)
     endif ()
 endif ()
+if (APPLE)
+    find_program (CODESIGN_EXECUTABLE codesign REQUIRED)
+    add_custom_command (TARGET godot-smce POST_BUILD
+        COMMAND "${CODESIGN_EXECUTABLE}" --force -s - "$<TARGET_FILE:godot-smce>"
+    )
+endif ()
 
 get_target_property (SMCE_RT_RES SMCE::SMCE RESOURCES_ARCHIVE)
 
@@ -164,12 +170,7 @@ else ()
     if (SMCEGD_BUNDLE_DEPS)
         install (FILES "${SMCE_DYNLIB_FILE}" DESTINATION "${PROJECT_BINARY_DIR}/export/SMCE-Godot.app/Contents/Frameworks")
     endif()
-    if (FORCE_STRIP_CODESIGNING)
-        find_program (CODESIGN_EXECUTABLE codesign REQUIRED)
-        install (CODE "
-            execute_process (COMMAND \"${CODESIGN_EXECUTABLE}\" --remove-signature \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\")
-        ")
-    endif ()
+
     install (CODE "
         file (INSTALL \"${PROJECT_BINARY_DIR}/export/SMCE-Godot.app\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\" USE_SOURCE_PERMISSIONS)
     ")
