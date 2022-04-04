@@ -117,8 +117,9 @@ func _on_sketch_btn() -> void:
 func _create_sketch_pane(sketch):
 	
 	var pane = control_pane_t.instance()
-	var toolchain = sketch_manager.get_toolchain(sketch)
+	pane.world_env = master_manager.world
 	
+	var toolchain = sketch_manager.get_toolchain(sketch)
 	
 	if ! toolchain.is_connected("building", self, "_on_toolchain_building"):
 		toolchain.connect("building", self, "_on_toolchain_building", [toolchain])

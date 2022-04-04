@@ -24,14 +24,19 @@ var debug_car: Spatial = null
 
 onready var ctl_cam: ControllableCamera = $Camera
 
+func get_spawn_position(hint = ""):
+	if world.has_method("get_spawn_position"):
+		return world.get_spawn_position(hint)
+	return Transform(Basis(), Vector3(0,3,0))
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_car_spawn"):
 		if is_instance_valid(debug_car):
 			debug_car.queue_free()
 			return
 		debug_car = load("res://src/objects/ray_car/RayCar.tscn").instance()
+		debug_car.global_transform = get_spawn_position("debug_vehicle")
 		add_child(debug_car)
-		debug_car.global_transform.origin = Vector3(0,3,0)
 	
 	if event.is_action_pressed("debug_car_cam") and debug_car:
 		if ctl_cam.locked == debug_car:

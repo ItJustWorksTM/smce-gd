@@ -52,3 +52,9 @@ transform = Transform( 0.92768, 0, 0.373376, 0, 1, 0, -0.373376, 0, 0.92768, -97
 
 [node name="Balls" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1137, -1.17459, 8.80446 )
+
+[node name="DebugVehicleSpawn" type="Camera" parent="."]
+transform = Transform( -0.0655015, 0.000897481, 0.997852, 0.0137004, 0.999906, 5.82022e-11, -0.997758, 0.013671, -0.0655076, 15.0202, 5.14066, -0.423532 )
+
+[node name="VehicleSpawn" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3729, 0 )

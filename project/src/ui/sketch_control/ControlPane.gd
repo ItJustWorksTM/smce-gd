@@ -54,6 +54,8 @@ var ctl_cam: ControllableCamera = null setget set_ctl_cam
 
 var vehicle = null
 
+var world_env = null
+
 func init(sketch: Sketch, toolchain: Toolchain):
 	
 	sketch_path = sketch.get_source()
@@ -372,8 +374,9 @@ func reset_vehicle_pos() -> void:
 		return
 	var was_frozen = vehicle.frozen
 	vehicle.freeze()
-	vehicle.global_transform.origin = Vector3(0,3,0)
-	vehicle.global_transform.basis = Basis()
+
+	vehicle.global_transform = world_env.get_spawn_position("vehicle")
+	
 	if ! was_frozen:
 		vehicle.unfreeze()
 
