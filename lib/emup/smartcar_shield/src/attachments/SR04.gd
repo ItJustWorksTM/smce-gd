@@ -24,7 +24,10 @@ var _distance: float = 0.0
 var distance: float:
     set(dist):
         if dist > 0: dist = clamp(dist, min_distance, max_distance)
-        _echo_pin.analog_write(int(dist * 10))
+        var write = int(dist * 10)
+        _echo_pin.analog_write(write)
+        var test = _echo_pin.analog_read()
+        _distance = dist
     get:
         return _distance
 

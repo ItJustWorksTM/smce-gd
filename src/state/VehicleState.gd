@@ -1,16 +1,18 @@
-class_name VehicleState extends Object
+class_name VehicleState extends Node
 
 var registered_vehicles := TrackedDict.new()
 
-var active_vehicles := TrackedDict.new()
+func register_vehicle(vehicle_name: String, node_fn: Callable):
+    if self.registered_vehicles.contains(vehicle_name):
+        printerr("VehicleState: unregister a vehicle before registering it again")
+    
+    self.registered_vehicles.insert_at(vehicle_name, node_fn)
 
-var register_vehicle = func(vehicle_name: String, node_fn: Callable): pass
-var unregister_vehicle = func(vehicle_name: String): pass
+func unregister_vehicle(vehicle_name: String):
+    printerr("TODO")
 
-var spawn_vehicle = func(vehicle_name: String, attachments: Dictionary): pass
-var despawn_vehicle = func(vehicle_node): pass
-var reset_vehicle_position = func(vehicle_node): pass
-var freeze_vehicle = func(vehicle_node): pass
+func _ctx_init(c: Ctx):
+    c.register_as_state()
 
 static func basic_vehicle(scene, slot_map): return func(attachments): 
     var scene_instance = load(scene)

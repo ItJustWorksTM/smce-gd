@@ -22,7 +22,7 @@ clearcoat = 0.2
 heightmap_scale = 0.071
 refraction_scale = -1.0
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_p4qjs"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_uwbpr"]
 data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0, -50, 50, 0, -50)
 
 [node name="TestLab" type="Node3D"]
@@ -31,10 +31,10 @@ data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0,
 mesh = SubResource( "PlaneMesh_wddcd" )
 surface_material_override/0 = SubResource( "StandardMaterial3D_ajwgd" )
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+[node name="StaticBody3D2" type="StaticBody3D" parent="MeshInstance3D"]
 
-[node name="@@32707" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-shape = SubResource( "ConcavePolygonShape3D_p4qjs" )
+[node name="@@84258" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D2"]
+shape = SubResource( "ConcavePolygonShape3D_uwbpr" )
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.209619, 0.977783, 0, -0.977783, 0.209619, 0, 2.13109, 0)

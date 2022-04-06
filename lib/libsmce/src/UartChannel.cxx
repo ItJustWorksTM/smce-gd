@@ -41,7 +41,7 @@ void UartChannel::poll() {
 
 void UartChannel::write(String buf) {
     const auto ascii_buf = buf.ascii();
-    std::copy_n(ascii_buf.get_data(), ascii_buf.length(), std::back_inserter(write_buf));
+    std::copy_n(ascii_buf.get_data(), ascii_buf.length() - 1, std::back_inserter(write_buf));
 
     poll();
 }

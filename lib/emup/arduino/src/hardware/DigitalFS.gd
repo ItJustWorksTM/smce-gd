@@ -8,6 +8,6 @@ var cspin = 0
 var _store = _rec[0]
 
 func requires() -> Array:
-	return [
-		{ c = digital_storage(path, cspin)}
-	]
+    return [
+        { c = digital_storage(path, cspin)}
+    ]

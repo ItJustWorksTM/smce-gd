@@ -8,6 +8,9 @@ const oops = ["SET", "MODIFIED", "INSERTED", "REMOVED", "MOVED"]
 
 signal changed(what: int, how: Variant)
 
+class Keep:
+    pass
+
 func _emit_change(what: int, how: Variant):
 #    if !self.changed.get_connections().is_empty():
 #        print()

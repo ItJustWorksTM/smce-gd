@@ -2,7 +2,7 @@ class_name InstanceControl
 extends Control
 
 static func instance_control(
-        board: Tracked, sketch: Tracked, uart_in: Tracked, uart_out: Tracked
+        info: Tracked, board: Tracked, sketch: Tracked, uart_in: Tracked, uart_out: Tracked
     ) -> Callable: return func(c: Ctx):
     
     var active_attachment = Cx.value(-1)
@@ -11,7 +11,7 @@ static func instance_control(
     var serial_window_open = Cx.value(false)
     
     var board_state = Cx.lens(board, "state")
-    var board_log = Cx.lens(board, "board_log")
+    var board_log = Cx.lens(board, "log")
     
     var board_available = Cx.map(board_state, func(state): return state != BoardState.BOARD_UNAVAILABLE)
     var board_active = Cx.map(board_state, func(state): return state == BoardState.BOARD_RUNNING || state == BoardState.BOARD_SUSPENDED)
@@ -19,12 +19,12 @@ static func instance_control(
 #    var vehicle_available = Cx.map(vehicle_state, func(state): return true)
 #    var has_attachments = Cx.dedup(Cx.map(attachments, func(vec): return !vec.is_empty()))
     
-    var build_state: Tracked = Cx.lens(sketch, "build_state")
+    var build_state: Tracked = Cx.lens(sketch, "state")
     var is_building: Tracked = Cx.map(build_state, func(state): return state == SketchState.BUILD_PENDING)
-    var build_log: Tracked = Cx.lens(sketch, "build_log")
+    var build_log: Tracked = Cx.lens(sketch, "log")
     var has_build_log: Tracked = Cx.map(build_log, func(s): return !s.is_empty())
     
-    var sketch_path: Tracked = Cx.map(sketch, func(s): return s.sketch.source)
+    var sketch_path: Tracked = Cx.lens(info, "source")
     
     c.inherits(VBoxContainer)
     
@@ -41,7 +41,7 @@ static func instance_control(
     var reset_vehicle := c.user_signal("reset_vehicle")
     var submit_uart := c.user_signal("submit_uart")
     
-    var sketch_file = Cx.map(sketch, func(p): return p.sketch.source.get_file())
+    var sketch_file = Cx.map(sketch_path, func(p): return p.get_file())
 
     c.child(func(c: Ctx):
         c.inherits(Widgets.button())

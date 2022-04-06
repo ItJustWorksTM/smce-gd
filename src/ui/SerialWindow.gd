@@ -21,6 +21,7 @@ static func serial_window(in_buffer: Tracked, out_buffer: Tracked) -> Callable: 
         c.child(func(c: Ctx):
             c.inherits(Widgets.line_edit(out_buffer))
             c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
+            c.on("text_submitted", func(__): write.emit())
         )
         c.child(func(c: Ctx):
             c.inherits(Widgets.button())

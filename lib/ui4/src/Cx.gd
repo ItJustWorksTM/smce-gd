@@ -49,6 +49,12 @@ static func inner(tracked: Tracked) -> TrackedInner:
     assert(tracked.value() is Tracked)
     return TrackedInner.new(tracked)
 
+static func poll(value_fn) -> TrackedPoll:
+    return TrackedPoll.new(value_fn)
+
+static func invert(tracked: Tracked) -> TrackedMap:
+    return map(tracked, func(v): return !v)
+
 # Tree manipulation
 static func map_child(tracked: Tracked, widget_fn: Callable): return func(placeholder: Ctx):
     var hook: Node = placeholder.node()
@@ -56,11 +62,15 @@ static func map_child(tracked: Tracked, widget_fn: Callable): return func(placeh
     
     var previous := RefCountedValue.new()
     var reset = func():
+
+        var widget = widget_fn.call(tracked.value())
+        if widget is Object && widget == Tracked.Keep:
+            return
+        
         if is_instance_valid(previous.value):
             parent.remove_child(previous.value)
             previous.value.queue_free()
-
-        var widget: Callable = widget_fn.call(tracked.value())
+        
         var ctx := Ctx.new(widget, placeholder._shared_state)
         
         if !ctx.is_initialized():
@@ -83,8 +93,7 @@ static func map_children(arr: TrackedArrayBase, widget_fn: Callable): return fun
     
     var make_new = func(k):
         var container_index = container_index(arr, k)
-        var value = map(container_index, func(v): if v != null: return arr.value_at(v))
-        var ret := Ctx.new(widget_fn.call(container_index, value), placeholder._shared_state)
+        var ret := Ctx.new(widget_fn.call(container_index, arr.value_at(k)), placeholder._shared_state)
         
         if !ret.is_initialized():
             ret.free()
@@ -119,6 +128,12 @@ static func map_children(arr: TrackedArrayBase, widget_fn: Callable): return fun
                 for c in how:
                     remove_child.call(base_index + 1)
                 reset.call()
+            Tracked.MODIFIED:
+                remove_child.call(base_index + at + 1)
+                var node = make_new.call(at)
+                var old = parent.get_child(base_index + at)
+                old.add_sibling(node.node(), true)
+                print("modified :=") 
     )
 
 static func map_children_dict(dict: TrackedContainer, widget_fn: Callable): return func(placeholder: Ctx):
@@ -173,3 +188,8 @@ static func use_states(scripts, widget): return func(placeholder: Ctx):
     for script in scripts:
         states.append(placeholder.get_state(script) as Tracked)
     return map_child(combine(states), Fn.spread(widget)).call(placeholder)
+
+static func get_or_init(this: Node) -> Ctx:
+    if this.has_meta("_ctx"): return this.get_meta("_ctx") as Ctx
+    
+    return Ctx.new(this, {})

@@ -6,12 +6,12 @@ enum { SELECT_FILE, SELECT_DIR, SELECT_ANY, SAVE_FILE }
 enum { KIND_FILE, KIND_DIR, KIND_NONE }
 
 static func filepicker(
-        mode = Cx.value(SELECT_FILE),
-        user_filters = Cx.value([["Any", ["*.*"]]]),
-        path = Cx.value("/home/ruthgerd/Documents/demo")
+        mode: Tracked = Cx.value(SELECT_FILE),
+        user_filters: Tracked = Cx.value([["Any", ["*.*"]]]),
+        path: Tracked = Cx.value("/home/ruthgerd/Documents/demo")
     ): return func(c: Ctx):
     
-    var object := c.inherits(PanelContainer).node() as PanelContainer
+    var object := c.inherits(MarginContainer).node() as MarginContainer
     var completed := c.user_signal("completed")
     var cancelled := c.user_signal("cancelled")
     
@@ -20,11 +20,11 @@ static func filepicker(
     var save_name := Cx.value("my_file.ino")
     
     var active_filter = Cx.value(0)
-    var filter = Cx.combine_map([user_filters as Tracked, active_filter as Tracked], func(uf, a):
+    var filter: Tracked = Cx.combine_map([user_filters, active_filter as Tracked], func(uf, a):
         return uf[a][1] if a >= 0 else []
     )
 
-    var fs_items = Cx.combine_map([path as Tracked, filter as Tracked], func(p, f):
+    var fs_items = Cx.combine_map([path, filter], func(p, f):
         var items = Fs.list_directory_items(p, f)
         var ret = items[0] + items[1]
         return ret
@@ -34,6 +34,14 @@ static func filepicker(
             return p.plus_file(items[si])
     )
     
+    var mode_title = Cx.map(mode, func(mode): match mode:
+        SELECT_FILE: return "Select a File"
+        SELECT_DIR: return "Select a Directory"
+        SELECT_ANY: return "Select a File or Directory"
+        SAVE_FILE: return "Save File"
+    )
+    
+    var mode_activate_label = Cx.map(mode, func(mode): return "Save" if mode == SAVE_FILE else "Open")
     
     var filters = Cx.map(user_filters, func(f):
         var ret = []
@@ -77,14 +85,8 @@ static func filepicker(
     
     var fu := Cx.array(fs_items.value())
     
-#    c.on("ready", func():
-#        c.node().get_tree().process_frame.connect(func():
-#            print(fu)
-#        )
-#    )
     c.with("name", "FilePicker")
-    c.with("minimum_size", Vector2(563, 330))
-    c.on(fs_items.changed, func(w,h): 
+    c.on(fs_items.changed, func(w,h):
         print("updating fu items")
         fu.change(fs_items.value())
     )
@@ -92,21 +94,9 @@ static func filepicker(
         c.inherits(VBoxContainer)
         c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
         c.child(func(c: Ctx):
-            c.inherits(HBoxContainer)
-            c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
-            c.child(func(c: Ctx):
-                c.inherits(Widgets.button())
-                c.with("text", "Cancel")
-                c.on("pressed", func(): cancelled.emit())
-            )
-            c.child_opt(Cx.map_child(mode, func(mode): return func(c: Ctx):
+            c.inherits(Widgets.popup_headerbar(Cx.map(mode, func(mode): return func(c: Ctx):
                 if mode != SAVE_FILE:
-                    c.inherits(Widgets.label((func():
-                        match mode:
-                            SELECT_FILE: return "Select a File"
-                            SELECT_DIR: return "Select a Directory"
-                            SELECT_ANY: return "Select a File or Directory"
-                    ).call()))
+                    c.inherits(Widgets.label(mode_title))
                     c.with("horizontal_alignment", HORIZONTAL_ALIGNMENT_CENTER)
                     c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
                 else:
@@ -122,18 +112,11 @@ static func filepicker(
                             c.with("minimum_size", Vector2(200, 0))
                         )
                     )
-            ))
-            c.child(func(c: Ctx):
-                c.inherits(Widgets.button())
-                c.with("text", Cx.map(mode, func(mode):
-                    return "Save" if mode == SAVE_FILE else "Open"
-                ))
-                c.with("theme_type_variation", "ButtonPrimary")
-                c.with("size_flags_horizontal", SIZE_SHRINK_END)
-                c.with("disabled", open_disabled)
-                c.on("pressed", func(): completed.emit(selected_path.value()))
-            )
+            ), mode_activate_label, open_disabled))
+            c.on("cancelled", func(): cancelled.emit())
+            c.on("activated", func(): completed.emit(selected_path.value()))
         )
+
         c.child(func(c: Ctx):
             c.inherits(VBoxContainer)
             c.with("size_flags_vertical", SIZE_EXPAND_FILL)

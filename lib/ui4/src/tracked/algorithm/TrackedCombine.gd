@@ -11,7 +11,6 @@ func _init(tracked: Array[Tracked]):
     self._tracked = tracked
     _values.resize(tracked.size())
     for i in tracked.size():
-        print(tracked[i])
         tracked[i].connect("changed", self._on_change, [i])
         self._on_change(0, 0, i)
 

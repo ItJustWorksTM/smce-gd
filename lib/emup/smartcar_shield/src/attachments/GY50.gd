@@ -1,6 +1,9 @@
 class_name GY50
 extends HardwareBase
 
+static func register():
+    return [ smartcar_gyroscope() ]
+
 static func smartcar_gyroscope() -> BoardDeviceSpecification:
     var ret = BoardDeviceSpecification.new()
     ret.device_name = "SmartcarGyro"

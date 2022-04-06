@@ -2,10 +2,6 @@ class_name Main
 extends Node
 
 func _ready():
-#    var visualizers = {
-#        GY50: func(gy: GY50): return func(c: Ctx): c.inherits(Widgets.label(Cx.poll(gy, "rotation")))
-#    }
-
     $Ui.add_child(CtxExt.create(func(c: Ctx):
         c.inherits(MarginContainer)
     
@@ -13,36 +9,11 @@ func _ready():
         c.on(version.changed, func(w,h): DisplayServer.window_set_title("SMCE-gd %s" % version.value()))
         version.change("2.0.0-dev")
     
-        c.child(UserConfigImpl.user_config_impl())
-        c.child(WorldEnvImpl.world_env_impl())
-        
-        c.child_opt(Cx.use_states([UserConfigState], func(usr): return func(c: Ctx): 
-            if !usr: return
-            c.inherits(SketchImpl.sketch_impl(usr))
-        ))
-        
-        var conf = c.get_state(UserConfigState).value()
+        c.child(UserConfigState)
+        var conf = c.get_state(UserConfigState).value() as UserConfigState
         conf.set_default_config.call(Defaults.user_config())
-        
-        c.child_opt(Cx.use_states([SketchState], func(sk): return func(c: Ctx): 
-            if !sk: return
-            c.inherits(BoardImpl.board_impl(sk))
-        ))
-        c.child_opt(Cx.use_states([BoardState, SketchState, UserConfigState], func(bd, sk, usr): return func(c: Ctx):
-            if !(bd && usr && sk): return
-            c.inherits(HardwareImpl.hardware_impl(bd, sk, usr))
-        ))
-        c.child(func(c: Ctx):
-            c.inherits(VehicleImpl.vehicle_impl(c.get_state(WorldEnvState)))
-        )
-        c.child_opt(Cx.use_states([UserConfigState, VehicleState, HardwareState], func(usr, veh, hw): return func(c: Ctx):
-            if !(usr && veh && usr): return
-            c.inherits(AttachmentImpl.attachment_impl(usr, hw, veh))
-        ))
-        c.child(func(c: Ctx):
-            c.inherits(SmceUiRoot.smce_ui_root())
-        )
-        
+
+        c.child(WorldEnvState)
         var env = c.get_state(WorldEnvState).value()
         
         var playground = load("res://assets/scenes/environments/playground/Playground.tscn")
@@ -59,39 +30,63 @@ func _ready():
                 c.inherits(scene)
         )
         
-        env.change_world.call("playground/Playground")
+        env.change_world.call("test_lab/TestLab")
         
+        c.child(HardwareState)
         var hw = c.get_state(HardwareState).value()
         
         hw.register_hardware.call("BrushedMotor", BrushedMotor)
         hw.register_hardware.call("SR04", SR04)
         hw.register_hardware.call("UartPuller", UartPuller)
         hw.register_hardware.call("GY50", GY50)
-        
+
+        c.child(VehicleState)
         var veh: VehicleState = c.get_state(VehicleState).value() 
-        
-        var totally_a_vehicle = VehicleState.basic_vehicle(
-            "res://assets/models/smartcar/smartcar-rigid.tscn",
+        var smartcar_shield = VehicleState.basic_vehicle(
+            "res://assets/scenes/objects/vehicles/SmartcarShield.tscn",
             {
-                front_top =  "CollisionShape3D",
-                front_left = "Slots/FrontLeft",
-                front_right = "Slots/FrontRight",
-                mid_left = "Wheels/Mid"
+                right =  "attachment_slots/right",
+                right_motor = "attachment_slots/front_top",
+                left =  "attachment_slots/left",
+                left_motor = "attachment_slots/front_top",
+                back =  "attachment_slots/back",
+                front =  "attachment_slots/front",
+                front2 = "attachment_slots/front2",
+                internal = "attachment_slots/front_top",
             }
         )
         
-        veh.register_vehicle.call("smartcar", totally_a_vehicle)
+        veh.register_vehicle.call("smartcar_shield", smartcar_shield)
         
-        var ez = {
-            front_top = func(vehicle): return func(c: Ctx):
-                c.inherits(Node3D)
-                c.with("name", "very cool attachment")
-                vehicle.apply_impulse(Vector3(randf_range(0.0,10.0), randf_range(0.0,60.0), randf_range(0,10.0)), Vector3(0,0,0))
-        }
-        
-        for i in 50:
-            veh.spawn_vehicle.call("smartcar", ez)
+        c.child_opt(Cx.use_states([UserConfigState, HardwareState], func(usr, hw): return func(c: Ctx): 
+            if (usr && hw): c.inherits(SketchState, [usr, hw])
+        ))
+        var sks = c.get_state(SketchState).value()
+        sks.add_sketch.call("/home/ruthgerd/Sources/.tracking/smartcar-shield/examples/Car/manualControl")
+#        sks.add_sketch.call("/home/ruthgerd/Sources/.tracking/smartcar-shield/examples/sensors/gyroscope/gyroscopeHeading/gyroscopeHeading.ino")
+#        sks.add_sketch.call("/home/ruthgerd/Sources/.tracking/smartcar-shield/examples/sensors/infrareds/GP2D120/GP2D120.ino")
 
+        c.child_opt(Cx.use_states([SketchState], func(sk): return func(c: Ctx): 
+            if (sk): c.inherits(BoardState, [sk])
+        ))
+        var bd = c.get_state(BoardState).value()
+        bd.add_board.call(0)
+        
+        c.child_opt(Cx.use_states([BoardState, UserConfigState, VehicleState], func(bd, usr, veh): return func(c: Ctx):
+            if (usr && veh && bd): c.inherits(AttachmentState, [bd, usr, veh, c.get_state(WorldEnvState)])
+        ))
+        var att = c.get_state(AttachmentState).value()
+        
+        var generic_attachment = func(type): return func(props): return func(vehicle): return func(c: Ctx):
+            c.inherits(type)
+            c.with("vehicle", vehicle)
+            for prop in props.keys():
+                c.with(prop, props[prop])
+        
+        att.register_attachment.call("MotorDriver", generic_attachment.call(MotorDriver))
+        att.register_attachment.call("ConeRaycaster", generic_attachment.call(ConeRaycaster))
+        
+        c.child(func(c: Ctx):
+            c.inherits(SmceUiRoot.smce_ui_root())
+        )
     ))
-    
-#    $Cx.add_child(root)

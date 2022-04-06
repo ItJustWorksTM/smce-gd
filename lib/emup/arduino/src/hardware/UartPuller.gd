@@ -14,6 +14,7 @@ func requires() -> Array:
 var history_in: String = ""
 
 func write(text: String) -> void:
+    
     _channel.write(text)
 
 func _process(_delta: float) -> void:

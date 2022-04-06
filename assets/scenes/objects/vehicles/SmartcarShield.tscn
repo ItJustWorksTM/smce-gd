@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpt0pls7hnwhx"]
+
+[ext_resource type="PackedScene" uid="uid://cgmsrwi1xd4k1" path="res://assets/scenes/objects/vehicles/Smartcar.tscn" id="1_26rv7"]
+
+[node name="Smartcar" instance=ExtResource( "1_26rv7" )]
+
+[node name="attachment_slots" type="Node3D" parent="." index="8"]
+
+[node name="right" type="Position3D" parent="attachment_slots" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.339, 0)
+
+[node name="internal" type="Position3D" parent="attachment_slots" index="1"]
+
+[node name="right_motor" type="Position3D" parent="attachment_slots" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.0670185, 0)
+
+[node name="left_motor" type="Position3D" parent="attachment_slots" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.067, 0)
+
+[node name="left" type="Position3D" parent="attachment_slots" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.339, 0)
+
+[node name="back" type="Position3D" parent="attachment_slots" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.339033, 1.72969)
+
+[node name="front" type="Position3D" parent="attachment_slots" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.339, -1.73)
+
+[node name="front2" type="Position3D" parent="attachment_slots" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.729526, -2.37697)
+
+[node name="front_top" type="Position3D" parent="attachment_slots" index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.729526, -1.12787)

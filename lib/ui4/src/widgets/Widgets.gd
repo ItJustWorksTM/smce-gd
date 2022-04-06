@@ -1,4 +1,4 @@
-class_name Widgets
+class_name Widgets extends Control
 
 
 static func item_list(items: TrackedArrayBase, selected: Tracked, item_child: Callable): return func(c: Ctx): 
@@ -35,7 +35,6 @@ static func item_list(items: TrackedArrayBase, selected: Tracked, item_child: Ca
         c.on("activated", func():
             on_activated.emit(i.value())
         )
-#        print("childing")
         c.child(item_child.call(i, item))
     ))
 
@@ -63,3 +62,34 @@ static func window(open: Tracked): return func(c: Ctx):
         print("close??")
         open.change(false)
     )
+
+static func popup_headerbar(
+        title_widget_fn,
+        activate_button_text: Tracked,
+        activate_disabled: Tracked
+    ): return func(c: Ctx):
+    c.inherits(HBoxContainer)
+    var cancel = c.user_signal("cancelled")
+    var activate = c.user_signal("activated")
+    
+    c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
+    c.child(func(c: Ctx):
+        c.inherits(Widgets.button())
+        c.with("text", "Cancel")
+        c.on("pressed", func(): cancel.emit())
+    )
+    c.child(func(c: Ctx):
+        c.inherits(MarginContainer)
+        c.with("size_flags_horizontal", SIZE_EXPAND_FILL)
+        c.child_opt(Cx.map_child(title_widget_fn, func(fn): return fn))
+    )
+    c.child(func(c: Ctx):
+        c.inherits(Widgets.button())
+        c.with("text", activate_button_text)
+        c.with("theme_type_variation", "ButtonPrimary")
+        c.with("size_flags_horizontal", SIZE_SHRINK_END)
+        c.with("disabled", activate_disabled)
+        c.on("pressed", func(): activate.emit())
+    )
+    
+    pass

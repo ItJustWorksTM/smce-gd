@@ -1,30 +1,24 @@
-[gd_scene load_steps=6 format=3 uid="uid://dome8ixsjh48i"]
+[gd_scene load_steps=9 format=3 uid="uid://bj2xhu6eiquk3"]
 
 [ext_resource type="Script" path="res://src/Main.gd" id="2_0rcig"]
-[ext_resource type="PackedScene" uid="uid://br0vb5hyy832y" path="res://assets/models/smartcar/smartcar.tscn" id="5_24sle"]
+[ext_resource type="PackedScene" uid="uid://cgmsrwi1xd4k1" path="res://assets/scenes/objects/vehicles/Smartcar.tscn" id="4_8pmub"]
 [ext_resource type="Environment" uid="uid://c8vfq6sfdpb2g" path="res://assets/environments/sunny_day.tres" id="6_u7rwh"]
 [ext_resource type="Script" path="res://lib/ui4/src/widgets/ItemButton.gd" id="7_fc4wc"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_153y7"]
-size = Vector3(1.18145, 1, 4.48176)
+[sub_resource type="BoxMesh" id="BoxMesh_rretv"]
+size = Vector3(10, 0.2, 10)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vohbx"]
+data = PackedVector3Array(-5, 0.1, 5, 5, 0.1, 5, -5, -0.1, 5, 5, 0.1, 5, 5, -0.1, 5, -5, -0.1, 5, 5, 0.1, -5, -5, 0.1, -5, 5, -0.1, -5, -5, 0.1, -5, -5, -0.1, -5, 5, -0.1, -5, 5, 0.1, 5, 5, 0.1, -5, 5, -0.1, 5, 5, 0.1, -5, 5, -0.1, -5, 5, -0.1, 5, -5, 0.1, -5, -5, 0.1, 5, -5, -0.1, -5, -5, 0.1, 5, -5, -0.1, 5, -5, -0.1, -5, 5, 0.1, 5, -5, 0.1, 5, 5, 0.1, -5, -5, 0.1, 5, -5, 0.1, -5, 5, 0.1, -5, -5, -0.1, 5, 5, -0.1, 5, -5, -0.1, -5, 5, -0.1, 5, 5, -0.1, -5, -5, -0.1, -5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_18na1"]
+size = Vector3(10, 2, 0.2)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0q78t"]
+data = PackedVector3Array(-5, 1, 0.1, 5, 1, 0.1, -5, -1, 0.1, 5, 1, 0.1, 5, -1, 0.1, -5, -1, 0.1, 5, 1, -0.1, -5, 1, -0.1, 5, -1, -0.1, -5, 1, -0.1, -5, -1, -0.1, 5, -1, -0.1, 5, 1, 0.1, 5, 1, -0.1, 5, -1, 0.1, 5, 1, -0.1, 5, -1, -0.1, 5, -1, 0.1, -5, 1, -0.1, -5, 1, 0.1, -5, -1, -0.1, -5, 1, 0.1, -5, -1, 0.1, -5, -1, -0.1, 5, 1, 0.1, -5, 1, 0.1, 5, 1, -0.1, -5, 1, 0.1, -5, 1, -0.1, 5, 1, -0.1, -5, -1, 0.1, 5, -1, 0.1, -5, -1, -0.1, 5, -1, 0.1, 5, -1, -0.1, -5, -1, -0.1)
 
 [node name="Control" type="Node"]
 script = ExtResource( "2_0rcig" )
-
-[node name="VehicleBody3D" type="RigidDynamicBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.2603, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
-shape = SubResource( "BoxShape3D_153y7" )
-
-[node name="Node3D2" parent="VehicleBody3D" instance=ExtResource( "5_24sle" )]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
-
-[node name="Node3D" type="Node3D" parent="VehicleBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1224, 1.53204)
-
-[node name="Position3D" type="Position3D" parent="VehicleBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03102, 0.512054, 1.55532)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( "6_u7rwh" )
@@ -288,3 +282,39 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Node3D" type="Node3D" parent="."]
+
+[node name="Label" type="Control" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="RigidDynamicBody3D" parent="." instance=ExtResource( "4_8pmub" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.829157, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9765, 0.215519, 0, -0.215519, 0.9765, 0, 0.664917, 8.47425)
+mesh = SubResource( "BoxMesh_rretv" )
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="@@123807" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource( "ConcavePolygonShape3D_vohbx" )
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -0.693668, 0, -10.2109)
+mesh = SubResource( "BoxMesh_18na1" )
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D2"]
+
+[node name="@@172842" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D"]
+shape = SubResource( "ConcavePolygonShape3D_0q78t" )
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.60429e-08, 0.436927, 0.899497, 5.36142e-08, 0.899497, -0.436927, -1, -4.23516e-22, 5.96047e-08, 6.14749, -0.679651, -3.9424)
+mesh = SubResource( "BoxMesh_18na1" )
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D3"]
+
+[node name="172842" type="CollisionShape3D" parent="MeshInstance3D3/StaticBody3D"]
+shape = SubResource( "ConcavePolygonShape3D_0q78t" )

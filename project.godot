@@ -10,11 +10,6 @@ config_version=5
 
 _global_script_classes=[{
 "base": "Node",
-"class": &"AttachmentImpl",
-"language": &"GDScript",
-"path": "res://src/state_impl/AttachmentImpl.gd"
-}, {
-"base": "Object",
 "class": &"AttachmentState",
 "language": &"GDScript",
 "path": "res://src/state/AttachmentState.gd"
@@ -23,11 +18,6 @@ _global_script_classes=[{
 "class": &"BetterOptionButton",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/widgets/BetterOptionButton.gd"
-}, {
-"base": "Node",
-"class": &"BoardImpl",
-"language": &"GDScript",
-"path": "res://src/state_impl/BoardImpl.gd"
 }, {
 "base": "Node",
 "class": &"BoardPoller",
@@ -42,7 +32,12 @@ _global_script_classes=[{
 "base": "HardwareBase",
 "class": &"BrushedMotor",
 "language": &"GDScript",
-"path": "res://src/hardware/smartcar_shield/BrushedMotor.gd"
+"path": "res://lib/emup/smartcar_shield/src/attachments/BrushedMotor.gd"
+}, {
+"base": "Node",
+"class": &"ConeRaycaster",
+"language": &"GDScript",
+"path": "res://lib/emup/smartcar_shield/src/hardware/ConeRaycaster.gd"
 }, {
 "base": "Object",
 "class": &"Ctx",
@@ -67,7 +62,7 @@ _global_script_classes=[{
 "base": "HardwareBase",
 "class": &"DigitalFS",
 "language": &"GDScript",
-"path": "res://src/hardware/misc/DigitalFS.gd"
+"path": "res://lib/emup/arduino/src/hardware/DigitalFS.gd"
 }, {
 "base": "Control",
 "class": &"FilePicker",
@@ -89,27 +84,27 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://lib/utility/src/Fs.gd"
 }, {
+"base": "Object",
+"class": &"Future",
+"language": &"GDScript",
+"path": "res://lib/utility/src/Future.gd"
+}, {
 "base": "HardwareBase",
 "class": &"GP2",
 "language": &"GDScript",
-"path": "res://src/hardware/smartcar_shield/GP2.gd"
+"path": "res://lib/emup/smartcar_shield/src/attachments/GP2.gd"
 }, {
 "base": "HardwareBase",
 "class": &"GY50",
 "language": &"GDScript",
-"path": "res://src/hardware/smartcar_shield/GY50.gd"
+"path": "res://lib/emup/smartcar_shield/src/attachments/GY50.gd"
 }, {
 "base": "Node",
 "class": &"HardwareBase",
 "language": &"GDScript",
-"path": "res://src/hardware/HardwareBase.gd"
+"path": "res://src/HardwareBase.gd"
 }, {
 "base": "Node",
-"class": &"HardwareImpl",
-"language": &"GDScript",
-"path": "res://src/state_impl/HardwareImpl.gd"
-}, {
-"base": "Object",
 "class": &"HardwareState",
 "language": &"GDScript",
 "path": "res://src/state/HardwareState.gd"
@@ -139,6 +134,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/Main.gd"
 }, {
+"base": "Node",
+"class": &"MotorDriver",
+"language": &"GDScript",
+"path": "res://lib/emup/smartcar_shield/src/hardware/MotorDriver.gd"
+}, {
 "base": "Control",
 "class": &"MultiInstance",
 "language": &"GDScript",
@@ -152,12 +152,22 @@ _global_script_classes=[{
 "base": "HardwareBase",
 "class": &"OV767X",
 "language": &"GDScript",
-"path": "res://src/hardware/misc/OV767X.gd"
+"path": "res://lib/emup/misc/OV767X.gd"
 }, {
 "base": "HardwareBase",
 "class": &"Odometer",
 "language": &"GDScript",
-"path": "res://src/hardware/smartcar_shield/Odometer.gd"
+"path": "res://lib/emup/smartcar_shield/src/attachments/Odometer.gd"
+}, {
+"base": "RigidDynamicBody3D",
+"class": &"RayCastVehicle",
+"language": &"GDScript",
+"path": "res://lib/physc/src/RayCastVehicle.gd"
+}, {
+"base": "Node3D",
+"class": &"RayCastWheel",
+"language": &"GDScript",
+"path": "res://lib/physc/src/RayCastWheel.gd"
 }, {
 "base": "RefCounted",
 "class": &"RefCountedValue",
@@ -177,7 +187,7 @@ _global_script_classes=[{
 "base": "HardwareBase",
 "class": &"SR04",
 "language": &"GDScript",
-"path": "res://src/hardware/smartcar_shield/SR04.gd"
+"path": "res://lib/emup/smartcar_shield/src/attachments/SR04.gd"
 }, {
 "base": "RefCounted",
 "class": &"ScopeGuard",
@@ -189,12 +199,17 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/ui/SerialWindow.gd"
 }, {
-"base": "RefCounted",
-"class": &"SketchImpl",
+"base": "Node3D",
+"class": &"ShapeCast3D",
 "language": &"GDScript",
-"path": "res://src/state_impl/SketchImpl.gd"
+"path": "res://lib/physc/src/ShapeCast3D.gd"
 }, {
-"base": "Object",
+"base": "Control",
+"class": &"SketchPicker",
+"language": &"GDScript",
+"path": "res://src/ui/SketchPicker.gd"
+}, {
+"base": "Node",
 "class": &"SketchState",
 "language": &"GDScript",
 "path": "res://src/state/SketchState.gd"
@@ -207,17 +222,7 @@ _global_script_classes=[{
 "base": "RayCast3D",
 "class": &"StraightRaycaster",
 "language": &"GDScript",
-"path": "res://src/attachments/StraightRaycaster.gd"
-}, {
-"base": "RefCounted",
-"class": &"Task",
-"language": &"GDScript",
-"path": "res://lib/utility/src/Task.gd"
-}, {
-"base": "RefCounted",
-"class": &"TestClass",
-"language": &"GDScript",
-"path": "res://src/TestClass.gd"
+"path": "res://lib/emup/smartcar_shield/src/hardware/StraightRaycaster.gd"
 }, {
 "base": "RefCounted",
 "class": &"Tracked",
@@ -234,7 +239,7 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://lib/ui4/src/tracked/storage/TrackedArrayBase.gd"
 }, {
-"base": "TrackedArrayBase",
+"base": "TrackedValue",
 "class": &"TrackedBuffer",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/tracked/algorithm/TrackedBuffer.gd"
@@ -279,6 +284,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://lib/ui4/src/tracked/algorithm/TrackedMap.gd"
 }, {
+"base": "Tracked",
+"class": &"TrackedPoll",
+"language": &"GDScript",
+"path": "res://lib/ui4/src/tracked/algorithm/TrackedPoll.gd"
+}, {
 "base": "TrackedContainer",
 "class": &"TrackedTransform",
 "language": &"GDScript",
@@ -297,14 +307,9 @@ _global_script_classes=[{
 "base": "HardwareBase",
 "class": &"UartPuller",
 "language": &"GDScript",
-"path": "res://src/hardware/misc/UartPuller.gd"
+"path": "res://lib/emup/arduino/src/hardware/UartPuller.gd"
 }, {
-"base": "RefCounted",
-"class": &"UserConfigImpl",
-"language": &"GDScript",
-"path": "res://src/state_impl/UserConfigImpl.gd"
-}, {
-"base": "Object",
+"base": "Node",
 "class": &"UserConfigState",
 "language": &"GDScript",
 "path": "res://src/state/UserConfigState.gd"
@@ -314,39 +319,33 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://src/VehicleConfig.gd"
 }, {
-"base": "RefCounted",
-"class": &"VehicleImpl",
-"language": &"GDScript",
-"path": "res://src/state_impl/VehicleImpl.gd"
-}, {
-"base": "Object",
+"base": "Node",
 "class": &"VehicleState",
 "language": &"GDScript",
 "path": "res://src/state/VehicleState.gd"
 }, {
-"base": "RefCounted",
+"base": "Control",
 "class": &"Widgets",
 "language": &"GDScript",
 "path": "res://lib/ui4/src/widgets/Widgets.gd"
 }, {
-"base": "Node3D",
-"class": &"WorldEnvImpl",
-"language": &"GDScript",
-"path": "res://src/state_impl/WorldEnvImpl.gd"
-}, {
-"base": "Object",
+"base": "Node",
 "class": &"WorldEnvState",
 "language": &"GDScript",
 "path": "res://src/state/WorldEnvState.gd"
+}, {
+"base": "Control",
+"class": &"WorldSwitch",
+"language": &"GDScript",
+"path": "res://src/ui/WorldSwitch.gd"
 }]
 _global_script_class_icons={
-"AttachmentImpl": "",
 "AttachmentState": "",
 "BetterOptionButton": "",
-"BoardImpl": "",
 "BoardPoller": "",
 "BoardState": "",
 "BrushedMotor": "",
+"ConeRaycaster": "",
 "Ctx": "",
 "CtxExt": "",
 "Cx": "",
@@ -356,32 +355,34 @@ _global_script_class_icons={
 "Fn": "",
 "FreeCamera": "",
 "Fs": "",
+"Future": "",
 "GP2": "",
 "GY50": "",
 "HardwareBase": "",
-"HardwareImpl": "",
 "HardwareState": "",
 "InstanceControl": "",
 "InstanceList": "",
 "ItemButton": "",
 "LogWindow": "",
 "Main": "",
+"MotorDriver": "",
 "MultiInstance": "",
 "Notifications": "",
 "OV767X": "",
 "Odometer": "",
+"RayCastVehicle": "",
+"RayCastWheel": "",
 "RefCountedValue": "",
 "RefKill": "",
 "Reflect": "",
 "SR04": "",
 "ScopeGuard": "",
 "SerialWindow": "",
-"SketchImpl": "",
+"ShapeCast3D": "",
+"SketchPicker": "",
 "SketchState": "",
 "SmceUiRoot": "",
 "StraightRaycaster": "",
-"Task": "",
-"TestClass": "",
 "Tracked": "",
 "TrackedArray": "",
 "TrackedArrayBase": "",
@@ -394,18 +395,17 @@ _global_script_class_icons={
 "TrackedInner": "",
 "TrackedLens": "",
 "TrackedMap": "",
+"TrackedPoll": "",
 "TrackedTransform": "",
 "TrackedTween": "",
 "TrackedValue": "",
 "UartPuller": "",
-"UserConfigImpl": "",
 "UserConfigState": "",
 "VehicleConfig": "",
-"VehicleImpl": "",
 "VehicleState": "",
 "Widgets": "",
-"WorldEnvImpl": "",
-"WorldEnvState": ""
+"WorldEnvState": "",
+"WorldSwitch": ""
 }
 
 [application]
@@ -414,6 +414,10 @@ config/name="SMCE-gd"
 run/main_scene="res://assets/scenes/Main.tscn"
 config/icon="res://assets/icons/icon.png"
 config/features=PackedStringArray("4.0", "Vulkan Clustered")
+
+[autoload]
+
+DebugCanvas="*res://src/DebugCanvas.gd"
 
 [debug]
 
@@ -461,6 +465,10 @@ camera_up={
 ]
 }
 
+[physics]
+
+common/physics_ticks_per_second=120
+
 [rendering]
 
 global_illumination/gi/use_half_resolution=true
@@ -469,3 +477,4 @@ global_illumination/sdfgi/probe_ray_count=0
 global_illumination/sdfgi/frames_to_converge=2
 global_illumination/sdfgi/frames_to_update_lights=3
 environment/defaults/default_clear_color=Color(0.188235, 0.188235, 0.188235, 0)
+anti_aliasing/quality/msaa=1

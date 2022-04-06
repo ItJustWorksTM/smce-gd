@@ -39,29 +39,25 @@ static func multi_instance(active_sketch: Tracked) -> Callable: return func(c: C
                 c.with("visible", Cx.map(active_sketch, func(i): return i >= 0))
                 c.with("minimum_size", Vector2(288, 0))
                 c.child_opt(Cx.map_children(boards, func(i, board): return func(c: Ctx):
-                    var sketch_id = Cx.inner(Cx.lens(board, "attached_sketch"))
-                    var sketch_maybe = Cx.map(sketch_id, func(id):
-                        if id >= 0: return sketch_state.sketches.value_at(id)
-                    )
-                    
-                    var uart_in = Cx.value("")
                     var uart_out = Cx.value("")
                     
-                    c.inherits(InstanceControl.instance_control(board, sketch_maybe, uart_in, uart_out))
+                    var uart_maybe = Cx.map(
+                        Cx.lens(board.board, "hardware"),
+                        func(hw):
+                            return hw.get("Gui Uart")
+                    )
+                    
+                    var uart_in = Cx.dedup(Cx.poll(func():
+                        var uart = uart_maybe.value()
+                        if uart == null: return ""
+                        return uart.history_in
+                    ))
+                    
+                    c.inherits(InstanceControl.instance_control(board.info, board.board, board.sketch, uart_in, uart_out))
                     c.with("visible", Cx.combine_map(
                         [active_sketch as Tracked, i as Tracked],
                         func(a, i): return a == i
                     ))
-                    
-                    var uart_maybe = Cx.map(
-                        Cx.container_value(hardware_state.hardware, i.value()),
-                        func(hw): if hw: return hw.by_label.get("Gui Uart")
-                    )
-                    c.on(uart_maybe.changed, func(w,h): # TODO: disconnect on change
-                        var uart = uart_maybe.value()
-                        if uart == null: uart_in.change("")
-                        else: c.on(uart.read, func(_r): uart_in.change(uart.history_in)) 
-                    )
                     c.on("submit_uart", func():
                         var uart = uart_maybe.value()
                         if uart == null: return

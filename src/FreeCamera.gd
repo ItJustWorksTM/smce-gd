@@ -36,12 +36,12 @@ func translate_local(offset: Vector3) -> Vector3:
     return (self.transform * ext).origin - self.transform.origin
 
 func _physics_process(delta: float) -> void:
-    self.target_position += self.translate_local(40 * self.velocity * Vector3(1,0,1) * delta)
-    self.target_position.y += 40 * self.velocity.y * delta
-    self.target_rotation += velocity2 * delta
+    self.target_position += self.translate_local(5 * self.velocity * Vector3(1,0,1) * delta)
+    self.target_position.y += 20 * self.velocity.y * delta
+    self.target_rotation += velocity2 * delta * 0.5
     self.target_rotation.x = clamp(self.target_rotation.x, - PI / 2, PI / 2)
     self.velocity2 = Vector3()
     
-    self.position = self.position.lerp(self.target_position, delta * 5)
-    self.rotation = self.rotation.lerp(self.target_rotation, delta * 5)
+    self.position = self.position.lerp(self.target_position, delta * 10)
+    self.rotation = self.rotation.lerp(self.target_rotation, delta * 15)
     self.rotation.z = 0

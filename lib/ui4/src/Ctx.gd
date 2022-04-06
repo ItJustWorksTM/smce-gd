@@ -53,6 +53,10 @@ func inherits(widget, args := []):
             return
         self._managed_node = vanilla_node
         self._managed_node.set_meta("_kill", RefKill.new(self))
+        self._managed_node.set_meta("_ctx", self)
+        if vanilla_node.has_method("_ctx_init"):
+            vanilla_node._ctx_init(self)
+        
     
 #    print("Ctx: created managed node: %s", self.node())
     
@@ -111,11 +115,13 @@ func child_at(node_path: String, widget):
 
 func with(property: String, value):
     if assert_init(): return null
+    if !(property in self.node()): return self # its ok :)
     
     var value_now = value
     if value is Tracked:
         self.on(value.changed, self._property_changed.bind(value).bind(property))
         value_now = value.value()
+    
     
     self.node().set_indexed(property, value_now)
     return self
@@ -156,6 +162,9 @@ func register_state(script, node):
     _registered_state.append(script)
     return existing.value()
 
+func register_as_state():
+    return register_state(self.node().script, self.node())
+
 #func unregister_state(script):
 #    if _registered_state.has(script):
 #        _shared_state[script].change(null)
@@ -191,3 +200,4 @@ func _notification(what):
                 ex.__value.free()
             ex.change(null)
 #        print("Ctx: freed (%s) with %s" % [self, self._managed_node])
+

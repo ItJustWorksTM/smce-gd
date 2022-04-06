@@ -8,9 +8,6 @@ func value(): return self._values
 func size(): return self._values.size()
 func keys(): return self._values.keys()
 
-class Keep:
-    pass
-
 func _init(tracked_container: TrackedContainer, transform: Callable = func(v): return v):
     self._transform = transform
     self._tracked_container = tracked_container

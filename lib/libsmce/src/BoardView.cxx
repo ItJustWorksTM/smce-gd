@@ -26,7 +26,8 @@ Ref<BoardView> BoardView::from_native(smce::BoardConfig board_config, smce::Boar
     gbv->view = bv;
 
     for (int i = 0; i < board_config.gpio_drivers.size(); ++i) {
-        gbv->pins[board_config.gpio_drivers[i].pin_id] = GpioPin::from_native(bv.pins[i]);
+        const auto id = board_config.gpio_drivers[i].pin_id;
+        gbv->pins[id] = GpioPin::from_native(bv.pins[id]);
     }
 
     for (int i = 0; i < board_config.uart_channels.size(); ++i) {
@@ -34,7 +35,8 @@ Ref<BoardView> BoardView::from_native(smce::BoardConfig board_config, smce::Boar
     }
 
     for (int i = 0; i < board_config.frame_buffers.size(); ++i) {
-        gbv->frame_buffers[board_config.frame_buffers[i].key] = FrameBuffer::from_native(bv.frame_buffers[i]);
+        const auto key = board_config.frame_buffers[i].key;
+        gbv->frame_buffers[key] = FrameBuffer::from_native(bv.frame_buffers[key]);
     }
 
     for (const auto& fml : board_config.board_devices) {

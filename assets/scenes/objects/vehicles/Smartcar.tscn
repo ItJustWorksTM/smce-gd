@@ -1,0 +1,83 @@
+[gd_scene load_steps=8 format=3 uid="uid://cgmsrwi1xd4k1"]
+
+[ext_resource type="Script" path="res://lib/physc/src/RayCastVehicle.gd" id="1_rd5fi"]
+[ext_resource type="PackedScene" uid="uid://3lox2f5ntjdk" path="res://assets/models/smartcar/smartcar_hull.tscn" id="2_rdjte"]
+[ext_resource type="Script" path="res://lib/physc/src/RayCastWheel.gd" id="3_jw5ga"]
+[ext_resource type="PackedScene" uid="uid://df42gpawqhvag" path="res://assets/models/smartcar/smartcar_wheel.tscn" id="4_28i72"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fnjmd"]
+size = Vector3(1.99214, 0.3, 2.57642)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d2kec"]
+size = Vector3(2.14363, 0.561938, 0.796942)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lbt5j"]
+size = Vector3(0.930072, 0.55839, 0.373778)
+
+[node name="Smartcar" type="RigidDynamicBody3D"]
+mass = 30.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.4, 0)
+script = ExtResource( "1_rd5fi" )
+
+[node name="smartcar-hull" parent="." instance=ExtResource( "2_rdjte" )]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
+
+[node name="body_collision" type="CollisionShape3D" parent="."]
+shape = SubResource( "BoxShape3D_fnjmd" )
+
+[node name="body_collision2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0186635, 1.73142)
+shape = SubResource( "BoxShape3D_d2kec" )
+
+[node name="body_collision3" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.892483, 0, 0.45108, 0, 1, 0, -0.45108, 0, 0.892483, 1.43662, 0.0186635, 1.72669)
+shape = SubResource( "BoxShape3D_lbt5j" )
+
+[node name="body_collision4" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.892586, 0, -0.450878, 0, 1, 0, 0.450878, 0, 0.892586, -1.437, 0.019, 1.727)
+shape = SubResource( "BoxShape3D_lbt5j" )
+
+[node name="body_collision5" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.999868, 0, 0.0162135, 0, 1, 0, -0.0162135, 0, -0.999868, -0.000254635, 0.0186635, -1.727)
+shape = SubResource( "BoxShape3D_d2kec" )
+
+[node name="body_collision6" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.89968, 0, -0.436551, 0, 1, 0, 0.436551, 0, -0.89968, -1.43668, 0.0186635, -1.75029)
+shape = SubResource( "BoxShape3D_lbt5j" )
+
+[node name="body_collision7" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.885158, 0, 0.46529, 0, 1, 0, -0.46529, 0, -0.885158, 1.43656, 0.019, -1.7037)
+shape = SubResource( "BoxShape3D_lbt5j" )
+
+[node name="left1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.957, -0.119, 0.683)
+script = ExtResource( "3_jw5ga" )
+easthetic_wheel_path = NodePath("wheel")
+
+[node name="wheel" parent="left1" instance=ExtResource( "4_28i72" )]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
+
+[node name="left2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.957, -0.119, -0.683)
+script = ExtResource( "3_jw5ga" )
+easthetic_wheel_path = NodePath("wheel")
+
+[node name="wheel" parent="left2" instance=ExtResource( "4_28i72" )]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
+
+[node name="right1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.956767, -0.11893, 0.682611)
+script = ExtResource( "3_jw5ga" )
+easthetic_wheel_path = NodePath("wheel")
+
+[node name="wheel" parent="right1" instance=ExtResource( "4_28i72" )]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+
+[node name="right2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.957, -0.119, -0.683)
+script = ExtResource( "3_jw5ga" )
+easthetic_wheel_path = NodePath("wheel")
+
+[node name="wheel" parent="right2" instance=ExtResource( "4_28i72" )]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)

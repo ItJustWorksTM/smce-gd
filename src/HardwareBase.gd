@@ -3,6 +3,9 @@ extends Node
 
 var _rec = []
 
+static func register():
+    return []
+
 func requires() -> Array:
     return []
 

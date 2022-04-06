@@ -16,13 +16,6 @@
 using namespace godot;
 
 struct SketchConfig : public GdRef<"SketchConfig", SketchConfig> {
-  public:
-    static void _bind_methods() {
-        bind_prop_rw<"extra_board_uris", Variant::Type::PACKED_STRING_ARRAY, &This::extra_board_uris>();
-        bind_prop_rw<"legacy_preproc_libs", Variant::Type::PACKED_STRING_ARRAY, &This::legacy_preproc_libs>();
-        bind_prop_rw<"plugins", Variant::Type::PACKED_STRING_ARRAY, &This::plugins>();
-    }
-
     PackedStringArray legacy_preproc_libs;
     PackedStringArray extra_board_uris;
     PackedStringArray plugins;
@@ -59,6 +52,12 @@ struct SketchConfig : public GdRef<"SketchConfig", SketchConfig> {
             }
 
         return config;
+    }
+
+    static void _bind_methods() {
+        bind_prop_rw<"extra_board_uris", Variant::Type::PACKED_STRING_ARRAY, &This::extra_board_uris>();
+        bind_prop_rw<"legacy_preproc_libs", Variant::Type::PACKED_STRING_ARRAY, &This::legacy_preproc_libs>();
+        bind_prop_rw<"plugins", Variant::Type::PACKED_STRING_ARRAY, &This::plugins>();
     }
 };
 
