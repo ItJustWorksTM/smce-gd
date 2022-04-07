@@ -29,6 +29,7 @@ def generate_bindings(path, needed_classes, use_template_get_node):
     target_dir = "."
 
     generate_global_constants(classes, target_dir)
+    generate_global_constant_binds(classes, target_dir)
     generate_builtin_bindings(classes, target_dir, "float_64")
     generate_engine_classes_bindings(classes, target_dir, use_template_get_node)
     generate_utility_functions(classes, target_dir)
