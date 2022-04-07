@@ -3,20 +3,18 @@
 [sub_resource type="PlaneMesh" id="PlaneMesh_wddcd"]
 size = Vector2(100, 100)
 
-[sub_resource type="OpenSimplexNoise" id="OpenSimplexNoise_ynwn1"]
-octaves = 9
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_l4y8d"]
 
-[sub_resource type="NoiseTexture" id="NoiseTexture_qyso1"]
-seamless = true
-noise = SubResource( "OpenSimplexNoise_ynwn1" )
+[sub_resource type="NoiseTexture" id="NoiseTexture_8vnc4"]
+noise = SubResource( "FastNoiseLite_l4y8d" )
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ajwgd"]
 albedo_color = Color(0.184314, 0.45098, 0.223529, 1)
-roughness_texture = SubResource( "NoiseTexture_qyso1" )
+roughness_texture = SubResource( "NoiseTexture_8vnc4" )
 emission_enabled = true
 emission = Color(0, 0.384314, 0, 1)
 normal_enabled = true
-normal_texture = SubResource( "NoiseTexture_qyso1" )
+normal_texture = SubResource( "NoiseTexture_8vnc4" )
 clearcoat_enabled = true
 clearcoat = 0.2
 heightmap_scale = 0.071
