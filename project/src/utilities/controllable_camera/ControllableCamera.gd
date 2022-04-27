@@ -50,6 +50,7 @@ func free_cam() -> void:
 
 func set_cam_position(tform: Transform = Transform()) -> void:
 	global_transform = tform
+	free_cam()
 
 
 func _on_free(node) -> void:
