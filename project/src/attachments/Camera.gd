@@ -121,9 +121,22 @@ func _physics_process(delta):
 
 
 func visualize() -> Control:
-	var visualizer = NodeVisualizer.new()
-	visualizer.display_node(self, "visualize_content")
-	return visualizer
+	var vis = NodeVisualizer.new()
+	vis.display_node(self, "visualize_content")
+	
+	var rect := TextureRect.new()
+	rect.expand = true
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rect.rect_min_size.y = 210
+	
+	rect.texture = viewport.get_texture()
+	
+	var parent = VBoxContainer.new()
+	parent.add_child(rect)
+	parent.add_child(vis)
+	
+	return parent
 
 
 func visualize_content() -> String:
