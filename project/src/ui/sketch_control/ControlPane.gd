@@ -173,7 +173,6 @@ func _built():
 	start_btn.disabled = false
 	start_btn.text = "Start"
 	serial_collapsable.disabled = false
-	uart.disabled = false
 	sketch_status.text = " Compiled"
 
 
@@ -183,7 +182,8 @@ func _on_board_started() -> void:
 	vehicle.unfreeze()
 	
 	sketch_log.text = ""
-	uart.console.text = ""	
+	uart.console.text = ""
+	uart.disabled = false
 	pause_btn.disabled = false
 	reset_pos_btn.disabled = false
 	start_btn.text = "Stop"
