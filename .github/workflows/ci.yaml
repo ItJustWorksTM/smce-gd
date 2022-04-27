@@ -2,8 +2,8 @@ name: CI
 on: [ push, pull_request ]
 env:
   GODOT_EXPORT_TEMPLATE_VERSION: 3.4.4
-  LIBSMCE_TAG: v1.5.5
-  LIBSMCE_VERSION: 1.5.5
+  LIBSMCE_TAG: v1.5.6
+  LIBSMCE_VERSION: 1.5.6
 jobs:
   rules:
     name: Compute job rules
@@ -318,6 +318,10 @@ jobs:
             codename: Bullseye
             image: gcc:11-bullseye
             slug: debian11
+          - name: Ubuntu
+            codename: Jammy
+            image: ubuntu:jammy
+            slug: ubuntu2204
           - name: Ubuntu
             codename: Impish
             image: ubuntu:impish
