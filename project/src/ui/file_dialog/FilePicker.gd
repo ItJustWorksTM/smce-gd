@@ -23,6 +23,10 @@ onready var _wrapped: FileDialog = $FileDialog
 enum dialog_type { SAVE, OPEN }
 export (dialog_type) var mode = dialog_type.OPEN
 
+export var current_dir: String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS) setget set_current_dir
+
+func set_current_dir(path: String) -> void:
+	_wrapped.current_dir = path
 
 func _ready():
 	# Trigger file refresh
@@ -30,7 +34,7 @@ func _ready():
 	_wrapped.hide()
 	_wrapped.connect("file_selected", self, "_on_file_selected")
 	_wrapped.get_cancel().connect("pressed", self, "_on_file_selected", [""])
-	_wrapped.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+	_wrapped.current_dir = current_dir
 
 
 func _on_file_selected(path: String) -> void:
@@ -38,7 +42,6 @@ func _on_file_selected(path: String) -> void:
 
 
 func _process(_delta: float) -> void:
-	
 	_wrapped.rect_size = rect_size
 	_wrapped.rect_global_position = rect_global_position
 	_wrapped.rect_scale = rect_scale

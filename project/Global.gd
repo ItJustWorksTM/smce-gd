@@ -33,6 +33,22 @@ var vehicles: Dictionary = {
 var user_dir: String = OS.get_user_data_dir() setget set_user_dir
 var version: String = "unknown"
 
+var last_open_directory_file: String = "" setget ,get_last_open_directory_file
+func get_last_open_directory_file() -> String:
+	return user_dir.plus_file("config/last_open_directory")
+
+var last_open_directory: String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS) setget set_last_open_directory
+
+func set_last_open_directory(path):
+	last_open_directory = path
+	var file = File.new()
+	
+	if file.open(self.last_open_directory_file, File.WRITE) != OK:
+		printerr("could not open last directory file")
+		return
+	
+	file.store_string(last_open_directory)
+
 var _classes: Array = [
 	AnalogRaycast, BrushedMotor,
 	load("res://src/attachments/Camera.gd"),

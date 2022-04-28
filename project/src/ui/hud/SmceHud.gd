@@ -96,8 +96,13 @@ func _on_sketch_btn() -> void:
 	var sketch_select = sketch_select_t.instance()
 	sketch_select.init(sketch_manager)
 	get_tree().root.add_child(sketch_select)
+	if Directory.new().dir_exists(Global.last_open_directory):
+		sketch_select.filepicker.current_dir = Global.last_open_directory
 	
 	var sketch = yield(sketch_select, "exited")
+	
+	Global.last_open_directory = sketch_select.filepicker._wrapped.current_dir
+	
 	
 	if ! is_instance_valid(sketch):
 		return

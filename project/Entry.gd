@@ -43,6 +43,11 @@ func _ready():
 		file.close()
 
 	Global.version = version
+	
+	file = File.new()
+	if file.open(Global.last_open_directory_file, File.READ) == OK:
+		Global.last_open_directory = file.get_as_text()
+		file.close()
 
 	OS.set_window_title("SMCE-gd: %s" % version)
 	print("Version: %s" % version)

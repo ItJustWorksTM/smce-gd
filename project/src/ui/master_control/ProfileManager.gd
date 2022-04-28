@@ -91,5 +91,5 @@ func save_profile(profile: ProfileConfig) -> bool:
 func save_profiles(profiles: Array) -> void:
 	for profile in profiles:
 		if ! save_profile(profile):
-			print("Could not save profile: ", profile.profile_name)
+			printerr("Could not save profile: ", profile.profile_name)
 
