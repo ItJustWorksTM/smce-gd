@@ -51,9 +51,10 @@ class BoardView : public Node {
     void write_digital_pin(int pin, bool value);
 
     int read_analog_pin(int pin);
+
     bool read_digital_pin(int pin);
 
-    Ref<FrameBuffer> framebuffers(int id);
+    Ref<FrameBuffer> framebuffers(String id);
 };
 } // namespace godot
 

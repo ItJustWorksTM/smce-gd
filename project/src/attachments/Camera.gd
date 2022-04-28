@@ -25,7 +25,16 @@ onready var effect = ColorRect.new()
 onready var viewport_root = Spatial.new()
 onready var camera = Camera.new()
 
-export var pin = 0
+var _pin = 0
+export var pins = [] setget set_pins
+
+func set_pins(pins: Array):
+	var key = 0
+	for i in pins.size():
+		key |= (int(pins[i]) & 0xFF) << (i * 8)
+	_pin = str(key)
+	print("camera key for %s is %s" % [str(pins), _pin])
+
 export(float, 0, 1) var distort = 0.75
 export(float) var fov = 90
 export(float) var far = 300
@@ -90,7 +99,7 @@ func _on_frame() -> void:
 		if hflip:
 			img.flip_x()
 		
-		var ret = view.framebuffers(pin).write_rgb888(img)
+		var ret = view.framebuffers(_pin).write_rgb888(img)
 
 
 func _physics_process(delta):
@@ -100,7 +109,7 @@ func _physics_process(delta):
 	
 	if ! view || ! view.is_valid():
 		return
-	var buffer = view.framebuffers(pin)
+	var buffer = view.framebuffers(_pin)
 	var new_res = Vector2(buffer.get_width(), buffer.get_height())
 	var new_freq = buffer.get_freq()
 	if new_res != resolution:

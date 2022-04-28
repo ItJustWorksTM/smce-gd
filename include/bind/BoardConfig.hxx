@@ -74,7 +74,7 @@ class BoardConfig : public Reference {
         GODOT_CLASS(FrameBufferConfig, Reference)
 
       public:
-        int key = 0;
+        String key = "0";
         bool direction = true; // true = in, false = out
 
         static void _register_methods();

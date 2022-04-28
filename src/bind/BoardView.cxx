@@ -52,9 +52,10 @@ void BoardView::write_analog_pin(int pin, int value) { view.pins[pin].analog().w
 
 void BoardView::write_digital_pin(int pin, bool value) { view.pins[pin].digital().write(value); }
 
-Ref<FrameBuffer> BoardView::framebuffers(int id) {
+Ref<FrameBuffer> BoardView::framebuffers(String id) {
     auto ret = make_ref<FrameBuffer>();
-    ret->frame_buf = view.frame_buffers[id];
+
+    ret->frame_buf = view.frame_buffers[std::wcstoull(id.unicode_str(), nullptr, 0)];
 
     return ret;
 }

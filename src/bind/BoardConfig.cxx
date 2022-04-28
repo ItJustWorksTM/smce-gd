@@ -16,8 +16,10 @@
  *
  */
 
+#include <cwchar>
 #include "bind/BoardConfig.hxx"
 #include "gen/ResourceLoader.hpp"
+#include "Variant.hpp"
 
 using namespace godot;
 
@@ -61,13 +63,14 @@ smce::BoardConfig::UartChannel BoardConfig::UartChannelConfig::to_native() const
 }
 
 void BoardConfig::FrameBufferConfig::_register_methods() {
-    register_property("key", &FrameBufferConfig::key, 0);
+    register_property("key", &FrameBufferConfig::key, String{"0"});
     register_property("direction", &FrameBufferConfig::direction, true);
 }
 
 smce::BoardConfig::FrameBuffer BoardConfig::FrameBufferConfig::to_native() const {
     using Direction = smce::BoardConfig::FrameBuffer::Direction;
-    return {.key = static_cast<size_t>(key), .direction = direction ? Direction::in : Direction::out};
+    const uint64_t parsed_key = std::wcstoull(key.unicode_str(), nullptr, 0);
+    return {.key = parsed_key, .direction = direction ? Direction::in : Direction::out};
 }
 
 void BoardConfig::SecureDigitalStorage::_register_methods() {

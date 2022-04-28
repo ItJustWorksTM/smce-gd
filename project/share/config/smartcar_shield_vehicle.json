@@ -10,7 +10,19 @@
       },
       "Front2": {
          "class": "Camera",
-         "name": "Front Camera"
+         "name": "Front Camera",
+         "props": {
+            "pins": [
+               10,
+               1,
+               0,
+               2,
+               3,
+               5,
+               6,
+               4
+            ]
+         }
       },
       "FrontTop": {
          "class": "UltraSonic",
@@ -53,7 +65,7 @@
          "backward_pin": 26,
          "enable_pin": 27
       },
-      "Gyroscope" : {
+      "Gyroscope": {
          "pin": 205
       },
       "Left Odometer": {
