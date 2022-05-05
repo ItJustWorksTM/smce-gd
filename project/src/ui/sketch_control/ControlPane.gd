@@ -315,17 +315,19 @@ func _create_vehicle() -> void:
 	assert(json_config)
 	
 	var vehicle_name = json_config.get("vehicle", "")
+	var vehicle_label = json_config.get("label", "vehicle")
 	var vehicle_scene = Global.vehicles.get(vehicle_name)
 	
 	# TODO: handle failure
 	assert(vehicle_scene is PackedScene, "Specified vehicle does not exist!")
 	
 	vehicle = vehicle_scene.instance()
+	vehicle.name = vehicle_label + "+%d" % vehicle.get_instance_id()
 	add_child(vehicle)
 	
 	vehicle.set_view(_board.view())
 	
-	print("Using vehicle: %s" % vehicle_name)
+	print("Using vehicle: %s (label: %s)" % [vehicle_name, vehicle.name])
 	var attachments = []
 	print("Attachments:")
 	for slot_name in json_config.get("slots", {}):
@@ -374,8 +376,10 @@ func reset_vehicle_pos() -> void:
 		return
 	var was_frozen = vehicle.frozen
 	vehicle.freeze()
-
-	vehicle.global_transform = world_env.get_spawn_position("vehicle")
+	
+	vehicle.global_transform = world_env.get_spawn_position(vehicle.name)
+	
+	print("Vehicle \"%s\" spawned at: %s" % [vehicle.name, str(vehicle.global_transform.origin)])
 	
 	if ! was_frozen:
 		vehicle.unfreeze()
