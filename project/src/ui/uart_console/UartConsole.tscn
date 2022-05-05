@@ -47,7 +47,6 @@ margin_right = 1280.0
 margin_bottom = 680.0
 size_flags_vertical = 3
 custom_styles/normal = SubResource( 1 )
-scroll_active = false
 scroll_following = true
 
 [node name="Input" type="LineEdit" parent="."]
