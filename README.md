@@ -34,6 +34,8 @@ You get simulated vehicle physics, along with a debug overlay and a keyboard con
 
 ### Resources
 
+SMCE compiles arduino code with a real C++ compiler, so be sure to checkout the following resources on installation and setup for the best experience:
+
 * [Releases](https://github.com/ItJustWorksTM/smce-gd/releases)
 * [Setup](https://github.com/ItJustWorksTM/smce-gd/wiki)
 * [Capabilities](https://github.com/ItJustWorksTM/smce-gd/wiki/Vehicle-Capabilities)
