@@ -1,5 +1,7 @@
 # SMCE-gd ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg)
 
+![]("project/media/images/banner.png")
+
 Official frontend for [libSMCE](https://github.com/ItJustWorksTM/libSMCE) using [Godot](https://godotengine.org/).  
 Initially created to emulate cars supporting the [smartcar_shield](https://github.com/platisd/smartcar_shield) platform.
 
