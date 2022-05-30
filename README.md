@@ -1,4 +1,4 @@
-# SMCE-gd ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/release/ItJustWorksTM/smce-gd) ![GitHub all releases](https://img.shields.io/github/downloads/ItJustWorksTM/smce-gd/total) ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg) [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE) 
+# SMCE-gd [![](https://img.shields.io/github/v/release/ItJustWorksTM/smce-gd)](https://github.com/ItJustWorksTM/smce-gd/releases) ![GitHub all releases](https://img.shields.io/github/downloads/ItJustWorksTM/smce-gd/total) ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg) [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE) 
 
 ![](project/media/images/banner.png)
 
@@ -26,7 +26,7 @@ In this world UART is always attached, thus the above will output:
 
 ![](project/media/images/SerialOutput.png)
 
-You get access to multiple sensors and other attachments through a simple gui interface, most sensors even display handy information such as what pins they are attached to, and what their actual measurement is:
+You get access to multiple sensors and other attachments through a simple graphical interface, most sensors even display handy information such as what pins they are attached to, and what their actual measurement is:
 
 <img src="project/media/images/sensors.png" alt="drawing" width="800"/>
 
