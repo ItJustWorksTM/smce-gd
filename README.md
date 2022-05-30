@@ -1,9 +1,34 @@
-# SMCE-gd ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg)
+# SMCE-gd ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg) 
 
-![]("project/media/images/banner.png")
+![](project/media/images/banner.png)
 
-Official frontend for [libSMCE](https://github.com/ItJustWorksTM/libSMCE) using [Godot](https://godotengine.org/).  
-Initially created to emulate cars supporting the [smartcar_shield](https://github.com/platisd/smartcar_shield) platform.
+The official frontend for [libSMCE](https://github.com/ItJustWorksTM/libSMCE).  
+Created to emulate cars supporting the [smartcar_shield](https://github.com/platisd/smartcar_shield) platform,  
+write real arduino code and run on it your desktop!
+
+### About
+SMCE-gd is an educational platform that allows its users to write real arduino code such as the example below, levaraging [libSMCE](https://github.com/ItJustWorksTM/libSMCE) to compile and run arduino code to instantly get results without involving real arduino hardware.
+
+
+```c++
+void setup() {
+    Serial.begin(9600);
+    Serial.println("Hello world");
+}
+
+void loop() {
+    Serial.println("Loop!");
+    delay(100);
+}
+```
+
+You get access to multiple sensors and other attachments through a simple gui interface, and in this world UART is remote:
+
+![](project/media/images/SerialOutput.png)
+
+All used sensors are listed while running and display handy information such as what pins they are attached to:
+
+<img src="project/media/images/sensors.png" alt="drawing" width="800"/>
 
 ### Resources
 
