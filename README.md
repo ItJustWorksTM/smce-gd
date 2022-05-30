@@ -1,4 +1,4 @@
-# SMCE-gd ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg) 
+# SMCE-gd ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/release/ItJustWorksTM/smce-gd) ![GitHub all releases](https://img.shields.io/github/downloads/ItJustWorksTM/smce-gd/total) ![CI](https://github.com/ItJustWorksTM/smce-gd/workflows/CI/badge.svg) [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE) 
 
 ![](project/media/images/banner.png)
 
