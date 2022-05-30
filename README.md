@@ -6,7 +6,7 @@ The official frontend for [libSMCE](https://github.com/ItJustWorksTM/libSMCE).
 Created to emulate cars supporting the [smartcar_shield](https://github.com/platisd/smartcar_shield) platform, write real arduino code and run on it your desktop!
 
 ### About
-SMCE-gd is an educational platform that allows its users to write real arduino code, levaraging [libSMCE](https://github.com/ItJustWorksTM/libSMCE) to compile and run arduino code to instantly get results without involving real arduino hardware.
+SMCE-gd is an educational platform that allows its users to write real arduino code, leveraging [libSMCE](https://github.com/ItJustWorksTM/libSMCE) to compile and run arduino code to instantly get results without involving real arduino hardware.
 
 Here is a simple arduino hello world program:
 
