@@ -22,11 +22,11 @@ void loop() {
 }
 ```
 
-You get access to multiple sensors and other attachments through a simple gui interface, and in this world UART is always attached:
+In this world UART is always attached, thus the above will output:
 
 ![](project/media/images/SerialOutput.png)
 
-All sensors display handy information such as what pins they are attached to, and what their actual measurement is:
+You get access to multiple sensors and other attachments through a simple gui interface, most sensors even display handy information such as what pins they are attached to, and what their actual measurement is:
 
 <img src="project/media/images/sensors.png" alt="drawing" width="800"/>
 
