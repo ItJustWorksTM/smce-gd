@@ -6,8 +6,9 @@ The official frontend for [libSMCE](https://github.com/ItJustWorksTM/libSMCE).
 Created to emulate cars supporting the [smartcar_shield](https://github.com/platisd/smartcar_shield) platform, write real arduino code and run on it your desktop!
 
 ### About
-SMCE-gd is an educational platform that allows its users to write real arduino code such as the example below, levaraging [libSMCE](https://github.com/ItJustWorksTM/libSMCE) to compile and run arduino code to instantly get results without involving real arduino hardware.
+SMCE-gd is an educational platform that allows its users to write real arduino code, levaraging [libSMCE](https://github.com/ItJustWorksTM/libSMCE) to compile and run arduino code to instantly get results without involving real arduino hardware.
 
+Here is a simple arduino hello world program:
 
 ```c++
 void setup() {
@@ -29,6 +30,8 @@ All sensors display handy information such as what pins they are attached to, an
 
 <img src="project/media/images/sensors.png" alt="drawing" width="800"/>
 
+You get simulated vehicle physics, along with a debug overlay and a keyboard controllable debug vehicle; it is _almost_ true to life.
+
 ### Resources
 
 * [Releases](https://github.com/ItJustWorksTM/smce-gd/releases)
@@ -36,8 +39,10 @@ All sensors display handy information such as what pins they are attached to, an
 * [Capabilities](https://github.com/ItJustWorksTM/smce-gd/wiki/Vehicle-Capabilities)
 * [Modding](https://github.com/ItJustWorksTM/smce-gd/wiki/Modding)
 
+* [Smartcar shield](https://github.com/platisd/smartcar_shield) (Examples)
 
 ### Development
+
 #### Dependencies
 
 * _[Godot](https://godotengine.org)_
